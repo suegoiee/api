@@ -15,6 +15,7 @@ class CreateAvatarsTable extends Migration
     {
         Schema::create('avatars', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('type');
             $table->string('path');
             $table->morphs('imageable');
             $table->timestamps();

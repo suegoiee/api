@@ -20,7 +20,6 @@ class CreateProductsTable extends Migration
             $table->string('info_short');
             $table->text('info_more');
             $table->string('type');
-            $table->string('collections',4096)->default('');
             $table->integer('price')->unsigned()->default(0);
             $table->timestamps();
         });

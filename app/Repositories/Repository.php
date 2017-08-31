@@ -1,0 +1,34 @@
+<?php
+namespace App\Repositories;
+
+class Repository
+{
+	protected $model;
+	public function get($id){
+		return $this->model->find($id);
+	}
+	public function getWith($id,$with=[]){
+		return $this->model->with($with)->find($id);
+	}
+	public function gets(){
+		return $this->model->get();
+	}
+	public function getsWith($with=[]){
+		return $this->model->with($with)->get();
+	}
+	public function create($data){
+		return $this->model->create($data);
+	}
+	public function update($id,$data){
+		$this->model->where('id',$id)->update($data);
+		return $this->model->find($id);
+	}
+	public function delete($id){
+		$model = $this->model->find($id);
+		$this->model->destroy($id);
+		return $model;
+	}
+	public function model(){
+		return $this->model;
+	}
+}

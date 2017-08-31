@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->integer('price');
             $table->text('memo')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
