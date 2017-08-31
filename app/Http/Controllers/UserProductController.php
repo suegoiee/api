@@ -47,6 +47,8 @@ class UserProductController extends Controller
             if($product_data->type=='collection'){
                 $collections_id = $product_data->collections->map(function($item,$key){return $item->id;});
                 $user->products()->syncWithoutDetaching($collections_id);
+                $laboratory = $user->laboratories()->create(['title'=>$product_data->name]);
+                $laboratory->products()->syncWithoutDetaching($collections_id);
             }
         }
 
