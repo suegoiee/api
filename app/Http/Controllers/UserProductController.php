@@ -52,7 +52,7 @@ class UserProductController extends Controller
             }
         }
 
-        return $this->successResponse($products?$products:[]);
+        return $this->successResponse(['id'=>$products]);
     }
 
     public function show(Request $request, $id)

@@ -16,9 +16,12 @@ class CreditCardController extends Controller
 	   $this->creditCardRepository = $creditCardRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //
+        $user = $request->user();
+        $creditCards = $user->creditCards()->select('id','number','year','month')->get();
+        return $this->successResponse($creditCards);
     }
 
     public function create()
@@ -36,7 +39,7 @@ class CreditCardController extends Controller
 
         $request_data = $request->only(['number','month','year','check']);
 
-        $creditCard = $user->creditCard()->create($request_data);
+        $creditCard = $user->creditCards()->create($request_data);
 
         return $this->successResponse($creditCard?$creditCard:[]);
     }
@@ -48,7 +51,7 @@ class CreditCardController extends Controller
             return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
         }
 
-        $creditCard = $this->creditCardRepository->get($id);
+        $creditCard = $user->creditCards()->find($id);
 
         return $this->successResponse($creditCard?$creditCard:[]);
     }
@@ -74,7 +77,7 @@ class CreditCardController extends Controller
 
         $data = array_filter($request_data, function($item){return $item!=null;});
 
-        $creditCard = $this->creditCardRepository->update($id,$data);
+        $creditCard = $user->creditCards()->where('id',$id)->update($data);
 
         return $this->successResponse($creditCard?$creditCard:[]);
     }
@@ -85,7 +88,7 @@ class CreditCardController extends Controller
         if(!($this->creditCardRepository->isOwner($user->id,$id))){
             return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
         }
-        $this->creditCardRepository->delete($id);
+        $user->creditCards()->delete($id);
         return $this->successResponse(['id'=>$id]);
 
     }

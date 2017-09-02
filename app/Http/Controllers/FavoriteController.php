@@ -38,7 +38,7 @@ class FavoriteController extends Controller
 
         $user->favorites()->syncWithoutDetaching($request_data);
 
-        return $this->successResponse($request_data);
+        return $this->successResponse(['id'=>$request_data]);
     }
 
     public function show(Request $request, $id)

@@ -96,7 +96,7 @@ class AvatarController extends Controller
         $moduleRepository->avatar()->delete();
         $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
         $this->destroyAvatar($deleted);
-        return $this->successResponse($deleted);
+        return $this->successResponse(['path'=>$deleted]);
     }
 
     protected function avatarValidator(array $data)

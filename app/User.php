@@ -42,7 +42,7 @@ class User extends Authenticatable
     {
         return $this->morphMany('App\Avatar', 'imageable');
     }
-    public function creditCard()
+    public function creditCards()
     {
         return $this->hasMany('App\CreditCard');
     }

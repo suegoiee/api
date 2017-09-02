@@ -26,7 +26,7 @@ class RegisterController extends Controller
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
-            return $this->failedResponse(['message'=>$validator->errors()->all()]);
+            return $this->validErrorResponse($validator->errors()->all());
         }
         $profileValidator = $this->profileValidator($request->all());
         if ($profileValidator->fails()) {

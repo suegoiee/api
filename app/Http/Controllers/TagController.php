@@ -20,7 +20,7 @@ class TagController extends Controller
     {
         $tags = $this->tagRepository->get();
 
-        return $this->successResponse($tags?$tags:[]);
+        return $this->successResponse($tags);
     }
 
     public function create()

@@ -71,7 +71,7 @@ class OrderController extends Controller
         }
         $request_data = $request->only('status');
 
-        $order = $this->orderRepository->update($id,$request_data);
+        $order = $user->orders()->where('id',$id)->update($request_data);
         if($order->status==1){
             return $this->orderPaid($request,$order);
         }
@@ -93,7 +93,7 @@ class OrderController extends Controller
     protected function orderValidator(array $data)
     {
         return Validator::make($data, [
-            'user_id' => 'required|exists:users,id',
+            //'user_id' => 'required|exists:users,id',
             'price' => 'required|numeric',
             'products.*'=>'exists:products,id',
         ]);        

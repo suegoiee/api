@@ -24,15 +24,15 @@ class TokenController extends Controller
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
-            return $this->failedResponse(['message'=>$validator->errors()->all()]);
+            return $this->validateErrorResponse($validator->errors()->all());
         }
         return $this->successResponse($this->passwordGrantToken($request));
     }
     public function refreshAccessToken(Request $request)
     {
-        $validator = $this->validator($request->all());
+        $validator = $this->refreshValidator($request->all());
         if ($validator->fails()) {
-            return $this->failedResponse(['message'=>$validator->errors()->all()]);
+            return $this->validateErrorResponse($validator->errors()->all());
         }
         return $this->successResponse($this->refreshGrantToken($request));
     }
@@ -43,6 +43,12 @@ class TokenController extends Controller
             //'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|exists:users',
             'password' => 'required|string|min:6',
+        ]);
+    }
+    protected function refreshValidator(array $data)
+    {
+        return Validator::make($data, [
+            'refresh_token' => 'required',
         ]);
     }
 }

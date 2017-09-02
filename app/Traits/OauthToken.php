@@ -22,7 +22,7 @@ trait OauthToken
         return json_decode((string) $response->getBody(), true);
     }
 
-    protected function refreshing($request){
+    protected function refreshGrantToken($request){
         $http = new \GuzzleHttp\Client;
         $client = PersonalAccessClient::first()->client;
         $response = $http->post(url('oauth/token'), [

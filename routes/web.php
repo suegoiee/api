@@ -13,6 +13,7 @@
 Route::get('/', 'HomeController@index')->name('login');
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
+Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -33,8 +34,8 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/user/avatar/{module_id}','AvatarController@update')->name('user.avatar.update');
 	Route::delete('/user/avatar/{module_id}','AvatarController@destroy')->name('user.avatar.destroy');
 
-	Route::resource('/user/credit_card', 'CreditCardController', ['only' => [
-		'store','show', 'update', 'destroy'
+	Route::resource('/user/credit_cards', 'CreditCardController', ['only' => [
+		'index','store','show', 'update', 'destroy'
 	]]);
 	Route::resource('/user/favorites', 'FavoriteController', ['only' => [
 			'index', 'store', 'destroy'
@@ -56,11 +57,11 @@ Route::middleware(['auth:api'])->group(function(){
 });
 
 Route::middleware(['auth:api'])->group(function(){
-	Route::resource('/tag', 'TagController', ['only' => [
-		'store', 'update', 'destroy'
+	Route::resource('/tags', 'TagController', ['only' => [
+		'index','store', 'update', 'destroy'
 	]]);
 
-	Route::resource('/ecommerce/products', 'ProductController', ['only' => [
+	Route::resource('/products', 'ProductController', ['only' => [
 		'index','store','show', 'update', 'destroy'
 	]]);
 
@@ -69,9 +70,9 @@ Route::middleware(['auth:api'])->group(function(){
 		'index','store','show', 'update', 'destroy'
 	]]);
 
-	Route::post('/ecommerce/product/avatar/{module_id}','AvatarController@store')->name('product.avatar.store');
-	Route::get('/ecommerce/product/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
-	Route::put('/ecommerce/product/avatar/{module_id}','AvatarController@update')->name('product.avatar.update');
-	Route::delete('/ecommerce/product/avatar/{module_id}','AvatarController@destroy')->name('product.avatar.destroy');
+	Route::post('/product/avatar/{module_id}','AvatarController@store')->name('product.avatar.store');
+	Route::get('/product/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
+	Route::put('/product/avatar/{module_id}','AvatarController@update')->name('product.avatar.update');
+	Route::delete('/product/avatar/{module_id}','AvatarController@destroy')->name('product.avatar.destroy');
 
 });

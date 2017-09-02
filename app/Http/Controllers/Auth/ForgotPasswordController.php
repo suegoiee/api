@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 
@@ -23,7 +24,10 @@ class ForgotPasswordController extends Controller
     }
     public function sendResetLinkEmail(Request $request)
     {
-        $this->validator($request);
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            return $this->validErrorResponse($validator->errors()->all());
+        }
         $redirect = $request->only(['redirect']);
         $response = $this->broker()->sendResetLink(
             $request->only(['email'])
@@ -43,9 +47,9 @@ class ForgotPasswordController extends Controller
 	   return $this->failedResponse(trans($response));
     }
 
-    protected function validator(Request $request)
+    protected function validator(array $data)
     {
-        $this->validate($request, [
+        return Validator::make($data, [
             'email' => 'required|email', 
             //'callback'=>'required|url'
             ]);
