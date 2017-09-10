@@ -18,7 +18,7 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = $this->tagRepository->get();
+        $tags = $this->tagRepository->gets();
 
         return $this->successResponse($tags);
     }
@@ -59,7 +59,7 @@ class TagController extends Controller
     {
         $validator = $this->tagValidator($request->all(), $id);
         if($validator->fails()){
-            return $this->failedResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
 
         $request_data = $request->only('name');

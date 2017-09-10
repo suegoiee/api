@@ -13,4 +13,10 @@ trait ResponseFormatter
     protected function validateErrorResponse($message=''){
         return response()->json(['status'=>'error','error'=>['message'=>$message]]);
     }
+    protected function unauthorizedResponse(){
+    	return response()->json(['status'=>'error','error'=>['message'=>'unauthorized']]);	
+    }
+    protected function notFoundResponse(){
+        return response()->json(['status'=>'error','error'=>['message'=>'Not Found']]);
+    }
 }

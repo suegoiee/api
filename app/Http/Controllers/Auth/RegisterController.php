@@ -26,7 +26,7 @@ class RegisterController extends Controller
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
-            return $this->validErrorResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
         $profileValidator = $this->profileValidator($request->all());
         if ($profileValidator->fails()) {
@@ -54,7 +54,7 @@ class RegisterController extends Controller
     }
 
     protected function createProfile(Request $request,$user){
-        $store_data = $request->only(['nike_name','name','sex','address','birthday']);
+        $store_data = $request->only(['nick_name','name','sex','address','birthday']);
         $profile = $user->profile()->create($store_data);
         return $profile;
     }
@@ -64,14 +64,14 @@ class RegisterController extends Controller
         return Validator::make($data, [
             //'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ]);
     }
 
     protected function profileValidator(array $data)
     {
         return Validator::make($data, [
-            'nike_name' => 'required|max:255',
+            'nick_name' => 'required|max:255',
             'name' => 'max:255',
             'sex'=>'in:F,M',
             'address'=>'max:255',

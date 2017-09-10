@@ -39,27 +39,27 @@ class AvatarController extends Controller
         //
     }
 
-    public function store(Request $request,$module_id)
+    public function store(Request $request, $module_id = 0)
     {
         $moduleRepository = $this->moduleRepository($request,$module_id);
         if(!$moduleRepository){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
         }
         $validator = $this->avatarValidator($request->all());
         if($validator->fails()){
-            return $this->failedResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $data = ['path' => $this->storeAvatar($request->file('avatar'), $module_id,$this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
+        $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
         $moduleRepository->avatar()->create($data);
         return $this->successResponse($data);
     }
 
-    public function show(Request $request, $module_id)
+    public function show(Request $request, $module_id = 0)
     {
         $moduleRepository = $this->moduleRepository($request,$module_id, false);
 
-        $avatar = $moduleRepository->avatar()->orderBy('created_at', 'desc')->first();
+        $avatar = $moduleRepository->avatar()->orderBy('created_at', 'desc')->get();
         return $this->successResponse($avatar);
     }
 
@@ -68,29 +68,29 @@ class AvatarController extends Controller
       
     }
 
-    public function update(Request $request, $module_id)
+    public function update(Request $request, $module_id = 0)
     {
         $moduleRepository = $this->moduleRepository($request,$module_id);
         if(!$moduleRepository){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
         }
         $validator = $this->avatarValidator($request->all());
         if($validator->fails()){
-            return $this->failedResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $data = ['path' => $this->storeAvatar($request->file('avatar'), $module_id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
+        $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
         $avatar = $moduleRepository->avatar()->orderBy('created_at', 'desc')->first();
         $this->avatarRepository->update($avatar->id,$data);
         $this->destroyAvatar($avatar->path);
         return $this->successResponse($data);
     }
 
-    public function destroy(Request $request, $module_id)
+    public function destroy(Request $request, $module_id = 0)
     {
         $moduleRepository = $this->moduleRepository($request,$module_id);
         if(!$moduleRepository){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
         }
         $avatars = $moduleRepository->avatar()->get();
         $moduleRepository->avatar()->delete();
@@ -102,7 +102,7 @@ class AvatarController extends Controller
     protected function avatarValidator(array $data)
     {
         return Validator::make($data, [
-            'avatar' => 'required|image',
+            'avatar' => 'required|image|dimensions:max_width=200,max_height=200',
         ]);
     }
 
@@ -111,10 +111,7 @@ class AvatarController extends Controller
         $module_name = Route::currentRouteName();
         if(preg_match("/^user/i", $module_name)){
             $user = $request->user();
-            if($user->id != $module_id && $validation){
-                return false;
-            }
-            return User::find($module_id);
+            return $user;
         }
 
         if(preg_match("/^product/i", $module_name)){

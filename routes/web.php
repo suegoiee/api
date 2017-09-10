@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/token','Auth\TokenController@token');
 Route::get('/', 'HomeController@index')->name('login');
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
@@ -25,14 +27,13 @@ Route::middleware(['guest'])->group(function(){
 Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){
-	Route::resource('/user/info', 'ProfileController', ['only' => [
-			'show', 'update'
-	]]);
+	Route::get('/user/info','ProfileController@show')->name('info.show');
+	Route::put('/user/info','ProfileController@update')->name('info.update');
 
-	Route::post('/user/avatar/{module_id}','AvatarController@store')->name('user.avatar.store');
-	Route::get('/user/avatar/{module_id}','AvatarController@show')->name('user.avatar.show');
-	Route::put('/user/avatar/{module_id}','AvatarController@update')->name('user.avatar.update');
-	Route::delete('/user/avatar/{module_id}','AvatarController@destroy')->name('user.avatar.destroy');
+	Route::post('/user/avatar','AvatarController@store')->name('user.avatar.store');
+	Route::get('/user/avatar','AvatarController@show')->name('user.avatar.show');
+	Route::put('/user/avatar','AvatarController@update')->name('user.avatar.update');
+	Route::delete('/user/avatar','AvatarController@destroy')->name('user.avatar.destroy');
 
 	Route::resource('/user/credit_cards', 'CreditCardController', ['only' => [
 		'index','store','show', 'update', 'destroy'
@@ -41,11 +42,16 @@ Route::middleware(['auth:api'])->group(function(){
 			'index', 'store', 'destroy'
 		]]);
 	Route::resource('/user/orders', 'OrderController', ['only' => [
-			'index','show', 'store', 'update','destroy'
+			'index','show', 'store','destroy'
 		]]);
+
+	Route::put('/user/products/{product}/install', 'UserProductController@install');
+	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');
 	Route::resource('/user/products', 'UserProductController', ['only' => [
-			'index','show', 'store', 'update','destroy'
+			'index','show'
 		]]);
+
+	Route::delete('/user/laboratories/{laboratory}/products','LaboratoryController@removeProducts')->name('laboratories.product.destroy');
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
 			'index','show', 'store', 'update','destroy'
 		]]);
@@ -56,23 +62,43 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
 });
 
-Route::middleware(['auth:api'])->group(function(){
+Route::middleware(['client'])->group(function(){
 	Route::resource('/tags', 'TagController', ['only' => [
-		'index','store', 'update', 'destroy'
+		'index'
 	]]);
 
-	Route::resource('/products', 'ProductController', ['only' => [
-		'index','store','show', 'update', 'destroy'
-	]]);
+	Route::get('/products','ProductController@onShelves')->name('products.onShelves');
+	Route::get('/products/{product}','ProductController@onShelf')->name('products.onShelf')->where('product', '[0-9]+');
 
-	Route::get('/stocks','StockController@index')->name('stock.index');
-	Route::resource('/stock', 'StockController', ['only' => [
-		'index','store','show', 'update', 'destroy'
-	]]);
+	Route::get('/products/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
+});
 
-	Route::post('/product/avatar/{module_id}','AvatarController@store')->name('product.avatar.store');
-	Route::get('/product/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
-	Route::put('/product/avatar/{module_id}','AvatarController@update')->name('product.avatar.update');
-	Route::delete('/product/avatar/{module_id}','AvatarController@destroy')->name('product.avatar.destroy');
 
+Route::middleware(['client:tag'])->group(function(){
+	Route::post('/tags','TagController@store')->name('tags.store');
+	Route::put('/tags/{tag}','TagController@update')->name('tags.update');
+	Route::delete('/tags/{tag}','TagController@destroy')->name('tags.destroy');
+});
+
+Route::middleware(['client:product'])->group(function(){
+	Route::get('/products/all','ProductController@index')->name('products.all.index');
+	Route::get('/products/all/{product}','ProductController@show')->name('products.all.show');
+
+	Route::post('/products','ProductController@store')->name('products.store');
+	Route::put('/products/{product}','ProductController@update')->name('products.update');
+	Route::delete('/products/{product}','ProductController@destroy')->name('products.destroy');
+
+	Route::post('/products/avatar/{module_id}','AvatarController@store')->name('product.avatar.store');
+	Route::put('/products/avatar/{module_id}','AvatarController@update')->name('product.avatar.update');
+	Route::delete('/products/avatar/{module_id}','AvatarController@destroy')->name('product.avatar.destroy');
+});
+
+Route::middleware(['client:order'])->group(function(){
+	Route::put('/user/orders/{order}','OrderController@update')->name('orders.update');
+});
+
+Route::middleware(['client:user-product'])->group(function(){
+	Route::post('/user/products','UserProductController@store')->name('user.products.store');
+	Route::put('/user/products/{product}','UserProductController@update')->name('user.products.update');
+	Route::delete('/user/products/{product}','UserProductController@destroy')->name('user.products.destroy');
 });

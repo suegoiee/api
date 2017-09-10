@@ -47,14 +47,14 @@ class User extends Authenticatable
         return $this->hasMany('App\CreditCard');
     }
     public function products(){
-        return $this->belongsToMany('App\Product')->withPivot('title', 'deadline')->withTimestamps();
+        return $this->belongsToMany('App\Product')->withPivot('installed', 'deadline')->withTimestamps();
     }
     public function laboratories()
     {
         return $this->hasMany('App\Laboratory');
     }
     public function favorites(){
-        return $this->belongsToMany('App\Stock','favorites')->withTimestamps();
+        return $this->hasMany('App\Favorite');
     }
     public function orders()
     {

@@ -21,6 +21,12 @@ class ProductController extends Controller
 
         return $this->successResponse($product?$product:[]);
     }
+    public function onShelves()
+    {
+        $product = $this->productRepository->getsWithByStatus(['tags','collections','avatar_small']);
+
+        return $this->successResponse($product?$product:[]);
+    }
 
     public function create()
     {
@@ -31,11 +37,10 @@ class ProductController extends Controller
     {
         $validator = $this->productValidator($request->all());
         if($validator->fails()){
-            return $this->failedResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name','model','info_short','info_more','type','price']);
-
+        $request_data = $request->only(['name','model','info_short','info_more','type','price','expiration','status']);
         $product = $this->productRepository->create($request_data);
 
         $tags = $request->input('tags',[]);
@@ -75,6 +80,13 @@ class ProductController extends Controller
 
         return $this->successResponse($product?$product:[]);
     }
+    public function onShelf(Request $request, $id)
+    {
+        
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections','avatar_small','avatar_detail']);
+
+        return $this->successResponse($product?$product:[]);
+    }
 
     public function edit($id)
     {
@@ -83,12 +95,12 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = $this->productValidator($request->all());
+        $validator = $this->productUpdateValidator($request->all());
         if($validator->fails()){
-            return $this->failedResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name','model','info_short','info_more','type','price']);
+        $request_data = $request->only(['name','model','info_short','info_more','type','price','expiration','status']);
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $product = $this->productRepository->update($id,$data);
@@ -106,6 +118,7 @@ class ProductController extends Controller
 
     public function destroy(Request $request, $id)
     {
+
         $this->productRepository->delete($id);
         return $this->successResponse(['id'=>$id]);
 
@@ -115,11 +128,23 @@ class ProductController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'model' => 'required|max:255',
+            'model' => 'max:255',
             'info_short'=>'required|max:255',
             'info_more'=>'string',
             'type'=>'required|max:255',
             'price'=>'required|numeric',
+        ]);        
+    }
+
+    protected function productUpdateValidator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'max:255',
+            'model' => 'max:255',
+            'info_short'=>'max:255',
+            'info_more'=>'string',
+            'type'=>'max:255',
+            'price'=>'numeric',
         ]);        
     }
 }

@@ -29,16 +29,16 @@ class FavoriteController extends Controller
     {
         $user = $request->user();
         
-        $validator = $this->favoriteValidator($request->all());
+        $validator = $this->favoriteValidator($request->all(), $user->id);
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->input('stock_id',[]);
+        $request_data = $request->only(['code','name']);
 
-        $user->favorites()->syncWithoutDetaching($request_data);
+        $user->favorites()->create($request_data);
 
-        return $this->successResponse(['id'=>$request_data]);
+        return $this->successResponse($request_data);
     }
 
     public function show(Request $request, $id)
@@ -64,18 +64,19 @@ class FavoriteController extends Controller
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $request_data = $request->input('stock_id',[]);
+        $stock_code = $request->input('code');
 
-        $user->favorites()->detach($request_data);
+        $user->favorites()->where('code',$stock_code)->delete();
 
-        return $this->successResponse(['id'=>$request_data]);
+        return $this->successResponse(['code'=>$stock_code]);
 
     }
 
-    protected function favoriteValidator(array $data)
+    protected function favoriteValidator(array $data, $user_id)
     {
         return Validator::make($data, [
-            'stock_id' => 'required|exists:stocks,id',
+            'code' => 'required|unique:favorites,code,NULL,id,user_id,'.$user_id,
+            'name' => 'required',
         ]);        
     }
 }

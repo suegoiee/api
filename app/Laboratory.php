@@ -4,9 +4,12 @@ namespace App;
 
 use App\UanalyzeModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Laboratory extends UanalyzeModel
 {
-	use SoftDeletes;
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
+
 	protected $fillable=['user_id','title','layout'];
 
 	public function avatar()

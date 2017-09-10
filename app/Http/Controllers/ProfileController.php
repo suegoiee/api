@@ -31,14 +31,10 @@ class ProfileController extends Controller
 
     }
 
-    public function show(Request $request, $id)
+    public function show(Request $request)
     {
         $user = $request->user();
-        if(!($this->profileRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
-        }
-
-        $profile = $this->profileRepository->get($id);
+        $profile = $user->profile;
         return $this->successResponse($profile?$profile:[]);
     }
 
@@ -47,23 +43,21 @@ class ProfileController extends Controller
       
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $user = $request->user();
-        if(!($this->profileRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
-        }
 
         $validator = $this->profileValidator($request->all());
         if($validator->fails()){
-            return $this->failedResponse($validator->errors()->all());
+            return $this->validErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['nike_name','name','sex','address','birthday']);
+        $request_data = $request->only(['nick_name','name','sex','address','birthday']);
 
         $data = array_filter($request_data, function($item){return $item!=null;});
 
-        $profile = $this->profileRepository->update($id,$data);
+        $user->profile()->update($data);
+        $profile = $user->profile;
 
         return $this->successResponse($profile?$profile:[]);
     }
@@ -76,7 +70,7 @@ class ProfileController extends Controller
     protected function profileValidator(array $data)
     {
         return Validator::make($data, [
-            'nike_name' => 'max:255',
+            'nick_name' => 'max:255',
             'name' => 'max:255',
             'sex'=>'in:F,M',
             'address'=>'max:255',

@@ -19,6 +19,9 @@ class TokenController extends Controller
     {
         
     }
+    public function token(){
+        return $this->clientCredentialsGrantToken();
+    }
 
     public function accessToken(Request $request)
     {

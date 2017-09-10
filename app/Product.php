@@ -3,15 +3,20 @@
 namespace App;
 
 use App\UanalyzeModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends UanalyzeModel
 {
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
+
+    
     protected $fillable = [
-        'name','model','info_short','info_more','type','price'
+        'name','model','info_short','info_more','type','price','expiration','status'
     ];
 
     public function user(){
-    	return $this->belongsToMany('App\User')->withPivot('title', 'deadline')->withTimestamps();
+    	return $this->belongsToMany('App\User')->withPivot('deadline','installed')->withTimestamps();
     }
 
     public function collections(){
@@ -37,4 +42,8 @@ class Product extends UanalyzeModel
         return $this->avatar()->where('type','detail');
     }
 
+    public function laboratories()
+    {
+        return $this->belongsToMany('App\Laboratory', 'laboratory_product' )->withTimestamps();
+    }
 }

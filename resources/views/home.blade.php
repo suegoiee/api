@@ -162,7 +162,8 @@ $(function(){
             data: formData,
             dataType : 'json',
             complete: function(response) {
-                $('#response_data').val(response.responseText);
+                $('#response_data').val(JSON.stringify(JSON.parse(response.responseText),null,2));
+                //$('#response_data').val(response.responseText);
             }
         });
     });

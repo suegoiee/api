@@ -15,5 +15,5 @@ return [
 
     'failed' => '密碼錯誤!',
     'throttle' => '登入次數過多，請於 :seconds 秒後再次嘗試登入。',
-    'permission_deined' =>'尚無存取權限。'
+    'permission_denied' =>'尚無存取權限。'
 ];
