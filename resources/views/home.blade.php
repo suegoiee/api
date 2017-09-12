@@ -3,15 +3,15 @@
     <link rel="stylesheet" href="{{asset('css/home.css')}}">
 @endsection
 @section('content')
-<div class="container pt-5">
+<div id="content" class="container pt-5">
     <form>
         <div class="form-row">
             <div class="col-sm-2 pt-2">
-                <select class="form-control" id="method">
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="DELETE">DELETE</option>
+                <select class="form-control bg-success" id="method">
+                    <option value="GET" class="bg-white text-dark" >GET</option>
+                    <option value="POST" class="bg-white text-dark" >POST</option>
+                    <option value="PUT" class="bg-white text-dark" >PUT</option>
+                    <option value="DELETE" class="bg-white text-dark" >DELETE</option>
                 </select>
             </div>
             <div class="col-sm pt-2">
@@ -38,7 +38,7 @@
                         <input type="text" class="form-control input_value" placeholder="Value" value="">
                     </div>
                     <div class="col-sm-1 text-center pt-2">
-                        <button class="btn btn-danger remove_btn"> X </button>
+                        <button class="btn btn-danger remove_btn"><span class="oi oi-x"></span></button>
                     </div>
                 </div>
                 <div class="form-row">
@@ -55,30 +55,13 @@
                         <input type="text" class="form-control input_value" placeholder="Value" value="">
                     </div>
                     <div class="col-sm-1 text-center pt-2">
-                        <button class="btn btn-danger remove_btn"> X </button>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-sm-1 pt-2">
-                        <select class="form-control input_type">
-                            <option value="TEXT">TEXT</option>
-                            <option value="FILE">FILE</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2 pt-2">
-                        <input type="text" class="form-control input_key" placeholder="Key" value="scope">
-                    </div>
-                    <div class="col-sm-8 pt-2">
-                        <input type="text" class="form-control input_value" placeholder="Value" value="">
-                    </div>
-                    <div class="col-sm-1 text-center pt-2">
-                        <button class="btn btn-danger remove_btn"> X </button>
+                        <button class="btn btn-danger remove_btn"><span class="oi oi-x"></span></button>
                     </div>
                 </div>
             </div>
             <div class="form-row text-center pt-2">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-info" id="posts_btn"> + </button>
+                    <button class="btn btn-info" id="posts_btn"><span class="oi oi-plus"></span></button>
                 </div>
             </div>
         </div>
@@ -92,7 +75,7 @@
                     <input type="text" class="form-control input_value" placeholder="Value" value="Bearer ">
                 </div>
                 <div class="col-sm-1 text-center pt-2">
-                    <button class="btn btn-danger remove_btn"> X </button>
+                    <button class="btn btn-danger remove_btn"><span class="oi oi-x"></span></button>
                 </div>
             </div>
             <div class="form-row">
@@ -103,13 +86,13 @@
                     <input type="text" class="form-control input_value" placeholder="Value" value="application/json" >
                 </div>
                 <div class="col-sm-1 text-center pt-2">
-                    <button class="btn btn-danger remove_btn"> X </button>
+                    <button class="btn btn-danger remove_btn"><span class="oi oi-x"></span></button>
                 </div>
             </div>
         </div>
         <div class="form-row text-center pt-2">
             <div class="col-sm-12 text-center">
-                <button class="btn btn-info" id="headers_btn"> + </button>
+                <button class="btn btn-info" id="headers_btn"><span class="oi oi-plus"></span></button>
             </div>
         </div>
     </form>
@@ -170,13 +153,14 @@ $(function(){
     $('#headers_btn').click(function(event){
         event.preventDefault();
         var header_input_html='<div class="form-row">'+
+                '<div class="col-sm-3 pt-2">'+
                     '<input type="text" class="form-control input_key" placeholder="Key" >'+
                 '</div>'+
                 '<div class="col-sm-8 pt-2">'+
                     '<input type="text" class="form-control input_value" placeholder="Value" >'+
                 '</div>'+
                 '<div class="col-sm-1 text-center pt-2">'+
-                    '<button class="btn btn-danger remove_btn"> X </button>'+
+                    '<button class="btn btn-danger remove_btn"><span class="oi oi-x"></span></button>'+
                 '</div>'+
             '</div>';
         $('#headers').append(header_input_html);
@@ -201,7 +185,7 @@ $(function(){
                     '<input type="text" class="form-control input_value" placeholder="Value" >'+
                 '</div>'+
                 '<div class="col-sm-1 text-center pt-2">'+
-                    '<button class="btn btn-danger remove_btn"> X </button>'+
+                    '<button class="btn btn-danger remove_btn"><span class="oi oi-x"></span></button>'+
                 '</div>'+
             '</div>';
         $('#posts').append(posts_input_html);

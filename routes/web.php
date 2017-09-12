@@ -21,8 +21,10 @@ Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::middleware(['guest'])->group(function(){
-});
+Route::get('/admin/login', 'Admin\Auth\LoginController@loginForm');
+Route::post('/admin/login', 'Admin\Auth\LoginController@login');
+Route::post('/admin/logout', 'Admin\Auth\LoginController@logout');
+
 
 Route::middleware(['auth'])->group(function(){
 });

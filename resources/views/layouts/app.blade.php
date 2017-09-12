@@ -7,12 +7,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Uanalyze API</title>
+    <title>Uanalyze Admin</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('thirdparty/open-iconic/font/css/open-iconic-bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/layout.css')}}">
-    
+    <link rel="stylesheet" href="{{asset('css/sidebar.css')}}">
 	@yield('css_file')  
     <!-- Scripts -->
    
@@ -33,7 +34,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-		<a class="navbar-brand" href="{{ url('/') }}">Uanalyze API</a>
+		<a class="navbar-brand" href="{{ url('/') }}">Uanalyze Admin</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -44,11 +45,37 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-                
+                @if (session('admin'))
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                           <span class="oi oi-person"></span> {{ session('admin_name') }}<span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        	<a class="dropdown-item" href="#" onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                                <span class="glyphicon glyphicon-off"></span> {{trans('auth.logout')}}
+                            </a>
+                            <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                            <div class="arrow-border"></div>
+                            <div class="arrow"></div>
+                        </div>
+                    </li>
+                @else
+                	<li class="nav-item active" >
+                		<a  class="nav-link" href="{{ url('/admin/login') }}">{{trans('auth.login')}}</a>
+                	</li>
+                @endif
             </ul>
 		</div>
 	</nav>
-	@yield('content')
+	<div class="wrapper">
+		@if(session('admin'))
+			@include('layouts.sidebar')
+		@endif
+		@yield('content')
+	</div>
 	<footer class="footer">
 		<div class="container">
 			<span class="text-muted">Version 0.1.0 . Copyright © 2017. All rights reserved.</span>
@@ -65,6 +92,9 @@
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
+            $('#sidebarToggle').on('click', function () {
+                $('.sidebar').toggleClass('active');
+            });
 		});
 	</script>
     @yield('javascript')  

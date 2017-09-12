@@ -1,0 +1,113 @@
+.sidebar {
+    min-width: 200px;
+    max-width: 200px;
+    background: #424242;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+.sidebar.active {
+    min-width: 200px;
+    max-width: 200px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    padding:20px 10px;
+    font-size: 1.1em;
+    display: block;
+    text-align: left;
+
+}
+.sidebar ul li a:hover {
+    color: #757575;
+    background: #fff;
+}
+
+.sidebar.active ul li a {
+    padding: 20px 10px;
+    text-align: left;
+    font-size: 1.1em;
+}
+.sidebar ul ul li a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #616161;
+}
+
+.sidebar.active ul ul li a {
+    padding: 20px 10px !important;
+    padding-left: 30px !important;
+    text-align: left;
+    font-size: 1.1em;
+}
+
+.sidebar ul li.active > a, .sidebar a[aria-expanded="true"] {
+    color: #fff;
+    background: #212121;
+}
+
+.sidebar.active a::before{
+    top: auto;
+    bottom: 5px;
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+}
+
+.sidebar ul.main-menu {
+    padding: 10px 0;
+    border-bottom: 1px solid #616161;
+}
+#sidebarToggle{
+    background-color: #9E9E9E;
+    top: 10px;
+    display: none;
+    height: 40px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+
+@media (max-width: 768px) {
+    .sidebar {
+        min-width: 80px;
+        max-width: 80px;
+        text-align: center;
+        margin-left: -80px !important ;
+    }
+
+    .sidebar.active {
+        min-width: 80px;
+        max-width: 80px;
+        margin-left: 0 !important;
+    }
+
+    .sidebar ul li a {
+        padding: 20px 10px;
+    }
+    .sidebar.active ul li a {
+        padding: 20px 10px;
+        font-size: 1.2em;
+        text-align: center;
+    }
+    .sidebar ul li a span.text {
+        display: none;
+    }
+    
+
+    .sidebar ul ul li a {
+        padding: 10px !important;
+    }
+    .sidebar.active ul ul li a {
+        padding: 10px !important;
+        text-align: center;
+        font-size: 0.85em;
+    }
+    #sidebarToggle{
+        display: block;
+    }
+}
