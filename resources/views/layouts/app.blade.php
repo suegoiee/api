@@ -48,8 +48,6 @@
             </ul>
 		</div>
 	</nav>
-	
-	
 	@yield('content')
 	<footer class="footer">
 		<div class="container">
