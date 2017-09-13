@@ -64,5 +64,8 @@ class Kernel extends HttpKernel
         'client' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
+        'admin' => \App\Http\Middleware\AdminAuth::class,
+        'csrf'=> \App\Http\Middleware\VerifyCsrfToken::class,
+        'apiToken'=>\Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
     ];
 }

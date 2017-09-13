@@ -2,6 +2,9 @@ html{
 	position: relative;
     min-height: 100%;
 }
+body{
+    font-family: "Microsoft JhengHei","Heiti TC","WenQuanYi Zen Hei",Arial,sans-serif;
+}
 
 a, a:hover, a:focus {
     color: inherit;
@@ -20,6 +23,11 @@ a, a:hover, a:focus {
     min-height: 100vh;
     transition: all 0.3s;
     padding-bottom: 130px;
+}
+.breadcrumb .breadcrumb-item{
+    line-height: 1.25;
+    padding: .5rem 0;
+    font-size: 1rem;
 }
 footer{
 	position: absolute;

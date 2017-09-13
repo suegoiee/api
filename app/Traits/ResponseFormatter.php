@@ -3,7 +3,6 @@ namespace App\Traits;
 
 trait ResponseFormatter
 {
-
     protected function successResponse($data=[],$message=''){
         return response()->json(['status'=>'success','data'=>$data,'message'=>$message]);
     }

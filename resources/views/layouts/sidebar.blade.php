@@ -14,25 +14,25 @@
         <li>
             <a href="{{url('/admin/products')}}">
                 <span class="oi oi-box"></span>
-                <span class="text">{{trans('product.menu_title')}}</span>
+                <span class="text">{{trans('product.admin.menu_title')}}</span>
             </a>
         </li> 
         <li>
             <a href="{{url('/admin/orders')}}">
                 <span class="oi oi-clipboard"></span>
-                <span class="text">{{trans('order.menu_title')}}</span>
+                <span class="text">{{trans('order.admin.menu_title')}}</span>
             </a>
         </li>
         <li>
             <a href="{{url('/admin/users')}}">
                 <span class="oi oi-people"></span>
-                <span class="text">{{trans('user.menu_title')}}</span>
+                <span class="text">{{trans('user.admin.menu_title')}}</span>
             </a>
         </li>
          <li>
             <a href="{{url('/admin/tags')}}">
                 <span class="oi oi-tag"></span>
-                <span class="text">{{trans('tag.menu_title')}}</span>
+                <span class="text">{{trans('tag.admin.menu_title')}}</span>
             </a>
         </li>
     </ul>

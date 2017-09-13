@@ -94,6 +94,9 @@
 			});
             $('#sidebarToggle').on('click', function () {
                 $('.sidebar').toggleClass('active');
+                var aria_expanded = $(this).attr("aria-expanded");
+                aria_expanded = aria_expanded=='true'?'false':'true';
+                $(this).attr("aria-expanded",aria_expanded);
             });
 		});
 	</script>

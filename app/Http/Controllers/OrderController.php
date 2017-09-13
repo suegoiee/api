@@ -107,7 +107,7 @@ class OrderController extends Controller
     private function orderPaid(Request $request,$order){
         $products = $order->products->map(function($item,$key){return $item->id;});
         
-        $token = $this->clientCredentialsGrantToken($request);
+        $token = $this->clientCredentialsGrantToken();
         $http = new \GuzzleHttp\Client;
         $response = $http->request('post',url('/user/products'),[
                 'headers'=>[

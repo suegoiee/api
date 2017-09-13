@@ -64,7 +64,7 @@ class TagController extends Controller
 
         $request_data = $request->only('name');
 
-        $tag = $this->tagRepository->update($id,$data);
+        $tag = $this->tagRepository->update($id,$request_data);
 
         return $this->successResponse($tag?$tag:[]);
     }

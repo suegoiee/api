@@ -11,6 +11,7 @@
 |
 */
 
+//API
 Route::get('/token','Auth\TokenController@token');
 Route::get('/', 'HomeController@index')->name('login');
 Route::post('/register', 'Auth\RegisterController@register');
@@ -20,11 +21,6 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
-
-Route::get('/admin/login', 'Admin\Auth\LoginController@loginForm');
-Route::post('/admin/login', 'Admin\Auth\LoginController@login');
-Route::post('/admin/logout', 'Admin\Auth\LoginController@logout');
-
 
 Route::middleware(['auth'])->group(function(){
 });
@@ -103,4 +99,23 @@ Route::middleware(['client:user-product'])->group(function(){
 	Route::post('/user/products','UserProductController@store')->name('user.products.store');
 	Route::put('/user/products/{product}','UserProductController@update')->name('user.products.update');
 	Route::delete('/user/products/{product}','UserProductController@destroy')->name('user.products.destroy');
+});
+
+
+//Admin
+Route::group(['middleware' => ['csrf'],'prefix' => 'admin'],function(){
+	Route::get('/login', 'Admin\Auth\LoginController@loginForm');
+	Route::post('/login', 'Admin\Auth\LoginController@login');
+});
+
+Route::group(['middleware' => ['csrf','admin','apiToken'],'prefix' => 'admin'],function(){
+	Route::post('/logout', 'Admin\Auth\LoginController@logout');
+
+	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
+	Route::delete('/products','Admin\ProductController@destroy');
+	Route::resource('/products', 'Admin\ProductController');
+
+	Route::get('/tags/{tag}/delete','Admin\TagController@destroy');
+	Route::delete('/tags','Admin\TagController@destroy');
+	Route::resource('/tags', 'Admin\TagController');
 });

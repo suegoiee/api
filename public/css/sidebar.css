@@ -62,13 +62,14 @@
 }
 #sidebarToggle{
     background-color: #9E9E9E;
-    top: 10px;
+    top: 5px;
     display: none;
     height: 40px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     cursor: pointer;
-    position: relative;
+    position: fixed;
+    transition: all 0.3s;
 }
 
 
@@ -109,5 +110,8 @@
     }
     #sidebarToggle{
         display: block;
+    }
+    #sidebarToggle[aria-expanded="true"]{
+        margin-left:80px;
     }
 }
