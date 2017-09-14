@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('css_file')
     <link rel="stylesheet" href="{{asset('css/form.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-multiselect/css/bootstrap-multiselect.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/chosen/chosen.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
 @endsection
 @section('content')
 <div id="content" class="container pt-5">
@@ -28,6 +31,10 @@
 @endsection
 
 @section('javascript')
+<script src="{{asset('thirdparty/bootstrap-multiselect/js/bootstrap-multiselect.js')}}"></script>
+<script src="{{asset('thirdparty/chosen/chosen.jquery.js')}}"></script>
+<script src="{{asset('thirdparty/jquery.quicksearch/jquery.quicksearch.js')}}"></script>
+<script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
 <script>
 $(function(){
    

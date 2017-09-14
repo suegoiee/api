@@ -1,15 +1,19 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
+use App\Repositories\TagRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class ProductController extends AdminController
 {	
-    public function __construct(ProductRepository $productRepository)
+    protected $tagRepository;
+
+    public function __construct(ProductRepository $productRepository, TagRepository $tagRepository)
     {
         $this->moduleName='product';
         $this->moduleRepository = $productRepository;
+        $this->tagRepository = $tagRepository;
+
         $this->token = $this->clientCredentialsGrantToken();
     }
 
@@ -29,6 +33,8 @@ class ProductController extends AdminController
     {
         $data = [
             'module_name'=> $this->moduleName,
+            'tags'=>$this->tagRepository->gets(),
+            'collections'=>$this->moduleRepository->gets(),
             'data'=>null,
         ];
         return view('admin.form',$data);
@@ -39,6 +45,8 @@ class ProductController extends AdminController
 
         $data = [
             'module_name'=> $this->moduleName,
+            'tags'=>$this->tagRepository->gets(),
+            'collections'=>$this->moduleRepository->gets(),
             'data' => $this->moduleRepository->getWith($id,['tags','collections','avatar_small','avatar_detail']),
         ];
         return view('admin.form',$data);

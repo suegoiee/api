@@ -47,6 +47,7 @@
                     </div>
                 </div>
             </div>
+            {{ csrf_field() }}
             <div class="row" style="padding-top: 1rem">
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-info col-4"><i class="fa fa-sign-in"></i> {{trans('auth.login')}}</button>

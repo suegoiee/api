@@ -33,7 +33,7 @@ class TagController extends AdminController
             'module_name'=> $this->moduleName,
             'data'=>null,
         ];
-        return view('admin.tag.form',$data);
+        return view('admin.form',$data);
     }
 
     public function edit($id)
@@ -42,6 +42,6 @@ class TagController extends AdminController
             'module_name'=> $this->moduleName,
             'data' => $this->moduleRepository->get($id),
         ];
-        return view('admin.tag.form',$data);
+        return view('admin.form',$data);
     }
 }

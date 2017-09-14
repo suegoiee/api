@@ -19,6 +19,19 @@
                 
     </div>
 </div>
+<div class="form-group row" id="collections_select">
+    <label class="form-control-label col-sm-2" for="collections">{{trans($module_name.'.admin.collections')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control chosen-select" id="collections" name="collections[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @foreach($collections as $product)
+                <option value="{{$product->id}}" {{$data && $data->colloections->where('id',$product->id)->count()>0 ? 'selected':''}} >{{$product->name}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="model">{{trans($module_name.'.admin.model')}}</label>
     <div class="col-sm-8">
@@ -72,6 +85,19 @@
         <select class="form-control" id="status" name="status" >
             <option value="0"  {{ $data && $data->status=='0' ? 'selected':'' }} >{{trans($module_name.'.admin.status_0')}}</option>
             <option value="1"  {{ $data && $data->status=='1' ? 'selected':'' }} >{{trans($module_name.'.admin.status_1')}}</option>
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="tags">{{trans($module_name.'.admin.tags')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control chosen-select" id="tags" name="tags[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @foreach($tags as $tag)
+                <option value="{{$tag->id}}" {{$data && $data->tags->where('id',$tag->id)->count()>0 ? 'selected':''}} >{{$tag->name}}</option>
+            @endforeach
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">
