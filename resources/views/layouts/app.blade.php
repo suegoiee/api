@@ -21,7 +21,6 @@
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); ?>;
-        var WEB_PATH = "{{url('/')}}";
 		function url(uri){
             if(!uri){
                 uri='/';

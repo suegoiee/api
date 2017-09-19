@@ -60,7 +60,7 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
 });
 
-Route::middleware(['client'])->group(function(){
+Route::middleware(['web'])->group(function(){
 	Route::resource('/tags', 'TagController', ['only' => [
 		'index'
 	]]);
@@ -118,4 +118,8 @@ Route::group(['middleware' => ['csrf','admin','apiToken'],'prefix' => 'admin'],f
 	Route::get('/tags/{tag}/delete','Admin\TagController@destroy');
 	Route::delete('/tags','Admin\TagController@destroy');
 	Route::resource('/tags', 'Admin\TagController');
+
+	Route::get('/users/{tag}/delete','Admin\UserController@destroy');
+	Route::delete('/users','Admin\UserController@destroy');
+	Route::resource('/users', 'Admin\UserController');
 });
