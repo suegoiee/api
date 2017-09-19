@@ -9,7 +9,7 @@ class Order extends UanalyzeModel
 {
     use SoftDeletes;
     protected $dates = ['deleted_at'];
-
+    protected $appends = ['user_nick_name'];
     protected $fillable = [
         'user_id','status','price','memo',
     ];
@@ -21,5 +21,9 @@ class Order extends UanalyzeModel
 
     public function products(){
         return $this->belongsToMany('App\Product');
+    }
+
+    public function getUserNickNameAttribute(){
+        return $this->user->profile->nick_name;
     }
 }

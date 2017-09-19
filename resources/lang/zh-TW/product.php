@@ -22,6 +22,7 @@ return [
     	'status_0'=>'下架',
     	'status_1'=>'上架',
         'tags'=>'標籤',
+        'created_at' => '訂購時間',
         'collections'=>'產品組合',
 	],
     'collection_cant_del' =>'無法個別刪除。'

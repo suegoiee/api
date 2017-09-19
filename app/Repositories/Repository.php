@@ -13,8 +13,12 @@ class Repository
 	public function gets(){
 		return $this->model->get();
 	}
-	public function getsWith($with=[]){
-		return $this->model->with($with)->get();
+	public function getsWith($with=[],$where=[]){
+		$query = $this->model->with($with);
+		foreach ($where as $key => $value) {
+			$query = $query->where($key,$value);
+		}
+		return $query->get();
 	}
 	public function create($data){
 		return $this->model->create($data);

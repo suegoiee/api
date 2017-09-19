@@ -20,6 +20,7 @@ class TagController extends AdminController
 
         $data = [
             'module_name'=> $this->moduleName,
+            'actions'=>['new'],
             'table_data' => $tags,
             'table_head' =>['id','name'],
             'table_formatter' =>[],

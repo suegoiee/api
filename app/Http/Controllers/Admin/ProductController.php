@@ -22,6 +22,7 @@ class ProductController extends AdminController
         $product = $this->moduleRepository->getsWith(['tags','collections','avatar_small']);
         $data = [
             'module_name'=> $this->moduleName,
+            'actions'=>['new'],
             'table_data' => $product,
             'table_head' =>['id','name','type','model','status'],
             'table_formatter' =>['status'],

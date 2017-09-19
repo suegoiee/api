@@ -122,4 +122,8 @@ Route::group(['middleware' => ['csrf','admin','apiToken'],'prefix' => 'admin'],f
 	Route::get('/users/{tag}/delete','Admin\UserController@destroy');
 	Route::delete('/users','Admin\UserController@destroy');
 	Route::resource('/users', 'Admin\UserController');
+
+	Route::get('/orders/{product}/delete','Admin\OrderController@destroy');
+	Route::delete('/orders','Admin\OrderController@destroy');
+	Route::resource('/orders', 'Admin\OrderController');
 });

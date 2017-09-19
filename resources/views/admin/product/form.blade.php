@@ -24,7 +24,7 @@
     <div class="col-sm-8">
         <select class="form-control chosen-select" id="collections" name="collections[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
             @foreach($collections as $product)
-                <option value="{{$product->id}}" {{$data && $data->colloections->where('id',$product->id)->count()>0 ? 'selected':''}} >{{$product->name}}</option>
+                <option value="{{$product->id}}" {{$data && $data->collections->where('id',$product->id)->count()>0 ? 'selected':''}} >{{$product->name}}</option>
             @endforeach
         </select>
     </div>

@@ -7,8 +7,19 @@
 <div id="content" class="container pt-5">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active"><span class="">{{trans($module_name.'.admin.title')}}</span></li>
-        <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/create')}}" class="btn btn-info" >{{trans($module_name.'.admin.new_label')}}</a></li>
+        @if(@in_array('new',$actions))
+            <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/create')}}" class="btn btn-info" >{{trans($module_name.'.admin.new_label')}}</a></li>
+        @endif
     </ol>
+    @if(isset($tabs))
+        <ul class="nav nav-tabs" role="tablist">
+            @foreach($tabs as $key => $tab)
+                @foreach($tab as $value)
+                    <li class="nav-item" role="presentation" ><a class="nav-link {!! @$query_string[$key] == $value? 'active':'' !!}"  href="{{url('/admin/'.str_plural($module_name).'?'.$key.'='.$value)}}"  >{{trans($module_name.'.admin.'.$key.'_'.$value)}}</a></li>
+                @endforeach
+            @endforeach
+        </ul>
+    @endif
     @include('admin.table')
 </div>
 @endsection
@@ -46,8 +57,9 @@ $(function(){
 
     $('#table').on('click','.delete-btn',function(event){
         if(confirm('確定刪除?')){
-
+            return true;
         }
+        return false;
     });
 });
 </script>
