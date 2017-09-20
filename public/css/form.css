@@ -4,7 +4,7 @@
     font-size: 1rem;
     line-height: 1.25;
 }
-.text{
+#content .text{
 	padding: .5rem .75rem;
     font-size: 1rem;
     line-height: 1.25;
@@ -12,5 +12,9 @@
 @media (max-width: 768px) {
 	.form-control-label{
 		text-align: left;
+	}
+	.nav-item{
+		width: 100%;
+		text-align: center;
 	}
 }

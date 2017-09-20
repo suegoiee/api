@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use Auth;
 use Hash;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\AdminRepository;
 
 class LoginController extends Controller
 {
-    protected $admin;
     protected $redirectTo = '/';
-    public function __construct(AdminRepository $admin)
+    public function __construct()
     {
-        $this->admin = $admin;
+       
     }
     public function loginForm()
     {
@@ -24,10 +23,7 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        $credentials = $this->credentials($request);
-
-        if ($this->admin->check($credentials)) {
-
+        if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
         return $this->sendFailedLoginResponse($request);
@@ -40,6 +36,12 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
     }
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->has('remember')
+        );
+    }
     protected function credentials(Request $request)
     {
         return $request->only('name', 'password');
@@ -47,8 +49,8 @@ class LoginController extends Controller
 
     protected function sendLoginResponse(Request $request)
     {
-        $request->session()->put('admin_name',$request->input('name'));
-        $request->session()->put('admin',true);
+        //$request->session()->put('admin_name',$request->input('name'));
+        //$request->session()->put('admin',true);
         $request->session()->regenerate();
         return redirect()->intended($this->redirectTo);
     }
@@ -64,10 +66,16 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->flush();
+        //$request->session()->flush();
+        $this->guard()->logout();
 
         $request->session()->regenerate();
 
         return redirect($this->redirectTo);
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('admin');
     }
 }

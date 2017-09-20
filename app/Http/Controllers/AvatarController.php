@@ -51,7 +51,7 @@ class AvatarController extends Controller
         }
 
         $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
-        $moduleRepository->avatar()->create($data);
+        $moduleRepository->avatars()->create($data);
         return $this->successResponse($data);
     }
 
@@ -59,7 +59,7 @@ class AvatarController extends Controller
     {
         $moduleRepository = $this->moduleRepository($request,$module_id, false);
 
-        $avatar = $moduleRepository->avatar()->orderBy('created_at', 'desc')->get();
+        $avatar = $moduleRepository->avatars()->orderBy('created_at', 'desc')->get();
         return $this->successResponse($avatar);
     }
 
@@ -80,7 +80,7 @@ class AvatarController extends Controller
         }
 
         $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
-        $avatar = $moduleRepository->avatar()->orderBy('created_at', 'desc')->first();
+        $avatar = $moduleRepository->avatars()->orderBy('created_at', 'desc')->first();
         $this->avatarRepository->update($avatar->id,$data);
         $this->destroyAvatar($avatar->path);
         return $this->successResponse($data);
@@ -92,8 +92,8 @@ class AvatarController extends Controller
         if(!$moduleRepository){
             return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
         }
-        $avatars = $moduleRepository->avatar()->get();
-        $moduleRepository->avatar()->delete();
+        $avatars = $moduleRepository->avatars()->get();
+        $moduleRepository->avatars()->delete();
         $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
         $this->destroyAvatar($deleted);
         return $this->successResponse(['path'=>$deleted]);

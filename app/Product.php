@@ -14,6 +14,7 @@ class Product extends UanalyzeModel
     protected $fillable = [
         'name','model','info_short','info_more','type','price','expiration','status'
     ];
+    protected $appends = [ 'avatar_small', 'avatar_detail' ];
 
     public function user(){
     	return $this->belongsToMany('App\User')->withPivot('deadline','installed')->withTimestamps();
@@ -28,18 +29,18 @@ class Product extends UanalyzeModel
         return $this->morphToMany('App\Tag', 'taggable')->withTimestamps();
     }
 
-    public function avatar()
+    public function avatars()
     {
         return $this->morphMany('App\Avatar', 'imageable');
     }
-    public function avatar_small()
+    public function getAvatarSmallAttribute()
     {
-        return $this->avatar()->where('type','small');
+        return $this->avatars()->where('type','small')->first();
     }
 
-    public function avatar_detail()
+    public function getAvatarDetailAttribute()
     {
-        return $this->avatar()->where('type','detail');
+        return $this->avatars()->where('type','detail')->get();
     }
 
     public function laboratories()

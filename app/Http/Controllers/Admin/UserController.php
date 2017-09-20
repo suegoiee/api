@@ -23,7 +23,7 @@ class UserController extends AdminController
         $data = [
             'module_name'=> $this->moduleName,
             'table_data' => $users,
-            'table_head' =>['id','email','nick_name'],
+            'table_head' =>['id','email','nick_name','updated_at'],
             'table_formatter' =>[],
         ];
         return view('admin.list',$data);
@@ -45,5 +45,15 @@ class UserController extends AdminController
             'data' => $this->moduleRepository->get($id),
         ];
         return view('admin.form',$data);
+    }
+    public function show($id)
+    {
+        $user = $this->moduleRepository->get($id);
+        $data = [
+            'module_name'=> $this->moduleName,
+            'title_field'=> $user->profile->nick_name,
+            'data' => $user,
+        ];
+        return view('admin.detail',$data);
     }
 }

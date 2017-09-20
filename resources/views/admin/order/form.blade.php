@@ -26,7 +26,6 @@
                     <th>{{trans('product.admin.name')}}</th>
                     <th>{{trans('product.admin.type')}}</th>
                     <th>{{trans('product.admin.price')}}</th>
-                    <th>{{trans('product.admin.created_at')}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,11 +35,16 @@
                     <td>{{$product->name}}</td>
                     <td>{{trans('product.admin.type_'.$product->type)}}</td>
                     <td>{{$product->price}}</td>
-                    <td>{{$product->created_at}}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="created_at">{{trans($module_name.'.admin.created_at')}}</label>
+    <div class="col-sm-8 text">
+        {{$data->created_at}}
     </div>
 </div>
 <div class="form-group row">

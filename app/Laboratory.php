@@ -12,9 +12,16 @@ class Laboratory extends UanalyzeModel
 
 	protected $fillable=['user_id','title','layout'];
 
-	public function avatar()
+	protected $appends = [ 'avatar' ];
+	
+	public function avatars()
     {
         return $this->morphMany('App\Avatar', 'imageable');
+    }
+
+    public function getAvatarAttribute()
+    {
+        return $this->avatars()->first();
     }
 
 	public function products(){

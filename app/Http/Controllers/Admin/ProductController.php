@@ -19,7 +19,7 @@ class ProductController extends AdminController
 
     public function index()
     {
-        $product = $this->moduleRepository->getsWith(['tags','collections','avatar_small']);
+        $product = $this->moduleRepository->getsWith(['tags','collections']);
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
@@ -48,7 +48,7 @@ class ProductController extends AdminController
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
             'collections'=>$this->moduleRepository->gets(),
-            'data' => $this->moduleRepository->getWith($id,['tags','collections','avatar_small','avatar_detail']),
+            'data' => $this->moduleRepository->getWith($id,['tags','collections']),
         ];
         return view('admin.form',$data);
     }

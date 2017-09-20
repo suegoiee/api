@@ -1,0 +1,14 @@
+.label{
+	text-align: right;
+}
+.text{
+}
+@media (max-width: 768px) {
+	.label{
+		text-align: left;
+	}
+	.nav-item{
+		width: 100%;
+		text-align: center;
+	}
+}

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Carbon\Carbon;
+use Hash;
+use App\User;
 use App\Traits\OauthToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -28,6 +30,10 @@ class TokenController extends Controller
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
+        }
+        $user = User::where('email',$request->input('email'))->first();
+        if($user && Hash::check($request->input('password'), $user->getAuthPassword())){
+            $user->touch();
         }
         return $this->successResponse($this->passwordGrantToken($request));
     }

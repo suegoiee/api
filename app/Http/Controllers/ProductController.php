@@ -17,13 +17,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        $product = $this->productRepository->getsWith(['tags','collections','avatar_small']);
+        $product = $this->productRepository->getsWith(['tags','collections']);
 
         return $this->successResponse($product?$product:[]);
     }
     public function onShelves()
     {
-        $product = $this->productRepository->getsWithByStatus(['tags','collections','avatar_small']);
+        $product = $this->productRepository->getsWithByStatus(['tags','collections']);
 
         return $this->successResponse($product?$product:[]);
     }
@@ -76,14 +76,14 @@ class ProductController extends Controller
     public function show(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWith($id,['tags','collections','avatar_small','avatar_detail']);
+        $product = $this->productRepository->getWith($id,['tags','collections']);
 
         return $this->successResponse($product?$product:[]);
     }
     public function onShelf(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWithByStatus($id, ['tags','collections','avatar_small','avatar_detail']);
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections']);
 
         return $this->successResponse($product?$product:[]);
     }

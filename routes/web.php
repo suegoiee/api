@@ -10,10 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 //API
 Route::get('/token','Auth\TokenController@token');
-Route::get('/', 'HomeController@index')->name('login');
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
@@ -103,12 +101,15 @@ Route::middleware(['client:user-product'])->group(function(){
 
 
 //Admin
-Route::group(['middleware' => ['csrf'],'prefix' => 'admin'],function(){
+Route::group(['middleware' => ['admin'] ],function(){
+	Route::get('/', 'HomeController@index')->name('login');
+});
+Route::group(['middleware' => ['admin'],'prefix' => 'admin'],function(){
 	Route::get('/login', 'Admin\Auth\LoginController@loginForm');
 	Route::post('/login', 'Admin\Auth\LoginController@login');
 });
 
-Route::group(['middleware' => ['csrf','admin','apiToken'],'prefix' => 'admin'],function(){
+Route::group(['middleware' => ['admin','auth:admin','apiToken'],'prefix' => 'admin'],function(){
 	Route::post('/logout', 'Admin\Auth\LoginController@logout');
 
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
