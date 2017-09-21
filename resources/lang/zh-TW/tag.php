@@ -5,7 +5,7 @@ return [
 		'title'=> $module_name.'管理',
     	'menu_title'=> $module_name.'管理',
     	'new_label'=>'新增'.$module_name,
-    	'new_title'=>'新增'.$module_name,
+    	'create_title'=>'新增'.$module_name,
         'edit_label'=>'編輯'.$module_name,
         'edit_title'=>'編輯'.$module_name,
     	'id'=>'編號',

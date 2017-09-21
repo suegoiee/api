@@ -14,7 +14,7 @@ return [
    
     'supportsCredentials' => true,
     'allowedOrigins' => ['*'],
-    'allowedHeaders' => ['DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type'],
+    'allowedHeaders' => ['DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Origin'],
     'allowedMethods' => ['GET, POST, OPTIONS'],
     'exposedHeaders' => [],
     'maxAge' => 1728000,

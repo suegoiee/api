@@ -27,13 +27,13 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \Barryvdh\Cors\HandleCors::class,
+            //\Barryvdh\Cors\HandleCors::class,
             'throttle:60,1',
             'bindings',
         ],
 
         'api' => [
-            \Barryvdh\Cors\HandleCors::class,
+            //\Barryvdh\Cors\HandleCors::class,
             'throttle:60,1',
             'bindings',
         ],

@@ -51,6 +51,12 @@ class AvatarController extends Controller
         }
 
         $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
+
+        if($request->input('avatar_type','normal')!='detail'){
+            $avatars = $moduleRepository->avatars()->where('type',$request->input('avatar_type','normal'))->orderBy('created_at', 'desc')->get();
+            $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
+            $this->destroyAvatar($deleted);
+        }
         $moduleRepository->avatars()->create($data);
         return $this->successResponse($data);
     }
@@ -80,7 +86,11 @@ class AvatarController extends Controller
         }
 
         $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
-        $avatar = $moduleRepository->avatars()->orderBy('created_at', 'desc')->first();
+        if($request->input('avatar_type','normal')=='detail'){
+            $avatar = $moduleRepository->avatars()->find($request->input('id'));
+        }else{
+            $avatar = $moduleRepository->avatars()->where('type',$request->input('avatar_type','normal'))->orderBy('created_at', 'desc')->first();
+        }
         $this->avatarRepository->update($avatar->id,$data);
         $this->destroyAvatar($avatar->path);
         return $this->successResponse($data);
@@ -92,8 +102,16 @@ class AvatarController extends Controller
         if(!$moduleRepository){
             return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
         }
-        $avatars = $moduleRepository->avatars()->get();
-        $moduleRepository->avatars()->delete();
+
+        $id = $request->input('deleted');
+        if($id){
+            $ids = is_array($id)? $id : [$id];
+            $avatars = $moduleRepository->avatars()->whereIn('id',$ids)->get();
+            $moduleRepository->avatars()->whereIn('id',$ids)->delete();
+        }else{
+            $avatars = $moduleRepository->avatars()->get();
+            $moduleRepository->avatars()->delete();
+        }
         $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
         $this->destroyAvatar($deleted);
         return $this->successResponse(['path'=>$deleted]);
@@ -124,6 +142,7 @@ class AvatarController extends Controller
         }
         return false;
     }
+
     protected function getModuleName()
     {
         $current_route_name = Route::currentRouteName();

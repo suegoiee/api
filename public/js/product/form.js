@@ -77,13 +77,15 @@ $(function(){
     $("#new_avatar_detail_btn").click(function(event){
         event.preventDefault();
         var avatar_detail_html='<div class="input-group">'+
-                                '<input type="file" class="form-control" name="avatar_detail[]" value="">'+
+                                '<input type="file" class="form-control" name="avatars[][avatar]" value="">'+
+                                '<input type="hidden" class="form-control" name="avatars[][avatar_type]" value="detail">'+
+                                
                                 '<span class="input-group-btn">'+
                                     '<button class="btn btn-danger remove_btn" type="button"><span class="oi oi-trash"></span></button>'+
                                 '</span>'+
                             '</div>';
         avatar_detail_index++;
-        $('#upload_list').prepend(avatar_detail_html);
+        $('#upload_list').append(avatar_detail_html);
     });
     $('#upload_list').on('click','.remove_btn',function(event){
         event.preventDefault();
@@ -97,6 +99,27 @@ $(function(){
         var row = $(this);
         if(confirm('確定刪除 ?')){
             row.parent().parent().remove();
+           $('#avatar_detail_list').append('<input type="hidden" name="deleted[]" value="'+row.data('id')+'">');
+                    
         }
     });
+
+    $('#avatar_small').on('click','.remove_btn',function(event){
+        event.preventDefault();
+        var row = $(this);
+        if(confirm('確定刪除 ?')){
+            $('#avatar_small').html('<div class="col-sm-10">'+
+                '<div class="input-group">'+
+                    '<input type="file" class="form-control" name="avatars[][avatar]" value="">'+
+                    '<input type="hidden" class="form-control" name="avatars[][avatar_type]" value="small">'+
+                '</div>'+
+            '</div>'+
+            '<div class="col-sm-2 text-danger msg">'+
+            '</div>');
+            if(row.data('id')){
+                $('#avatar_small').append('<input type="hidden" name="deleted[]" value="'+row.data('id')+'">');
+            } 
+        }
+    });
+
 });

@@ -3,7 +3,8 @@ $(function(){
 	$("#new_avatar_detail_btn").click(function(event){
 		event.preventDefault();
 		var avatar_detail_html='<div class="input-group">'+
-								'<input type="file" class="form-control" name="avatar_detail[]" value="">'+
+								'<input type="file" class="form-control" name="avatars[][avatar]" value="">'+
+								'<input type="hidden" class="form-control" name="avatars[][avatar_type]" value="detail">'+
 								'<span class="input-group-btn">'+
 									'<button class="btn btn-danger remove_btn" type="button"><span class="oi oi-trash"></span></button>'+
 								'</span>'+
