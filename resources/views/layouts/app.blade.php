@@ -73,13 +73,17 @@
 		@if(Auth::guard('admin')->check())
 			@include('layouts.sidebar')
 		@endif
-		@yield('content')
+        <div id="content" class="w-100">
+            <div class="w-100 p-3 pt-4">
+            @yield('content')
+            </div>
+            <footer class="footer pt-5">
+                <div class="container-fluid ">
+                    <span class="text-muted">Version 0.1.0 . Copyright © 2017. All rights reserved.</span>
+                </div>
+            </footer>
+        </div>
 	</div>
-	<footer class="footer">
-		<div class="container">
-			<span class="text-muted">Version 0.1.0 . Copyright © 2017. All rights reserved.</span>
-		</div>
-    </footer>
     <!-- Scripts -->
 	<script src="{{asset('thirdparty/jquery/jquery-3.2.1.min.js')}}" ></script>
 	<script src="{{asset('thirdparty/popper/popper.min.js')}}" ></script>

@@ -3,7 +3,6 @@
     <link rel="stylesheet" href="{{asset('css/home.css')}}">
 @endsection
 @section('content')
-<div id="content" class="container pt-5">
     <form>
         <div class="form-row">
             <div class="col-sm-2 pt-2">
@@ -100,7 +99,6 @@
         <h4 class="pt-3">Response:</h4>
         <textarea class="form-control" id="response_data" rows="10" ></textarea>
     </div>
- </div>
 @endsection
 
 @section('javascript')

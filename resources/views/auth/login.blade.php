@@ -3,7 +3,6 @@
     <link rel="stylesheet" href="{{asset('css/home.css')}}">
 @endsection
 @section('content')
-<div id="content" class="container">
         <form class="form-horizontal" role="form" method="POST" action="/login">
             <div class="row">
                 <div class="col-md-3"></div>
@@ -69,7 +68,6 @@
                 </div>
             </div>
         </form>
-    </div>
 
 @endsection
 

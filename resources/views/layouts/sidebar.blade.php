@@ -43,7 +43,8 @@
         </li>
     </ul>
 </nav>
-
-<button class="navbar-toggler" type="button" id="sidebarToggle" aria-expanded="false">
-   <span class="oi oi-menu"></span>
-</button>
+<div class="sidebar-toggler">
+    <button class="navbar-toggler" type="button" id="sidebarToggle" aria-expanded="false">
+       <span class="oi oi-menu"></span>
+    </button>
+</div>

@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.css')}}">
 @endsection
 @section('content')
-<div id="content" class="container pt-5">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active"><span class="">{{trans($module_name.'.admin.title')}}</span></li>
         @if(@in_array('new',$actions))
@@ -21,7 +20,6 @@
         </ul>
     @endif
     @include('admin.table')
-</div>
 @endsection
 
 @section('javascript')

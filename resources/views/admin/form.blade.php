@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
 @endsection
 @section('content')
-<div id="content" class="container pt-5">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{url('/admin/'.str_plural($module_name))}}"><span class="">{{trans($module_name.'.admin.title')}}</span></a></li>
         <li class="breadcrumb-item active">
@@ -27,7 +26,6 @@
             <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
         </div>
     </form>
-</div>
 @endsection
 
 @section('javascript')
