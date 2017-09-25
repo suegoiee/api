@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 //API
 Route::get('/token','Auth\TokenController@token');
 Route::post('/register', 'Auth\RegisterController@register');
@@ -59,6 +60,9 @@ Route::middleware(['auth:api'])->group(function(){
 });
 
 Route::middleware(['web'])->group(function(){
+
+	Route::post('/messages','MessageController@store');
+
 	Route::resource('/tags', 'TagController', ['only' => [
 		'index'
 	]]);
@@ -99,6 +103,12 @@ Route::middleware(['client:user-product'])->group(function(){
 	Route::delete('/user/products/{product}','UserProductController@destroy')->name('user.products.destroy');
 });
 
+Route::middleware(['client:message'])->group(function(){
+	Route::get('/messages/{message}','MessageController@show');
+	Route::put('/messages/{message}','MessageController@update');
+	Route::delete('/messages/{message}','MessageController@destroy');
+});
+
 
 //Admin
 Route::group(['middleware' => ['admin'] ],function(){
@@ -127,4 +137,8 @@ Route::group(['middleware' => ['admin','auth:admin','apiToken'],'prefix' => 'adm
 	Route::get('/orders/{product}/delete','Admin\OrderController@destroy');
 	Route::delete('/orders','Admin\OrderController@destroy');
 	Route::resource('/orders', 'Admin\OrderController');
+
+	Route::get('/messages/{product}/delete','Admin\MessageController@destroy');
+	Route::delete('/messages','Admin\MessageController@destroy');
+	Route::resource('/messages', 'Admin\MessageController');
 });

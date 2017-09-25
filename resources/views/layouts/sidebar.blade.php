@@ -29,10 +29,16 @@
                 <span class="text">{{trans('user.admin.menu_title')}}</span>
             </a>
         </li>
-         <li>
+        <li>
             <a href="{{url('/admin/tags')}}">
                 <span class="oi oi-tag"></span>
                 <span class="text">{{trans('tag.admin.menu_title')}}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{url('/admin/messages')}}">
+                <span class="oi oi-envelope-closed"></span>
+                <span class="text">{{trans('message.admin.menu_title')}}</span>
             </a>
         </li>
     </ul>
