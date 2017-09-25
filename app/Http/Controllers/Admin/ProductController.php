@@ -68,7 +68,7 @@ class ProductController extends AdminController
             $requet_avatars = $request->only('avatars');
             $avatars = $requet_avatars['avatars'];
             foreach ($avatars as $key => $avatar) {
-                if(!isset($avatar['avatar'])){
+                if(!array_key_exists('avatar',$avatar)){
                     continue;
                 }
                 $file_path = $avatar['avatar']->getPathname();
