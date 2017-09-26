@@ -40,7 +40,7 @@ class ProductController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name','model','info_short','info_more','type','price','expiration','status']);
+        $request_data = $request->only(['name','model','api','info_short','info_more','type','price','expiration','status']);
         $product = $this->productRepository->create($request_data);
 
         $tags = $request->input('tags',[]);
@@ -100,7 +100,7 @@ class ProductController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name','model','info_short','info_more','type','price','expiration','status']);
+        $request_data = $request->only(['name','model','api','info_short','info_more','type','price','expiration','status']);
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $product = $this->productRepository->update($id,$data);
@@ -129,6 +129,7 @@ class ProductController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:255',
             'model' => 'max:255',
+            'api' => 'max:255',
             'info_short'=>'required|max:255',
             'info_more'=>'string',
             'type'=>'required|max:255',
@@ -141,6 +142,7 @@ class ProductController extends Controller
         return Validator::make($data, [
             'name' => 'max:255',
             'model' => 'max:255',
+            'api' => 'max:255',
             'info_short'=>'max:255',
             'info_more'=>'string',
             'type'=>'max:255',
