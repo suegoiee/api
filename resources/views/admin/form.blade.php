@@ -35,7 +35,13 @@
 <script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
 <script>
 $(function(){
-   
+   $('#form').on('keyup keypress', function(e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) { 
+        e.preventDefault();
+        return false;
+      }
+    });
 });
 </script>
 <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>
