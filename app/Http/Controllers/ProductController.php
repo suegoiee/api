@@ -41,6 +41,7 @@ class ProductController extends Controller
         }
 
         $request_data = $request->only(['name','model','api','info_short','info_more','type','price','expiration','status']);
+        $request_data['expiration'] = $request_data['expiration']? $request_data['expiration']:0;
         $product = $this->productRepository->create($request_data);
 
         $tags = $request->input('tags',[]);
