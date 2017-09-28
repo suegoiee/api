@@ -74,8 +74,8 @@
 			@include('layouts.sidebar')
 		@endif
         <div id="content" class="w-100">
-            <div class="w-100 p-3 pt-4">
-            @yield('content')
+            <div class="w-100 px-4 pt-4">
+                @yield('content')
             </div>
             <footer class="footer pt-5">
                 <div class="container-fluid ">
