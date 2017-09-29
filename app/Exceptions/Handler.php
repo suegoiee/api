@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
             );
 
             // log your new custom guzzle error message
-            return $logger->error($message);
+            return $logger->error((string) $exception->getResponse()->getBody());
         }
 
         // make sure to still log non-guzzle exceptions
@@ -71,15 +71,19 @@ class Handler extends ExceptionHandler
 	if ($request->wantsJson()) {
         	// Define the response
       	  	$response = [
-            		'error' => ['title'=>'Sorry, something went wrong.']
+            		'error' => ['title'=> 'Sorry, something went wrong.']
         	];
 
         	// If the app is in debug mode
         	if (config('app.debug')) {
            	 	// Add the exception class name, message and stack trace to response
-            		$response['error']['exception'] = get_class($exception); // Reflection might be better here
-            		$response['error']['message'] = $exception->getMessage();
-            		$response['error']['trace'] = $exception->getTrace();
+            	//$response['error']['exception'] = get_class($exception); // Reflection might be better here
+                if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
+                    $exception_response = json_decode($exception->getResponse()->getBody(),true);
+                    $response['error']['type'] = $exception_response['error'];
+                    $response['error']['message'] = [$exception_response['message']];
+                    //$response['error']['trace'] = $exception->getTrace();
+                }
         	}
 
         	// Default response of 400
@@ -106,8 +110,8 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+        if ($request->wantsJson(){//->expectsJson()) {
+            return response()->json(['error' => ['message'=>['Unauthenticated.']]], 401);
         }
 
         return redirect()->guest(route('login'));

@@ -35,6 +35,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $profile = $user->profile;
+        $profile->email =  $user->email;
         return $this->successResponse($profile?$profile:[]);
     }
 

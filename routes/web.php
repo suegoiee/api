@@ -21,6 +21,9 @@ Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 
+Route::get('/allpay','AllpayController@index');
+Route::get('/allpay/ok','AllpayController@ok');
+
 Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){

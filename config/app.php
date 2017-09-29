@@ -180,6 +180,8 @@ return [
 
         Barryvdh\Cors\ServiceProvider::class,
 
+        Shouwda\Allpay\AllpayServiceProvider::class,
+
     ],
 
     /*
@@ -196,6 +198,7 @@ return [
     'aliases' => [
 
         'App' => Illuminate\Support\Facades\App::class,
+        'Allpay' => Shouwda\Allpay\Facades\Allpay::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
         'Blade' => Illuminate\Support\Facades\Blade::class,

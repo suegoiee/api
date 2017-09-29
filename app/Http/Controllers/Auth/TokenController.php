@@ -35,7 +35,8 @@ class TokenController extends Controller
         if($user && Hash::check($request->input('password'), $user->getAuthPassword())){
             $user->touch();
         }
-        return $this->successResponse($this->passwordGrantToken($request));
+        $response = $this->passwordGrantToken($request);
+        return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)
     {

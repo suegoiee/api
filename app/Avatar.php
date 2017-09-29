@@ -12,9 +12,14 @@ class Avatar extends UanalyzeModel
     protected $fillable = [
         'path','type'
     ];
-
+    protected $appends=[
+    	'url',
+    ];
     public function imageable()
     {
         return $this->morphTo();
+    }
+    public function getUrlAttribute(){
+    	return url('storage/'.$this->path);
     }
 }

@@ -1,0 +1,20 @@
+{
+    "name": "shouwda/allpay",
+    "description": "The Allpay for Laravel 5 Framework.",
+    "keywords": ["allpay", "laravel"],
+    "authors": [
+        {
+            "name": "shouwda",
+            "email": "shouwda@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {  
+        "classmap": [
+            "src/SDK"
+        ],
+        "psr-4": {
+            "Shouwda\\Allpay\\": "src/"
+        }
+    }
+}
