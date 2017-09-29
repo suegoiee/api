@@ -48,7 +48,7 @@ class CreditCardController extends Controller
     {
         $user = $request->user();
         if(!($this->creditCardRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
         $creditCard = $user->creditCards()->find($id);
@@ -65,7 +65,7 @@ class CreditCardController extends Controller
     {
         $user = $request->user();
         if(!($this->creditCardRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
         $validator = $this->creditCardValidator($request->all());
@@ -86,7 +86,7 @@ class CreditCardController extends Controller
     {
         $user = $request->user();
         if(!($this->creditCardRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $user->creditCards()->delete($id);
         return $this->successResponse(['id'=>$id]);

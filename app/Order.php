@@ -14,6 +14,7 @@ class Order extends UanalyzeModel
         'user_id','status','price','memo',
     ];
     protected $hidden = [
+        'user','profile'
     ];
     public function user(){
     	return $this->belongsTo('App\User');
@@ -24,6 +25,7 @@ class Order extends UanalyzeModel
     }
 
     public function getUserNickNameAttribute(){
-        return $this->user->profile->nick_name;
+        $nick_name = $this->user->profile->nick_name;
+        return $nick_name;
     }
 }

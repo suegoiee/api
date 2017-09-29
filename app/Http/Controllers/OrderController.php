@@ -48,7 +48,7 @@ class OrderController extends Controller
     {
         $user = $request->user();
         if(!($this->orderRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
         $order = $user->orders()->with(['products','products.avatar_small','products.collections'])->find($id);
@@ -88,7 +88,7 @@ class OrderController extends Controller
     {
         $user = $request->user();
         if(!($this->orderRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $this->orderRepository->delete($id);
         return $this->successResponse(['id'=>$id]);

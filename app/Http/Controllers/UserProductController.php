@@ -89,7 +89,7 @@ class UserProductController extends Controller
         $user = $request->user();
         $product = $user->products()->find($id);
         if(!$product){
-            return $this->validateErrorResponse(trans('auth.permission_denied'));
+            return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
         if($product->type=='collection'){
             if($product->pivot->installed==0){
@@ -106,7 +106,7 @@ class UserProductController extends Controller
         $user = $request->user();
         $product = $request->user()->products()->find($id);
         if(!$product){
-            return $this->validateErrorResponse(trans('auth.permission_denied'));
+            return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
         $request->user()->products()->updateExistingPivot($id,['installed'=>0]);
 

@@ -43,7 +43,7 @@ class AvatarController extends Controller
     {
         $moduleRepository = $this->moduleRepository($request,$module_id);
         if(!$moduleRepository){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $validator = $this->avatarValidator($request->all());
         if($validator->fails()){
@@ -78,7 +78,7 @@ class AvatarController extends Controller
     {
         $moduleRepository = $this->moduleRepository($request,$module_id);
         if(!$moduleRepository){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $validator = $this->avatarValidator($request->all());
         if($validator->fails()){
@@ -100,7 +100,7 @@ class AvatarController extends Controller
     {
         $moduleRepository = $this->moduleRepository($request,$module_id);
         if(!$moduleRepository){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
         $id = $request->input('deleted');

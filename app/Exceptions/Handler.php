@@ -75,7 +75,7 @@ class Handler extends ExceptionHandler
         	];
 
         	// If the app is in debug mode
-        	if (config('app.debug')) {
+        	/*if (config('app.debug')) {
            	 	// Add the exception class name, message and stack trace to response
             	//$response['error']['exception'] = get_class($exception); // Reflection might be better here
                 if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
@@ -86,7 +86,20 @@ class Handler extends ExceptionHandler
                 }else if($exception instanceof AuthenticationException){
                     $response['error']['message'] = ['Unauthenticated.'];
                 }
-        	}
+        	}*/
+            if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
+                $exception_response = json_decode($exception->getResponse()->getBody(),true);
+                $response['error']['type'] = $exception_response['error'];
+                $response['error']['message'] = [$exception_response['message']];
+                //$response['error']['trace'] = $exception->getTrace();
+            }else if($exception instanceof AuthenticationException){
+                $response['error']['message'] = ['Unauthenticated.'];
+            }else if($exception instanceof \Laravel\Passport\Exceptions\MissingScopeException){
+                $response['error']['message'] = ['Permission denied.'];
+            }else{
+                $response['error']['exception'] = get_class($exception);
+                $response['error']['message'] = [$exception->getMessage()];
+            }
 
         	// Default response of 400
         	$status = 400;

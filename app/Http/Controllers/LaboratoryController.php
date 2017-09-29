@@ -55,7 +55,7 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         if(!($this->laboratoryRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
         $laboratory = $user->laboratories()->with('avatar','products','products.avatar_small')->find($id);
@@ -72,7 +72,7 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         if(!($this->laboratoryRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
         $validator = $this->laboratoryValidator($request->all(), $user->id);
@@ -104,7 +104,7 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         if(!($this->laboratoryRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_denied')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $validator = $this->laboratoryValidator($request->all(), $user->id);
         if($validator->fails()){
@@ -113,7 +113,7 @@ class LaboratoryController extends Controller
         $products = $request->input('products');
         $is_collection = $user->laboratories()->find($id)->products()->where('type','collection')->count();
         if($is_collection){
-            return $this->failedResponse(['message'=>trans('product.collection_cant_del')]);
+            return $this->failedResponse(['message'=>[trans('product.collection_cant_del')]]);
         }
         $user->laboratories()->find($id)->products()->detach($products);
 
@@ -125,7 +125,7 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         if(!($this->laboratoryRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>trans('auth.permission_deined')]);
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $laboratory = $user->laboratories()->find($id);
         $user->laboratories()->where('id',$id)->delete();
