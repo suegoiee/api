@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Allpay;
+use Shouwda\Allpay\SDK\PaymentMethod;
+
 use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -11,10 +15,11 @@ class OrderController extends Controller
 {	
     use OauthToken;
     protected $orderRepository;
-
-    public function __construct(OrderRepository $orderRepository)
+    protected $productRepository;
+    public function __construct(OrderRepository $orderRepository,ProductRepository $productRepository)
     {
 	   $this->orderRepository = $orderRepository;
+       $this->productRepository = $productRepository;
     }
 
     public function index(Request $request)
@@ -39,8 +44,19 @@ class OrderController extends Controller
         $request_data = $request->only(['price','memo']);
         $products = $request->input('products',[]);
         $order = $user->orders()->create($request_data);
-        $order->products()->attach($products);
-        $order['products']=$order->products;
+        $product_ids = [];
+        foreach ($products as $key => $value) {
+            $product = $this->productRepository->get($value);
+            if($product->price==0){
+                $this->addProducts($user->id,$product->id);
+            }else{
+                array_push($product_ids,$value);
+            }
+        }
+        $order->products()->attach($product_ids);
+        $allpay_form = $this->allpay_form($order);
+        $order['products'] = $order->products;
+        $order['form_html'] = $allpay_form;
         return $this->successResponse($order?$order:[]);
     }
 
@@ -51,7 +67,7 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $order = $user->orders()->with(['products','products.avatar_small','products.collections'])->find($id);
+        $order = $user->orders()->with(['products','products.collections'])->find($id);
 
         return $this->successResponse($order?$order:[]);
     }
@@ -63,7 +79,6 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $validator = Validator::make($request->only('status'),['status' => 'required|numeric']);
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
@@ -76,9 +91,11 @@ class OrderController extends Controller
         if(!$order){
             return $this->notFoundResponse();
         }
-
+        $user = $order->user;
         if($order->status==1){
-            return $this->orderPaid($request,$order);
+            $order_products = $order->products->map(function($item,$key){return $item->id;});
+            $product_ids = $order_products->toArray();
+            return $this->addProducts($user->id, $product_ids);
         }
 
         return $this->successResponse($order?$order:[]);
@@ -104,9 +121,20 @@ class OrderController extends Controller
             'products.*'=>'exists:products,id,status,1',
         ]);        
     }
-    private function orderPaid(Request $request,$order){
-        $products = $order->products->map(function($item,$key){return $item->id;});
-        
+    protected function orderPayment(Request $request, $id)
+    {
+        $user = $request->user();
+        if(!($this->orderRepository->isOwner($user->id,$id))){
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
+        }
+
+        $order = $user->orders()->with(['products'])->find($id);
+        $allpay_form = $this->allpay_form($order);
+        $order['products'] = $order->products;
+        $order['form_html'] = $allpay_form;
+        return $this->successResponse($order?$order:[]);
+    }
+    private function addProducts($user_id, $products){
         $token = $this->clientCredentialsGrantToken();
         $http = new \GuzzleHttp\Client;
         $response = $http->request('post',url('/user/products'),[
@@ -115,10 +143,36 @@ class OrderController extends Controller
                     'Authorization' => 'Bearer '.$token['access_token'],
                 ],
                 'form_params' => [
-                    'products' => $products->toArray(),
-                    'user_id' => $order->user->id,
+                    'products' => $products,
+                    'user_id' => $user_id,
                 ],
             ]);
         return json_decode((string) $response->getBody(), true);
+    }
+    private function allpay_form($order){
+        $merchant_trade_no = 'Test'.time();
+        $order->allpays()->create(['MerchantTradeNo'=>$merchant_trade_no]);
+        $items = [];
+        foreach ($order->products as $key => $product) {
+            $item = [
+                'Name' => $product->name, 
+                'Price' => $product->price, 
+                'Currency'=> 'NTD', 
+                'Quantity' => (int)"1", 
+                'URL' => "#"
+                ];
+            array_push($items, $item);
+        }
+        $data=[
+            'ReturnURL' => url('/allapy/feedback'),
+            'MerchantTradeNo' => $merchant_trade_no,
+            'MerchantTradeDate' => date('Y/m/d H:i:s'),
+            'TotalAmount' => $order->price,
+            'TradeDesc' => 'Uanalyze',
+            'ChoosePayment' => \PaymentMethod::Credit,
+            'Items' => $items,
+        ];
+        Allpay::set($data);
+        return Allpay::checkOutString();
     }
 }

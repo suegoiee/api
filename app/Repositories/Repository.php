@@ -10,6 +10,13 @@ class Repository
 	public function getWith($id,$with=[]){
 		return $this->model->with($with)->find($id);
 	}
+	public function getBy($where=[]){
+		$query = $this->model;
+		foreach ($where as $key => $value) {
+			$query = $query->where($key,$value);
+		}
+		return $query->get();
+	}
 	public function gets(){
 		return $this->model->get();
 	}

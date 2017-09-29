@@ -20,6 +20,10 @@ class Order extends UanalyzeModel
     	return $this->belongsTo('App\User');
     }
 
+    public function allpays(){
+        return $this->hasMany('App\Allpay');
+    }
+
     public function products(){
         return $this->belongsToMany('App\Product');
     }

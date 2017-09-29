@@ -22,7 +22,7 @@ Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('/allpay','AllpayController@index');
-Route::get('/allpay/ok','AllpayController@ok');
+Route::get('/allpay/feedback','AllpayController@feedback');
 
 Route::middleware(['auth'])->group(function(){
 });
@@ -41,6 +41,7 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::resource('/user/favorites', 'FavoriteController', ['only' => [
 			'index', 'store', 'destroy'
 		]]);
+	Route::get('/user/orders/{order}/payment','OrderController@orderPayment');
 	Route::resource('/user/orders', 'OrderController', ['only' => [
 			'index','show', 'store','destroy'
 		]]);

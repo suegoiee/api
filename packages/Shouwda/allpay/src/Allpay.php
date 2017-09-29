@@ -42,4 +42,9 @@ class Allpay
     	} 
     }
 
+    public function checkOutFeedback()
+    {
+        return $this->opay->CheckOutFeedback();
+    }
+
 }

@@ -13,9 +13,9 @@ trait ResponseFormatter
         return response()->json(['status'=>'error','error'=>['message'=>$message]]);
     }
     protected function unauthorizedResponse(){
-    	return response()->json(['status'=>'error','error'=>['message'=>'unauthorized']]);	
+    	return response()->json(['status'=>'error','error'=>['message'=>['unauthorized']]]);	
     }
     protected function notFoundResponse(){
-        return response()->json(['status'=>'error','error'=>['message'=>'Not Found']]);
+        return response()->json(['status'=>'error','error'=>['message'=>['Not Found']]]);
     }
 }
