@@ -83,6 +83,8 @@ class Handler extends ExceptionHandler
                     $response['error']['type'] = $exception_response['error'];
                     $response['error']['message'] = [$exception_response['message']];
                     //$response['error']['trace'] = $exception->getTrace();
+                }else if($exception instanceof AuthenticationException){
+                    $response['error']['message'] = ['Unauthenticated.'];
                 }
         	}
 
