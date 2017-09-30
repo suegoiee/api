@@ -45,20 +45,22 @@ class OrderController extends Controller
         $products = $request->input('products',[]);
         $order = $user->orders()->create($request_data);
         $product_ids = [];
+        $product_data = [];
         foreach ($products as $key => $value) {
-            $product = $this->productRepository->get($value);
+            $product = $this->productRepository->getWith($value,['products','products.collections']);
             if($product->price==0){
                 $this->addProducts($user->id,[$product->id]);
             }else{
                 array_push($product_ids,$value);
             }
+            array_push($product_data,$product);
         }
         if(count($product_ids)){
             $order->products()->attach($product_ids);
             $allpay_form = $this->allpay_form($order);
-            $order['products'] = $order->products;
             $order['form_html'] = $allpay_form;
         }
+        $order['products'] = $product_data;
         return $this->successResponse($order?$order:[]);
     }
 
