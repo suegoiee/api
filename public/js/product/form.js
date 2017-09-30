@@ -1,4 +1,5 @@
 $(function(){
+    CKEDITOR.replace( 'info_more' );
     $('#collections').multiSelect({
         selectableHeader: "<div class='text-center'>可選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",

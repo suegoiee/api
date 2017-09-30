@@ -45,4 +45,5 @@ $(function(){
 });
 </script>
 <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>
+<script src="{{asset('thirdparty/ckeditor/ckeditor.js')}}"></script>
 @endsection
