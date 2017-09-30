@@ -42,15 +42,6 @@
     </div>
 </div>
 <div class="form-group row">
-    <label class="form-control-label col-sm-2" for="api">{{trans($module_name.'.admin.api')}}</label>
-    <div class="col-sm-8">
-        <input type="text" class="form-control" id="api" name="api" placeholder="{{trans($module_name.'.admin.api')}}" value="{{@$data->api}}">
-    </div>
-    <div class="col-sm-2 text-danger msg">
-                
-    </div>
-</div>
-<div class="form-group row">
     <label class="form-control-label col-sm-2" for="info_short">{{trans($module_name.'.admin.info_short')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
         <input type="text" class="form-control" id="info_short" name="info_short" placeholder="{{trans($module_name.'.admin.info_short')}}" value="{{@$data->info_short}}">
