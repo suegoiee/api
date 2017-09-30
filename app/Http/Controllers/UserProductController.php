@@ -23,6 +23,7 @@ class UserProductController extends Controller
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline;
+            $product->collections = $product->collections;
         }
         
         return $this->successResponse($products?$products:[]);
@@ -51,6 +52,7 @@ class UserProductController extends Controller
             $deadline = $this->getExpiredDate($product_data->expiration, $old_deadline);
 
             $installed = 0;
+            $collections =[];
             if($product_data->type=='collection'){
                 /*
                 $collections_id = $product_data->collections->map(function($item,$key){return $item->id;});
@@ -61,8 +63,9 @@ class UserProductController extends Controller
                     $laboratory = $user->laboratories()->create(['title'=>$product_data->name]);
                     $laboratory->products()->syncWithoutDetaching($product_data->id);
                 }
+                $collections = $product_data->collections;
             }
-            $products[$product_data->id]=['deadline'=>$deadline,'installed'=>$installed];
+            $products[$product_data->id]=['deadline'=>$deadline,'installed'=>$installed,'collections'=>$collections];
         }
         $user->products()->syncWithoutDetaching($products);
 
