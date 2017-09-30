@@ -41,7 +41,7 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::resource('/user/favorites', 'FavoriteController', ['only' => [
 			'index', 'store', 'destroy'
 		]]);
-	Route::get('/user/orders/{order}/payment','OrderController@orderPayment');
+	Route::put('/user/orders/{order}/payment','OrderController@orderPayment');
 	Route::resource('/user/orders', 'OrderController', ['only' => [
 			'index','show', 'store','destroy'
 		]]);
