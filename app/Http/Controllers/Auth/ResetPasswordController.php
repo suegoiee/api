@@ -77,7 +77,7 @@ class ResetPasswordController extends Controller
 
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        return $this->failedResponse(['email'=>$request->only('email'),'message'=>trans($response)]);
+        return $this->failedResponse(['email'=>$request->only('email'),'message'=>[trans($response)]]);
     }
 
     public function broker()

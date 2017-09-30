@@ -48,15 +48,17 @@ class OrderController extends Controller
         foreach ($products as $key => $value) {
             $product = $this->productRepository->get($value);
             if($product->price==0){
-                $this->addProducts($user->id,$product->id);
+                $this->addProducts($user->id,[$product->id]);
             }else{
                 array_push($product_ids,$value);
             }
         }
-        $order->products()->attach($product_ids);
-        $allpay_form = $this->allpay_form($order);
-        $order['products'] = $order->products;
-        $order['form_html'] = $allpay_form;
+        if(count($product_ids)){
+            $order->products()->attach($product_ids);
+            $allpay_form = $this->allpay_form($order);
+            $order['products'] = $order->products;
+            $order['form_html'] = $allpay_form;
+        }
         return $this->successResponse($order?$order:[]);
     }
 
