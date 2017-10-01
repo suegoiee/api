@@ -28,9 +28,10 @@ class ForgotPasswordController extends Controller
         if ($validator->fails()) {
             return $this->validErrorResponse($validator->errors()->all());
         }
-        $redirect = $request->only(['redirect']);
+        $redirect = $request->input(['redirect']);
         $response = $this->broker()->sendResetLink(
-            $request->only(['email'])
+            $request->only(['email']),
+            $redirect
         );
 
         return $response == Password::RESET_LINK_SENT
@@ -51,7 +52,7 @@ class ForgotPasswordController extends Controller
     {
         return Validator::make($data, [
             'email' => 'required|email', 
-            //'callback'=>'required|url'
+            'redirect'=>'required|url'
             ]);
     }
 

@@ -13,16 +13,17 @@ class ResetPassword extends Notification
      * @var string
      */
     public $token;
-
+    public $redirect;
     /**
      * Create a notification instance.
      *
      * @param  string  $token
      * @return void
      */
-    public function __construct($token)
+    public function __construct($token, $redirect)
     {
         $this->token = $token;
+        $this->redirect = $redirect;
     }
 
     /**
@@ -48,7 +49,7 @@ class ResetPassword extends Notification
             ->subject(env('APP_NAME').' Password Reset')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
             ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', env('PASSWORD_RESET_LINK',url('password/reset')).'?token='.$this->token)
+            ->action('Reset Password', $this->redirect.'?token='.$this->token)
             ->line('If you did not request a password reset, no further action is required.');
     }
 }
