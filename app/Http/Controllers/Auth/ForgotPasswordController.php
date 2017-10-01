@@ -26,7 +26,7 @@ class ForgotPasswordController extends Controller
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
-            return $this->validErrorResponse($validator->errors()->all());
+            return $this->validateErrorResponse($validator->errors()->all());
         }
         $redirect = $request->input(['redirect']);
         $response = $this->broker()->sendResetLink(
@@ -45,7 +45,7 @@ class ForgotPasswordController extends Controller
 
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-	   return $this->validErrorResponse([trans($response)]);
+	   return $this->validateErrorResponse([trans($response)]);
     }
 
     protected function validator(array $data)
