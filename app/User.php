@@ -5,23 +5,12 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-//use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use App\Services\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use App\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
-class User  extends Model implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract
+class User  extends Authenticatable
 {
-    use Authenticatable, Authorizable, CanResetPassword, HasApiTokens, Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -42,9 +31,9 @@ class User  extends Model implements
     ];
     protected $appends = [ 'avatar' ];
 
-    public function sendPasswordResetNotification($token, $redirect)
+    public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordNotification($token, $redirect));
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     public function profile(){
