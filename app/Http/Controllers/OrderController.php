@@ -169,7 +169,7 @@ class OrderController extends Controller
         }
         $data=[
             'ReturnURL' => url('/allapy/feedback'),
-            'ClientBackURL ' => env('ALLPAY_BACK_URL'),
+            'ClientBackURL' => env('ALLPAY_BACK_URL'),
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,
