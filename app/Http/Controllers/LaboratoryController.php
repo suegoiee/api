@@ -18,7 +18,7 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->with('avatar')->get();
+        $laboratories = $user->laboratories()->get();
         return $this->successResponse($laboratories);
     }
 
@@ -58,7 +58,7 @@ class LaboratoryController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $laboratory = $user->laboratories()->with('avatar','products')->find($id);
+        $laboratory = $user->laboratories()->with('products')->find($id);
 
         return $this->successResponse($laboratory?$laboratory:[]);
     }
