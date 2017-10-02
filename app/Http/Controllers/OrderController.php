@@ -154,7 +154,7 @@ class OrderController extends Controller
         return json_decode((string) $response->getBody(), true);
     }
     private function allpay_form($order){
-        $merchant_trade_no = 'Test'.time();
+        $merchant_trade_no = $order->user->id.time();
         $order->allpays()->create(['MerchantTradeNo'=>$merchant_trade_no]);
         $items = [];
         foreach ($order->products as $key => $product) {
@@ -169,6 +169,7 @@ class OrderController extends Controller
         }
         $data=[
             'ReturnURL' => url('/allapy/feedback'),
+            'ClientBackURL ' => env('ALLPAY_BACK_URL'),
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,

@@ -22,6 +22,7 @@ class AllpayController extends Controller
 
     public function index()
     {
+        //test code
         $data=[
             'ReturnURL' => url('/allapy/test'),
             'MerchantTradeNo' => 'Test'.time(),
