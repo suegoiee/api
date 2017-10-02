@@ -47,7 +47,7 @@ class OrderController extends Controller
         $product_ids = [];
         $product_data = [];
         foreach ($products as $key => $value) {
-            $product = $this->productRepository->getWith($value,['products','products.collections']);
+            $product = $this->productRepository->getWith($value,['collections']);
             if($product->price==0){
                 $this->addProducts($user->id,[$product->id]);
             }else{

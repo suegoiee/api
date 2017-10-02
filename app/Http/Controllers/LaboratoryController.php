@@ -58,7 +58,7 @@ class LaboratoryController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $laboratory = $user->laboratories()->with('products')->find($id);
+        $laboratory = $user->laboratories()->with('products','products.collections')->find($id);
 
         return $this->successResponse($laboratory?$laboratory:[]);
     }
