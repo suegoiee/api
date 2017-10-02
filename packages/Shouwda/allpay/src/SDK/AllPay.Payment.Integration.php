@@ -666,13 +666,13 @@ class Send extends Aio
         //產生檢查碼
         $szCheckMacValue = CheckMacValue::generate($arParameters,$HashKey,$HashIV,$arParameters["EncryptType"]);
         
-        $szHtml =  '<!DOCTYPE html>';
-        $szHtml .= '<html>';
-        $szHtml .=     '<head>';
-        $szHtml .=         '<meta charset="utf-8">';
-        $szHtml .=     '</head>';
-        $szHtml .=     '<body>';
-        $szHtml .=         "<form id=\"__allpayForm\" method=\"post\" target=\"{$target}\" action=\"{$ServiceURL}\">";
+        //$szHtml =  '<!DOCTYPE html>';
+        //$szHtml .= '<html>';
+        //$szHtml .=     '<head>';
+        //$szHtml .=         '<meta charset="utf-8">';
+        //$szHtml .=     '</head>';
+        //$szHtml .=     '<body>';
+        $szHtml =         "<form id=\"__allpayForm\" method=\"post\" target=\"{$target}\" action=\"{$ServiceURL}\">";
 
         foreach ($arParameters as $keys => $value) {
             $szHtml .=         "<input type=\"hidden\" name=\"{$keys}\" value=\"{$value}\" />";
@@ -681,8 +681,8 @@ class Send extends Aio
         $szHtml .=             "<input type=\"hidden\" name=\"CheckMacValue\" value=\"{$szCheckMacValue}\" />";
         $szHtml .=             "<input type=\"submit\" id=\"__paymentButton\" value=\"{$paymentButton}\" />";
         $szHtml .=         '</form>';
-        $szHtml .=     '</body>';
-        $szHtml .= '</html>';
+        //$szHtml .=     '</body>';
+        //$szHtml .= '</html>';
         return  $szHtml ;
     }
 
