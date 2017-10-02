@@ -25,7 +25,7 @@ Route::get('/allpay','AllpayController@index');
 Route::get('/url',function(){
 	return url('/');
 });
-Route::get('/allpay/feedback','AllpayController@feedback');
+Route::post('/allpay/feedback','AllpayController@feedback');
 
 Route::middleware(['auth'])->group(function(){
 });

@@ -168,7 +168,7 @@ class OrderController extends Controller
             array_push($items, $item);
         }
         $data=[
-            'ReturnURL' => url('/allapy/feedback'),
+            'ReturnURL' => url('/allpay/feedback'),
             'ClientBackURL' => env('ALLPAY_BACK_URL'),
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),

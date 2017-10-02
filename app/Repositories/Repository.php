@@ -15,7 +15,7 @@ class Repository
 		foreach ($where as $key => $value) {
 			$query = $query->where($key,$value);
 		}
-		return $query->get();
+		return $query->orderBy('created_at','DESC')->first();
 	}
 	public function gets(){
 		return $this->model->get();

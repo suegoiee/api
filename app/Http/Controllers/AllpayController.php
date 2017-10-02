@@ -39,9 +39,10 @@ class AllpayController extends Controller
         echo Allpay::checkOutString();
         return '';
     }
-    public function feedback(){
+    public function feedback(Request $request){
         try {
             $feedback_data = Allpay::checkOutFeedback();
+            //$feedback_data = $request->all();
             $allpay = $this->allpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
             if($allpay){
                 $allpay->feedbacks()->create($feedback_data);
