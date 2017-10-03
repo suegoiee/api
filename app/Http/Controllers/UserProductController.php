@@ -43,6 +43,7 @@ class UserProductController extends Controller
         $user = User::find($request->input('user_id'));
         $_products = $request->input('products',[]);
         $products = [];
+        $result = []
         foreach ($_products as $key => $product) {
             $product_data = $this->productRepository->get($product);
             $old_product = $user->products()->where('id',$product)->first();
@@ -65,11 +66,12 @@ class UserProductController extends Controller
                 }
                 $collections = $product_data->collections;
             }
-            $products[$product_data->id]=['deadline'=>$deadline,'installed'=>$installed,'collections'=>$collections];
+            $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections]);
         }
         $user->products()->syncWithoutDetaching($products);
 
-        return $this->successResponse($products);
+        return $this->successResponse($result);
     }
 
     public function show(Request $request, $id)
