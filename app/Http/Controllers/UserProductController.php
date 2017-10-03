@@ -43,7 +43,7 @@ class UserProductController extends Controller
         $user = User::find($request->input('user_id'));
         $_products = $request->input('products',[]);
         $products = [];
-        $result = []
+        $result = [];
         foreach ($_products as $key => $product) {
             $product_data = $this->productRepository->get($product);
             $old_product = $user->products()->where('id',$product)->first();

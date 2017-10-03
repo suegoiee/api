@@ -40,7 +40,7 @@ class AllpayController extends Controller
         return '';
     }
     public function feedback(Request $request){
-        //try {
+        try {
             $feedback_data = Allpay::checkOutFeedback();
             //$feedback_data = $request->all();
             $allpay = $this->allpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
@@ -55,12 +55,11 @@ class AllpayController extends Controller
             }else{
                 return '0|Allpay record not found';
             }
-           /* 
         } catch (Exception $e) {
             return '0|'.$e->getMessage();
-        } */
+        }
     }
-    private function order_update($order_id,$status){
+    private function order_update($order_id, $status){
         $token = $this->clientCredentialsGrantToken();
         $http = new \GuzzleHttp\Client;
         $response = $http->request('put',url('/user/orders/'.$order_id),[
