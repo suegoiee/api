@@ -18,7 +18,7 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->get();
+        $laboratories = $user->laboratories()->with('products','products.collections')->get();
         return $this->successResponse($laboratories);
     }
 
