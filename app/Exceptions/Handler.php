@@ -88,9 +88,10 @@ class Handler extends ExceptionHandler
                 }
         	}*/
             if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
-                $exception_response = json_decode($exception->getResponse()->getBody(),true);
+                $message_body = $exception->getResponse()->getBody();
+                $exception_response = json_decode($message_body,true);
                 $response['error']['type'] = $exception_response['error'];
-                $response['error']['message'] = [$exception_response['message']];
+                $response['error']['message'] = [(isset($exception_response['message']) ? $exception_response['message']:$message_body)];
                 //$response['error']['trace'] = $exception->getTrace();
             }else if($exception instanceof AuthenticationException){
                 $response['error']['message'] = ['Unauthenticated.'];

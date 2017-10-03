@@ -55,7 +55,7 @@ class OrderController extends Controller
             }
             array_push($product_data,$product);
         }
-        if(count($product_ids)){
+        if(count($product_ids)>0){
             $order->products()->attach($product_ids);
             $allpay_form = $this->allpay_form($order);
             $order['form_html'] = $allpay_form;
