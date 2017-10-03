@@ -176,6 +176,7 @@ class OrderController extends Controller
         }
         $data=[
             'ReturnURL' => url('/allpay/feedback'),
+            'PaymentInfoURL' => url('/allpay/feedback'),
             'ClientBackURL' => env('ALLPAY_BACK_URL'),
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
