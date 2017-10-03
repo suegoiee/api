@@ -99,7 +99,9 @@ class OrderController extends Controller
         if($order->status==1){
             $order_products = $order->products->map(function($item,$key){return $item->id;});
             $product_ids = $order_products->toArray();
-            return $this->addProducts($user->id, $product_ids);
+            if(count($product_ids)>0){
+                $this->addProducts($user->id, $product_ids);    
+            }
         }
 
         return $this->successResponse($order?$order:[]);
