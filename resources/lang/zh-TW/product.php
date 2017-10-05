@@ -30,6 +30,10 @@ return [
         'collections'=>'產品組合',
         'avatar_small'=>'圖片',
         'avatar_detail'=>'圖片集',
+        'deadline'=>'使用期限',
+        'installed'=>'安裝',
+        'installed_0'=>'未安裝',
+        'installed_1'=>'已安裝',
 	],
     'collection_cant_del' =>'無法個別刪除。'
 ];
