@@ -34,6 +34,7 @@ return [
         'installed'=>'安裝',
         'installed_0'=>'未安裝',
         'installed_1'=>'已安裝',
+        'faq'=>'FAQ',
 	],
     'collection_cant_del' =>'無法個別刪除。'
 ];

@@ -12,7 +12,7 @@ class Product extends UanalyzeModel
 
     
     protected $fillable = [
-        'name','model','api','info_short','info_more','type','price','expiration','status'
+        'name','model','api','info_short','info_more','type','price','expiration','status','faq',
     ];
     protected $appends = [ 'avatar_small', 'avatar_detail' ];
 

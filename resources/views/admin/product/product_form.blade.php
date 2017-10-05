@@ -104,3 +104,12 @@
                 
     </div>
 </div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="faq">{{trans($module_name.'.admin.faq')}}</label>
+    <div class="col-sm-8">
+        <textarea class="form-control" id="faq" rows="6" name="faq" placeholder="{{trans($module_name.'.admin.faq')}}">{{@$data->faq}}</textarea>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
