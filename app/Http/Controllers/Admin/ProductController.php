@@ -24,7 +24,7 @@ class ProductController extends AdminController
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $product,
-            'table_head' =>['id','name','type','model','status'],
+            'table_head' =>['id','name','type','model','price','status'],
             'table_formatter' =>['status'],
         ];
         return view('admin.list',$data);
