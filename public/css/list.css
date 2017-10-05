@@ -10,3 +10,8 @@
 .actions span:hover{
 	color:#F44336;
 }
+.pagination .page-number.active{
+	background-color: #BBDEFB;
+	border-radius:2px; 
+	//border-bottom:1px solid #000 ; 
+}
