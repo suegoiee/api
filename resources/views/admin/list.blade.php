@@ -24,6 +24,7 @@
 
 @section('javascript')
 <script src="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.js')}}"></script>
+<script src="{{asset('thirdparty/bootstrap-table/locale/bootstrap-table-zh-TW.min.js')}}"></script>
 <script>
 var module_name = "{{str_plural($module_name)}}";
 $(function(){

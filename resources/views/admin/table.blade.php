@@ -8,7 +8,7 @@
         </div>
     </div>
 </div>
-<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" >
+<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="25">
     <thead class="thead-inverse text-center">
         <tr>
             <th data-align="center" data-checkbox="true">{{trans('table.action_label')}}</th>
