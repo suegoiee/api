@@ -118,9 +118,12 @@ class OrderController extends Controller
         if(!($this->orderRepository->isOwner($user->id,$id))){
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
-        $this->orderRepository->delete($id);
-        return $this->successResponse(['id'=>$id]);
-
+        $order = $this->orderRepository->get($id);
+        if($order && $order->status==0){
+            $this->orderRepository->delete($id);  
+            return $this->successResponse(['id'=>$id]);
+        }
+        return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
     }
 
     protected function orderValidator(array $data)
