@@ -52,17 +52,19 @@ class UserProductController extends Controller
 
             $deadline = $this->getExpiredDate($product_data->expiration, $old_deadline);
 
-            $installed = 0;
+            $installed = $old_product ? $old_product->pivot->installed : 0;
             $collections =[];
             if($product_data->type=='collection'){
                 /*
                 $collections_id = $product_data->collections->map(function($item,$key){return $item->id;});
                 $user->products()->syncWithoutDetaching($collections_id);
                 */
-                $installed = 1;
-                if($user->products()->where('id',$product_data->id)->count()==0){
-                    $laboratory = $user->laboratories()->create(['title'=>$product_data->name]);
-                    $laboratory->products()->syncWithoutDetaching($product_data->id);
+                if($installed==0){
+                    if($user->products()->where('id',$product_data->id)->count()==0){
+                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name]);
+                        $laboratory->products()->syncWithoutDetaching($product_data->id);
+                    }
+                    $installed = 1;
                 }
                 $collections = $product_data->collections;
             }
