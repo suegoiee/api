@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Exceptions;
-
+use Route;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -71,7 +71,7 @@ class Handler extends ExceptionHandler
 	if ($request->wantsJson()) {
         	// Define the response
       	  	$response = [
-            		'error' => ['title'=> 'Sorry, something went wrong.']
+            	'error' => ['title'=> 'Sorry, something went wrong.']
         	];
 
         	// If the app is in debug mode
@@ -103,14 +103,18 @@ class Handler extends ExceptionHandler
             }
 
         	// Default response of 400
-        	$status = 400;
+        	$status = 200;
 
         	// If this exception is an instance of HttpException
         	if ($this->isHttpException($exception)) {
             	// Grab the HTTP status code from the Exception
-            	$status = $exception->getStatusCode();
+            	//$status = $exception->getStatusCode();
+                $response['error']['message']= 'Http error.';
         	}
-
+            $uri = $request->path();
+            $actionMethod = $request->method();
+            $response['uri'] = $uri;
+            $response['method'] = $actionMethod;
         	// Return a JSON response with the response array and status code
         	return response()->json($response, $status);
     	}
