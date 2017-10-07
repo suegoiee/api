@@ -1,6 +1,10 @@
 $(function(){
-    CKEDITOR.replace( 'info_more' );
-    CKEDITOR.replace( 'faq' );
+    var ckeditor_config = {
+        filebrowserImageUploadUrl : url('admin/ckeditor/images'),
+        removeButtons:'About'
+    }
+    CKEDITOR.replace( 'info_more',ckeditor_config);
+    CKEDITOR.replace( 'faq', ckeditor_config);
     $('#collections').multiSelect({
         selectableHeader: "<div class='text-center'>可選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",

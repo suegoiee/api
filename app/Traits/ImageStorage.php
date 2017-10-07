@@ -10,6 +10,12 @@ trait ImageStorage
 	    Storage::disk('public')->makeDirectory($directory);
 		return $file->store($directory, 'public');
 	}
+	protected function storeImage($file, $dir='other')
+	{
+		$directory = 'ckeditor/'.$dir;
+	    Storage::disk('public')->makeDirectory($directory);
+		return $file->store($directory, 'public');
+	}
 	protected function destroyAvatar($path)
 	{
 		Storage::disk('public')->delete($path);

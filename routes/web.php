@@ -98,6 +98,7 @@ Route::middleware(['client:product'])->group(function(){
 	Route::post('/products/avatar/{module_id}','AvatarController@store')->name('product.avatar.store');
 	Route::put('/products/avatar/{module_id}','AvatarController@update')->name('product.avatar.update');
 	Route::delete('/products/avatar/{module_id}','AvatarController@destroy')->name('product.avatar.destroy');
+
 });
 
 Route::middleware(['client:order'])->group(function(){
@@ -132,7 +133,8 @@ Route::group(['middleware' => ['admin','auth:admin','apiToken'],'prefix' => 'adm
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
 	Route::delete('/products','Admin\ProductController@destroy');
 	Route::resource('/products', 'Admin\ProductController');
-
+	Route::post('/ckeditor/images','CkeditorImageController@store')->name('ckeditor.image.store');
+	
 	Route::get('/tags/{tag}/delete','Admin\TagController@destroy');
 	Route::delete('/tags','Admin\TagController@destroy');
 	Route::resource('/tags', 'Admin\TagController');
