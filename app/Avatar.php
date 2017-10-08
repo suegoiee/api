@@ -15,6 +15,9 @@ class Avatar extends UanalyzeModel
     protected $appends=[
     	'url',
     ];
+    protected $hidden=[
+        'id','type','path', 'imageable_id', 'imageable_type', 'created_at', 'updated_at', 'deleted_at'  
+    ];
     public function imageable()
     {
         return $this->morphTo();

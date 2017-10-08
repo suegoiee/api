@@ -12,16 +12,19 @@ class Product extends UanalyzeModel
 
     
     protected $fillable = [
-        'name','model','api','info_short','info_more','type','price','expiration','status','faq',
+        'name','model','info_short','info_more','type','price','expiration','status','faq',
     ];
     protected $appends = [ 'avatar_small', 'avatar_detail' ];
 
-    public function user(){
+    protected $hidden = ['pivot'];
+    //protected $visible = ['id', 'name', 'model', 'info_short', 'info_more', 'type', 'price', 'expiration', 'faq'];
+
+    public function users(){
     	return $this->belongsToMany('App\User')->withPivot('deadline','installed')->withTimestamps();
     }
 
     public function collections(){
-    	return $this->belongsToMany('App\Product','product_collections','collection_id','product_id')->withTimestamps();
+    	return $this->belongsToMany('App\Product','product_collections','collection_id','product_id')->select(['id','name','model','type'])->withTimestamps();
     }
 
     public function tags()

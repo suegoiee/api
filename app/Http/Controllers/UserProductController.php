@@ -19,11 +19,10 @@ class UserProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = $request->user()->products;
+        $products = $request->user()->products->makeHidden(['model','info_short','info_more','type','price','expiration','status','faq','created_at', 'updated_at', 'deleted_at' ,'avatar_small', 'avatar_detail','pivot']);
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline;
-            $product->collections = $product->collections;
         }
         
         return $this->successResponse($products?$products:[]);
@@ -79,11 +78,11 @@ class UserProductController extends Controller
     public function show(Request $request, $id)
     {
         
-        $product = $request->user()->products()->with($id,['tags','collections','avatar_small','avatar_detail'])->find($id);
+        $product = $request->user()->products()->with(['tags','collections'])->find($id);
         $product->installed = $product->pivot->installed;
         $product->deadline = $product->pivot->deadline;
 
-        return $this->successResponse($product?$product:[]);
+        return $this->successResponse($product?$product->makeHidden(['model','info_short','info_more','type','price','expiration','status','faq','created_at', 'updated_at', 'deleted_at' ,'avatar_small', 'avatar_detail','pivot']):[]);
     }
 
     public function edit($id)

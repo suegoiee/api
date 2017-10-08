@@ -9,12 +9,12 @@ class Order extends UanalyzeModel
 {
     use SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $appends = ['user_nick_name'];
+    protected $appends = ['user_nickname'];
     protected $fillable = [
         'user_id','status','price','memo',
     ];
     protected $hidden = [
-        'user','profile'
+        'user','user_id','profile'
     ];
     public function user(){
     	return $this->belongsTo('App\User');
@@ -25,11 +25,11 @@ class Order extends UanalyzeModel
     }
 
     public function products(){
-        return $this->belongsToMany('App\Product');
+        return $this->belongsToMany('App\Product')->select(['id','name','type','price','expiration']);
     }
 
-    public function getUserNickNameAttribute(){
-        $nick_name = $this->user->profile->nick_name;
-        return $nick_name;
+    public function getUserNicknameAttribute(){
+        $nickname = $this->user->profile->nickname;
+        return $nickname;
     }
 }

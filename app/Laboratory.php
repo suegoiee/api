@@ -12,6 +12,8 @@ class Laboratory extends UanalyzeModel
 
 	protected $fillable=['user_id','title','layout'];
 
+    protected $hidden=['created_at', 'updated_at', 'deleted_at'];
+
 	protected $appends = [ 'avatar' ];
 	
 	public function avatars()
@@ -25,6 +27,7 @@ class Laboratory extends UanalyzeModel
     }
 
 	public function products(){
-		return $this->belongsToMany('App\Product')->withTimestamps();
+        $user_id = $this->user_id;
+		return $this->belongsToMany('App\Product')->with(['users'])->withTimestamps();
 	}
 }

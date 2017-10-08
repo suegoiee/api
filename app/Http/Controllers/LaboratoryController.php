@@ -19,6 +19,16 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         $laboratories = $user->laboratories()->with('products','products.collections')->get();
+        foreach ($laboratories as $laboratory) {
+            $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+            foreach ($laboratory->products as $product) {
+                $product->installed = $product->users->first()->pivot->installed;
+                $product->deadline = $product->users->first()->pivot->deadline;
+                foreach ( $product->collections as $collection){
+                    $collection->makeHidden(['avatar_small','avatar_detail']);
+                }
+            }
+        }
         return $this->successResponse($laboratories);
     }
 
@@ -59,6 +69,14 @@ class LaboratoryController extends Controller
         }
 
         $laboratory = $user->laboratories()->with('products','products.collections')->find($id);
+        $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+        foreach ($laboratory->products as $product) {
+            $product->installed = $product->users->first()->pivot->installed;
+            $product->deadline = $product->users->first()->pivot->deadline;
+            foreach ( $product->collections as $collection){
+                $collection->makeHidden(['avatar_small','avatar_detail']);
+            }
+         }
 
         return $this->successResponse($laboratory?$laboratory:[]);
     }

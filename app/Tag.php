@@ -9,7 +9,7 @@ class Tag extends UanalyzeModel
     protected $fillable = [
         'name'
     ];
-
+    protected $hidden = ['pivot','created_at','updated_at'];
     public function Products()
     {
         return $this->morphedByMany('App\Product', 'taggable');

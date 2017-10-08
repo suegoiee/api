@@ -23,7 +23,7 @@ class ProductController extends Controller
     }
     public function onShelves()
     {
-        $product = $this->productRepository->getsWithByStatus(['tags','collections']);
+        $product = $this->productRepository->getsWithByStatus(['tags'=>function($query){$query->select('name');}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at']);
 
         return $this->successResponse($product?$product:[]);
     }

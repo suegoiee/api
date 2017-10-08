@@ -4,6 +4,9 @@ namespace App\Repositories;
 class Repository
 {
 	protected $model;
+	public function makeHidden($attribute){
+		$this->model = $this->model->makeHidden($attribute);
+	}
 	public function get($id){
 		return $this->model->find($id);
 	}
