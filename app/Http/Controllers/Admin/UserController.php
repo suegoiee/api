@@ -23,7 +23,7 @@ class UserController extends AdminController
         $data = [
             'module_name'=> $this->moduleName,
             'table_data' => $users,
-            'table_head' =>['id','email','nick_name','updated_at'],
+            'table_head' =>['id','email','nickname','updated_at'],
             'table_formatter' =>[],
         ];
         return view('admin.list',$data);

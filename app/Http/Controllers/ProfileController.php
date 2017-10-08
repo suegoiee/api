@@ -53,7 +53,7 @@ class ProfileController extends Controller
             return $this->validErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['nick_name','name','sex','address','birthday']);
+        $request_data = $request->only(['nickname','name','sex','address','birthday']);
 
         $data = array_filter($request_data, function($item){return $item!=null;});
 
@@ -71,7 +71,7 @@ class ProfileController extends Controller
     protected function profileValidator(array $data)
     {
         return Validator::make($data, [
-            'nick_name' => 'max:255',
+            'nickname' => 'max:255',
             'name' => 'max:255',
             'sex'=>'in:F,M',
             'address'=>'max:255',

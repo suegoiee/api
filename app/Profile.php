@@ -6,7 +6,7 @@ use App\UanalyzeModel;
 
 class Profile extends UanalyzeModel
 {
-	protected $fillable=['user_id','nick_name','name','sex','address','birthday'];
+	protected $fillable=['user_id','nickname','name','sex','address','birthday'];
 	protected $hidden = [
         'id','user_id',
     ];

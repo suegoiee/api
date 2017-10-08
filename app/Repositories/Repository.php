@@ -20,10 +20,13 @@ class Repository
 	public function gets(){
 		return $this->model->get();
 	}
-	public function getsWith($with=[],$where=[]){
+	public function getsWith($with=[],$where=[],$order=[]){
 		$query = $this->model->with($with);
 		foreach ($where as $key => $value) {
 			$query = $query->where($key,$value);
+		}
+		foreach ($order as $key => $value) {
+			$query = $query->orderBy($key,$value);
 		}
 		return $query->get();
 	}

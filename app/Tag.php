@@ -14,4 +14,8 @@ class Tag extends UanalyzeModel
     {
         return $this->morphedByMany('App\Product', 'taggable');
     }
+    public function Stocks()
+    {
+        return $this->belongsToMany('App\Tag','stock_tags','tag_id','stock_id');
+    }
 }

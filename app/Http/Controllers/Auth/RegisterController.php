@@ -54,7 +54,7 @@ class RegisterController extends Controller
     }
 
     protected function createProfile(Request $request,$user){
-        $store_data = $request->only(['nick_name','name','sex','address','birthday']);
+        $store_data = $request->only(['nickname','name','sex','address','birthday']);
         $profile = $user->profile()->create($store_data);
         return $profile;
     }
@@ -71,7 +71,7 @@ class RegisterController extends Controller
     protected function profileValidator(array $data)
     {
         return Validator::make($data, [
-            'nick_name' => 'required|max:255',
+            'nickname' => 'required|max:255',
             'name' => 'max:255',
             'sex'=>'in:F,M',
             'address'=>'max:255',
