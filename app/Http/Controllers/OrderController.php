@@ -25,7 +25,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $orders = $user->orders()->with(['products'])->get()->makeHidden(['created_at', 'updated_at', 'deleted_at']);
+        $orders = $user->orders()->with(['products'])->get()->makeHidden(['deleted_at']);
         return $this->successResponse($orders);
     }
 
