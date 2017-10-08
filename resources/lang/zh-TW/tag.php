@@ -10,5 +10,6 @@ return [
         'edit_title'=>'編輯'.$module_name,
     	'id'=>'編號',
     	'name'=>'名稱',
+        'stocks'=>'股票',
     ],
 ];
