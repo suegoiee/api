@@ -60,7 +60,7 @@ class UserProductController extends Controller
                 */
                 if($installed==0){
                     if($user->products()->where('id',$product_data->id)->count()==0){
-                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name]);
+                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name,'customized'=>0]);
                         $laboratory->products()->syncWithoutDetaching($product_data->id);
                     }
                     $installed = 1;
@@ -99,13 +99,13 @@ class UserProductController extends Controller
         }
         if($product->type=='collection'){
             if($product->pivot->installed==0){
-                $laboratory = $user->laboratories()->create(['title'=>$product->name]);
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0]);
                 $laboratory->products()->syncWithoutDetaching($product->id);
             }
         }
         $user->products()->updateExistingPivot($product->id,['installed'=>1]);
 
-        return $this->successResponse(['message'=>$product->name.' installed']);
+        return $this->successResponse(['message'=>[$product->name.' installed']]);
     }
     public function uninstall(Request $request, $id)
     {
@@ -114,9 +114,16 @@ class UserProductController extends Controller
         if(!$product){
             return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
+        if($product->type=='collection'){
+            $laboratory = $product->laboratories()->where('user_id',$user->id)->first();
+            if($laboratory){
+                $laboratory->delete();
+            }
+        }
         $request->user()->products()->updateExistingPivot($id,['installed'=>0]);
 
-        return $this->successResponse(['message'=>$product->name.' uninstalled']);
+
+        return $this->successResponse(['message'=>[$product->name.' uninstalled']]);
     }
 
     public function update(Request $request, $id)

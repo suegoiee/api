@@ -10,7 +10,7 @@ class Laboratory extends UanalyzeModel
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
-	protected $fillable=['user_id','title','layout'];
+	protected $fillable=['user_id','title','layout','customized'];
 
     protected $hidden=['created_at', 'updated_at', 'deleted_at'];
 

@@ -47,7 +47,7 @@ class ProductController extends AdminController
         $data = [
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
-            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single']),
+            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id',[$id]),
             'data' => $this->moduleRepository->getWith($id,['tags','collections']),
         ];
         return view('admin.form',$data);

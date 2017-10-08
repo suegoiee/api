@@ -10,7 +10,7 @@ return [
         'edit_title'=>'編輯'.$module_name,
     	'id' => '訂單編號',
     	'price' => '金額',
-    	'user_nick_name' => '訂購者',
+    	'user_nickname' => '訂購者',
     	'memo' => '備註',
     	'status' => '付款狀態',
     	'status_0'=>'未付款',

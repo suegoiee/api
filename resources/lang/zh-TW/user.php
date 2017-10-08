@@ -13,7 +13,7 @@ return [
 
     	'id' => $module_name.'編號',
     	'email' => 'E-mail',
-    	'nick_name' => '暱稱',
+    	'nickname' => '暱稱',
     	'name'=>'姓名',
     	'sex'=>'性別',
     	'sex_'=>'',

@@ -46,7 +46,7 @@ class LaboratoryController extends Controller
         }
 
         $request_data = $request->only(['title','layout']);
-
+        $request_data['customized']=1;
         $laboratory = $user->laboratories()->create($request_data);
 
         $products = $request->input('products');
