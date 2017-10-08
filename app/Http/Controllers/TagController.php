@@ -36,8 +36,13 @@ class TagController extends Controller
         }
         
         $request_data = $request->only('name');
+        $stock_ids = $request->input('stocks',[]);
 
         $tag = $this->tagRepository->create($request_data);
+
+        if($tag){
+            $tag->stocks()->attach($stock_ids);
+        }
 
         return $this->successResponse($tag?$tag:[]);
     }
@@ -63,9 +68,11 @@ class TagController extends Controller
         }
 
         $request_data = $request->only('name');
-
+        $stock_ids = $request->input('stocks',[]);
         $tag = $this->tagRepository->update($id,$request_data);
-
+        if($tag){
+            $tag->stocks()->sync($stock_ids);
+        }
         return $this->successResponse($tag?$tag:[]);
     }
 

@@ -10,12 +10,13 @@ class Tag extends UanalyzeModel
         'name'
     ];
     protected $hidden = ['pivot','created_at','updated_at'];
-    public function Products()
+
+    public function products()
     {
         return $this->morphedByMany('App\Product', 'taggable');
     }
-    public function Stocks()
+    public function stocks()
     {
-        return $this->belongsToMany('App\Tag','stock_tags','tag_id','stock_id');
+        return $this->belongsToMany('App\Stock','stock_tags','tag_id','stock_no');
     }
 }
