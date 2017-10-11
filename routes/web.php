@@ -12,6 +12,7 @@
 */
 
 //API
+
 Route::get('/token','Auth\TokenController@token');
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
