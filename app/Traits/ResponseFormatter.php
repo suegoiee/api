@@ -11,7 +11,7 @@ trait ResponseFormatter
     protected function failedResponse($error=[],$data=[],$message=''){
         $uri = $this->getUri();
         $actionMethod = $this->getMethod();
-        return response()->json(['status'=>'error','data'=>$data,'message'=>$message,'error'=>$error, 'uri'=>$uri, 'method'=>$actionMethod]);
+        return response()->json(['status'=>'error','data'=>$data,'error'=>$error, 'uri'=>$uri, 'method'=>$actionMethod]);
     }
     protected function validateErrorResponse($message=''){
         $uri = $this->getUri();

@@ -31,6 +31,8 @@ Route::post('/allpay/feedback','AllpayController@feedback');
 Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){
+	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
+
 	Route::get('/user/info','ProfileController@show')->name('info.show');
 	Route::put('/user/info','ProfileController@update')->name('info.update');
 

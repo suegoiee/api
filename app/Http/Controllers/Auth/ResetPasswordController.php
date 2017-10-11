@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Hash;
 use App\Traits\OauthToken;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Controller;
@@ -19,7 +21,11 @@ class ResetPasswordController extends Controller
 
     public function reset(Request $request)
     {
-        $this->validate($request, $this->rules(), $this->validationErrorMessages());
+    	
+    	$validator = $this->forgetPasswordValidator($request->all());
+    	if ($validator->fails()) {
+            return $this->validateErrorResponse($validator->errors()->all());
+       }
 
         $response = $this->broker()->reset(
             $this->credentials($request), function ($user, $password) {
@@ -34,19 +40,37 @@ class ResetPasswordController extends Controller
                     ? $this->sendResetResponse($request, $response)
                     : $this->sendResetFailedResponse($request, $response);
     }
-
-    /**
-     * Get the password reset validation rules.
-     *
-     * @return array
-     */
-    protected function rules()
+    public function update(Request $request)
     {
-        return [
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ];
+    	$user = $request->user();
+
+    	$validator = $this->resetValidator($request->all());
+    	if ($validator->fails()) {
+            return $this->validateErrorResponse($validator->errors()->all());
+        }
+        if(Hash::check($request->input('old_password'), $user->getAuthPassword())){
+    		$this->resetPassword($user, $request->input('password'));
+        	$request->merge(['email' => $user->email]);
+        	return $this->sendResetResponse($request);
+    	}else{
+    		return $this->validateErrorResponse([trans('auth.old_password_error')]);
+    	}
+    }
+
+    protected function forgetPasswordValidator(array $data)
+    {
+        return Validator::make($data, [
+        		'token' => 'required',
+            	'email' => 'required|email',
+            	'password' => 'required|min:6',
+            ]);
+    }
+    protected function resetValidator(array $data)
+    {
+        return Validator::make($data, [
+        		'old_password' => 'required|min:6',
+            	'password' => 'required|min:6',
+            ]);
     }
 
     protected function validationErrorMessages()
@@ -69,13 +93,13 @@ class ResetPasswordController extends Controller
         ])->save();
     }
 
-    protected function sendResetResponse(Request $request, $response)
+    protected function sendResetResponse(Request $request, $response='')
     {
         $token = $this->passwordGrantToken($request);
         return $this->successResponse($token, trans($response));
     }
 
-    protected function sendResetFailedResponse(Request $request, $response)
+    protected function sendResetFailedResponse(Request $request, $response='')
     {
         return $this->failedResponse(['email'=>$request->only('email'),'message'=>[trans($response)]]);
     }
