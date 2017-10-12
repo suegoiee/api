@@ -12,7 +12,7 @@ class Laboratory extends UanalyzeModel
 
 	protected $fillable=['user_id','title','layout','customized'];
 
-    protected $hidden=['created_at', 'updated_at', 'deleted_at'];
+    protected $hidden=['user_id','created_at', 'updated_at', 'deleted_at'];
 
 	protected $appends = [ 'avatar' ];
 	
@@ -23,7 +23,7 @@ class Laboratory extends UanalyzeModel
 
     public function getAvatarAttribute()
     {
-        return $this->avatars()->first();
+        return $this->avatars()->orderBy('created_at','DESC')->first();
     }
 
 	public function products(){

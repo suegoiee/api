@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Storage;
+use Illuminate\Http\File;
+use App\Traits\ImageStorage;
+use App\Traits\OauthToken;
 use App\User;
 use Carbon\Carbon;
 use App\Repositories\ProductRepository;
@@ -10,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserProductController extends Controller
 {	
+    use OauthToken, ImageStorage;
     protected $productRepository;
 
     public function __construct(ProductRepository $productRepository)
@@ -54,13 +59,10 @@ class UserProductController extends Controller
             $installed = $old_product ? $old_product->pivot->installed : 0;
             $collections =[];
             if($product_data->type=='collection'){
-                /*
-                $collections_id = $product_data->collections->map(function($item,$key){return $item->id;});
-                $user->products()->syncWithoutDetaching($collections_id);
-                */
                 if($installed==0){
                     if($user->products()->where('id',$product_data->id)->count()==0){
                         $laboratory = $user->laboratories()->create(['title'=>$product_data->name,'customized'=>0]);
+                        $this->create_avatar($laboratory, $product_data->avatar_small);
                         $laboratory->products()->syncWithoutDetaching($product_data->id);
                     }
                     $installed = 1;
@@ -100,6 +102,7 @@ class UserProductController extends Controller
         if($product->type=='collection'){
             if($product->pivot->installed==0){
                 $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0]);
+                $this->create_avatar($laboratory, $product->avatar_small);
                 $laboratory->products()->syncWithoutDetaching($product->id);
             }
         }
@@ -165,5 +168,11 @@ class UserProductController extends Controller
         $date->minute = 0;
         $date->second = 0;
         return $date->addDays($days);
+    }
+    private function create_avatar($laboratory, $avatar){
+        $contents = new File(storage_path('app/public/'.$avatar->path));
+        $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
+        $data = ['path' => $path,'type'=>'normal'];
+        return $laboratory->avatars()->create($data);
     }
 }

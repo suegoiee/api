@@ -53,19 +53,21 @@ class OrderController extends Controller
             $order_price += $product->price;
             if($product->price==0){
                 $this->addProducts($user->id, [$product->id]);
-            }else{
-                array_push($product_ids,$value);
             }
+            array_push($product_ids,$value);
             array_push($product_data,$product);
         }
-        if(count($product_ids)>0){
-            $order->products()->attach($product_ids);
+        $order->products()->attach($product_ids);
+        
+        if($order_price>0){
             $allpay_form = $this->allpay_form($order);
             $order['form_html'] = $allpay_form;
         }
+
         if($order_price==0){
             $this->orderRepository->update($order->id, ['status'=>1]);
         }
+
         $order['products'] = $product_data;
         return $this->successResponse($order?$order:[]);
     }
@@ -103,10 +105,11 @@ class OrderController extends Controller
         }
         $user = $order->user;
         if($order->status==1){
-            $order_products = $order->products->map(function($item,$key){return $item->id;});
-            $product_ids = $order_products->toArray();
-            if(count($product_ids)>0){
-                $this->addProducts($user->id, $product_ids);    
+            $order_products = $order->products;
+            foreach ($order_products as $key => $product) {
+                if($product->price>0){
+                    $this->addProducts($user->id, [$product->id]);
+                }
             }
         }
 

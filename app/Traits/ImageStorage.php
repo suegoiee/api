@@ -10,6 +10,13 @@ trait ImageStorage
 	    Storage::disk('public')->makeDirectory($directory);
 		return $file->store($directory, 'public');
 	}
+	protected function createAvatar($file, $module_id, $module='other')
+	{
+		$directory = 'avatar/'.$module.'/'.$module_id;
+	    Storage::disk('public')->makeDirectory($directory);
+		$path = Storage::disk('public')->putFile($directory, $file);
+		return $path;
+	}
 	protected function storeImage($file, $dir='other')
 	{
 		$directory = 'ckeditor/'.$dir;

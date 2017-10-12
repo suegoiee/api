@@ -1,13 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+use Storage;
+
+use Illuminate\Http\File;
+use App\Traits\ImageStorage;
 use App\Repositories\LaboratoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class LaboratoryController extends Controller
 {	
-
+    use ImageStorage;
     protected $laboratoryRepository;
 
     public function __construct(LaboratoryRepository $laboratoryRepository)
@@ -55,6 +59,10 @@ class LaboratoryController extends Controller
         $products_install = [];
         $products = is_array($products) ? $products:[$products];
         foreach ($products as $key => $product) {
+            $product_data = $user->products()->find($product);
+            if($key==0){
+                $this->create_avatar($laboratory, $product_data->avatar_small);
+            }
             $user->products()->updateExistingPivot($product,['installed'=>1]);
         }
 
@@ -166,5 +174,14 @@ class LaboratoryController extends Controller
             'products' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL',
             'products.*' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL',
         ]);        
+    }
+    private function create_avatar($laboratory, $avatar){
+        if(!$avatar){
+            return false;
+        }
+        $contents = new File(storage_path('app/public/'.$avatar->path));
+        $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
+        $data = ['path' => $path,'type'=>'normal'];
+        return $laboratory->avatars()->create($data);
     }
 }
