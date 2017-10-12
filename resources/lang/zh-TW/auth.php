@@ -21,6 +21,7 @@ return [
     'logout'=>'登出',
     'failed' => '密碼錯誤!',
     'throttle' => '登入次數過多，請於 :seconds 秒後再次嘗試登入。',
+    'password_reset_success' =>'密碼重設成功',
     'permission_denied' =>'尚無存取權限。',
     'old_password_error'=>'原密碼錯誤!',
 ];

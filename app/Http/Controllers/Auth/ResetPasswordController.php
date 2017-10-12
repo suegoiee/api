@@ -95,8 +95,8 @@ class ResetPasswordController extends Controller
 
     protected function sendResetResponse(Request $request, $response='')
     {
-        $token = $this->passwordGrantToken($request);
-        return $this->successResponse($token, trans($response));
+        //$token = $this->passwordGrantToken($request);
+        return $this->successResponse(['message'=>[trans('auth.password_reset_success')]], trans($response));
     }
 
     protected function sendResetFailedResponse(Request $request, $response='')
