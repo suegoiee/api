@@ -30,9 +30,9 @@
 </div>
 @if($data->invoice_type == 2)
     <div class="form-group row">
-        <label class="form-control-label col-sm-2" for="invoice_number">{{trans($module_name.'.admin.invoice_number')}}</label>
+        <label class="form-control-label col-sm-2" for="company_id">{{trans($module_name.'.admin.company_id')}}</label>
         <div class="col-sm-8 text">
-            {{$data->invoice_number}}
+            {{$data->company_id}}
         </div>
     </div>
     <div class="form-group row">

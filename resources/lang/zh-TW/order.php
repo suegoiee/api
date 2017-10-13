@@ -31,7 +31,7 @@ return [
         'invoice_name' => '姓名',
         'invoice_phone' => '連絡電話',
         'invoice_address' => '地址',
-        'invoice_number' => '統一編號',
         'invoice_title' => '抬頭',
+        'company_id' => '統一編號',
     ],
 ];
