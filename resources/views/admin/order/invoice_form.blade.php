@@ -36,9 +36,9 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="form-control-label col-sm-2" for="invoice_head">{{trans($module_name.'.admin.invoice_head')}}</label>
+        <label class="form-control-label col-sm-2" for="invoice_title">{{trans($module_name.'.admin.invoice_title')}}</label>
         <div class="col-sm-8 text">
-            {{$data->invoice_head}}
+            {{$data->invoice_title}}
         </div>
     </div>
 @endif

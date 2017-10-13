@@ -11,7 +11,7 @@ class Order extends UanalyzeModel
     protected $dates = ['deleted_at'];
     protected $appends = ['user_nickname'];
     protected $fillable = [
-        'user_id','status','price','memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'invoice_number', 'invoice_head'
+        'user_id','status','price','memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'invoice_number', 'invoice_title'
     ];
     protected $hidden = [
         'user','user_id','profile'
