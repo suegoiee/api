@@ -8,6 +8,9 @@ return [
         'create_title'=>'新增'.$module_name,
         'edit_label'=>'編輯'.$module_name,
         'edit_title'=>'編輯'.$module_name,
+        'order_tab' =>'訂購資訊',
+        'invoice_tab' =>'發票資訊',
+
     	'id' => '訂單編號',
     	'price' => '金額',
     	'user_nickname' => '訂購者',
@@ -17,5 +20,18 @@ return [
     	'status_1'=>'已付款',
     	'products' => '產品',
         'created_at' => '訂購日期',
+
+        'use_invoice' => '使用發票',
+        'use_invoice_0' => '不使用',
+        'use_invoice_1' => '使用',
+        'invoice_type' => '發票類型',
+        'invoice_type_0' => '捐贈',
+        'invoice_type_1' => '二聯',
+        'invoice_type_2' => '三聯',
+        'invoice_name' => '姓名',
+        'invoice_phone' => '連絡電話',
+        'invoice_address' => '地址',
+        'invoice_number' => '統一編號',
+        'invoice_head' => '抬頭',
     ],
 ];
