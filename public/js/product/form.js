@@ -4,7 +4,11 @@ $(function(){
         removeButtons:'About'
     }
     CKEDITOR.replace( 'info_more',ckeditor_config);
-    CKEDITOR.replace( 'faq', ckeditor_config);
+    // CKEDITOR.replace( 'faq', ckeditor_config);
+    console.log(CKEDITOR.config);
+    CKEDITOR.config.height=100;
+    CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
+    CKEDITOR.config.removeButtons='About',
     $('#collections').multiSelect({
         selectableHeader: "<div class='text-center'>可選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
@@ -127,5 +131,46 @@ $(function(){
             } 
         }
     });
-
+    var faq_index=1;
+    $("#new_faq_btn").click(function(event){
+        event.preventDefault();
+        var faq_html='<div class="form-group row">'+
+        '<div class="col-10">'+
+            '<div class="col-sm-12">'+
+                '<div class="row">'+
+                    '<label class="form-control-label col-sm-2">Q</label>'+
+                    '<div class="col-sm-10">'+
+                        '<textarea class="form-control ckeditor" id="faq_q_new_'+faq_index+'" name="faqs[new_'+faq_index+'][question]" placeholder="Q"></textarea>'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
+            '<div class="col-sm-12">'+
+                '<div class="row">'+
+                    '<div class="col-sm-1">'+
+                    '</div>'+
+                    '<label class="form-control-label col-sm-2">A</label>'+
+                    '<div class="col-sm-9">'+
+                        '<textarea class="form-control ckeditor" id="faq_a_new_'+faq_index+'" name="faqs[new_'+faq_index+'][answer]" placeholder="A"></textarea>'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="col-2 text-center">'+
+            '<input type="hidden" name="faqs[new_'+faq_index+'][id]" value="0">'+
+            '<button class="btn btn-danger remove_btn" type="button"><span class="oi oi-trash"></span></button>'+
+       '</div>'+
+    '</div>';
+        $('#new_faqs').append(faq_html);
+        CKEDITOR.replace( 'faq_q_new_'+faq_index );
+        CKEDITOR.replace( 'faq_a_new_'+faq_index );
+        faq_index++;
+    });
+    $('#faqs').on('click','.remove_btn',function(event){
+        event.preventDefault();
+        var row = $(this);
+        if(confirm('確定刪除 ?')){
+            row.parent().parent().remove();
+            
+        }
+    });
 });

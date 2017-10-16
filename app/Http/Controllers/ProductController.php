@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $product = $this->productRepository->getsWith(['tags','collections']);
+        $product = $this->productRepository->getsWith(['tags','collections','faqs']);
 
         return $this->successResponse($product?$product:[]);
     }
@@ -51,6 +51,12 @@ class ProductController extends Controller
             $collections = $request->input('collections',[]);
             $product->collections()->attach($collections);
         }
+
+        $faqs = $request->input('faqs',[]);
+        foreach ($faqs as $key => $faq) {
+            # code...
+            $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
+        }
         /*
         $avatar_small = $request->file('avatar_small');
         if($avatar_small){
@@ -77,14 +83,14 @@ class ProductController extends Controller
     public function show(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWith($id,['tags','collections']);
+        $product = $this->productRepository->getWith($id,['tags','collections','faqs']);
 
         return $this->successResponse($product?$product:[]);
     }
     public function onShelf(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWithByStatus($id, ['tags','collections']);
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections','faqs']);
 
         return $this->successResponse($product?$product:[]);
     }
@@ -113,6 +119,23 @@ class ProductController extends Controller
             $collections = $request->input('collections',[]);
             $product->collections()->sync($collections);
         }
+        $faqs = $request->input('faqs',[]);
+        $faq_ids = [];
+        foreach ($faqs as $key => $faq) {
+            if(!isset($faq['question']) && !isset($faq['answer'])){
+                continue;
+            }
+            $faq['question'] = isset($faq['question']) ? $faq['question']:'';
+            $faq['answer'] = isset($faq['answer']) ? $faq['answer']:'';
+            if($faq['id']==0){
+                $faq_data = $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
+            }else{
+                $product->faqs()->where('id',$faq['id'])->update(['question'=>$faq['question'],'answer'=>$faq['answer']]);
+                $faq_data = $product->faqs()->find($faq['id']);
+            }
+            array_push($faq_ids,$faq_data->id);
+        }
+        $product->faqs()->whereNotIn('id',$faq_ids)->delete();
 
         return $this->successResponse($product?$product:[]);
     }

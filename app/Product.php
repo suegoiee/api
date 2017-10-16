@@ -16,11 +16,15 @@ class Product extends UanalyzeModel
     ];
     protected $appends = [ 'avatar_small', 'avatar_detail' ];
 
-    protected $hidden = ['pivot'];
+    protected $hidden = [ 'pivot' ];
     //protected $visible = ['id', 'name', 'model', 'info_short', 'info_more', 'type', 'price', 'expiration', 'faq'];
 
     public function users(){
     	return $this->belongsToMany('App\User')->withPivot('deadline','installed')->withTimestamps();
+    }
+
+    public function faqs(){
+        return $this->hasMany('App\Product_faq');
     }
 
     public function collections(){

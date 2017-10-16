@@ -53,6 +53,7 @@ trait OauthToken
 
         return json_decode((string) $response->getBody(), true);
     }
+    
     private function getPasswordGrantClient(){
         $client = DB::table('oauth_clients')->where('password_client',1)->first();
         return $client;

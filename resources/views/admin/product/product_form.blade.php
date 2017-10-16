@@ -104,6 +104,7 @@
                 
     </div>
 </div>
+<!--
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="faq">{{trans($module_name.'.admin.faq')}}</label>
     <div class="col-sm-8">
@@ -112,4 +113,4 @@
     <div class="col-sm-2 text-danger msg">
                 
     </div>
-</div>
+</div>-->

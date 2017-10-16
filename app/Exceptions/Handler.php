@@ -115,6 +115,7 @@ class Handler extends ExceptionHandler
             $actionMethod = $request->method();
             $response['uri'] = $uri;
             $response['method'] = $actionMethod;
+            $response['status'] = 'error';
         	// Return a JSON response with the response array and status code
         	return response()->json($response, $status);
     	}

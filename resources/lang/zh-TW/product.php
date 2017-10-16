@@ -10,6 +10,7 @@ return [
         'edit_title'=>'編輯'.$module_name,
         'product_tab'=>$module_name.'資料',
         'avatar_tab'=>'產品圖片',
+        'faq_tab'=>'FAQ',
 
     	'id'=>'編號',
     	'name'=>'名稱',
@@ -34,6 +35,8 @@ return [
         'installed_0'=>'未安裝',
         'installed_1'=>'已安裝',
         'faq'=>'FAQ',
+        'faq_q'=>'Q',
+        'faq_a'=>'A',
 	],
     'collection_cant_del' =>'無法個別刪除。'
 ];

@@ -80,7 +80,7 @@ class UserProductController extends Controller
     public function show(Request $request, $id)
     {
         
-        $product = $request->user()->products()->with(['tags','collections'])->find($id);
+        $product = $request->user()->products()->with(['tags','collections','faqs'])->find($id);
         $product->installed = $product->pivot->installed;
         $product->deadline = $product->pivot->deadline;
 

@@ -182,7 +182,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
 
         Shouwda\Allpay\AllpayServiceProvider::class,
-
+        Shouwda\Facebook\FacebookServiceProvider::class,
     ],
 
     /*
@@ -212,6 +212,7 @@ return [
         'DB' => Illuminate\Support\Facades\DB::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
+        'Facebook' => Shouwda\Facebook\Facades\Facebook::class,
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,

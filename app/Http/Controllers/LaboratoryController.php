@@ -22,7 +22,7 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->with('products','products.collections')->get();
+        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->get();
         foreach ($laboratories as $laboratory) {
             $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
             foreach ($laboratory->products as $product) {
@@ -76,7 +76,7 @@ class LaboratoryController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $laboratory = $user->laboratories()->with('products','products.collections')->find($id);
+        $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->find($id);
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
         foreach ($laboratory->products as $product) {
             $product->installed = $product->users->first()->pivot->installed;
