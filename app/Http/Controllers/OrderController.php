@@ -42,7 +42,9 @@ class OrderController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['price', 'memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title']);
+        $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title']);
+        $request_data['use_invoice'] =  $request->input('use_invoice',0);
+        $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $products = $request->input('products',[]);
         $order = $user->orders()->create($request_data);
         $product_ids = [];
