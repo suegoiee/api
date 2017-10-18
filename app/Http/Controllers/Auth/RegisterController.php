@@ -54,7 +54,7 @@ class RegisterController extends Controller
     }
 
     protected function createProfile(Request $request,$user){
-        $store_data = $request->only(['nickname','name','sex','address','birthday']);
+        $store_data = $request->only(['nickname','name','sex','address','birthday','phone','company_id','invoice_title']);
         $profile = $user->profile()->create($store_data);
         return $profile;
     }

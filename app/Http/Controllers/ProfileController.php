@@ -53,7 +53,7 @@ class ProfileController extends Controller
             return $this->validErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['nickname','name','sex','address','birthday']);
+        $request_data = $request->only(['nickname','name','sex','address','birthday','phone','company_id','invoice_title']);
 
         $data = array_filter($request_data, function($item){return $item!=null;});
 
