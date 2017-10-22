@@ -23,6 +23,9 @@ class Order extends UanalyzeModel
     public function allpays(){
         return $this->hasMany('App\Allpay');
     }
+    public function ecpays(){
+        return $this->hasMany('App\Ecpay');
+    }
 
     public function products(){
         return $this->belongsToMany('App\Product')->select(['id','name','type','price','expiration']);

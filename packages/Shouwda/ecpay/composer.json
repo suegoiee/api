@@ -1,0 +1,20 @@
+{
+    "name": "shouwda/ecpay",
+    "description": "The Allpay for Laravel 5 Framework.",
+    "keywords": ["ecpay", "laravel"],
+    "authors": [
+        {
+            "name": "shouwda",
+            "email": "shouwda@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {  
+        "classmap": [
+            "src/SDK"
+        ],
+        "psr-4": {
+            "Shouwda\\Ecpay\\": "src/"
+        }
+    }
+}

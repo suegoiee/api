@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Allpay;
-use Shouwda\Allpay\SDK\PaymentMethod;
+use Ecpay;
+use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 
 use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
@@ -62,8 +62,8 @@ class OrderController extends Controller
         $order->products()->attach($product_ids);
         
         if($order_price>0){
-            $allpay_form = $this->allpay_form($order);
-            $order['form_html'] = $allpay_form;
+            $ecpay_form = $this->ecpay_form($order);
+            $order['form_html'] = $ecpay_form;
         }
 
         if($order_price==0){
@@ -149,9 +149,9 @@ class OrderController extends Controller
         }
 
         $order = $user->orders()->with(['products'])->find($id);
-        $allpay_form = $this->allpay_form($order);
+        $ecpay_form = $this->ecpay_form($order);
         $order['products'] = $order->products;
-        $order['form_html'] = $allpay_form;
+        $order['form_html'] = $ecpay_form;
         return $this->successResponse($order?$order:[]);
     }
     private function addProducts($user_id, $products){
@@ -169,9 +169,9 @@ class OrderController extends Controller
             ]);
         return json_decode((string) $response->getBody(), true);
     }
-    private function allpay_form($order){
+    private function ecpay_form($order){
         $merchant_trade_no = $order->user->id.time();
-        $order->allpays()->create(['MerchantTradeNo'=>$merchant_trade_no]);
+        $order->ecpays()->create(['MerchantTradeNo'=>$merchant_trade_no]);
         $items = [];
         foreach ($order->products as $key => $product) {
             $item = [
@@ -184,18 +184,19 @@ class OrderController extends Controller
             array_push($items, $item);
         }
         $data=[
-            'ReturnURL' => env('ALLPAY_RETURN_URL',url('/')).'allpay/feedback',
-            'PaymentInfoURL' => env('ALLPAY_PAYMENTINFO_URL',url('/')).'allpay/feedback',
-            'ClientBackURL' => env('ALLPAY_BACK_URL'),
+            'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
+            'PaymentInfoURL' => env('ECPAY_PAYMENTINFO_URL',url('/')).'/ecpay/feedback',
+            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')),
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,
             'TradeDesc' => 'Uanalyze',
-            'ChoosePayment' => \PaymentMethod::Credit,
-            'ChooseSubPayment' => \PaymentMethodItem::None,
+            'ChoosePayment' => \ECPay_PaymentMethod::Credit,
+            'ChooseSubPayment' => \ECPay_PaymentMethodItem::None,
             'Items' => $items,
         ];
-        Allpay::set($data);
-        return Allpay::checkOutString();
+        Ecpay::set($data);
+        return Ecpay::checkOutString();
     }
+
 }

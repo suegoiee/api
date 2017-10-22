@@ -182,6 +182,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
 
         Shouwda\Allpay\AllpayServiceProvider::class,
+        Shouwda\Ecpay\EcpayServiceProvider::class,
         Shouwda\Facebook\FacebookServiceProvider::class,
     ],
 
@@ -210,6 +211,7 @@ return [
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,
+        'Ecpay' => Shouwda\Ecpay\Facades\Ecpay::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'Facebook' => Shouwda\Facebook\Facades\Facebook::class,
