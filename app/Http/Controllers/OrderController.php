@@ -191,8 +191,8 @@ class OrderController extends Controller
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,
             'TradeDesc' => 'Uanalyze',
-            'ChoosePayment' => \PaymentMethod::ALL,
-            'IgnorePayment' => 'ATM#WebATM#CVS#AccountLink#TopUpUsed',
+            'ChoosePayment' => \PaymentMethod::Credit,
+            'ChooseSubPayment' => PaymentMethodItem::None,
             'Items' => $items,
         ];
         Allpay::set($data);
