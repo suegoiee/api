@@ -653,7 +653,7 @@ class ECPay_Send extends ECPay_Aio
         //$szHtml .=         '<meta charset="utf-8">';
         //$szHtml .=     '</head>';
         //$szHtml .=     '<body>';
-        $szHtml =         "<form id=\"__ecpayForm\" method=\"post\" target=\"{$target}\" action=\"{$ServiceURL}\">";
+        $szHtml =         "<form id=\"__allpayForm\" method=\"post\" target=\"{$target}\" action=\"{$ServiceURL}\">";
 
         foreach ($arParameters as $keys => $value) {
             $szHtml .=         "<input type=\"hidden\" name=\"{$keys}\" value=\"{$value}\" />";
@@ -954,7 +954,7 @@ class ECPay_FundingReconDetail extends ECPay_Aio
         $szHtml .=         '<meta charset="utf-8">';
         $szHtml .=     '</head>';
         $szHtml .=     '<body>';
-        $szHtml .=         "<form id=\"__allpayForm\" method=\"post\" target=\"{$target}\" action=\"{$ServiceURL}\">";
+        $szHtml .=         "<form id=\"__ecpayForm\" method=\"post\" target=\"{$target}\" action=\"{$ServiceURL}\">";
         
         foreach ($arParameters as $keys => $value) {
             $szHtml .=         "<input type=\"hidden\" name=\"{$keys}\" value=\"{$value}\" />";
