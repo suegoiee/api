@@ -192,7 +192,6 @@ class OrderController extends Controller
             'TotalAmount' => $order->price,
             'TradeDesc' => 'Uanalyze',
             'ChoosePayment' => \PaymentMethod::Credit,
-            'ChooseSubPayment' => PaymentMethodItem::None,
             'Items' => $items,
         ];
         Allpay::set($data);
