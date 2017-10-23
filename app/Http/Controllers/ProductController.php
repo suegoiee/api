@@ -114,11 +114,10 @@ class ProductController extends Controller
 
         $tags = $request->input('tags',[]);
         $product->tags()->sync($tags);
+        
+        $collections = $request->input('collections',[]);
+        $product->collections()->sync($collections);
 
-        if( $product->type =='collection' ){
-            $collections = $request->input('collections',[]);
-            $product->collections()->sync($collections);
-        }
         $faqs = $request->input('faqs',[]);
         $faq_ids = [];
         foreach ($faqs as $key => $faq) {

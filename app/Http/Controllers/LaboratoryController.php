@@ -60,8 +60,10 @@ class LaboratoryController extends Controller
         $products = is_array($products) ? $products:[$products];
         foreach ($products as $key => $product) {
             $product_data = $user->products()->find($product);
-            if($key==0){
-                $this->create_avatar($laboratory, $product_data->avatar_small);
+            if($key==0 && $product_data->type=='collection'){
+                if($product_data->avatar_small){
+                    $this->create_avatar($laboratory, $product_data->avatar_small);
+                }
             }
             $user->products()->updateExistingPivot($product,['installed'=>1]);
         }
