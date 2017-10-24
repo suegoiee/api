@@ -120,7 +120,7 @@ class AvatarController extends Controller
     protected function avatarValidator(array $data)
     {
         return Validator::make($data, [
-            'avatar' => 'required|image|dimensions:max_width=200,max_height=200',
+            'avatar' => 'required|image|size:1024',
         ]);
     }
 
