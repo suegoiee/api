@@ -24,10 +24,11 @@ class UserProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = $request->user()->products->makeHidden(['model','info_short','info_more','price','expiration','status','faq','created_at', 'updated_at', 'deleted_at' ,'avatar_small', 'avatar_detail','pivot']);
+        $products = $request->user()->products()->with('faqs')->get()->makeHidden(['model','info_short','info_more','price','expiration','status','faq','created_at', 'updated_at', 'deleted_at' ,'avatar_small', 'avatar_detail','pivot']);
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline;
+            $product->faqs = $product->faqs;
         }
         
         return $this->successResponse($products?$products:[]);
@@ -84,7 +85,7 @@ class UserProductController extends Controller
         $product->installed = $product->pivot->installed;
         $product->deadline = $product->pivot->deadline;
 
-        return $this->successResponse($product?$product->makeHidden(['model','info_short','info_more','price','expiration','status','faq','created_at', 'updated_at', 'deleted_at' ,'avatar_small', 'avatar_detail','pivot']):[]);
+        return $this->successResponse($product?$product->makeHidden(['model','column','info_short','info_more','price','expiration','status','faq','created_at', 'updated_at', 'deleted_at' ,'avatar_small', 'avatar_detail','pivot']):[]);
     }
 
     public function edit($id)

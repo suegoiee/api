@@ -19,6 +19,7 @@ return [
     	'type_collection'=>'組合',
     	'price'=>'價格',
     	'model'=>'對應API',
+        'column'=>'欄位',
     	'info_short'=>'簡介',
     	'info_more'=>'詳細介紹',
         'expiration'=>'使用期限',
