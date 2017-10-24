@@ -55,7 +55,7 @@ class CkeditorImageController extends Controller
     protected function avatarValidator(array $data)
     {
         return Validator::make($data, [
-            'upload' => 'required|image|size:2048',
+            'upload' => 'required|image|max:2048',
         ]);
     }
 }
