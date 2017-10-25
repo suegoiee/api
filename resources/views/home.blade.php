@@ -99,42 +99,9 @@
         <h4 class="pt-3">Response:</h4>
         <textarea class="form-control" id="response_data" rows="10" ></textarea>
     </div>
-    <p><a href="#" onClick="logInWithFacebook()">Log In with the JavaScript SDK</a></p>
 @endsection
 
 @section('javascript')
-
-<script>
-    logInWithFacebook = function() {
-    FB.login(function(response) {
-      if (response.authResponse) {
-        alert('You are logged in &amp; cookie set!');
-        // Now you can redirect the user or do an AJAX request to
-        // a PHP script that grabs the signed request from the cookie.
-      } else {
-        alert('User cancelled login or did not fully authorize.');
-      }
-    },{scope: 'email'});
-    return false;
-  };
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{{env('FACEBOOK_APP_ID')}}',
-      cookie     : true,
-      xfbml      : true,
-      version    : '{{env('FACEBOOK_GRAPHVERSION')}}',
-    });
-    FB.AppEvents.logPageView();   
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
 <script>
 
 $(function(){
