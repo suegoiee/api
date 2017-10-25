@@ -91,8 +91,12 @@ class AvatarController extends Controller
         }else{
             $avatar = $moduleRepository->avatars()->where('type',$request->input('avatar_type','normal'))->orderBy('created_at', 'desc')->first();
         }
-        $this->avatarRepository->update($avatar->id,$data);
-        $this->destroyAvatar($avatar->path);
+        if($avatar){
+            $this->avatarRepository->update($avatar->id,$data);
+            $this->destroyAvatar($avatar->path);
+        }else{
+            $moduleRepository->avatars()->create($data);
+        }
         return $this->successResponse($data);
     }
 
