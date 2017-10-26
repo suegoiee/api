@@ -15,10 +15,15 @@ class RestrictIPMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $restrict_ip = env('RESTRIC_IP');
-        if ($restrict_ip!='' && $request->ip() != env('RESTRIC_IP')) {
-            abort(401, 'Unauthorized.');
+        if(env('RESTRICT_IP','')==''){
+            return $next($request);
         }
-        return $next($request);
+        $restrict_ips = explode(',', env('RESTRICT_IP'));
+        foreach ($restrict_ips as $key => $restrict_ip) {
+            if ($request->ip() == $restrict_ip) {
+                return $next($request);
+            }
+        }
+        abort(401, 'Unauthorized.');
     }
 }
