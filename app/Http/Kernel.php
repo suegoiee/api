@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
         'apiToken'=>\Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+        'ip'=>\App\Http\Middleware\RestrictIPMiddleware::class,
     ];
 }

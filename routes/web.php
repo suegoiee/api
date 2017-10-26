@@ -21,7 +21,6 @@ Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::get('/allpay','AllpayController@index');
 Route::post('/allpay/feedback','AllpayController@feedback');
 Route::post('/ecpay/feedback','EcpayController@feedback');
 
@@ -122,15 +121,15 @@ Route::middleware(['client:message'])->group(function(){
 
 
 //Admin
-Route::group(['middleware' => ['admin'] ],function(){
-	Route::get('/', 'HomeController@index')->name('login');
+Route::group(['middleware' => ['ip','admin'] ],function(){
+	Route::get('/', 'HomeController@index');
 });
-Route::group(['middleware' => ['admin'],'prefix' => 'admin'],function(){
-	Route::get('/login', 'Admin\Auth\LoginController@loginForm');
+Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
+	Route::get('/login', 'Admin\Auth\LoginController@loginForm')->name('login');
 	Route::post('/login', 'Admin\Auth\LoginController@login');
 });
 
-Route::group(['middleware' => ['admin','auth:admin','apiToken'],'prefix' => 'admin'],function(){
+Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' => 'admin'],function(){
 	Route::post('/logout', 'Admin\Auth\LoginController@logout');
 
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
