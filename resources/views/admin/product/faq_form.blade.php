@@ -4,7 +4,10 @@
         </div>
     </div>
 <div id="faqs">
-@forelse($data->faqs as $key => $faq)
+@php 
+    $faqs = $data? $data->faqs : [] ;
+@endphp
+@forelse($faqs as $key => $faq)
     <div class="form-group row">
         <div class="col-10">
             <div class="col-sm-12">

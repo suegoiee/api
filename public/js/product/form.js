@@ -173,4 +173,12 @@ $(function(){
             
         }
     });
+    $('#new_faqs').on('click','.remove_btn',function(event){
+        event.preventDefault();
+        var row = $(this);
+        if(confirm('確定刪除 ?')){
+            row.parent().parent().remove();
+            
+        }
+    });
 });
