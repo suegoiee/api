@@ -55,7 +55,9 @@ class ProductController extends Controller
         $faqs = $request->input('faqs',[]);
         foreach ($faqs as $key => $faq) {
             # code...
-            $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
+            if(isset($faq['question'])||isset($faq['answer'])){
+                $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
+            }
         }
         /*
         $avatar_small = $request->file('avatar_small');
