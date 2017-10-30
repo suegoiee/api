@@ -39,5 +39,6 @@ return [
         'faq_q'=>'Q',
         'faq_a'=>'A',
 	],
-    'collection_cant_del' =>'無法個別刪除。'
+    'collection_cant_del' =>'無法個別刪除。',
+    'cant_no_products' =>'需至少有一項產品。'
 ];

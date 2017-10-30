@@ -119,7 +119,11 @@ class LaboratoryController extends Controller
             return $this->failedResponse(['message'=>[trans('product.collection_cant_del')]]);
         }
         $products = $request->input('products');
+
         $products_install = $products ? (is_array($products) ? $products:[$products]) : [];
+        if(count($products_install)==0){
+        	return $this->failedResponse(['message'=>[trans('product.cant_no_products')]]);
+        }
         $products_remove = $laboratory->products()->whereNotIn('id',$products_install)->get();
         $laboratory->products()->sync($products_install);
         foreach ($products_install as $key => $product) {
