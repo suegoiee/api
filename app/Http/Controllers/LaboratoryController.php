@@ -112,16 +112,24 @@ class LaboratoryController extends Controller
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $user->laboratories()->where('id',$id)->update($data);
+
         $laboratory = $user->laboratories()->find($id);
 
+		if($laboratory->customized == 0){
+            return $this->failedResponse(['message'=>[trans('product.collection_cant_del')]]);
+        }
         $products = $request->input('products');
-        
-        $laboratory->products()->syncWithoutDetaching($products);
-        
-        $products_install = [];
-        $products = is_array($products) ? $products:[$products];
-        foreach ($products as $key => $product) {
+        $products_install = $products ? (is_array($products) ? $products:[$products]) : [];
+        $products_remove = $laboratory->products()->whereNotIn('id',$products_install)->get();
+        $laboratory->products()->sync($products_install);
+        foreach ($products_install as $key => $product) {
             $user->products()->updateExistingPivot($product,['installed'=>1]);
+        }
+        foreach ($products_remove as $key => $product) {
+        	$install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
+	        if($install_num==0){
+	            $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+	        }
         }
 
         return $this->successResponse($laboratory?$laboratory:[]);
@@ -133,16 +141,24 @@ class LaboratoryController extends Controller
         if(!($this->laboratoryRepository->isOwner($user->id,$id))){
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
-        $validator = $this->laboratoryValidator($request->all(), $user->id);
-        if($validator->fails()){
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
+        
         $products = $request->input('products');
-        $is_collection = $user->laboratories()->find($id)->products()->where('type','collection')->count();
-        if($is_collection){
+
+        $laboratory = $user->laboratories()->find($id);
+        if($laboratory->customized == 0){
             return $this->failedResponse(['message'=>[trans('product.collection_cant_del')]]);
         }
-        $user->laboratories()->find($id)->products()->detach($products);
+        $laboratory->products()->detach($products);
+
+        foreach ($products as $key => $product) {
+        	$product_data = $user->products()->find($product);
+        	if($product_data){
+	            $install_num = $product_data->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
+	            if($install_num==0){
+	                $user->products()->updateExistingPivot($product_data->id, ['installed'=>0]);
+	            }
+        	}
+        }
 
         return $this->successResponse(['products'=>$products]);
 
@@ -172,7 +188,7 @@ class LaboratoryController extends Controller
         return Validator::make($data, [
             'title' => 'max:255',
             'layout' => 'string',
-            'products' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL',
+            'products' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL|nullable',
             'products.*' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL',
         ]);        
     }

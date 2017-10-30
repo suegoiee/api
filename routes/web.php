@@ -121,6 +121,7 @@ Route::middleware(['client:message'])->group(function(){
 
 
 //Admin
+Route::get('/ip', function(){return Request::ip();});
 Route::group(['middleware' => ['ip','admin'] ],function(){
 	Route::get('/', 'HomeController@index');
 });
