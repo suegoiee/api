@@ -50,7 +50,7 @@ class AvatarController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
+        $data = [ 'path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
 
         if($request->input('avatar_type','normal')!='detail'){
             $avatars = $moduleRepository->avatars()->where('type',$request->input('avatar_type','normal'))->orderBy('created_at', 'desc')->get();
@@ -58,6 +58,7 @@ class AvatarController extends Controller
             $this->destroyAvatar($deleted);
         }
         $moduleRepository->avatars()->create($data);
+        $data['url'] = url('storage/'.$data['path']);
         return $this->successResponse($data);
     }
 
@@ -97,6 +98,7 @@ class AvatarController extends Controller
         }else{
             $moduleRepository->avatars()->create($data);
         }
+        $data['url'] = url('storage/'.$data['path']);
         return $this->successResponse($data);
     }
 
