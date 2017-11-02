@@ -32,8 +32,16 @@ class TokenController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
         $user = User::where('email',$request->input('email'))->first();
-        if($user && Hash::check($request->input('password'), $user->getAuthPassword())){
-            $user->touch();
+        if($user){
+            if($user->version==0 && $user->is_socialite==0){
+                if($request->input('password') == $user->getAuthPassword()){
+                    
+                    return $this->successResponse([]);
+                }
+            }
+            if(Hash::check($request->input('password'), $user->getAuthPassword())){
+                $user->touch();
+            }
         }
         $response = $this->passwordGrantToken($request);
         return $this->successResponse($response);
