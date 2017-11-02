@@ -31,12 +31,15 @@ class TokenController extends Controller
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $user = User::where('email',$request->input('email'))->first();
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $user = User::where('email',$email)->first();
         if($user){
             if($user->version==0 && $user->is_socialite==0){
-                if($request->input('password') == $user->getAuthPassword()){
-                    
-                    return $this->successResponse([]);
+                if($password == $user->getAuthPassword()){
+                    User::where('id',$user->id)->update(['password'=>bcrypt($password),'version'=>2]);
+                }else{
+                   return $this->validateErrorResponse([trans('auth.invalid_credential')]);
                 }
             }
             if(Hash::check($request->input('password'), $user->getAuthPassword())){

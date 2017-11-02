@@ -24,4 +24,5 @@ return [
     'password_reset_success' =>'密碼重設成功',
     'permission_denied' =>'尚無存取權限。',
     'old_password_error'=>'原密碼錯誤!',
+    'invalid_credential'=>'The user credentials were incorrect.',
 ];
