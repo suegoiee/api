@@ -35,7 +35,7 @@ class TokenController extends Controller
         $password = $request->input('password');
         $user = User::where('email',$email)->first();
         if($user){
-            if($user->version==0 && $user->is_socialite==0){
+            if($user->version==0 ){
                 if(md5($password) == $user->getAuthPassword()){
                     User::where('id',$user->id)->update(['password'=>bcrypt($password),'version'=>2]);
                 }else{
