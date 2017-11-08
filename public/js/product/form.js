@@ -9,6 +9,7 @@ $(function(){
     CKEDITOR.config.height=100;
     CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
     CKEDITOR.config.removeButtons='About',
+    CKEDITOR.config.extraPlugins = 'youtube';
     $('#collections').multiSelect({
         selectableHeader: "<div class='text-center'>可選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
