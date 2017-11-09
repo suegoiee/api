@@ -34,7 +34,7 @@ class OrderController extends AdminController
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>[],
-            'tabs'=>['status'=>[0,1],'free'=>[0]],
+            'tabs'=>['status'=>[0,1]],
             'query_string' => $query_string,
             'table_data' => $orders,
             'table_head' =>['id','user_nickname','price','status','created_at'],
