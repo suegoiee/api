@@ -18,6 +18,7 @@ return [
     	'status' => '付款狀態',
     	'status_0'=>'未付款',
     	'status_1'=>'已付款',
+        'free_0'=>'免付費',
     	'products' => '產品',
         'created_at' => '訂購日期',
 

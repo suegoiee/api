@@ -15,15 +15,26 @@ class OrderController extends AdminController
 
     public function index(Request $request)
     {
-        $query_string=['status' => 0];
-        if($request->has('status')){
-            $query_string['status']=$request->input('status');
+        $query_string=[];
+        if($request->has('free')){
+            $where['price.='] = 0;
+            $query_string = $request->only(['free']);
+        }else if($request->has('status')){
+            $where['status'] = $request->input('status',0);
+            $where['price.<>'] = 0;
+            $query_string = $request->only(['status']);
+        }else{
+            $where['status'] = $request->input('status',0);
+            $where['price.<>'] = 0;
+            $query_string['status'] = $request->input('status',0);
         }
-        $orders = $this->moduleRepository->getsWith(['user','products'],$query_string);
+
+        $orders = $this->moduleRepository->getsWith(['user','products'], $where);
+
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>[],
-            'tabs'=>['status'=>[0,1]],
+            'tabs'=>['status'=>[0,1],'free'=>[0]],
             'query_string' => $query_string,
             'table_data' => $orders,
             'table_head' =>['id','user_nickname','price','status','created_at'],

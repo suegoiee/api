@@ -14,7 +14,7 @@
         <ul class="nav nav-tabs" role="tablist">
             @foreach($tabs as $key => $tab)
                 @foreach($tab as $value)
-                    <li class="nav-item" role="presentation" ><a class="nav-link {!! @$query_string[$key] == $value? 'active':'' !!}"  href="{{url('/admin/'.str_plural($module_name).'?'.$key.'='.$value)}}"  >{{trans($module_name.'.admin.'.$key.'_'.$value)}}</a></li>
+                    <li class="nav-item" role="presentation" ><a class="nav-link {!! isset($query_string[$key]) && $query_string[$key] == $value? 'active':'' !!}"  href="{{url('/admin/'.str_plural($module_name).'?'.$key.'='.$value)}}"  >{{trans($module_name.'.admin.'.$key.'_'.$value)}}</a></li>
                 @endforeach
             @endforeach
         </ul>

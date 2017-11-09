@@ -26,7 +26,12 @@ class Repository
 	public function getsWith($with=[],$where=[],$order=[]){
 		$query = $this->model->with($with);
 		foreach ($where as $key => $value) {
-			$query = $query->where($key,$value);
+			$field_array = explode('.', $key);
+			if(count($field_array)>1){ 
+				$query = $query->where($field_array[0], $field_array[1], $value);
+			}else{
+				$query = $query->where($key,$value);
+			}
 		}
 		foreach ($order as $key => $value) {
 			$query = $query->orderBy($key,$value);
