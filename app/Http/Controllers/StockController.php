@@ -33,9 +33,17 @@ class StockController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name','abbrev','code']);
+        $request_data = $request->only(['stock_code','stock_name','stock_industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type']);
 
         $stock = $this->stockRepository->create($request_data);
+
+        $events = $request->input('events',[]);
+        foreach ($events as $key => $event) {
+            if(isset($faq['year'])||isset($faq['content'])){
+                $stock->events()->create(['year'=>$faq['year'],'content'=>$faq['content']]);
+            }
+        }
+
 
         return $this->successResponse($stock?$stock:[]);
     }
@@ -60,10 +68,29 @@ class StockController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name','abbrev','code']);
+        $request_data = $request->only(['stock_code','stock_name','stock_industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type']);
+
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $stock = $this->stockRepository->update($id,$data);
+
+        $events = $request->input('events',[]);
+        $event_ids = [];
+        foreach ($events as $key => $event) {
+            if(!isset($event['year']) && !isset($event['content'])){
+                continue;
+            }
+            $event['year'] = isset($event['year']) ? $event['year']:'';
+            $event['content'] = isset($event['content']) ? $event['content']:'';
+            if($event['id']==0){
+                $event_data = $stock->events()->create(['year'=>$event['year'],'content'=>$event['content']]);
+            }else{
+                $stock->events()->where('id',$event['id'])->update(['year'=>$event['year'],'content'=>$event['content']]);
+                $event_data = $stock->events()->find($event['id']);
+            }
+            array_push($event_ids,$event_data->id);
+        }
+        $stock->events()->whereNotIn('id',$event_ids)->delete();
 
         return $this->successResponse($stock?$stock:[]);
     }
@@ -78,9 +105,19 @@ class StockController extends Controller
     protected function stockValidator(array $data,$id=0)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'abbrev' => 'required|max:255',
-            'code'=>'required|max:6|unique:stocks,code,'.$id,
+            'stock_code'=>'required|max:4|unique:company_info,stock_code,'.$id.',no',
+            'stock_name' => 'required|max:255',
+            'stock_industries' => 'required|max:255',
+            //'info' => 'required',
+            //'area',
+            //'product',
+            //'local_related_1',
+            //'local_related_2',
+            //'local_related_3',
+            //'local_related_4',
+            //'local_related_5',
+            //'foreign_related',
+            'type' => 'required|max:255',
         ]);        
     }
 }

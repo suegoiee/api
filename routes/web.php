@@ -119,6 +119,11 @@ Route::middleware(['client:message'])->group(function(){
 	Route::delete('/messages/{message}','MessageController@destroy');
 });
 
+Route::middleware(['client:company'])->group(function(){
+	Route::post('/companies','StockController@store')->name('companies.store');
+	Route::put('/companies/{company}','StockController@update')->name('companies.update');
+	Route::delete('/companies/{company}','StockController@destroy')->name('companies.destroy');
+});
 
 //Admin
 Route::get('/ip', function(){return Request::ip();});
@@ -141,6 +146,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/tags/{tag}/delete','Admin\TagController@destroy');
 	Route::delete('/tags','Admin\TagController@destroy');
 	Route::resource('/tags', 'Admin\TagController');
+
+	Route::get('/companies/{tag}/delete','Admin\CompanyController@destroy');
+	Route::delete('/companies','Admin\CompanyController@destroy');
+	Route::resource('/companies', 'Admin\CompanyController');
 
 	Route::get('/users/{tag}/delete','Admin\UserController@destroy');
 	Route::delete('/users','Admin\UserController@destroy');

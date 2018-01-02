@@ -42,7 +42,7 @@ class Repository
 		return $this->model->create($data);
 	}
 	public function update($id,$data){
-		$this->model->where('id',$id)->update($data);
+		$this->model->where($this->model->getKeyName(),$id)->update($data);
 		return $this->model->find($id);
 	}
 	public function delete($id){

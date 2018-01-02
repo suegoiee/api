@@ -36,6 +36,12 @@
             </a>
         </li>
         <li>
+            <a href="{{url('/admin/companies')}}">
+                <span class="oi oi-briefcase"></span>
+                <span class="text">{{trans('company.admin.menu_title')}}</span>
+            </a>
+        </li>
+        <li>
             <a href="{{url('/admin/messages')}}">
                 <span class="oi oi-envelope-closed"></span>
                 <span class="text">{{trans('message.admin.menu_title')}}</span>

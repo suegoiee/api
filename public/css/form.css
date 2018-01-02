@@ -4,10 +4,34 @@
     font-size: 1rem;
     line-height: 1.25;
 }
+.data p{
+	margin: 0;
+}
 #content .text{
 	padding: .5rem .75rem;
     font-size: 1rem;
     line-height: 1.25;
+}
+.table td, .table th{
+	vertical-align: middle;
+}
+.hide{
+	visibility: hidden;
+	display: none;
+}
+.action_btns>span{
+	margin: 0 5px;
+}
+.action_btns>span:hover{
+	cursor: pointer;
+	color:#F00;
+}
+.confirm_btns>span{
+	margin: 0 5px;
+}
+.confirm_btns>span:hover{
+	cursor: pointer;
+	color:#F00;
 }
 @media (max-width: 768px) {
 	.form-control-label{
