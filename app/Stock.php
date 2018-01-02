@@ -10,7 +10,7 @@ class Stock extends UanalyzeModel
 	//protected $visible = ['stock_code', 'stock_name'];
 	protected $primaryKey = 'no';
     protected $fillable = [
-        'stock_code','stock_name','stock_industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type'
+        'stock_code','stock_name','stock_industries','industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type'
     ];
     public function Tags()
     {

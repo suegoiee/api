@@ -15,6 +15,7 @@ return [
         'stock_code'=>'代號',
         'stock_name'=>'公司名稱',
         'stock_industries'=>'產業代碼',
+        'industries' => '產業名稱',
         'info' => '公司簡介',
         'area' => '銷售區域別',
         'product' => '產品組合',

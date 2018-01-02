@@ -8,6 +8,6 @@ class StockRepository extends Repository
 		$this->model = $stock;
 	}
 	public function getIndustreis(){
-		return $this->model->select('stock_industries')->distinct()->orderBy('stock_industries')->get();
+		return $this->model->select('industries')->distinct()->orderBy('industries')->get();
 	}
 }

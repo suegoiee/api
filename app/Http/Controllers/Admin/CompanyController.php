@@ -22,7 +22,7 @@ class CompanyController extends AdminController
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $company,
-            'table_head' =>['stock_code','stock_name','stock_industries','type'],
+            'table_head' =>['stock_code','stock_name','stock_industries','industries','type'],
             'table_formatter' =>[],
         ];
         return view('admin.list',$data);

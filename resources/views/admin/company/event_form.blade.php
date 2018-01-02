@@ -12,9 +12,9 @@
         <table class="table table-striped table-bordered table-hover table-sm text-center">
             <thead class="thead-light">
                 <tr>
-                    <th class="text-center">{{trans($module_name.'.admin.event_year')}}</th>
+                    <th class="text-center" width="100px">{{trans($module_name.'.admin.event_year')}}</th>
                     <th class="text-center">{{trans($module_name.'.admin.event_content')}}</th>
-                    <th class="text-center"></th>
+                    <th class="text-center" width="100px"></th>
                 </tr>
             </thead>
             <tbody id="new_event_list">

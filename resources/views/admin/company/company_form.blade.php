@@ -19,9 +19,18 @@
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="stock_industries">{{trans($module_name.'.admin.stock_industries')}}</label>
     <div class="col-sm-8">
-        <select class="form-control" id="stock_industries" name="stock_industries" >
+        <input type="text" class="form-control" id="stock_industries" name="stock_industries" placeholder="{{trans($module_name.'.admin.stock_industries')}}" value="{{@$data->stock_industries}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="industries">{{trans($module_name.'.admin.industries')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control" id="industries" name="industries" >
             @foreach( $industries as $key => $industry )
-                <option value="{{$industry->stock_industries}}" {{ $data && $data->stock_industries==$industry->stock_industries ? 'selected':'' }} >{{$industry->stock_industries}}</option>
+                <option value="{{$industry->industries}}" {{ $data && $data->industries==$industry->industries ? 'selected':'' }} >{{$industry->industries}}</option>
             @endforeach
         </select>
     </div>
