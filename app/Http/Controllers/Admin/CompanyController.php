@@ -49,6 +49,7 @@ class CompanyController extends AdminController
         ];
         return view('admin.form',$data);
     }
+   
     public function store(Request $request)
     {
         $http = new \GuzzleHttp\Client;

@@ -20,4 +20,28 @@ class Stock extends UanalyzeModel
     {
         return $this->hasMany('App\StockEvents','company_id','no');
     }
+    public function products()
+    {
+        return $this->hasMany('App\StockProduct','company_id','no');
+    }
+    public function areas()
+    {
+        return $this->hasMany('App\StockArea','company_id','no');
+    }
+    public function customers()
+    {
+        return $this->hasMany('App\StockCustomer','company_id','no');
+    }
+    public function suppliers()
+    {
+        return $this->hasMany('App\StockSupplier','company_id','no');
+    }
+    public function local_relateds()
+    {
+        return $this->hasMany('App\StockLocalRelated','company_id','no');
+    }
+    public function foreign_relateds()
+    {
+        return $this->hasMany('App\StockForeignRelated','company_id','no');
+    }
 }

@@ -39,11 +39,21 @@ class StockController extends Controller
 
         $events = $request->input('events',[]);
         foreach ($events as $key => $event) {
-            if(isset($faq['year'])||isset($faq['content'])){
-                $stock->events()->create(['year'=>$faq['year'],'content'=>$faq['content']]);
+            if(isset($event['year'])||isset($event['content'])){
+                $stock->events()->create(['year'=>$event['year'],'content'=>$event['content']]);
             }
         }
-
+        $fieldName = ['products','areas','suppliers','customers','local_relateds','foreign_relateds'];
+        foreach ($fieldName as $value) {
+            $list_inputs = $request->input($value,[]);
+            foreach ($list_inputs as $key => $list_input) {
+                $list_input_name = isset($list_input['name'])? $list_input['name'] : '';
+                $list_input_value = isset($list_input['value'])? $list_input['value'] : '';
+                if($list_input_name!='' || $list_input_value!=''){
+                    $stock->$value()->create(['name'=>$list_input_name,'value'=>$list_input_value]);
+                }
+            }
+        }
 
         return $this->successResponse($stock?$stock:[]);
     }
@@ -91,6 +101,29 @@ class StockController extends Controller
             array_push($event_ids,$event_data->id);
         }
         $stock->events()->whereNotIn('id',$event_ids)->delete();
+
+        $fieldName = ['products','areas','suppliers','customers','local_relateds','foreign_relateds'];
+        foreach ($fieldName as $value) {
+            $list_inputs = $request->input($value,[]);
+            $list_input_ids = [];
+            foreach ($list_inputs as $key => $list_input) {
+                if(!isset($list_input['name']) && !isset($list_input['value'])){
+                    continue;
+                }
+
+                $list_input_name    = isset($list_input['name']) ? $list_input['name']:'';
+                $list_input_value   = isset($list_input['value']) ? $list_input['value']:'';
+                
+                if($list_input['id']==0){
+                    $list_input_data = $stock->$value()->create(['name'=>$list_input_name,'value'=>$list_input_value]);
+                }else{
+                    $stock->$value()->where('id',$list_input['id'])->update(['name'=>$list_input_name,'value'=>$list_input_value]);
+                    $list_input_data = $stock->$value()->find($list_input['id']);
+                }
+                array_push($list_input_ids,$list_input_data->id);
+            }
+            $stock->$value()->whereNotIn('id',$list_input_ids)->delete();
+        }
 
         return $this->successResponse($stock?$stock:[]);
     }

@@ -1,37 +1,37 @@
 <div  class="form-group row">
     <div class="col-12 text-center">
-        <button class="btn btn-success" id="new_event_btn"><span class="oi oi-plus"></span></button>
+        <button class="btn btn-success" id="new_supplier_btn"><span class="oi oi-plus"></span></button>
     </div>
 </div>
-<div id="events">
+<div id="suppliers">
 @php 
-    $events = $data? $data->events->sortByDesc('year') : [] ;
+    $suppliers = $data? $data->suppliers : [] ;
 @endphp
 <div class="form-group row justify-content-center">
     <div class="col-10">
         <table class="table table-striped table-bordered table-hover table-sm text-center">
             <thead class="thead-light">
                 <tr>
-                    <th class="text-center" width="100px">{{trans($module_name.'.admin.event_year')}}</th>
-                    <th class="text-center">{{trans($module_name.'.admin.event_content')}}</th>
+                    <th class="text-center" width="40%">{{trans($module_name.'.admin.supplier_name')}}</th>
+                    <th class="text-center">{{trans($module_name.'.admin.supplier_value')}}</th>
                     <th class="text-center" width="100px"></th>
                 </tr>
             </thead>
-            <tbody id="new_event_list">
+            <tbody id="new_supplier_list">
                 
             </tbody>
-            <tbody id="event_list">
-                @foreach($events as $key => $event)
+            <tbody id="supplier_list">
+                @foreach($suppliers as $key => $supplier)
                     <tr data-index="{{$key}}">
-                        <input type="hidden" name="events[{{$key}}][id]" value="{{$event->id}}">
-                        <td class="year_col">
-                            <div class="data">{{$event->year}}</div>
-                            <input type="hidden" name="events[{{$key}}][year]" value="{{$event->year}}">
+                        <input type="hidden" name="suppliers[{{$key}}][id]" value="{{$supplier->id}}">
+                        <td class="name_col">
+                            <div class="data">{{$supplier->name}}</div>
+                            <input type="hidden" name="suppliers[{{$key}}][name]" value="{{$supplier->name}}">
                             <div class="editor"></div>
                         </td>
-                        <td class="content_col">
-                            <div class="data">{!!$event->content!!}</div>
-                            <input type="hidden" name="events[{{$key}}][content]" value="{{$event->content}}">
+                        <td class="value_col">
+                            <div class="data">{!!$supplier->value!!}</div>
+                            <input type="hidden" name="suppliers[{{$key}}][value]" value="{{$supplier->value}}">
                             <div class="editor"></div>
                         </td>
                         <td>
