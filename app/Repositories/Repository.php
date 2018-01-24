@@ -20,8 +20,12 @@ class Repository
 		}
 		return $query->orderBy('created_at','DESC')->first();
 	}
-	public function gets(){
-		return $this->model->get();
+	public function gets($select=false){
+		if($select){
+			return $this->model->get($select);
+		}else{
+			return $this->model->get();
+		}
 	}
 	public function getsWith($with=[],$where=[],$order=[]){
 		$query = $this->model->with($with);

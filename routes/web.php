@@ -80,6 +80,8 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/products/{product}','ProductController@onShelf')->name('products.onShelf')->where('product', '[0-9]+');
 
 	Route::get('/products/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
+
+	Route::get('/stocks','StockController@list');
 });
 
 
