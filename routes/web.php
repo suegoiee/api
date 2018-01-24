@@ -81,7 +81,7 @@ Route::middleware(['web'])->group(function(){
 
 	Route::get('/products/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
 
-	Route::get('/stocks','StockController@list');
+	Route::get('/stocks','StockController@lists');
 });
 
 

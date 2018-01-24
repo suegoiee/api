@@ -20,11 +20,12 @@ class StockController extends Controller
 
         return $this->successResponse($stocks?$stocks:[]);
     }
-    
-    public function list()
-    {
-        $stocks = $this->stockRepository->gets(['stock_code'])->map(function($item, $key){return $item->stock_code;});
 
+    public function lists()
+    {
+        $stocks = $this->stockRepository->gets(['stock_code'])->map(function($item, $key){
+            return $item->stock_code;
+            });
         return $this->successResponse($stocks?$stocks:[]);
     }
 
