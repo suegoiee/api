@@ -26,8 +26,8 @@ class LaboratoryController extends Controller
         foreach ($laboratories as $laboratory) {
             $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
             foreach ($laboratory->products as $product) {
-                $product->installed = $product->users->first()->pivot->installed;
-                $product->deadline = $product->users->first()->pivot->deadline;
+                $product->installed = $product->users->where('id', $user->id)->first()->pivot->installed;
+                $product->deadline = $product->users->where('id', $user->id)->first()->pivot->deadline;
                 foreach ( $product->collections as $collection){
                     $collection->makeHidden(['avatar_small','avatar_detail']);
                 }
