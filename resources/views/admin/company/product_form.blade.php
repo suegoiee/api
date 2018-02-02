@@ -5,13 +5,14 @@
 </div>
 <div id="products">
 @php 
-    $products = $data? $data->products : [] ;
+    $products = $data? $data->products->sortByDesc('year') : [] ;
 @endphp
 <div class="form-group row justify-content-center">
     <div class="col-10">
         <table class="table table-striped table-bordered table-hover table-sm text-center">
             <thead class="thead-light">
                 <tr>
+                    <th class="text-center" width="15%">{{trans($module_name.'.admin.product_year')}}</th>
                     <th class="text-center" width="40%">{{trans($module_name.'.admin.product_name')}}</th>
                     <th class="text-center">{{trans($module_name.'.admin.product_value')}}</th>
                     <th class="text-center" width="100px"></th>
@@ -24,6 +25,11 @@
                 @foreach($products as $key => $product)
                     <tr data-index="{{$key}}">
                         <input type="hidden" name="products[{{$key}}][id]" value="{{$product->id}}">
+                        <td class="year_col">
+                            <div class="data">{{$product->year}}</div>
+                            <input type="hidden" name="products[{{$key}}][year]" value="{{$product->year}}">
+                            <div class="editor"></div>
+                        </td>
                         <td class="name_col">
                             <div class="data">{{$product->name}}</div>
                             <input type="hidden" name="products[{{$key}}][name]" value="{{$product->name}}">

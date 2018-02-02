@@ -8,7 +8,7 @@ class StockProduct extends UanalyzeModel
 {
 	protected $table = 'company_product';
 	protected $fillable = [
-        'name','value'
+        'year','name','value'
     ];
     public function company()
     {

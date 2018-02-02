@@ -57,8 +57,15 @@ class StockController extends Controller
             foreach ($list_inputs as $key => $list_input) {
                 $list_input_name = isset($list_input['name'])? $list_input['name'] : '';
                 $list_input_value = isset($list_input['value'])? $list_input['value'] : '';
-                if($list_input_name!='' || $list_input_value!=''){
-                    $stock->$value()->create(['name'=>$list_input_name,'value'=>$list_input_value]);
+                $input_data = ['name'=>$list_input_name,'value'=>$list_input_value];
+                $can_create = $list_input_name!='' || $list_input_value!='';
+                if($value == 'products'){
+                    $list_input_year = isset($list_input['year'])? $list_input['year'] : '';
+                    $input_data['year'] = $list_input_year;
+                    $can_create = $can_create || $list_input_year != '';
+                }
+                if($can_create){
+                    $stock->$value()->create($input_data);
                 }
             }
         }
@@ -115,20 +122,27 @@ class StockController extends Controller
             $list_inputs = $request->input($value,[]);
             $list_input_ids = [];
             foreach ($list_inputs as $key => $list_input) {
-                if(!isset($list_input['name']) && !isset($list_input['value'])){
-                    continue;
-                }
 
                 $list_input_name    = isset($list_input['name']) ? $list_input['name']:'';
                 $list_input_value   = isset($list_input['value']) ? $list_input['value']:'';
                 
-                if($list_input['id']==0){
-                    $list_input_data = $stock->$value()->create(['name'=>$list_input_name,'value'=>$list_input_value]);
-                }else{
-                    $stock->$value()->where('id',$list_input['id'])->update(['name'=>$list_input_name,'value'=>$list_input_value]);
-                    $list_input_data = $stock->$value()->find($list_input['id']);
+                $input_data = ['name'=>$list_input_name,'value'=>$list_input_value];
+                $can_update = $list_input_name!='' || $list_input_value!='';
+
+                if($value == 'products'){
+                    $list_input_year = isset($list_input['year'])? $list_input['year'] : '';
+                    $input_data['year'] = $list_input_year;
+                    $can_update = $can_update || $list_input_year != '';
                 }
-                array_push($list_input_ids,$list_input_data->id);
+                if($can_update){
+                    if($list_input['id']==0){
+                        $list_input_data = $stock->$value()->create($input_data);
+                    }else{
+                        $stock->$value()->where('id',$list_input['id'])->update($input_data);
+                        $list_input_data = $stock->$value()->find($list_input['id']);
+                    }
+                    array_push($list_input_ids,$list_input_data->id);
+                }
             }
             $stock->$value()->whereNotIn('id',$list_input_ids)->delete();
         }

@@ -37,6 +37,7 @@ return [
         'type_null'=>'',
         'type_listed'=>'上市',
         'type_otc'=>'上櫃',
+        'product_year'=>'年度',
         'product_name'=>'產品名稱',
         'product_value'=>'產品比例',
         'area_name'=>'區域名稱',

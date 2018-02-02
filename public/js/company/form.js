@@ -116,8 +116,17 @@ $(function(){
         $("#new_"+feildName+"_btn").click(function(event){
             event.preventDefault();
             var tr_html = '<tr data-index="new_'+listIndex+'">'+
-                            '<input type="hidden" class="form-control" name="'+feildName+'s[new_'+listIndex+'][id]" value="0">'+
-                            '<td class="name_col">'+
+                            '<input type="hidden" class="form-control" name="'+feildName+'s[new_'+listIndex+'][id]" value="0">';
+            if(feildName == 'product'){
+                tr_html += '<td class="year_col">'+
+                                '<div class="data"></div>'+
+                                '<input type="hidden" name="'+feildName+'s[new_'+listIndex+'][year]">'+
+                                '<div class="editor">'+
+                                    '<input type="text" class="form-control">'+
+                                '</div>'+
+                            '</td>';
+            }
+            tr_html += '<td class="name_col">'+
                                 '<div class="data"></div>'+
                                 '<input type="hidden" name="'+feildName+'s[new_'+listIndex+'][name]">'+
                                 '<div class="editor">'+
@@ -160,6 +169,10 @@ $(function(){
             var value = tr.find('.value_col').find('input').val();
             tr.find('.name_col').find('.editor').html('<input type="text" class="form-control" value="'+name+'">');
             tr.find('.value_col').find('.editor').html('<input type="text" class="form-control" value="'+value+'">');
+            if(feildName == 'product'){
+                var year = tr.find('.year_col').find('input').val();
+                tr.find('.year_col').find('.editor').html('<input type="text" class="form-control" value="'+year+'">');
+            }
             tr.find('.action_btns').addClass('hide');
             tr.find('.confirm_btns').removeClass('hide');
         });
@@ -169,13 +182,23 @@ $(function(){
             var name = tr.find('.name_col').find('.editor').find('input').val();
             tr.find('.name_col').find('input').val(name);
             tr.find('.name_col').find('.data').html(name);
+            
             var value = tr.find('.value_col').find('.editor').find('input').val();
             tr.find('.value_col').find('input').val(value);
             tr.find('.value_col').find('.data').html(value);
-            tr.find('.data').removeClass('hide');
 
             tr.find('.name_col').find('.editor').empty();
             tr.find('.value_col').find('.editor').empty();
+            
+            if(feildName == 'product'){
+                var year = tr.find('.year_col').find('.editor').find('input').val();
+                tr.find('.year_col').find('input').val(year);
+                tr.find('.year_col').find('.data').html(year);
+                tr.find('.year_col').find('.editor').empty();
+            }
+
+            tr.find('.data').removeClass('hide');
+
             tr.find('.action_btns').removeClass('hide');
             tr.find('.confirm_btns').addClass('hide');
         });
@@ -184,6 +207,11 @@ $(function(){
             var tr = $(this).parent().parent().parent();
             tr.find('.name_col').find('.editor').empty();
             tr.find('.value_col').find('.editor').empty();
+
+            if(feildName == 'product'){
+                 tr.find('.year_col').find('.editor').empty();
+            }
+
             tr.find('.data').removeClass('hide');
 
             tr.find('.action_btns').removeClass('hide');
