@@ -158,6 +158,9 @@ class UserProductController extends Controller
         ]);        
     }
     private function getExpiredDate($days, $expired = 0){
+        if($days==0){
+            return null;
+        }
         $now = Carbon::now('Asia/Taipei');
         if($expired){
             $expired_date = Carbon::parse($expired);
