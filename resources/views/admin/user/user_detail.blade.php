@@ -17,7 +17,7 @@
     </div>
 </div>
 <div class="row">
-    <label class="label col-sm-2" for="nick_name">{{trans($module_name.'.admin.nick_name')}}</label>
+    <label class="label col-sm-2" for="nick_name">{{trans($module_name.'.admin.nickname')}}</label>
     <div class="col-sm-8 text">
         {{$data->profile->nick_name}}
     </div>
