@@ -45,7 +45,7 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-Regards,<br>{{ config('app.name') }}
+投資順利<br>台股優分析  UAnalyze API
 @endif
 
 {{-- Subcopy --}}

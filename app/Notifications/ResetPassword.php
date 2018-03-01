@@ -44,10 +44,10 @@ class ResetPassword extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(env('APP_NAME').' Password Reset')
+            ->subject(env('APP_NAME').' 密碼重設')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', env('RESET_PASSWORD_REDIRECT').'?token='.$this->token)
-            ->line('If you did not request a password reset, no further action is required.');
+            ->line('我們收到您想要重設密碼的要求。')
+            ->action('重設密碼', env('RESET_PASSWORD_REDIRECT').'?token='.$this->token)
+            ->line('如果您並未要求重設密碼，就不需做任何動作。');
     }
 }
