@@ -146,15 +146,17 @@ class LaboratoryController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         
-        $products = $request->input('products',[]);
+        $products = $request->input('products');
+
 
         $laboratory = $user->laboratories()->find($id);
         if($laboratory->customized == 0){
             return $this->failedResponse(['message'=>[trans('product.collection_cant_del')]]);
         }
-        $laboratory->products()->detach($products);
+        $products_remove = $products ? (is_array($products) ? $products:[$products]) : [];
+        $laboratory->products()->detach($products_remove);
 
-        foreach ($products as $key => $product) {
+        foreach ($products_remove as $key => $product) {
         	$product_data = $user->products()->find($product);
         	if($product_data){
 	            $install_num = $product_data->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
@@ -164,7 +166,7 @@ class LaboratoryController extends Controller
         	}
         }
 
-        return $this->successResponse(['products'=>$products]);
+        return $this->successResponse(['products'=>$products_remove]);
 
     }
 
