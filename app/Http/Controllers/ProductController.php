@@ -143,7 +143,6 @@ class ProductController extends Controller
 
     public function destroy(Request $request, $id)
     {
-
         $this->productRepository->delete($id);
         return $this->successResponse(['id'=>$id]);
 
