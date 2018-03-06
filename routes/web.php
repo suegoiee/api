@@ -82,6 +82,9 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/products/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
 
 	Route::get('/stocks','StockController@lists');
+
+	Route::get('/articles','ArticleController@publishList')->name('articles.publishList');
+	Route::get('/articles/{article}','ArticleController@onPublish')->name('articles.onPublish')->where('article', '[0-9]+');
 });
 
 
