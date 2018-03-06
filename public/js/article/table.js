@@ -1,5 +1,8 @@
 function titleFormatter(value, row, index){
-	return value + (row.top == 1 ? '<span class="topArticle">Top</span>':'');
+	if ( row.top == 1 ){
+		return value + '<span class="topArticle">Top</span>';
+	}
+	return value ;
 }
 function statusFormatter(value, row, index){
 	switch(value){

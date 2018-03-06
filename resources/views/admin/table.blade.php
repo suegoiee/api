@@ -13,7 +13,7 @@
         <tr>
             <th data-align="center" data-checkbox="true">{{trans('table.action_label')}}</th>
             @foreach($table_head as $th)
-                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="statusFormatter"':'' !!} data-sortable="true"
+                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="'.$th.'Formatter"':'' !!} data-sortable="true"
                 >
                 {{trans($module_name.'.admin.'.$th)}}
                 </th>
