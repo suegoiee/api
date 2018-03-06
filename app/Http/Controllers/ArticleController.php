@@ -42,6 +42,7 @@ class ArticleController extends Controller
 
         $request_data = $request->only(['title','content','top','status','posted_at']);
         $request_data['posted_at'] = date('Y-m-d H:i:s', strtotime($request_data['posted_at']));
+        $request_data['top'] = $request_data['top']!=null? '1':'0';
         $article = $this->articleRepository->create($request_data);
 
         $tags = $request->input('tags',[]);

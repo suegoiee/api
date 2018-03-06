@@ -24,7 +24,7 @@ class ArticleController extends AdminController
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $article,
-            'table_head' =>['id','title','top','status','posted_at'],
+            'table_head' =>['id','title','status','posted_at'],
             'table_formatter' =>['title','status'],
         ];
         return view('admin.list',$data);
