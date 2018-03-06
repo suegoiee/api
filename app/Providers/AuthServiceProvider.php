@@ -39,7 +39,8 @@ class AuthServiceProvider extends ServiceProvider
 			'order'=>'update',
 			'tag'=>'create update delete',
             'message'=>'get update delete',
-            'company'=>'create update delete'
+            'company'=>'create update delete',
+            'article'=>'create update delete',
 			]);
     }
 }

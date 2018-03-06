@@ -4,7 +4,7 @@
             <thead>
                 <tr class="">
                     <th>{{trans('favorite.admin.code')}}</th>
-                    <th>{{trans('favorite.admin.title')}}</th>
+                    <th>{{trans('favorite.admin.name')}}</th>
                     <th>{{trans('favorite.admin.created_at')}}</th>
                 </tr>
             </thead>

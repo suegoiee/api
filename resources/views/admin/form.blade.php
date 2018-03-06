@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-multiselect/css/bootstrap-multiselect.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/chosen/chosen.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
+
+     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
 @endsection
 @section('content')
     <ol class="breadcrumb">
@@ -29,10 +31,13 @@
 @endsection
 
 @section('javascript')
+<script src="{{asset('thirdparty/moment/moment.js')}}"></script>
+<script src="{{asset('thirdparty/moment/locales/zh-tw.js')}}"></script>
 <script src="{{asset('thirdparty/bootstrap-multiselect/js/bootstrap-multiselect.js')}}"></script>
 <script src="{{asset('thirdparty/chosen/chosen.jquery.js')}}"></script>
 <script src="{{asset('thirdparty/jquery.quicksearch/jquery.quicksearch.js')}}"></script>
 <script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('thirdparty/bootstrap4-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
 <script>
 $(function(){
    $('#form').on('keyup keypress','input[type=text]',function(e) {

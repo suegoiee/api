@@ -47,6 +47,12 @@
                 <span class="text">{{trans('message.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/articles')}}">
+                <span class="oi oi-script"></span>
+                <span class="text">{{trans('article.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">

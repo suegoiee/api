@@ -127,6 +127,12 @@ Route::middleware(['client:company'])->group(function(){
 	Route::delete('/companies/{company}','StockController@destroy')->name('companies.destroy');
 });
 
+Route::middleware(['client:article'])->group(function(){
+	Route::post('/articles','ArticleController@store')->name('articles.store');
+	Route::put('/articles/{article}','ArticleController@update')->name('articles.update');
+	Route::delete('/articles/{article}','ArticleController@destroy')->name('articles.destroy');
+});
+
 //Admin
 Route::get('/ip', function(){return Request::ip();});
 Route::group(['middleware' => ['ip','admin'] ],function(){
@@ -161,7 +167,11 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::delete('/orders','Admin\OrderController@destroy');
 	Route::resource('/orders', 'Admin\OrderController');
 
-	Route::get('/messages/{product}/delete','Admin\MessageController@destroy');
+	Route::get('/messages/{message}/delete','Admin\MessageController@destroy');
 	Route::delete('/messages','Admin\MessageController@destroy');
 	Route::resource('/messages', 'Admin\MessageController');
+
+	Route::get('/articles/{article}/delete','Admin\ArticleController@destroy');
+	Route::delete('/articles','Admin\ArticleController@destroy');
+	Route::resource('/articles', 'Admin\ArticleController');
 });
