@@ -37,7 +37,7 @@ class OrderController extends AdminController
             'tabs'=>['status'=>[0,1]],
             'query_string' => $query_string,
             'table_data' => $orders,
-            'table_head' =>['id','user_nickname','price','status','created_at'],
+            'table_head' =>['no','user_nickname','price','status','created_at'],
             'table_formatter' =>['status'],
         ];
         return view('admin.list',$data);

@@ -1,7 +1,7 @@
 <div class="form-group row">
-    <label class="form-control-label col-sm-2" for="id">{{trans($module_name.'.admin.id')}}</label>
+    <label class="form-control-label col-sm-2" for="no">{{trans($module_name.'.admin.no')}}</label>
     <div class="col-sm-8 text">
-        {{$data->id}}
+        {{$data->no}}
     </div>
 </div>
 <div class="form-group row">

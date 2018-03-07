@@ -11,7 +11,8 @@ return [
         'order_tab' =>'訂購資訊',
         'invoice_tab' =>'發票資訊',
 
-    	'id' => '訂單編號',
+    	'id' => '編號',
+        'no' => '訂單編號',
     	'price' => '金額',
     	'user_nickname' => '訂購者',
     	'memo' => '備註',
