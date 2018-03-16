@@ -13,10 +13,15 @@ class Repository
 	public function getWith($id,$with=[]){
 		return $this->model->with($with)->find($id);
 	}
-	public function getBy($where=[]){
-		$query = $this->model;
+	public function getBy($where=[], $with=[]){
+		$query = $this->model->with($with);
 		foreach ($where as $key => $value) {
-			$query = $query->where($key,$value);
+			$field_array = explode('.', $key);
+			if(count($field_array)>1){ 
+				$query = $query->where($field_array[0], $field_array[1], $value);
+			}else{
+				$query = $query->where($key,$value);
+			}
 		}
 		return $query->orderBy('created_at','DESC')->first();
 	}
@@ -56,5 +61,8 @@ class Repository
 	}
 	public function model(){
 		return $this->model;
+	}
+	public function count(){
+		return $this->model->count();
 	}
 }

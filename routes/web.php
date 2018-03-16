@@ -85,6 +85,10 @@ Route::middleware(['web'])->group(function(){
 
 	Route::get('/articles','ArticleController@publishList')->name('articles.publishList');
 	Route::get('/articles/{article}','ArticleController@onPublish')->name('articles.onPublish')->where('article', '[0-9]+');
+
+	Route::get('/blogs','Front\ArticleController@index');
+	Route::get('/blogs/{slug}','Front\ArticleController@index');
+	Route::get('/archives/{slug}','Front\ArticleController@show');
 });
 
 

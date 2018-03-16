@@ -4,13 +4,14 @@ use App\Repositories\TagRepository;
 use App\Repositories\ArticleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 class ArticleController extends AdminController
 {	
-    protected $articleRepository;
+    protected $tagRepository;
 
     public function __construct(ArticleRepository $articleRepository, TagRepository $tagRepository)
     {
-        $this->moduleName='article';
+        $this->moduleName = 'article';
         $this->moduleRepository = $articleRepository;
         $this->tagRepository = $tagRepository;
 

@@ -12,7 +12,7 @@ class Article extends UanalyzeModel
 
     
     protected $fillable = [
-        'title','content','top','posted_at','status'
+        'title','content','top','posted_at','status','slug'
     ];
 
     public function tags()

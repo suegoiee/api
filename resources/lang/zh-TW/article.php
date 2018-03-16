@@ -18,5 +18,6 @@ return [
     	'status_1'=>'發佈',
         'tags'=>'標籤',
         'posted_at' => '發佈時間',
-	]
+	],
+    'front'=>'無此文章',
 ];
