@@ -8,7 +8,9 @@ $(function(){
     CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
     CKEDITOR.config.removeButtons='About',
     CKEDITOR.config.extraPlugins = 'youtube';
-   
+    $("#title").change(function(){
+        $("#slug").val($("#title").val());
+    });
 	$("#tags").chosen();
 
     $('#posted_at').datetimepicker({

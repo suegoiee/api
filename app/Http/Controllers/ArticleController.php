@@ -40,9 +40,10 @@ class ArticleController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['title','content','top','status','posted_at']);
+        $request_data = $request->only(['title','content','top','status','posted_at','slug']);
         $request_data['posted_at'] = $request_data['posted_at'] != null ? date('Y-m-d H:i:s', strtotime($request_data['posted_at'])):date('Y-m-d H:i:s');
         $request_data['top'] = $request_data['top']!=null? '1':'0';
+        $request_data['slug'] = $this->hasChineseStr($request_data['slug']) ? urlencode(str_replace('+', ' ', $request_data['slug'])) : $request_data['slug'];
         $article = $this->articleRepository->create($request_data);
 
         $tags = $request->input('tags',[]);
@@ -78,9 +79,10 @@ class ArticleController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['title','content','top','status','posted_at']);
+        $request_data = $request->only(['title','content','top','status','posted_at','slug']);
         $request_data['posted_at'] = $request_data['posted_at'] != null ? date('Y-m-d H:i:s', strtotime($request_data['posted_at'])):date('Y-m-d H:i:s');
         $request_data['top'] = $request_data['top']!=null? '1':'0';
+        $request_data['slug'] = $this->hasChineseStr($request_data['slug']) ? urlencode(str_replace('+', ' ', $request_data['slug'])) : $request_data['slug'];
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $article = $this->articleRepository->update($id,$data);
@@ -103,6 +105,7 @@ class ArticleController extends Controller
         return Validator::make($data, [
             'title' => 'required|max:255',
             'content' => 'string',
+            'slug'=> 'required'
         ]);        
     }
 
@@ -111,6 +114,11 @@ class ArticleController extends Controller
         return Validator::make($data, [
             'title' => 'required|max:255',
             'content' => 'string',
+            'slug'=> 'required'
         ]);        
+    }
+
+    private function hasChineseStr($str){
+        return mb_strlen($str, mb_detect_encoding($str)) != strlen($str);
     }
 }

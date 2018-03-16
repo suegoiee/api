@@ -8,6 +8,15 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="slug">{{trans($module_name.'.admin.slug')}} <span class="text-danger">*</span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="slug" name="slug" placeholder="{{trans($module_name.'.admin.slug')}}" value="{{@$data->slug}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
     <label class="form-control-label col-sm-2" for="articleContent">{{trans($module_name.'.admin.content')}}</label>
     <div class="col-sm-8">
         <textarea class="form-control" id="articleContent" rows="6" name="content" placeholder="{{trans($module_name.'.admin.content')}}">{{@$data->content}}</textarea>

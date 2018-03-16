@@ -104,15 +104,15 @@
 				</article> <!-- end entry -->
 				@endif
 				<div class="pagenav">
-	            <p>
-	            @if($prev_data)
-	            	<a rel="prev" href="{{url('blogs/'.$prev_data->slug)}}">Prev</a>
-	            @endif
-	            @if($next_data)
-	           		<a rel="next" href="{{url('blogs/'.$next_data->slug)}}">Next</a>
-	            @endif		
-	            </p>
-            </div> 	
+		            <p>
+		            @if($prev_data)
+		            	<a rel="prev" href="{{url('blogs/'.$prev_data->slug)}}">Prev</a>
+		            @endif
+		            @if($next_data)
+		           		<a rel="next" href="{{url('blogs/'.$next_data->slug)}}">Next</a>
+		            @endif		
+		            </p>
+            	</div> 	
 
 
    		</div> <!-- end main -->

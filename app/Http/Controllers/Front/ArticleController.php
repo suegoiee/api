@@ -43,6 +43,7 @@ class ArticleController extends Controller
             'data_num' =>  $articles->count(),
             'prev_data' => $prev_article,
             'next_data' => $next_article,
+            'tags'=>$this->tagRepository->gets(),
         ];
         return view('front.blog',$data);
     }
@@ -55,6 +56,7 @@ class ArticleController extends Controller
         $data = [
             'data' => $article,
             'data_num' => $article_num,
+            'tags'=>$this->tagRepository->gets(),
         ];
         return view('front.archives',$data);
     }
