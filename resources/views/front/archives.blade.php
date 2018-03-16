@@ -8,7 +8,7 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-   <title>Uanalyze Pro beta - {$data-title}</title>
+   <title>Uanalyze Pro beta - {{$data->title}}</title>
    <meta name="description" content="">  
    <meta name="author" content="">
 
@@ -70,8 +70,10 @@
                   <div class="entry-meta">
                      <ul>
                         <li>{{$data->posted_at}}</li>
-                        <span class="meta-sep">&bull;</span>
-                        <li>UA專欄</li>
+                        @foreach($data->tags as $tag)
+                           <span class="meta-sep">&bull;</span>
+                           <li>{{$tag->name}}</li>
+                        @endforeach
                      </ul>
                   </div> 
                 

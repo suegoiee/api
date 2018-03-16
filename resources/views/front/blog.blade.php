@@ -69,8 +69,10 @@
 						<div class="entry-meta">
 							<ul>
 								<li>{{str_limit($data->posted_at)}}</li>
-								<span class="meta-sep">&bull;</span>
-								<li>UA專欄</li>
+								@foreach($data->tags as $tag)
+									<span class="meta-sep">&bull;</span>
+									<li>{{$tag->name}}</li>
+								@endforeach
 							</ul>
 						</div> 
 					 
