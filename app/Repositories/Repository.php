@@ -47,6 +47,21 @@ class Repository
 		}
 		return $query->get();
 	}
+	public function getsWithPaginate($with=[],$where=[],$order=[], $paginate = 10){
+        $query = $this->model->with($with);
+        foreach ($where as $key => $value) {
+            $field_array = explode('.', $key);
+            if(count($field_array)>1){
+                $query = $query->where($field_array[0], $field_array[1], $value);
+            }else{
+                $query = $query->where($key,$value);
+            }
+        }
+        foreach ($order as $key => $value) {
+            $query = $query->orderBy($key,$value);
+        }
+        return $query->paginate($paginate);
+	}
 	public function create($data){
 		return $this->model->create($data);
 	}

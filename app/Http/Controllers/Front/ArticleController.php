@@ -18,31 +18,9 @@ class ArticleController extends Controller
 
     public function index($slug = 0)
     {
-        $articles = $this->moduleRepository->getsWith(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC']);
-        $article = false;
-        $next_article = false;
-        $prev_article = false;
-        if($slug){
-            $slug = $this->hasChineseStr($slug) ? urlencode(str_replace('+', ' ', $slug)) : $slug;
-            $article_key = $articles->search(function ($item, $key) use ($slug){
-                return $item->slug==$slug;
-            });
-            if($article_key>=0){
-                $article = $articles->get($article_key);
-                $prev_article = $article_key != (0) ? $articles->get($article_key-1) : false;
-                $next_article = $article_key != ($articles->count() - 1) ? $articles->get($article_key+1) : false;
-            }
-        }else{
-            $article = $articles->first();
-            if($articles->count()>1){
-                $next_article = $articles->get(1);
-            }
-        }
+        $articles = $this->moduleRepository->getsWithPaginate(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC']);
         $data = [
-            'data' => $article,
-            'data_num' =>  $articles->count(),
-            'prev_data' => $prev_article,
-            'next_data' => $next_article,
+            'articles' => $articles,
             'tags'=>$this->tagRepository->gets(),
         ];
         return view('front.blog',$data);

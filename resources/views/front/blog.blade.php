@@ -57,19 +57,19 @@
    	<div class="row">
 
    		<div id="main" class="eight columns">
-   			@if($data)
+   			@foreach($articles as $article)
 	   		<article class="entry">
 
 					<header class="entry-header">
 
 						<h2 class="entry-title">
-							<a href="{{url('archives/'.$data->slug)}}" title="{{$data->title}}">{{str_limit($data->title,40)}}</a>
+							<a href="{{url('archives/'.$article->slug)}}" title="{{$article->title}}">{{str_limit($article->title,40)}}</a>
 						</h2> 				 
 					
 						<div class="entry-meta">
 							<ul>
-								<li>{{str_limit($data->posted_at)}}</li>
-								@foreach($data->tags as $tag)
+								<li>{{str_limit($article->posted_at)}}</li>
+								@foreach($article->tags as $tag)
 									<span class="meta-sep">&bull;</span>
 									<li>{{$tag->name}}</li>
 								@endforeach
@@ -79,39 +79,14 @@
 					</header> 
 					
 					<div class="entry-content">
-						{!!str_limit(strip_tags(preg_replace("/<img[^>]+\>/i", "", $data->content)),300)!!}
+						{!!str_limit(strip_tags(preg_replace("/<img[^>]+\>/i", "", $article->content)),300)!!}
 					</div> 
 
 				</article> <!-- end entry -->
-				@else
-					<article class="entry">
 
-					<header class="entry-header">
-
-						<h2 class="entry-title">
-							{{trans('article.no_data')}}
-						</h2> 				 
-					
-						<div class="entry-meta">
-						</div> 
-					 
-					</header> 
-					
-					<div class="entry-content">
-						
-					</div> 
-
-				</article> <!-- end entry -->
-				@endif
+				@endforeach
 				<div class="pagenav">
-		            <p>
-		            @if($prev_data)
-		            	<a rel="prev" href="{{url('blogs/'.$prev_data->slug)}}">Prev</a>
-		            @endif
-		            @if($next_data)
-		           		<a rel="next" href="{{url('blogs/'.$next_data->slug)}}">Next</a>
-		            @endif		
-		            </p>
+		            {!! $article->links() !!}
             	</div> 	
 
 
@@ -122,7 +97,7 @@
 
    			<div class="widget widget_categories group">
    				<ul>
-						<li><a href="{{url('blogs')}}" title="">UA專欄</a> ({{$data_num}})</li>
+						<li><a href="{{url('blogs')}}" title="">UA專欄</a> ({!! $article->count() !!})</li>
 	
 					</ul>
 				</div>
