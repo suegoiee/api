@@ -18,7 +18,7 @@ class ArticleController extends Controller
 
     public function index($slug = 0)
     {
-        $articles = $this->moduleRepository->getsWithPaginate(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC']);
+        $articles = $this->moduleRepository->getsWithPaginate(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC'], 15);
         $data = [
             'articles' => $articles,
             'tags'=>$this->tagRepository->gets(),
