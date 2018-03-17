@@ -86,7 +86,7 @@
 
 				@endforeach
 				<div class="pagenav">
-		            {!! $article->links() !!}
+		            {!! $articles->links() !!}
             	</div> 	
 
 
@@ -97,7 +97,7 @@
 
    			<div class="widget widget_categories group">
    				<ul>
-						<li><a href="{{url('blogs')}}" title="">UA專欄</a> ({!! $article->count() !!})</li>
+						<li><a href="{{url('blogs')}}" title="">UA專欄</a> ({!! $articles->count() !!})</li>
 	
 					</ul>
 				</div>
