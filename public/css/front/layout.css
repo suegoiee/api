@@ -402,11 +402,18 @@ ul#nav ul li a {
 /* ------------------------------------------------------------------ */
 .entry {
 	padding-bottom: 12px;
-	margin-bottom: 24px;
+	margin-bottom: 14px;
 }
-.entry header { height: auto; }
+.entry header {
+    height: auto;
+    padding: 0 5px;
+}
+.entry-content{
+    padding: 0 5px;
+}
 
 .entry .entry-meta ul {
+    padding: 0 5px;
 	margin: 6px 0 18px;
 	color: #B7B9BD;
 	line-height: 24px;

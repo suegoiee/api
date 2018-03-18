@@ -56,7 +56,7 @@
 	-------------------------------------------------------------- */
 	header,
 	header .header-content { 
-		height: 276px;      
+		height: 80px;
 	}
 	header .header-content {
 		background: #fff url(img/header-content-bg.png) no-repeat 50% top;	
@@ -86,7 +86,7 @@
       position: absolute;
       top: 0;
       right: 0;
-      border-top: 6px solid #9FCC7F; 
+      //border-top: 6px solid #9FCC7F;
    }
    #nav-wrap > a {	   
       text-align: left;

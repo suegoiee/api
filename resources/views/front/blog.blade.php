@@ -8,7 +8,7 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-	<title>Uanalyze Pro beta - 文章</title>
+	<title>優分析 Uanalyze - UA專欄</title>
 	<meta name="description" content="">  
 	<meta name="author" content="">
 
@@ -63,7 +63,7 @@
 					<header class="entry-header">
 
 						<h2 class="entry-title">
-							<a href="{{url('archives/'.$article->slug)}}" title="{{$article->title}}">{{str_limit($article->title,40)}}</a>
+							<a href="{{url('archives/'.$article->slug)}}" title="{{$article->title}}">{{str_limit($article->title,60)}}</a>
 						</h2> 				 
 					
 						<div class="entry-meta">
@@ -79,11 +79,11 @@
 					</header> 
 					
 					<div class="entry-content">
-						{!!str_limit(strip_tags(preg_replace("/<img[^>]+\>/i", "", $article->content)),300)!!}
+						{!!str_limit(strip_tags(preg_replace("/<img[^>]+\>/i", "", $article->content)),500)!!}
 					</div> 
 
 				</article> <!-- end entry -->
-
+				<hr/>
 				@endforeach
 				<div class="pagenav">
 		            {!! $articles->links() !!}
