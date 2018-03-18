@@ -32,10 +32,11 @@ body {
 .page h2,
 .entry h2,
 .entry h2 a {
-	font: 31px/36px 'Microsoft JhengHei', 'Heiti TC','opensans-semibold', sans-serif;
-	color: #444;
-	margin-bottom: 0;
-	letter-spacing: -.5px;
+    font: 28px/36px 'Microsoft JhengHei', 'Heiti TC','opensans-semibold', sans-serif;
+    color: #444;
+    margin-bottom: 0;
+    letter-spacing: -.5px;
+    font-weight: bold;
 }
 .page h2 { margin-bottom: 18px; }
 
@@ -410,11 +411,12 @@ ul#nav ul li a {
 }
 .entry-content{
     padding: 0 5px;
+    line-height: 180%;
 }
 
 .entry .entry-meta ul {
     padding: 0 5px;
-	margin: 6px 0 18px;
+	margin: 6px 0 8px;
 	color: #B7B9BD;
 	line-height: 24px;
 }

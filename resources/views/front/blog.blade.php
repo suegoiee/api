@@ -79,7 +79,7 @@
 					</header> 
 					
 					<div class="entry-content">
-						{!!str_limit(strip_tags(preg_replace("/<img[^>]+\>/i", "", $article->content)),500)!!}
+						{!!str_limit(strip_tags(preg_replace("/<img[^>]+\>/i", "", $article->content)),400)!!}
 					</div> 
 
 				</article> <!-- end entry -->
