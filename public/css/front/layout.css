@@ -164,7 +164,7 @@ blockquote:before {
     display: inline-block;
     width: 146px;
     height: 70px;
-    background: url(../../images/logo(dark_background)-05.png) no-repeat;
+    background: url(../../images/ua-logo.png) no-repeat;
     background-size: 100%;
     background-position: 0px 15px;
     cursor: pointer;
@@ -535,7 +535,7 @@ ul#nav ul li a {
     margin: 0;
     padding: 0;
     font-size: 14px;
-    font-family: 'merriweather-regular', sans-serif;
+    font-family: 'Microsoft JhengHei', 'Heiti TC', 'opensans-regular', sans-serif !important;
 }
 
 .entry .entry-meta ul .meta-sep {

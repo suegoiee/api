@@ -209,8 +209,8 @@
 	.page h2,
 	.entry h2,
 	.entry h2 a {
-		font: 28px/36px 'opensans-semibold', sans-serif;	
-		letter-spacing: -.5px;
+		//font: 28px/36px 'opensans-semibold', sans-serif;
+		//letter-spacing: -.5px;
 	}
 
 	.entry h2,
