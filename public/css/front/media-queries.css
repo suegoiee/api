@@ -110,7 +110,7 @@
       color: #666666;
       margin: 0;
       font-size: 25px;
-      line-height: 54px;
+      line-height: 69px;
       text-align: left;      
       display: block; 
       float: right;     
@@ -337,7 +337,7 @@
 
 	/* mobile navigation
    --------------------------------------------------------------- */
-	#nav-wrap > a { right: 30px; }  
+	#nav-wrap > a { right: -6px; }
    #nav-wrap { width: 100%; }
    #nav-wrap ul#nav { width: 100%; }         
 

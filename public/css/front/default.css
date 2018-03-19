@@ -316,6 +316,7 @@ ul ul, ul ol,
 ol ol, ol ul { margin: 6px 0 6px 17px; }
 ul ul li, ul ol li,
 ol ol li, ol ul li { }
+#sidebar ul li { font-size: 20px;}
 
 
 /* ---------------------------------------------------------------------
@@ -452,6 +453,7 @@ video,
 iframe,
 embed,
 object {
+    margin-bottom: 20px;
    max-width: 100%;
    height: auto;
 }
@@ -618,7 +620,7 @@ input[type="checkbox"] { display: inline; }
 
 .column, .columns {
    position: relative;
-    padding: 0 19px;
+    padding: 0px !important;
    min-height: 1px;
    float: left;
 }
