@@ -28,6 +28,7 @@ class UserProductController extends Controller
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline;
+            $product->sort = $product->pivot->sort;
             $product->faqs = $product->faqs;
         }
         
@@ -84,6 +85,7 @@ class UserProductController extends Controller
         $product = $request->user()->products()->with(['tags','collections','faqs'])->find($id);
         $product->installed = $product->pivot->installed;
         $product->deadline = $product->pivot->deadline;
+        $product->sort = $product->pivot->sort;
 
         return $this->successResponse($product?$product->makeHidden(['model','column','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at' , 'avatar_detail','pivot']):[]);
     }
@@ -137,11 +139,26 @@ class UserProductController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['deadline','installed']);
+        $request_data = $request->only(['deadline','installed','sort']);
         $data = array_filter($request_data, function($item){return $item!=null;});
         $request->user()->products()->updateExistingPivot($id, $data);
 
         return $this->successResponse($request_data?$request_data:[]);
+    }
+
+    public function sorted(Request $request)
+    {
+        $validator = $this->productValidator($request->all());
+        if($validator->fails()){
+            return $this->validateErrorResponse($validator->errors()->all());
+        }
+        $user_products=$request->user()->products();
+        $sorted_products = $request->input('sorted_products', []);
+        foreach ($sorted_products as $key => $product) {
+            $user_products->updateExistingPivot($product, ['sort'=>$key]);
+        }
+
+        return $this->successResponse(['sorted_products'=>$sorted_products]);
     }
 
     public function destroy(Request $request, $id)

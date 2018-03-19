@@ -49,7 +49,7 @@ class LaboratoryController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['title','layout']);
+        $request_data = $request->only(['title','layout','sort']);
         $request_data['customized']=1;
         $laboratory = $user->laboratories()->create($request_data);
 
@@ -82,6 +82,7 @@ class LaboratoryController extends Controller
         foreach ($laboratory->products as $product) {
             $product->installed = $product->users->first()->pivot->installed;
             $product->deadline = $product->users->first()->pivot->deadline;
+            $product->sort = $product->users->first()->pivot->sort;
             foreach ( $product->collections as $collection){
                 $collection->makeHidden(['avatar_small','avatar_detail']);
             }
@@ -107,7 +108,7 @@ class LaboratoryController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['title','layout']);
+        $request_data = $request->only(['title','layout', 'sort']);
 
         $data = array_filter($request_data, function($item){return $item!=null;});
 
@@ -188,12 +189,27 @@ class LaboratoryController extends Controller
         return $this->successResponse(['id'=>$id]);
 
     }
+    public function sorted(Request $request)
+    {
+        $validator = $this->laboratoryValidator($request->all());
+        if($validator->fails()){
+            return $this->validateErrorResponse($validator->errors()->all());
+        }
+        $user_laboratories=$request->user()->laboratories();
+        $sorted_laboratories = $request->input('sorted_laboratories', []);
+        foreach ($sorted_laboratories as $key => $laboratory) {
+            $user_laboratories->where('id',$laboratory)->update(['sort'=>$key]);
+        }
+
+        return $this->successResponse(['sorted_laboratories'=>$sorted_laboratories]);
+    }
 
     protected function laboratoryValidator(array $data , $user_id)
     {
         return Validator::make($data, [
             'title' => 'max:255',
             'layout' => 'string',
+            'sort'=>'numeric',
             'products' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL|nullable',
             'products.*' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL',
         ]);        
