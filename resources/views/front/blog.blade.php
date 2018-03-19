@@ -8,9 +8,9 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-	<title>優分析 Uanalyze - UA專欄</title>
+	<title>優分析 Uanalyze - 優分析專欄</title>
 	<meta name="description" content="">  
-	<meta name="author" content="">
+	<meta name="author" content="Uanalyze 優分析">
 
 	<!-- mobile specific metas
    ================================================== -->
@@ -42,7 +42,7 @@
 
 	   	<div style="display:inline">  
 			   	<ul id="nav" class="nav">
-	            	<li><a  class="btn-orange" href="https://pro.uanalyze.com.tw">UA Pro</a></li>		               
+	            	<li><a  class="btn-orange" href="https://pro.uanalyze.com.tw">立即使用機器人</a></li>
 			   	</ul> <!-- end #nav -->		
 	   	</div> 
 
@@ -97,7 +97,7 @@
 
    			<div class="widget widget_categories group">
    				<ul>
-						<li><a href="{{url('blogs')}}" title="">UA專欄</a> ({!! $articles->count() !!})</li>
+						<li><a href="{{url('blogs')}}" title="">優分析專欄</a> ({!! $articles->count() !!})</li>
 	
 					</ul>
 				</div>

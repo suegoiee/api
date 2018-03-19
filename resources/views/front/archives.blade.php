@@ -8,9 +8,13 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-   <title>Uanalyze Pro beta - {{$data->title}}</title>
-   <meta name="description" content="">  
-   <meta name="author" content="">
+   <title>優分析 Uanalyze - {{$data->title}}</title>
+
+   <meta name="description" content="
+   @foreach($data->tags as $tag)
+   {{$tag->name}},
+   @endforeach">
+   <meta name="author" content="Uanalyze 優分析">
 
    <!-- mobile specific metas
    ================================================== -->
@@ -42,7 +46,7 @@
 
          <div style="display:inline">  
                <ul id="nav" class="nav">
-                  <li><a  class="btn-orange" href="https://pro.uanalyze.com.tw">UA Pro</a></li>                   
+                  <li><a  class="btn-orange" href="https://pro.uanalyze.com.tw">立即使用機器人</a></li>
                </ul> <!-- end #nav -->    
          </div> 
 
