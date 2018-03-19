@@ -204,7 +204,7 @@
 	/* content 
 	-------------------------------------------------------------- */
 	#content-wrap { padding-top: 0; }
-	#content-wrap  #main { padding-right: 30px;}	
+	#content-wrap  #main { }
 
 	.page h2,
 	.entry h2,
@@ -351,7 +351,7 @@
 	-------------------------------------------------------------- */
 	header,
 	header .header-content { 
-		height: 260px;      
+		height: 140px;
 	}
 	header .header-content {
 		background: #fff url(img/header-content-bg.png) no-repeat 50% top;	

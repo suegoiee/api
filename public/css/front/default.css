@@ -158,7 +158,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
    color: #444;
-	font-family: 'opensans-semibold', sans-serif;
+    font-family: 'Microsoft JhengHei', 'opensans-semibold', sans-serif;
    font-weight: normal;
    text-rendering: optimizeLegibility;
 }
@@ -172,7 +172,7 @@ h6 { font-size: 14px; line-height: 30px; }
 .subheader { }
 
 p { margin: 0 0 30px 0; }
-p img { margin: 0; }
+p img { margin-bottom: 20px; }
 p.lead {
    font: 18px/33px 'opensans-light', sans-serif;
    margin-bottom: 18px;   
@@ -618,7 +618,7 @@ input[type="checkbox"] { display: inline; }
 
 .column, .columns {
    position: relative;
-   padding: 0 18px;
+    padding: 0 19px;
    min-height: 1px;
    float: left;
 }
@@ -708,7 +708,7 @@ properly.
 	   float: none;
 	   margin-left: 0;
 	   margin-right: 0;
-      padding: 0 30px;
+      padding: 0px;
    }
    .row .row { 
    	width: auto; 
