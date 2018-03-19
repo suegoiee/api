@@ -53,7 +53,7 @@ class User  extends Authenticatable
         return $this->hasMany('App\CreditCard');
     }
     public function products(){
-        return $this->belongsToMany('App\Product')->withPivot('installed', 'deadline')->withTimestamps();
+        return $this->belongsToMany('App\Product')->withPivot('installed', 'deadline','sort')->withTimestamps();
     }
     public function laboratories()
     {
