@@ -40,7 +40,7 @@
 
 
       <nav id="nav-wrap">
-         <a href="{{url('blogs/')}}" class="logo_a"><div class="logo"></div></a>
+         <div class="logo"></div>
          <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show Menu</a>
          <a class="mobile-btn" href="#" title="Hide navigation">Hide Menu</a>
 
