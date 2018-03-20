@@ -98,11 +98,10 @@
       font: 0/0 a;
       text-shadow: none;
       color: transparent;
-
-		float: right;
+	   //float: right;
       position: relative;
       top: 0px;
-      right: 36px;
+      //right: 36px;
    }
 	#nav-wrap  > a:before {
 	   font-family: 'FontAwesome';
@@ -337,7 +336,7 @@
 
 	/* mobile navigation
    --------------------------------------------------------------- */
-	#nav-wrap > a { right: -6px; }
+	#nav-wrap > a { //right: -6px; }
    #nav-wrap { width: 100%; }
    #nav-wrap ul#nav { width: 100%; }         
 
