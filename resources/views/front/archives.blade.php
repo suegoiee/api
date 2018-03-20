@@ -40,7 +40,7 @@
 
 
       <nav id="nav-wrap">
-         <a href="{{url('blogs/'.$data->slug)}}" title="{{$data->title}}"><div class="logo"></div></a>
+         <a href="{{url('blogs/'.$data->slug)}}" class="logo_a" title="{{$data->title}}"><div class="logo"></div></a>
          <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show Menu</a>
          <a class="mobile-btn" href="#" title="Hide navigation">Hide Menu</a>
 
@@ -73,7 +73,7 @@
                
                   <div class="entry-meta">
                      <ul>
-                        <li>{{$data->posted_at}}</li>
+                        <li>{{str_limit($article->posted_at, 16)}}</li>
                         @foreach($data->tags as $tag)
                            <span class="meta-sep">&bull;</span>
                            <li>{{$tag->name}}</li>

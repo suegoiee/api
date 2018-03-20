@@ -912,3 +912,7 @@ footer .copyright {
 .archive{
     padding: 29px 5px;
 }
+
+.logo_a{
+    display: inline;
+}
