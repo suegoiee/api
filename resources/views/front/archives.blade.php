@@ -83,7 +83,7 @@
                 
                </header> 
                
-               <div class="entry-content">
+               <div class="entry-content archive">
                   {!!$data->content!!}
                </div> 
 
