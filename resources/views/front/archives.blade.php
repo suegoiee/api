@@ -39,8 +39,8 @@
    <header id="top">
 
 
-      <nav id="nav-wrap"> 
-         <div class="logo"></div>
+      <nav id="nav-wrap">
+         <a href="{{url('blogs/'.$data->slug)}}" title="{{$data->title}}"><div class="logo"></div></a>
          <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show Menu</a>
          <a class="mobile-btn" href="#" title="Hide navigation">Hide Menu</a>
 
