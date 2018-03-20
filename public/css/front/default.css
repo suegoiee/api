@@ -641,7 +641,7 @@ input[type="checkbox"] { display: inline; }
 .one, .row .one        { width: 8.33333%; }
 .two, .row .two        { width: 16.66667%; }
 .three, .row .three    { width: 25%; }
-.four, .row .four      { width: 33.33333%; }
+.four, .row .four      { width: 29.33333%; }
 .five, .row .five      { width: 41.66667%; }
 .six, .row .six        { width: 50%; }
 .seven, .row .seven    { width: 58.33333%; }
