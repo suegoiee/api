@@ -53,11 +53,13 @@ Route::middleware(['auth:api'])->group(function(){
 
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
 	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');
+	Route::put('/user/products/sort', 'UserProductController@sorted');
 	Route::resource('/user/products', 'UserProductController', ['only' => [
 			'index','show'
 		]]);
 
 	Route::delete('/user/laboratories/{laboratory}/products','LaboratoryController@removeProducts')->name('laboratories.product.destroy');
+	Route::put('/user/laboratories/sort', 'LaboratoryController@sorted');
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
 			'index','show', 'store', 'update','destroy'
 		]]);

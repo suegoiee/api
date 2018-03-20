@@ -11,6 +11,7 @@ return [
 
     	'id'=>'編號',
     	'title'=>'標題',
+        'slug'=>'網址代號',
     	'top'=>'置頂',
         'content'=>'內容',
     	'status'=>'狀態',

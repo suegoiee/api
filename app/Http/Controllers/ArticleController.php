@@ -105,7 +105,7 @@ class ArticleController extends Controller
         return Validator::make($data, [
             'title' => 'required|max:255',
             'content' => 'string',
-            'slug'=> 'required'
+            'slug'=> 'required|max:1024'
         ]);        
     }
 
@@ -114,7 +114,7 @@ class ArticleController extends Controller
         return Validator::make($data, [
             'title' => 'required|max:255',
             'content' => 'string',
-            'slug'=> 'required'
+            'slug'=> 'required|max:1024'
         ]);        
     }
 
