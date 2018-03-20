@@ -116,7 +116,7 @@
 
             <div class="widget widget_categories group">
                <ul>
-                  <li><a href="{{url('blogs')}}" title="">UA專欄</a> ({{$data_num}})</li>
+                  <li><a href="{{url('blogs')}}" title="">優分析專欄</a> ({{$data_num}})</li>
    
                </ul>
             </div>
