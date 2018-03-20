@@ -63,7 +63,7 @@
 					<header class="entry-header">
 
 						<h2 class="entry-title">
-							<a href="{{url('archives/'.$article->slug)}}" title="{{$article->title}}">{{str_limit($article->title,60)}}</a>
+							<a href="{{url('archives/'.$article->slug)}}" title="{{$article->title}}">{{str_limit($article->title,70)}}</a>
 						</h2> 				 
 					
 						<div class="entry-meta">
