@@ -203,7 +203,7 @@
 
 	/* content 
 	-------------------------------------------------------------- */
-	#content-wrap { padding-top: 0; }
+	#content-wrap { //padding-top: 0; }
 	#content-wrap  #main { }
 
 	.page h2,
@@ -366,7 +366,7 @@
 
 	/* content 
 	-------------------------------------------------------------- */
-	#content-wrap { margin-top: -24px; }
+	#content-wrap { margin-top: 50px; }
 
 } 
 
