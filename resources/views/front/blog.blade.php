@@ -68,7 +68,7 @@
 					
 						<div class="entry-meta">
 							<ul>
-								<li>{{str_limit($article->posted_at, 16)}}</li>
+								<li>{{substr($article->posted_at,0, 16)}}</li>
 								@foreach($article->tags as $tag)
 									<span class="meta-sep">&bull;</span>
 									<li>{{$tag->name}}</li>
