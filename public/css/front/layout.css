@@ -480,6 +480,11 @@ ul#nav ul li a {
     font-size: 20px;
 }
 
+#main ul {
+    list-style: square outside;
+    margin-left: 22px;
+}
+
 .entry-content {
     padding: 0 5px;
     line-height: 180%;
