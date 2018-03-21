@@ -163,8 +163,8 @@ h1, h2, h3, h4, h5, h6 {
    text-rendering: optimizeLegibility;
 }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit;  font-family: 'Microsoft JhengHei', 'Heiti TC', 'opensans-regular', sans-serif !important; }
-h1 { font-size: 52px; line-height: 54px; margin-bottom: 6px; font-weight: bold; color: #ff7800; letter-spacing:-1px; }
-h2 { font-size: 41px; line-height: 45px; margin-bottom: 6px; font-weight: bold; color: #ff7800; }
+h1 { font-size: 52px; line-height: 54px; margin-bottom: 10px; font-weight: bold; color: #ff7800; letter-spacing:-1px; }
+h2 { font-size: 41px; line-height: 45px; margin-bottom: 8px; font-weight: bold; color: #ff7800; }
 h3 { font-size: 32px; line-height: 42px; margin-bottom: 6px; font-weight: bold; color: #ff7800; }
 h4 { font-size: 25px; line-height: 39px; margin-bottom: 6px; font-weight: bold; color: #4A5153; }
 h5 { font-size: 20px; line-height: 36px; color: #4A5153; }

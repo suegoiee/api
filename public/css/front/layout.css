@@ -492,6 +492,7 @@ ul#nav ul li a {
     margin: 0;
 }
 
+/*--
 .entry-content h1 {
     font-family: 'Microsoft JhengHei', 'Heiti TC', 'opensans-regular', sans-serif !important;
     font-size: 32px;
@@ -501,6 +502,7 @@ ul#nav ul li a {
     font-weight: bold;
     color: #ff7800;
 }
+*/
 
 .entry-content ul li{
     padding-left: 0px;
