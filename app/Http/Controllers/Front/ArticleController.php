@@ -30,10 +30,10 @@ class ArticleController extends Controller
     {
         $slug = $this->hasChineseStr($slug) ? urlencode(str_replace('+', ' ', $slug)) : $slug;
         $article = $this->moduleRepository->getBy(['slug'=> $slug, 'status'=>'1'],['tags']);
-        $article_num = $this->moduleRepository->count();
+        $articles = $this->moduleRepository->getsWithPaginate(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC'], 15);
         $data = [
             'data' => $article,
-            'data_num' => $article_num,
+            'data_num' => $articles->count(),
             'tags'=>$this->tagRepository->gets(),
         ];
         return view('front.archives',$data);
