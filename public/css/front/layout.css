@@ -488,6 +488,7 @@ ul#nav ul li a {
 .pagenav ul{
     list-style: none;
     margin: 0px;
+    margin-left: 0;
 }
 .pagenav ul li{
     display: inline-block;
