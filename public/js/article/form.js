@@ -5,6 +5,8 @@ $(function(){
     }
     CKEDITOR.replace( 'articleContent',ckeditor_config);
     CKEDITOR.config.height=100;
+    CKEDITOR.config.extraPlugins = 'uploadimage';
+    CKEDITOR.config.uploadUrl = url('admin/ckeditor/images'),
     CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
     CKEDITOR.config.removeButtons='About',
     CKEDITOR.config.extraPlugins = 'youtube';

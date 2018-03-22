@@ -28,8 +28,10 @@ class CkeditorImageController extends Controller
     public function store(Request $request)
     {
         $path = $this->storeImage($request->file('upload'), $request->input('CKEditor'));
+        $hashName = pathinfo($path)['basename'];
         $url = url('storage/'.$path);
-        return '<script>window.parent.CKEDITOR.tools.callFunction('.$request->input('CKEditorFuncNum').', "'.$url.'");window.close();</script>';
+        return response()->json(['uploaded'=>1,'fileName'=>$hashName,'url'=>$url]);
+        //return '<script>window.parent.CKEDITOR.tools.callFunction('.$request->input('CKEditorFuncNum').', "'.$url.'");window.close();</script>';
     }
 
     public function show(Request $request)
