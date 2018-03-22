@@ -19,8 +19,10 @@ class ArticleController extends Controller
     public function index($slug = 0)
     {
         $articles = $this->moduleRepository->getsWithPaginate(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC'], 15);
+        $data_num = $this->moduleRepository->getsWith(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC'])->count();
         $data = [
             'articles' => $articles,
+            'data_num' => $data_num,
             'tags'=>$this->tagRepository->gets(),
         ];
         return view('front.blog',$data);
@@ -30,7 +32,7 @@ class ArticleController extends Controller
     {
         $slug = $this->hasChineseStr($slug) ? urlencode(str_replace('+', ' ', $slug)) : $slug;
         $article = $this->moduleRepository->getBy(['slug'=> $slug, 'status'=>'1'],['tags']);
-        $articles = $this->moduleRepository->getsWithPaginate(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC'], 15);
+        $articles = $this->moduleRepository->getsWith(['tags'],['status'=>'1'],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC']);
         $data = [
             'data' => $article,
             'data_num' => $articles->count(),
