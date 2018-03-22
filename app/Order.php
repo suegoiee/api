@@ -32,7 +32,8 @@ class Order extends UanalyzeModel
     }
 
     public function getUserNicknameAttribute(){
-        $nickname = $this->user->profile->nickname;
+        $nickname = $this->user->profile ? $this->user->profile->nickname : '-';
+
         return $nickname;
     }
 
