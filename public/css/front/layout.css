@@ -218,7 +218,7 @@ ul#nav li a {
 a, a:visited {
     text-decoration: none;
     outline: 0;
-    color: #ff7800;
+    color: #ffa500;
     -webkit-transition: color .3s ease-in-out;
     -moz-transition: color .3s ease-in-out;
     -o-transition: color .3s ease-in-out;
@@ -484,6 +484,24 @@ ul#nav ul li a {
     list-style: square outside;
     margin-left: 22px;
 }
+
+.pagenav ul{
+    list-style: none;
+    margin: 0px;
+}
+.pagenav ul li{
+    display: inline-block;
+}
+
+.pagenav ul li a{
+    margin: 0 5px;
+}
+
+.pagenav ul li span{
+    margin: 0 5px;
+}
+
+
 
 .entry-content {
     padding: 0 5px;
