@@ -33,6 +33,12 @@
 	cursor: pointer;
 	color:#F00;
 }
+.chosen-select{
+	width: 100%;
+}
+.chosen-container-single .chosen-single{
+	padding: .5rem .75rem;
+}
 input[type=checkbox]{
 	width: 20px;
     height: 20px;

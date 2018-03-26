@@ -91,6 +91,8 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/blogs','Front\ArticleController@index');
 	Route::get('/blogs/{slug}','Front\ArticleController@index');
 	Route::get('/archives/{slug}','Front\ArticleController@show');
+
+	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
 });
 
 
@@ -135,11 +137,16 @@ Route::middleware(['client:company'])->group(function(){
 	Route::put('/companies/{company}','StockController@update')->name('companies.update');
 	Route::delete('/companies/{company}','StockController@destroy')->name('companies.destroy');
 });
-
 Route::middleware(['client:article'])->group(function(){
 	Route::post('/articles','ArticleController@store')->name('articles.store');
 	Route::put('/articles/{article}','ArticleController@update')->name('articles.update');
 	Route::delete('/articles/{article}','ArticleController@destroy')->name('articles.destroy');
+});
+Route::middleware(['client:promocode'])->group(function(){
+	Route::get('/promocodes','PromocodeController@index')->name('promocodes.index');
+	Route::post('/promocodes','PromocodeController@store')->name('promocodes.store');
+	Route::put('/promocodes/{promocode}','PromocodeController@update')->name('promocodes.update');
+	Route::delete('/promocodes/{promocode}','PromocodeController@destroy')->name('promocodes.destroy');
 });
 
 //Admin
@@ -183,4 +190,13 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/articles/{article}/delete','Admin\ArticleController@destroy');
 	Route::delete('/articles','Admin\ArticleController@destroy');
 	Route::resource('/articles', 'Admin\ArticleController');
+
+	Route::get('/promocodes/{promocode}/delete','Admin\PromocodeController@destroy');
+	Route::delete('/promocodes','Admin\PromocodeController@destroy');
+	Route::resource('/promocodes', 'Admin\PromocodeController', ['except' => [
+    	'show'
+	]]);
+	Route::get('/promocodes/{promocode}','Admin\PromocodeController@show')->name('promocodes.show')->where('promocode','[0-9]+');
+	Route::get('/promocodes/import','Admin\PromocodeController@importView');
+	Route::post('/promocodes/import','Admin\PromocodeController@import');
 });
