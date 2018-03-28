@@ -164,7 +164,12 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
 	Route::delete('/products','Admin\ProductController@destroy');
-	Route::resource('/products', 'Admin\ProductController');
+	Route::resource('/products', 'Admin\ProductController', ['except' => [
+    	'show'
+	]]);
+	Route::get('/products/{product}','Admin\ProductController@show')->name('products.show')->where('product','[0-9]+');
+	Route::get('/products/assigned','Admin\ProductController@assignedView');
+	Route::post('/products/assigned','Admin\ProductController@assigned');
 	Route::post('/ckeditor/images','CkeditorImageController@store')->name('ckeditor.image.store');
 	
 	Route::get('/tags/{tag}/delete','Admin\TagController@destroy');

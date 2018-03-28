@@ -2,12 +2,12 @@
 namespace App\Http\Controllers\Admin;
 use App\Repositories\TagRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class ProductController extends AdminController
 {	
     protected $tagRepository;
-
     public function __construct(ProductRepository $productRepository, TagRepository $tagRepository)
     {
         $this->moduleName='product';
@@ -22,7 +22,7 @@ class ProductController extends AdminController
         $product = $this->moduleRepository->getsWith(['tags','collections'],[],['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
             'module_name'=> $this->moduleName,
-            'actions'=>['new'],
+            'actions'=>['assigned','new'],
             'table_data' => $product,
             'table_head' =>['id','name','type','model','price','status'],
             'table_formatter' =>['status'],
@@ -156,5 +156,40 @@ class ProductController extends AdminController
             }
         }
         return $this->adminResponse($request,$response_product);
+    }
+    public function assignedView(UserRepository $userRepository)
+    {
+        $products = $this->moduleRepository->getsWith([],['status'=>1]);
+        $users = $userRepository->gets();
+        $data = [
+            'module_name'=> $this->moduleName,
+            'products' =>$products,
+            'users' => $users,
+        ];
+        return view('admin.assigned', $data);
+    }
+    public function assigned(Request $request)
+    {   
+        $products = $request->input('products', []);
+        $users = $request->input('users', []);
+        foreach ($users as $key => $user) {
+            $this->addProducts($user, $products);
+        }
+        return redirect('admin/products');
+    }
+    private function addProducts($user_id, $products){
+        $token = $this->token;
+        $http = new \GuzzleHttp\Client;
+        $response = $http->request('post',url('/user/products'),[
+                'headers'=>[
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$token['access_token'],
+                ],
+                'form_params' => [
+                    'products' => $products,
+                    'user_id' => $user_id,
+                ],
+            ]);
+        return json_decode((string) $response->getBody(), true);
     }
 }

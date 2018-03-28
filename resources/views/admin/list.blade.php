@@ -12,6 +12,9 @@
         @if(@in_array('import',$actions))
             <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/import')}}" id="import" class="btn btn-info" >{{trans($module_name.'.admin.import_label')}}</a></li>
         @endif
+        @if(@in_array('assigned',$actions))
+            <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/assigned')}}" id="assigned" class="btn btn-info" >{{trans($module_name.'.admin.assigned_label')}}</a></li>
+        @endif
     </ol>
     @include('admin.list_error')
     @if(isset($tabs))

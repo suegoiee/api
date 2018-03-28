@@ -27,7 +27,7 @@ class PromocodeController extends AdminController
             'actions'=>['import','new'],
             'query_string' => $query_string,
             'table_data' => $promocodes,
-            'table_head' =>['id','name','code','offer','user_name','deadline', 'used_at'],
+            'table_head' =>['name','code','offer','user_name','deadline', 'used_at'],
             'table_formatter' =>['status', 'user_name', 'deadline', 'used_at'],
         ];
         return view('admin.list',$data);

@@ -5,6 +5,8 @@ return [
 		'menu_title'=> $module_name.'管理',
     	'title'=> $module_name.'管理',
     	'new_label'=>'新增'.$module_name,
+        'assigned_label'=>'贈送'.$module_name,
+        'assignedView_title'=>'贈送'.$module_name,
     	'create_title'=>'新增'.$module_name,
         'edit_label'=>'編輯'.$module_name,
         'edit_title'=>'編輯'.$module_name,
@@ -38,6 +40,8 @@ return [
         'faq'=>'FAQ',
         'faq_q'=>'Q',
         'faq_a'=>'A',
+        'assigned_products'=>'選擇欲贈送的產品',
+        'assigned_users'=>'選擇贈與的使用者',
 	],
     'collection_cant_del' =>'無法個別刪除。',
     'cant_no_products' =>'需至少有一項產品。'
