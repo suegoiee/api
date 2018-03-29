@@ -8,13 +8,16 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-   <title>優分析 Uanalyze - {{$data->title}}</title>
+   <title>{{$data->title}}【優分析專欄】</title>
 
    <meta name="description" content="
    @foreach($data->tags as $tag)
    {{$tag->name}},
    @endforeach">
-   <meta name="author" content="Uanalyze 優分析">
+   <meta name="author" content="優分析 Uanalyze ">
+   <meta property="og:title" content="{{$data->title}}【優分析專欄】">
+   <meta property="og:type" content="website">
+   <meta property="og:site_name" content="優分析 Uanalyze">
 
    <!-- mobile specific metas
    ================================================== -->
