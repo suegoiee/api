@@ -218,12 +218,23 @@ ul#nav li a {
 a, a:visited {
     text-decoration: none;
     outline: 0;
-    color: #ffa500;
     -webkit-transition: color .3s ease-in-out;
     -moz-transition: color .3s ease-in-out;
     -o-transition: color .3s ease-in-out;
     transition: color .3s ease-in-out;
 }
+
+.entry-content a, a:visited {
+    text-decoration: none;
+    color: #0085cd;
+    outline: 0;
+    -webkit-transition: color .3s ease-in-out;
+    -moz-transition: color .3s ease-in-out;
+    -o-transition: color .3s ease-in-out;
+    transition: color .3s ease-in-out;
+}
+
+.entry-content a:hover, a:focus { color: #34393A; }
 
 ul#nav li a:hover {
     color: #222;
@@ -482,7 +493,7 @@ ul#nav ul li a {
 
 #main ul {
     list-style: square outside;
-    margin-left: 22px;
+    margin-left: 23px;
 }
 
 .pagenav ul{
@@ -496,6 +507,11 @@ ul#nav ul li a {
 
 .pagenav ul li a{
     margin: 0 5px;
+    color: #717171;
+}
+
+.pagenav ul li a:hover{
+    color: #ea7d00;
 }
 
 .pagenav ul li span{
@@ -748,7 +764,8 @@ ol.commentlist {
 
 .pagenav span {
     font: 18px/30px 'opensans-regular', sans-serif;
-    color: #C0C6C9;
+    color: #ea7d00;
+    font-weight: bold;
     margin: 0 15px;
 }
 
