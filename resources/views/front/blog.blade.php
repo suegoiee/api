@@ -8,9 +8,12 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-	<title>優分析 Uanalyze - 優分析專欄</title>
-	<meta name="description" content="">  
-	<meta name="author" content="Uanalyze 優分析">
+	<title>優分析股市AI機器人 - 優分析專欄</title>
+	<meta name="description" content="優分析股市AI機器人">
+	<meta name="author" content="優分析 Uanalyze ">
+	<meta property="og:title" content="優分析股市AI機器人 - 自動鎖定超級強勢股">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="優分析 Uanalyze">
 
 	<!-- mobile specific metas
    ================================================== -->
