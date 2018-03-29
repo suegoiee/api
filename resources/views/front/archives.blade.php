@@ -15,7 +15,7 @@
    {{$tag->name}},
    @endforeach">
    <meta name="author" content="優分析 Uanalyze ">
-   <meta property="og:title" content="優分析股市AI機器人 - 自動鎖定超級強勢股">
+   <meta property="og:title" content="{{$data->title}}【優分析專欄】">
    <meta property="og:type" content="website">
    <meta property="og:site_name" content="優分析 Uanalyze">
 
