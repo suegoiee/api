@@ -47,8 +47,10 @@ Route::middleware(['auth:api'])->group(function(){
 			'index', 'store', 'destroy'
 		]]);
 	Route::put('/user/orders/{order}/payment','OrderController@orderPayment');
+	Route::post('/user/orders/trial','OrderController@priceTrial');
+	Route::post('/user/orders/{order}','OrderController@store')->name('orders.store')->where('order', '[0-9]+');
 	Route::resource('/user/orders', 'OrderController', ['only' => [
-			'index','show', 'store','destroy'
+			'index', 'show','destroy'
 		]]);
 
 	Route::put('/user/products/{product}/install', 'UserProductController@install');

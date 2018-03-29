@@ -7,6 +7,7 @@ use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 
 use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
+use App\Repositories\PromocodeRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -260,5 +261,25 @@ class OrderController extends Controller
         Ecpay::set($data, null, $extendData);
         return Ecpay::checkOutString();
     }
-
+    public function priceTrial(Request $request,PromocodeRepository $promocodeRepository)
+    {
+        $user = $request->user();
+        $products = $request->input('products',[]);
+        $promocodes = $request->input('promocodes',[]);
+        $result = ['total_price'=>0, 'promocodes'=>[]];
+        foreach ($products as $key => $value) {
+            $product = $this->productRepository->getWith($value['id'],['collections']);
+            $result['total_price'] += $product->price * (int)$value['quantity'];
+        }
+        foreach ($promocodes as $key => $value) {
+            if(!$promocodeRepository->check($user->id, $value)){
+                $result['promocodes'][$value]=['msg'=>'error'];
+            }else{
+                $promocode = $promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
+                $result['promocodes'][$value]=['name'=>$promocode->name, 'offer'=>$promocode->offer];
+                $result['total_price'] = $result['total_price'] <= $promocode->offer ? 0 : $result['total_price'] - $promocode->offer;
+            }
+        }
+        return $this->successResponse($result);
+    }
 }
