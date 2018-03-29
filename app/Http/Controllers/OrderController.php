@@ -42,23 +42,30 @@ class OrderController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title']);
+        $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType']);
         $request_data['use_invoice'] =  $request->input('use_invoice',0);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $products = $request->input('products',[]);
-        $order = $user->orders()->create($request_data);
         $product_ids = [];
         $product_data = [];
+        $product_free = [];
         $order_price = 0;
         foreach($products as $key => $value) {
-            $product = $this->productRepository->getWith($value,['collections']);
-            $order_price += $product->price;
+            $product = $this->productRepository->getWith($value['id'],['collections']);
+            $order_price += $product->price * (int)$value['quantity'];
             if($product->price==0){
-                $this->addProducts($user->id, [$product->id]);
+                array_push($product_free,['id'=>$product->id, 'quantity'=>1]);
+                //$result = $this->addProducts($user->id, [['id'=>$product->id, 'quantity'=>1]]);
             }
-            array_push($product_ids,$value);
-            array_push($product_data,$product);
+            //array_push($product_ids, $value['id']);
+            $product_ids[$value['id']] = ['unit_price'=>$product->price , 'quantity' => $value['quantity']];
+            array_push($product_data, $product);
         }
+        if(count($product_free)>0){
+            $result = $this->addProducts($user->id, $product_free);
+        }
+        $request_data['price'] = $order_price;
+        $order = $user->orders()->create($request_data);
         $order->products()->attach($product_ids);
         
         if($order_price>0){
@@ -108,10 +115,15 @@ class OrderController extends Controller
         $user = $order->user;
         if($order->status==1){
             $order_products = $order->products;
+            $product_data = [];
             foreach ($order_products as $key => $product) {
-                if($product->price>0){
-                    $this->addProducts($user->id, [$product->id]);
+                if($product->pivot->unit_price>0){
+                    array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
+                    //$this->addProducts($user->id,  [['id'=>$product->id, 'quantity'=>$product->pivot->quantity]]);
                 }
+            }
+            if(count($product_data)>0){
+                $this->addProducts($user->id, $product_data);
             }
         }
 
@@ -136,9 +148,9 @@ class OrderController extends Controller
     {
         return Validator::make($data, [
             //'user_id' => 'required|exists:users,id',
-            'price' => 'required|numeric',
-            'products'=>'exists:products,id,status,1',
-            'products.*'=>'exists:products,id,status,1',
+            //'price' => 'required|numeric',
+            'products.id'=>'exists:products,id,status,1',
+            'products.*.id'=>'exists:products,id,status,1',
         ]);        
     }
     protected function orderPayment(Request $request, $id)
@@ -164,7 +176,7 @@ class OrderController extends Controller
                 ],
                 'form_params' => [
                     'products' => $products,
-                    'user_id' => $user_id,
+                    'user_id' => $user_id
                 ],
             ]);
         return json_decode((string) $response->getBody(), true);
@@ -176,12 +188,26 @@ class OrderController extends Controller
         foreach ($order->products as $key => $product) {
             $item = [
                 'Name' => $product->name, 
-                'Price' => $product->price, 
+                'Price' => $product->pivot->unit_price, 
                 'Currency'=> 'NTD', 
-                'Quantity' => (int)"1", 
+                'Quantity' => (int)$product->pivot->quantity, 
                 'URL' => "#"
                 ];
             array_push($items, $item);
+        }
+        switch ($order->paymentType) {
+            case 'credit':
+                $paymentMethod = \ECPay_PaymentMethod::Credit;
+                break;
+            case 'atm':
+                $paymentMethod = \ECPay_PaymentMethod::ATM;
+                break;
+            case 'atm':
+                $paymentMethod = \ECPay_PaymentMethod::BARCODE;
+                break;
+            default:
+                $paymentMethod = \ECPay_PaymentMethod::Credit;
+                break;
         }
         $data=[
             'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
@@ -195,7 +221,43 @@ class OrderController extends Controller
             'ChooseSubPayment' => \ECPay_PaymentMethodItem::None,
             'Items' => $items,
         ];
-        Ecpay::set($data);
+        $extendData = [];
+        switch ($order->paymentType) {
+            case 'credit':
+                $data['ChoosePayment'] = \ECPay_PaymentMethod::Credit;
+                break;
+            case 'atm':
+                $data['ChoosePayment'] = \ECPay_PaymentMethod::ATM;
+                //$extendData['PaymentInfoURL'] = '';
+                //$extendData['expireDate'] = '';
+                break;
+            case 'barcode':
+                $data['ChoosePayment'] = \ECPay_PaymentMethod::BARCODE;
+                //$extendData['Desc_1'] = '';
+                //$extendData['Desc_2'] = '';
+                //$extendData['Desc_3'] = '';
+                //$extendData['Desc_4'] = '';
+                //$extendData['PaymentInfoURL'] = '';
+                //$extendData['ClientRedirectURL'] = '';
+                //$extendData['StoreExpireDate'] = '';
+                break;
+            case 'cvs':
+                $data['ChoosePayment'] = \ECPay_PaymentMethod::CVS;
+                //$extendData['Desc_1'] = '';
+                //$extendData['Desc_2'] = '';
+                //$extendData['Desc_3'] = '';
+                //$extendData['Desc_4'] = '';
+                //$extendData['PaymentInfoURL'] = '';
+                //$extendData['ClientRedirectURL'] = '';
+                //$extendData['StoreExpireDate'] = '';
+                break;
+            case 'webatm':
+                $data['ChoosePayment'] = \ECPay_PaymentMethod::WebATM;
+                break;
+            default:
+                break;
+        }
+        Ecpay::set($data, null, $extendData);
         return Ecpay::checkOutString();
     }
 

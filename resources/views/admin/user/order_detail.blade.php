@@ -15,6 +15,7 @@
                     <td>{{$order->id}}</td>
                     <td>{{$order->price}}</td>
                     <td>{{trans('order.admin.status_'.$order->status)}}</td>
+                    <td>{{trans('order.admin.paymentType_'.$order->paymentType)}}</td>
                     <td>{{$order->created_at}}</td>
                 </tr>
                 @endforeach
