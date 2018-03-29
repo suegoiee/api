@@ -48,9 +48,10 @@ Route::middleware(['auth:api'])->group(function(){
 		]]);
 	Route::put('/user/orders/{order}/payment','OrderController@orderPayment');
 	Route::resource('/user/orders', 'OrderController', ['only' => [
-			'index','show', 'store','destroy'
+			'index','show','store','destroy'
 		]]);
-
+	Route::post('/user/orders/trial','OrderController@trial')->name('orders.trial');
+	
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
 	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');
 	Route::put('/user/products/sort', 'UserProductController@sorted');
@@ -150,7 +151,7 @@ Route::middleware(['client:promocode'])->group(function(){
 });
 
 //Admin
-Route::get('/ip', function(){return Request::ip();});
+//Route::get('/ip', function(){return Request::ip();});
 Route::group(['middleware' => ['ip','admin'] ],function(){
 	Route::get('/', 'HomeController@index');
 });

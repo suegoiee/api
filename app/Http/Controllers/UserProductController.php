@@ -51,13 +51,12 @@ class UserProductController extends Controller
         $products = [];
         $result = [];
         foreach ($_products as $key => $product) {
-            $product_data = $this->productRepository->get($product);
-            $old_product = $user->products()->where('id',$product)->first();
+            $product_data = $this->productRepository->get($product["id"]);
+            $old_product = $user->products()->where('id',$product["id"])->first();
 
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-
-            $deadline = $this->getExpiredDate($product_data->expiration, $old_deadline);
-
+            $expiration = (int)$product_data->expiration * (int)$product['quantity'];
+            $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
             $collections =[];
             if($product_data->type=='collection'){
@@ -72,7 +71,7 @@ class UserProductController extends Controller
                 $collections = $product_data->collections;
             }
             $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
-            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections]);
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
         }
         $user->products()->syncWithoutDetaching($products);
 
@@ -171,7 +170,7 @@ class UserProductController extends Controller
     protected function productValidator(array $data)
     {
         return Validator::make($data, [
-            'products.*' => 'exists:products,id',
+            'products.*.id' => 'exists:products,id',
         ]);        
     }
     private function getExpiredDate($days, $expired = 0){

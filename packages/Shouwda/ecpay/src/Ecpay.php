@@ -23,7 +23,7 @@ class Ecpay
     {
     	return $this->ecpay;
     }
-    public function set($ecPayData=[],$value=null)
+    public function set($ecPayData=[], $value=null, $ecPayExtendData=[], $extendValue=null)
     {
     	if(is_array($ecPayData)){
 	    	foreach ($ecPayData as $key => $data) {
@@ -32,6 +32,14 @@ class Ecpay
     	}else{
     		$this->ecpay->Send[$ecPayData] = $value;
     	}
+
+        if(is_array($ecPayExtendData)){
+            foreach ($ecPayExtendData as $key => $data) {
+                $this->ecpay->SendExtend[$key] = $data;
+            }
+        }else{
+            $this->ecpay->SendExtend[$ecPayExtendData] = $extendValue;
+        }
     }
     public function checkOutString()
     {

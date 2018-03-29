@@ -17,5 +17,8 @@ class Promocode extends UanalyzeModel
         $user = $this->user;
         return $user ? $user->profile->nickname : 0 ;
     }
-
+    public function order()
+    {
+        return $this->belongsToMany('App\Order');
+    }
 }
