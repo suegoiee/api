@@ -16,13 +16,14 @@ class OrderController extends Controller
 {	
     use OauthToken;
     protected $orderRepository;
+    protected $promocodeRepository;
     protected $productRepository;
-    public function __construct(OrderRepository $orderRepository,ProductRepository $productRepository)
+    public function __construct(OrderRepository $orderRepository, ProductRepository $productRepository, PromocodeRepository $promocodeRepository)
     {
 	   $this->orderRepository = $orderRepository;
        $this->productRepository = $productRepository;
+       $this->promocodeRepository = $promocodeRepository;
     }
-
     public function index(Request $request)
     {
         $user = $request->user();
@@ -36,7 +37,7 @@ class OrderController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $user = $request->user();
         $validator = $this->orderValidator($request->all());
         if($validator->fails()){
@@ -62,13 +63,34 @@ class OrderController extends Controller
             $product_ids[$value['id']] = ['unit_price'=>$product->price , 'quantity' => $value['quantity']];
             array_push($product_data, $product);
         }
-        if(count($product_free)>0){
-            $result = $this->addProducts($user->id, $product_free);
+
+        $promocodes = $request->input('promocodes',[]);
+        $promocode_ids = [];
+        foreach ($promocodes as $key => $value) {
+            if($this->promocodeRepository->check($user->id, $value)){
+                $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
+                $order_price = $order_price <= $promocode->offer ? 0 : $order_price - $promocode->offer;
+                $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
+                array_push($promocode_ids, $promocode->id);
+            }
         }
+        if($order_price == 0){
+            $product_pass=[];
+            foreach ($product_ids as $key => $product) {
+                array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity']]);
+            }
+            $result = $this->addProducts($user->id, $product_pass);
+        }else{
+            if(count($product_free)>0){
+                $result = $this->addProducts($user->id, $product_free);
+            }
+
+        }
+        
         $request_data['price'] = $order_price;
         $order = $user->orders()->create($request_data);
         $order->products()->attach($product_ids);
-        
+        $order->promocodes()->attach($promocode_ids);
         if($order_price>0){
             $ecpay_form = $this->ecpay_form($order);
             $order['form_html'] = $ecpay_form;
@@ -81,7 +103,6 @@ class OrderController extends Controller
         $order['products'] = $product_data;
         return $this->successResponse($order?$order:[]);
     }
-
     public function show(Request $request, $id)
     {
         $user = $request->user();
@@ -126,11 +147,18 @@ class OrderController extends Controller
             if(count($product_data)>0){
                 $this->addProducts($user->id, $product_data);
             }
+        }else if($order->status==2 || $order->status==4){
+            $promocodes = $order->promocodes;
+            $cancel_promocode_ids = [];
+            foreach ($promocodes as $key => $promocode) {
+                $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                array_push($cancel_promocode_ids, $promocode->id); 
+            }
+            $order->promocodes()->detach($cancel_promocode_ids);
         }
 
         return $this->successResponse($order?$order:[]);
     }
-
     public function destroy(Request $request, $id)
     {
         $user = $request->user();
@@ -139,12 +167,18 @@ class OrderController extends Controller
         }
         $order = $this->orderRepository->get($id);
         if($order && $order->status==0){
+            $promocodes = $order->promocodes;
+            $cancel_promocode_ids = [];
+            foreach ($promocodes as $key => $promocode) {
+                $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                array_push($cancel_promocode_ids, $promocode->id); 
+            }
+            $order->promocodes()->detach($cancel_promocode_ids);
             $this->orderRepository->delete($id);  
             return $this->successResponse(['id'=>$id]);
         }
         return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
     }
-
     protected function orderValidator(array $data)
     {
         return Validator::make($data, [
@@ -161,9 +195,10 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $order = $user->orders()->with(['products'])->find($id);
+        $order = $user->orders()->with(['products','promocodes'])->find($id);
         $ecpay_form = $this->ecpay_form($order);
         $order['products'] = $order->products;
+        $order['promocodes'] = $order->promocodes;
         $order['form_html'] = $ecpay_form;
         return $this->successResponse($order?$order:[]);
     }
@@ -196,19 +231,15 @@ class OrderController extends Controller
                 ];
             array_push($items, $item);
         }
-        switch ($order->paymentType) {
-            case 'credit':
-                $paymentMethod = \ECPay_PaymentMethod::Credit;
-                break;
-            case 'atm':
-                $paymentMethod = \ECPay_PaymentMethod::ATM;
-                break;
-            case 'atm':
-                $paymentMethod = \ECPay_PaymentMethod::BARCODE;
-                break;
-            default:
-                $paymentMethod = \ECPay_PaymentMethod::Credit;
-                break;
+        foreach ($order->promocodes as $key => $promocode) {
+            $item = [
+                'Name' => $promocode->name, 
+                'Price' => $promocode->offer, 
+                'Currency'=> 'NTD', 
+                'Quantity' => 1, 
+                'URL' => "#"
+                ];
+            array_push($items, $item);
         }
         $data=[
             'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
@@ -261,8 +292,12 @@ class OrderController extends Controller
         Ecpay::set($data, null, $extendData);
         return Ecpay::checkOutString();
     }
-    public function priceTrial(Request $request,PromocodeRepository $promocodeRepository)
+    public function trial(Request $request)
     {
+        $validator = $this->orderValidator($request->all());
+        if($validator->fails()){
+            return $this->validateErrorResponse($validator->errors()->all());
+        }
         $user = $request->user();
         $products = $request->input('products',[]);
         $promocodes = $request->input('promocodes',[]);
@@ -272,10 +307,10 @@ class OrderController extends Controller
             $result['total_price'] += $product->price * (int)$value['quantity'];
         }
         foreach ($promocodes as $key => $value) {
-            if(!$promocodeRepository->check($user->id, $value)){
+            if(!$this->promocodeRepository->check($user->id, $value)){
                 $result['promocodes'][$value]=['msg'=>'error'];
             }else{
-                $promocode = $promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
+                $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
                 $result['promocodes'][$value]=['name'=>$promocode->name, 'offer'=>$promocode->offer];
                 $result['total_price'] = $result['total_price'] <= $promocode->offer ? 0 : $result['total_price'] - $promocode->offer;
             }

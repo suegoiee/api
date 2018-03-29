@@ -44,4 +44,8 @@ class Order extends UanalyzeModel
         $no =  '103'.str_pad($this->id, 5, '0', STR_PAD_LEFT);
         return $no;
     }
+    public function promocodes()
+    {
+        return $this->belongsToMany('App\Promocode');
+    }
 }
