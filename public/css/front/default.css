@@ -294,7 +294,7 @@ hr { border: solid #E8E8E8; border-width: 1px 0 0; clear: both; margin: 35px 0 3
    text-decoration: none;
    outline: 0;
    color: #ffa500;
-   
+    font-weight: bold;
    -webkit-transition: color .3s ease-in-out;
    -moz-transition: color .3s ease-in-out;
    -o-transition: color .3s ease-in-out;

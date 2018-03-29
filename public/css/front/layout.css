@@ -217,7 +217,6 @@ ul#nav li a {
 }
 a, a:visited {
     text-decoration: none;
-    font-weight: bold;
     outline: 0;
     -webkit-transition: color .3s ease-in-out;
     -moz-transition: color .3s ease-in-out;
@@ -494,7 +493,7 @@ ul#nav ul li a {
 
 #main ul {
     list-style: square outside;
-    //margin-left: 22px;
+    margin-left: 23px;
 }
 
 .pagenav ul{
@@ -765,7 +764,7 @@ ol.commentlist {
 
 .pagenav span {
     font: 18px/30px 'opensans-regular', sans-serif;
-    color: #ffa500;
+    color: #ea7d00;
     font-weight: bold;
     margin: 0 15px;
 }
