@@ -163,12 +163,16 @@ h1, h2, h3, h4, h5, h6 {
    text-rendering: optimizeLegibility;
 }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit;  font-family: 'Microsoft JhengHei', 'Heiti TC', 'opensans-regular', sans-serif !important; }
-h1 { font-size: 52px; line-height: 54px; margin-bottom: 10px; margin-top: 10px; font-weight: bold; color: #ff7800; letter-spacing:-1px; }
-h2 { font-size: 41px; line-height: 45px; margin-bottom: 8px; margin-top: 8px; font-weight: bold; color: #ff7800; }
-h3 { font-size: 32px; line-height: 42px; margin-bottom: 6px; margin-top: 6px; font-weight: bold; color: #ff7800; }
+h1 { font-size: 52px; line-height: 54px; margin-bottom: 14px; margin-top: 14px; font-weight: bold; color: #ff7800; letter-spacing:-1px; }
+h2 { font-size: 41px; line-height: 45px; margin-bottom: 11px; margin-top: 11px; font-weight: bold; color: #ff7800; }
+h3 { font-size: 32px; line-height: 42px; margin-bottom: 8px; margin-top: 8px; font-weight: bold; color: #ff7800; }
 h4 { font-size: 25px; line-height: 39px; margin-bottom: 6px; margin-top: 6px; font-weight: bold; color: #4A5153; }
 h5 { font-size: 20px; line-height: 36px; color: #4A5153; }
-h6 { font-size: 16px; line-height: 33px; color: #4A5153; }
+h6 { font-size: 17px; line-height: 33px; color: #4A5153; }
+h7 { font-size: 32px; line-height: 33px; margin-bottom: 8px; margin-top: 8px; font-weight: bold; } //大連結
+h8 { font-size: 20px; line-height: 33px; } //一般連結
+h9 { font-size: 17px; line-height: 33px; } //小連結
+
 .subheader { }
 
 p { margin: 0 0 30px 0; }
@@ -181,7 +185,7 @@ p.lead {
 /* for 'em' and 'strong' tags, font-size and line-height should be same with
 the body tag due to rendering problems in some browsers */
 em { font: 15px/30px 'merriweather-italic', sans-serif; }
-strong, b { font: 15px/30px 'merriweather-bold', sans-serif; }
+/* strong, b { font: 15px/30px 'merriweather-bold', sans-serif; } */
 small { font-size: 11px; line-height: inherit; }
 
 /*	Blockquotes */
@@ -286,17 +290,17 @@ hr { border: solid #E8E8E8; border-width: 1px 0 0; clear: both; margin: 35px 0 3
 
 /*  3. Links  ------------------------------------------------------- */
 
-a, a:visited {
+#sidebar a, a:visited {
    text-decoration: none;
    outline: 0;
-   color: #93B876;
+   color: #ffa500;
    
    -webkit-transition: color .3s ease-in-out;
    -moz-transition: color .3s ease-in-out;
    -o-transition: color .3s ease-in-out;
    transition: color .3s ease-in-out;
 }
-a:hover, a:focus { color: #34393A; }
+#sidebar a:hover, a:focus { color: #34393A; }
 p a, p a:visited { line-height: inherit; }
 
 
@@ -453,7 +457,6 @@ video,
 iframe,
 embed,
 object {
-    margin-bottom: 20px;
    max-width: 100%;
    height: auto;
 }
