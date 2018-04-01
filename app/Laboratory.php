@@ -10,7 +10,7 @@ class Laboratory extends UanalyzeModel
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
-	protected $fillable=['user_id','title','layout','customized'];
+	protected $fillable=['user_id','title','layout','customized', 'sort'];
 
     protected $hidden=['user_id','created_at', 'updated_at', 'deleted_at'];
 
@@ -28,6 +28,6 @@ class Laboratory extends UanalyzeModel
 
 	public function products(){
         $user_id = $this->user_id;
-		return $this->belongsToMany('App\Product')->with(['users'])->withTimestamps();
+		return $this->belongsToMany('App\Product')->with(['users'])->orderBy('pivot_sort', 'ASC')->withPivot('sort')->withTimestamps();
 	}
 }

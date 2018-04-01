@@ -60,6 +60,7 @@ Route::middleware(['auth:api'])->group(function(){
 		]]);
 
 	Route::delete('/user/laboratories/{laboratory}/products','LaboratoryController@removeProducts')->name('laboratories.product.destroy');
+	Route::put('/user/laboratories/{laboratory}/products/sort','LaboratoryController@productSorted')->name('laboratories.product.sort');
 	Route::put('/user/laboratories/sort', 'LaboratoryController@sorted');
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
 			'index','show', 'store', 'update','destroy'

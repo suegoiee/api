@@ -22,12 +22,13 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->get();
+        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get();
         foreach ($laboratories as $laboratory) {
             $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
             foreach ($laboratory->products as $product) {
                 $product->installed = $product->users->where('id', $user->id)->first()->pivot->installed;
                 $product->deadline = $product->users->where('id', $user->id)->first()->pivot->deadline;
+                $product->sort = $product->pivot->sort;
                 foreach ( $product->collections as $collection){
                     $collection->makeHidden(['avatar_small','avatar_detail']);
                 }
@@ -82,7 +83,7 @@ class LaboratoryController extends Controller
         foreach ($laboratory->products as $product) {
             $product->installed = $product->users->first()->pivot->installed;
             $product->deadline = $product->users->first()->pivot->deadline;
-            $product->sort = $product->users->first()->pivot->sort;
+            $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){
                 $collection->makeHidden(['avatar_small','avatar_detail']);
             }
@@ -191,17 +192,40 @@ class LaboratoryController extends Controller
     }
     public function sorted(Request $request)
     {
-        $validator = $this->laboratoryValidator($request->all());
+        $user = $request->user();
+        $validator = Validator::make($request->all(), [
+            'sorted_laboratories.*' => 'exists:laboratories,id,user_id,'.$user->id.',deleted_at,NULL']);   
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $user_laboratories=$request->user()->laboratories();
         $sorted_laboratories = $request->input('sorted_laboratories', []);
         foreach ($sorted_laboratories as $key => $laboratory) {
-            $user_laboratories->where('id',$laboratory)->update(['sort'=>$key]);
+            $user->laboratories()->where('id', $laboratory)->update(['sort' => $key]);
         }
 
-        return $this->successResponse(['sorted_laboratories'=>$sorted_laboratories]);
+        return $this->successResponse(['sorted_laboratories' => $sorted_laboratories]);
+    }
+    public function productSorted(Request $request, $id)
+    {
+        $user = $request->user();
+        if(!($this->laboratoryRepository->isOwner($user->id,$id))){
+            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
+        }
+        $validator = Validator::make($request->all(), [
+            'sorted_products.*' => 'exists:laboratory_product,product_id,laboratory_id,'.$id
+        ]);
+        if($validator->fails()){
+            return $this->validateErrorResponse($validator->errors()->all());
+        }
+        $laboratory = $user->laboratories()->find($id);
+        $laboratory_products=$laboratory->products();
+
+        $sorted_products = $request->input('sorted_products', []);
+        foreach ($sorted_products as $key => $product) {
+            $laboratory_products->updateExistingPivot($product, ['sort'=>$key]);
+        }
+
+        return $this->successResponse(['sorted_products'=>$sorted_products]);
     }
 
     protected function laboratoryValidator(array $data , $user_id)
@@ -214,6 +238,7 @@ class LaboratoryController extends Controller
             'products.*' => 'exists:product_user,product_id,user_id,'.$user_id.',deleted_at,NULL',
         ]);        
     }
+
     private function create_avatar($laboratory, $avatar){
         if(!$avatar){
             return false;
