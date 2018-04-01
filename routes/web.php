@@ -71,7 +71,11 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/user/lab_avatar/{module_id}','AvatarController@update')->name('laboratories.avatar.update');
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
 
+	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
+
 	Route::get('/user/notifications','NotificationController@index')->name('notifications.index');
+
+	Route::put('/user/notifications/{notification}','NotificationController@update')->name('notifications.update');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -95,8 +99,6 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/blogs','Front\ArticleController@index');
 	Route::get('/blogs/{slug}','Front\ArticleController@index');
 	Route::get('/archives/{slug}','Front\ArticleController@show');
-
-	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
 });
 
 

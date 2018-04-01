@@ -33,7 +33,7 @@ class ReceiveProducts extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','mail'];
     }
 
     /**
@@ -44,10 +44,18 @@ class ReceiveProducts extends Notification
      */
     public function toMail($notifiable)
     {
+        $products = $this->user->products()->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
+        foreach ($products as $key => $product) {
+            $product->deadline = $product->pivot->deadline;
+        }
+        $data = [
+            'products' => $products,
+            'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
+        ];
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject(env('APP_NAME').' 產品贈送')
+            ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
+            ->view('emails.receiveProducts', $data);
     }
 
     /**
