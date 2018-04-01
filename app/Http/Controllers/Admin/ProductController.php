@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\Notifications\ReceiveProducts;
 use App\Repositories\TagRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
@@ -8,11 +9,13 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends AdminController
 {	
     protected $tagRepository;
-    public function __construct(ProductRepository $productRepository, TagRepository $tagRepository)
+    protected $userRepository;
+    public function __construct(ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
     {
         $this->moduleName='product';
         $this->moduleRepository = $productRepository;
         $this->tagRepository = $tagRepository;
+        $this->userRepository = $userRepository;
 
         $this->token = $this->clientCredentialsGrantToken();
     }
@@ -170,10 +173,14 @@ class ProductController extends AdminController
     }
     public function assigned(Request $request)
     {   
-        $products = $request->input('products', []);
-        $users = $request->input('users', []);
-        foreach ($users as $key => $user) {
-            $this->addProducts($user, $products);
+        $product_ids = $request->input('products', []);
+        $user_ids = $request->input('users', []);
+        foreach ($user_ids as $key => $user_id) {
+            $result = $this->addProducts($user_id, $product_ids);
+            if($result['status']=='success'){
+                $user = $this->userRepository->get($user_id);
+                $user->notify(new ReceiveProducts($user, $product_ids));
+            }
         }
         return redirect('admin/products');
     }

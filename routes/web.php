@@ -70,6 +70,8 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::get('/user/lab_avatar/{module_id}','AvatarController@show')->name('laboratories.avatar.show');
 	Route::put('/user/lab_avatar/{module_id}','AvatarController@update')->name('laboratories.avatar.update');
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
+
+	Route::get('/user/notifications','NotificationController@index')->name('notifications.index');
 });
 
 Route::middleware(['web'])->group(function(){

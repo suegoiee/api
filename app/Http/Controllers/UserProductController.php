@@ -51,11 +51,12 @@ class UserProductController extends Controller
         $products = [];
         $result = [];
         foreach ($_products as $key => $product) {
+            $quantity = isset($product['quantity'])? (int)$product['quantity'] : 1;
             $product_data = $this->productRepository->get($product["id"]);
             $old_product = $user->products()->where('id',$product["id"])->first();
 
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            $expiration = (int)$product_data->expiration * (int)$product['quantity'];
+            $expiration = (int)$product_data->expiration * $quantity;
             $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
             $collections =[];
