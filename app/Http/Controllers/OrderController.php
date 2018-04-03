@@ -69,9 +69,12 @@ class OrderController extends Controller
         foreach ($promocodes as $key => $value) {
             if($this->promocodeRepository->check($user->id, $value)){
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
-                $order_price = $order_price <= $promocode->offer ? 0 : $order_price - $promocode->offer;
-                $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
-                array_push($promocode_ids, $promocode->id);
+                if($promocode->used_at!=null && $promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
+                   
+                    $order_price = $order_price <= $promocode->offer ? 0 : $order_price - $promocode->offer;
+                    $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
+                    array_push($promocode_ids, $promocode->id);
+                }
             }
         }
         if($order_price == 0){
@@ -308,11 +311,17 @@ class OrderController extends Controller
         }
         foreach ($promocodes as $key => $value) {
             if(!$this->promocodeRepository->check($user->id, $value)){
-                $result['promocodes'][$value]=['msg'=>'error'];
+                $result['promocodes'][$value]=[ 'msg' => 'not exists','error'=>1];
             }else{
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
-                $result['promocodes'][$value]=['name'=>$promocode->name, 'offer'=>$promocode->offer];
-                $result['total_price'] = $result['total_price'] <= $promocode->offer ? 0 : $result['total_price'] - $promocode->offer;
+                if($promocode->used_at!=null){
+                    $result['promocodes'][$value]=[ 'msg' => 'used','error'=>2];
+                }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
+                    $result['promocodes'][$value]=[ 'msg' => 'Expired','error'=>3];
+                }else{
+                    $result['promocodes'][$value]=['name'=>$promocode->name, 'offer'=>$promocode->offer];
+                    $result['total_price'] = $result['total_price'] <= $promocode->offer ? 0 : $result['total_price'] - $promocode->offer;
+                }
             }
         }
         return $this->successResponse($result);
