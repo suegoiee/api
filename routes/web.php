@@ -176,6 +176,8 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/products/{product}','Admin\ProductController@show')->name('products.show')->where('product','[0-9]+');
 	Route::get('/products/assigned','Admin\ProductController@assignedView');
 	Route::post('/products/assigned','Admin\ProductController@assigned');
+	Route::get('/products/sorted','Admin\ProductController@sortedView');
+	Route::post('/products/sorted','Admin\ProductController@sorted');
 	Route::post('/ckeditor/images','CkeditorImageController@store')->name('ckeditor.image.store');
 	
 	Route::get('/tags/{tag}/delete','Admin\TagController@destroy');

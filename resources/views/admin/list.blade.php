@@ -13,7 +13,10 @@
             <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/import')}}" id="import" class="btn btn-info" >{{trans($module_name.'.admin.import_label')}}</a></li>
         @endif
         @if(@in_array('assigned',$actions))
-            <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/assigned')}}" id="assigned" class="btn btn-info" >{{trans($module_name.'.admin.assigned_label')}}</a></li>
+            <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/assigned')}}" id="assigned" class="btn btn-primary" >{{trans($module_name.'.admin.assigned_label')}}</a></li>
+        @endif
+        @if(@in_array('sorted',$actions))
+            <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/sorted')}}" id="sorted" class="btn btn-success" >{{trans($module_name.'.admin.sorted_label')}}</a></li>
         @endif
     </ol>
     @include('admin.list_error')
