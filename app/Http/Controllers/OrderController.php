@@ -69,8 +69,8 @@ class OrderController extends Controller
         foreach ($promocodes as $key => $value) {
             if($this->promocodeRepository->check($user->id, $value)){
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
-                if($promocode->used_at!=null && $promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
-                   
+                if( !isset($promocode->used_at) && (!isset($promocode->deadline) || strtotime($promocode->deadline. ' +1 day') > time())){
+                    
                     $order_price = $order_price <= $promocode->offer ? 0 : $order_price - $promocode->offer;
                     $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
                     array_push($promocode_ids, $promocode->id);
