@@ -5,6 +5,8 @@ return [
 		'menu_title'=> $module_name.'管理',
     	'title'=> $module_name.'管理',
     	'new_label'=>'新增'.$module_name,
+        'sorted_label'=>$module_name.'排序',
+        'sortedView_title'=>$module_name.'排序',
     	'create_title'=>'新增'.$module_name,
         'edit_label'=>'編輯'.$module_name,
         'edit_title'=>'編輯'.$module_name,
