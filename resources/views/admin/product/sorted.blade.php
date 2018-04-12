@@ -2,6 +2,7 @@
     <div class="cursor"></div>
     <div class="pic">{{trans($module_name.'.admin.avatar_small')}}</div>
     <div class="name">{{trans($module_name.'.admin.name')}}</div>
+    <div class="type">{{trans($module_name.'.admin.type')}}</div>
     <div class="category">{{trans($module_name.'.admin.tags')}}</div>
 </li>
 <ul id="sortable" class="list-group mb-5">
@@ -14,6 +15,7 @@
                 @endif
             </div>
             <div class="name">{{$product->name}}</div>
+            <div class="type">{{$product->type}}</div>
             <div class="category">
                 @foreach($product->tags as $tag)
                     {{$tag->name}}
