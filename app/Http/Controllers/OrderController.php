@@ -45,6 +45,7 @@ class OrderController extends Controller
         }
 
         $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType']);
+        $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
         $request_data['use_invoice'] =  $request->input('use_invoice',0);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $products = $request->input('products',[]);
