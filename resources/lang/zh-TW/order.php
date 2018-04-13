@@ -26,6 +26,7 @@ return [
     	'products' => '產品',
         'created_at' => '訂購日期',
         'paymentType'=>'付款方式',
+        'paymentType_'=>'免費',
         'paymentType_credit'=>'信用卡',
         'paymentType_webatm'=>'網路ATM',
         'paymentType_atm'=>'ATM櫃員機',
