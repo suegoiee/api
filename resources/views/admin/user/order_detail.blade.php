@@ -6,6 +6,7 @@
                     <th>{{trans('order.admin.id')}}</th>
                     <th>{{trans('order.admin.price')}}</th>
                     <th>{{trans('order.admin.status')}}</th>
+                    <th>{{trans('order.admin.paymentType')}}</th>
                     <th>{{trans('order.admin.created_at')}}</th>
                 </tr>
             </thead>

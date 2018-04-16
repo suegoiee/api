@@ -15,7 +15,7 @@ $(function(){
     //CKEDITOR.replace( 'local_related_5',ckeditor_config);
     //CKEDITOR.replace( 'foreign_related',ckeditor_config);
     // CKEDITOR.replace( 'faq', ckeditor_config);
-    CKEDITOR.config.height=100;
+    CKEDITOR.config.height=400;
     CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
     CKEDITOR.config.removeButtons='About',
     CKEDITOR.config.extraPlugins = 'youtube';

@@ -19,7 +19,7 @@ class ReceiveProducts extends Notification
      *
      * @return void
      */
-    public function __construct($user, $product_ids)
+    public function __construct($user, $product_ids = [])
     {
         $this->product_ids = $product_ids;
         $this->user = $user;
@@ -44,7 +44,7 @@ class ReceiveProducts extends Notification
      */
     public function toMail($notifiable)
     {
-        $products = $this->user->products()->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
+        $products = $this->user->products()->whereIn('id', $this->product_ids)->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
         foreach ($products as $key => $product) {
             $product->deadline = $product->pivot->deadline;
         }
@@ -66,7 +66,7 @@ class ReceiveProducts extends Notification
      */
     public function toArray($notifiable)
     {
-        $products = $this->user->products()->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
+        $products = $this->user->products()->whereIn('id', $this->product_ids)->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
         foreach ($products as $key => $product) {
             $product->deadline = $product->pivot->deadline;
         }

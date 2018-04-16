@@ -25,7 +25,7 @@ class ProductController extends AdminController
         $product = $this->moduleRepository->getsWith(['tags','collections'],[],['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
             'module_name'=> $this->moduleName,
-            'actions'=>['assigned','new'],
+            'actions'=>['assigned','sorted','new'],
             'table_data' => $product,
             'table_head' =>['id','name','type','model','price','status'],
             'table_formatter' =>['status'],
@@ -181,6 +181,23 @@ class ProductController extends AdminController
                 $user = $this->userRepository->get($user_id);
                 $user->notify(new ReceiveProducts($user, $product_ids));
             }
+        }
+        return redirect('admin/products');
+    }
+    public function sortedView()
+    {
+        $products = $this->moduleRepository->getsWith([],['status'=>1], ['sort'=>'ASC']);
+        $data = [
+            'module_name'=> $this->moduleName,
+            'products' =>$products,
+        ];
+        return view('admin.sorted', $data);
+    }
+    public function sorted(Request $request)
+    {   
+        $product_ids = $request->input('products', []);
+        foreach ($product_ids as $key => $product_id) {
+           $this->moduleRepository->update($product_id, ['sort'=>$key]);
         }
         return redirect('admin/products');
     }

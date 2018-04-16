@@ -4,7 +4,7 @@ $(function(){
         removeButtons:'About'
     }
     CKEDITOR.replace( 'articleContent',ckeditor_config);
-    CKEDITOR.config.height=100;
+    CKEDITOR.config.height=400;
     CKEDITOR.config.extraPlugins = 'uploadimage';
     CKEDITOR.config.uploadUrl = url('admin/ckeditor/images'),
     CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),

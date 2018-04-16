@@ -21,7 +21,7 @@
     <div class="col-sm-10">
         <select class="form-control chosen-select" id="users" name="users[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
             @foreach($users as $user)
-                <option value="{{$user->id}}">{{$user->profile->nickname}}</option>
+                <option value="{{$user->id}}">{{$user->email}} (No.{{$user->id}}, {{$user->profile->nickname}})</option>
             @endforeach
         </select>
     </div>

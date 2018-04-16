@@ -191,9 +191,12 @@ class UserProductController extends Controller
         return $date->addDays($days);
     }
     private function create_avatar($laboratory, $avatar){
-        $contents = new File(storage_path('app/public/'.$avatar->path));
-        $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
-        $data = ['path' => $path,'type'=>'normal'];
-        return $laboratory->avatars()->create($data);
+        if(Storage::disk('public')->exists($avatar->path)){
+            $contents = new File(storage_path('app/public/'.$avatar->path));
+            $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
+            $data = ['path' => $path,'type'=>'normal'];
+            return $laboratory->avatars()->create($data);
+        }
+        return false;
     }
 }
