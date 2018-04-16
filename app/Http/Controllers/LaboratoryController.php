@@ -24,10 +24,11 @@ class LaboratoryController extends Controller
         $user = $request->user();
         $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get();
         foreach ($laboratories as $laboratory) {
-            $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+            $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
             foreach ($laboratory->products as $product) {
-                $product->installed = $product->users->where('id', $user->id)->first()->pivot->installed;
-                $product->deadline = $product->users->where('id', $user->id)->first()->pivot->deadline;
+                $product_user = $product->users()->find($user->id);
+                $product->installed = $product_user ? $product_user->pivot->installed : 0;
+                $product->deadline = $product_user ? $product_user->pivot->deadline : null;
                 $product->sort = $product->pivot->sort;
                 foreach ( $product->collections as $collection){
                     $collection->makeHidden(['avatar_small','avatar_detail']);
@@ -79,10 +80,11 @@ class LaboratoryController extends Controller
         }
 
         $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->find($id);
-        $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+        $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
         foreach ($laboratory->products as $product) {
-            $product->installed = $product->users->first()->pivot->installed;
-            $product->deadline = $product->users->first()->pivot->deadline;
+            $product_user = $product->users()->find($user->id);
+            $product->installed = $product_user ? $product_user->pivot->installed : 0;
+            $product->deadline = $product_user ? $product_user->pivot->deadline : null;
             $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){
                 $collection->makeHidden(['avatar_small','avatar_detail']);
