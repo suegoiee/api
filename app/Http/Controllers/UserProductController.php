@@ -53,12 +53,14 @@ class UserProductController extends Controller
         foreach ($_products as $key => $product) {
             $quantity = isset($product['quantity'])? (int)$product['quantity'] : 1;
             $product_data = $this->productRepository->get($product["id"]);
-            $old_product = $user->products()->where('id',$product["id"])->first();
 
+            $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
             $expiration = (int)$product_data->expiration * $quantity;
             $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
+            $collections_ids = [];
+            $collection_products = [];
             $collections =[];
             if($product_data->type=='collection'){
                 if($installed==0){
@@ -66,20 +68,35 @@ class UserProductController extends Controller
                         $customized = $product_data->model ? 0 : 1;
                         $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized ]);
                         $this->create_avatar($laboratory, $product_data->avatar_small);
-                        $collection_product_ids = [];
-                        foreach ($product_data->collections as $key => $collection_product) {
-                            array_push($collection_product_ids, $collection_product->id);
+                        if($customized ==1){
+                            foreach ($product_data->collections as $key => $collection_product) {
+                                $old_collection_product = $user->products()->where('id',$collection_product->id)->first();
+                                $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
+                                $collection_deadline = $this->getExpiredDate($expiration, $old_collection_deadline);
+                                $collection_installed = 1;
+                                array_push($collections_ids, $collection_product->id);
+                                $collection_products[ $collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
+                            }
+                            $laboratory->products()->syncWithoutDetaching($collections_ids);
+                        }else{
+                            $laboratory->products()->syncWithoutDetaching($product_data->id);
                         }
-                        $laboratory->products()->syncWithoutDetaching($collection_product_ids);
                     }
                     $installed = 1;
                 }
                 $collections = $product_data->collections;
             }
             $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
+            
             array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
+
+            if($product_data->type=='collection' && !$product_data->model){
+                $user->products()->syncWithoutDetaching($collection_products);
+            }else{
+                $user->products()->syncWithoutDetaching([ $product_data->id =>['deadline'=>$deadline,'installed'=>$installed]]);
+            }
         }
-        $user->products()->syncWithoutDetaching($products);
+        //$user->products()->syncWithoutDetaching($products);
 
         return $this->successResponse($result);
     }
@@ -201,11 +218,13 @@ class UserProductController extends Controller
         return $date->addDays($days);
     }
     private function create_avatar($laboratory, $avatar){
-        if(Storage::disk('public')->exists($avatar->path)){
-            $contents = new File(storage_path('app/public/'.$avatar->path));
-            $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
-            $data = ['path' => $path,'type'=>'normal'];
-            return $laboratory->avatars()->create($data);
+        if($avatar){
+            if(Storage::disk('public')->exists($avatar->path)){
+                $contents = new File(storage_path('app/public/'.$avatar->path));
+                $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
+                $data = ['path' => $path,'type'=>'normal'];
+                return $laboratory->avatars()->create($data);
+            }
         }
         return false;
     }
