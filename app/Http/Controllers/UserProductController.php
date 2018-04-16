@@ -63,9 +63,14 @@ class UserProductController extends Controller
             if($product_data->type=='collection'){
                 if($installed==0){
                     if($user->products()->where('id',$product_data->id)->count()==0){
-                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name,'customized'=>0]);
+                        $customized = $product_data->model ? 0 : 1;
+                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized ]);
                         $this->create_avatar($laboratory, $product_data->avatar_small);
-                        $laboratory->products()->syncWithoutDetaching($product_data->id);
+                        $collection_product_ids = [];
+                        foreach ($product_data->collections as $key => $collection_product) {
+                            array_push($collection_product_ids, $collection_product->id);
+                        }
+                        $laboratory->products()->syncWithoutDetaching($collection_product_ids);
                     }
                     $installed = 1;
                 }
@@ -104,9 +109,14 @@ class UserProductController extends Controller
         }
         if($product->type=='collection'){
             if($product->pivot->installed==0){
-                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0]);
+                $customized = $product->model ? 0 : 1;
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized]);
                 $this->create_avatar($laboratory, $product->avatar_small);
-                $laboratory->products()->syncWithoutDetaching($product->id);
+                $collection_product_ids = [];
+                foreach ($product->collections as $key => $collection_product) {
+                    array_push($collection_product_ids, $collection_product->id);
+                }
+                $laboratory->products()->syncWithoutDetaching($collection_product_ids);
             }
         }
         $user->products()->updateExistingPivot($product->id,['installed'=>1]);
