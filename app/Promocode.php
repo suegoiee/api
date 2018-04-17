@@ -15,7 +15,7 @@ class Promocode extends UanalyzeModel
     }
     public function getUserNameAttribute(){
         $user = $this->user;
-        return $user ? $user->profile->nickname : 0 ;
+        return $user ? $user->email: 0;
     }
     public function order()
     {
