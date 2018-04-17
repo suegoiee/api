@@ -79,6 +79,9 @@ class UserProductController extends Controller
                             }
                             $laboratory->products()->syncWithoutDetaching($collections_ids);
                         }else{
+                            foreach ($product_data->collections as $key => $collection_product) {
+                                array_push($collections_ids, $collection_product->id);
+                            }
                             $laboratory->products()->syncWithoutDetaching($product_data->id);
                         }
                     }

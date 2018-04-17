@@ -212,4 +212,6 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/promocodes/{promocode}','Admin\PromocodeController@show')->name('promocodes.show')->where('promocode','[0-9]+');
 	Route::get('/promocodes/import','Admin\PromocodeController@importView');
 	Route::post('/promocodes/import','Admin\PromocodeController@import');
+
 });
+Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
