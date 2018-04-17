@@ -53,6 +53,7 @@ class LaboratoryController extends Controller
 
         $request_data = $request->only(['title','layout','sort']);
         $request_data['customized']=1;
+        $request_data['sort'] = isset($request_data['sort']) ? $request_data['sort']:0;
         $laboratory = $user->laboratories()->create($request_data);
 
         $products = $request->input('products',[]);
