@@ -19,7 +19,7 @@ class ServerTaskController extends AdminController
             }
             if(!$laboratory->customized && !$laboratory->collection_product_id){
                 $product = $laboratory->products->first();
-                $this->output_msg($laboratory->title.' => '.($product? $product->name : 'null'));
+                $this->output_msg($laboratory->title);
                 $laboratory->update(['collection_product_id' => $product ? $product->id : 0]);
                 $laboratory_products = [];
                 foreach ($product->collections as $key => $collection_product) {

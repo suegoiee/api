@@ -22,7 +22,7 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get();
+        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get()->makeHidden(['collection_product_id']);
         foreach ($laboratories as $laboratory) {
             $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
             
@@ -30,7 +30,7 @@ class LaboratoryController extends Controller
                 $collect_product = $user->products()->find($laboratory->collection_product_id);
                 $deadline = $collect_product? $collect_product->pivot->deadline:0;
             }
-            
+
             foreach ($laboratory->products as $product) {
                 $product_user = $product->users()->find($user->id);
                 if(!$laboratory->customized){
