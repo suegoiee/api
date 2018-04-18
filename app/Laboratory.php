@@ -29,13 +29,13 @@ class Laboratory extends UanalyzeModel
 	public function products(){
         $user_id = $this->user_id;
 		return $this->belongsToMany('App\Product')->with(['users'])->orderBy('pivot_sort', 'ASC')->withPivot('sort')->withTimestamps();
-	}/*
+	}
     public function collection_products(){
         $user_id = $this->user_id;
-        return $this->belongsTo('App\Product','id','collection_product_id')->with(['users'])->withPivot('sort')->withTimestamps();
+        return $this->belongsTo('App\Product','collection_product_id','id')->with(['users']);
     }
     public function getMasterAttribute()
     {
         return $this->collection_products()->first();
-    }*/
+    }
 }
