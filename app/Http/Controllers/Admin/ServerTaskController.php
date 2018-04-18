@@ -14,6 +14,9 @@ class ServerTaskController extends AdminController
     {
         $laboratories = $laboratoryRepository->gets();
         foreach ($laboratories as $key => $laboratory) {
+            if($laboratory->user_id !='0'){
+                continue;
+            }
             if(!$laboratory->customized && !$laboratory->collection_product_id){
                 $product = $laboratory->products->first();
                 $this->output_msg($laboratory->title.' => '.($product? $product->name : 'null'));

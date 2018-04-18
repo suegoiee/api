@@ -202,13 +202,19 @@ class LaboratoryController extends Controller
         }
         $laboratory = $user->laboratories()->find($id);
         $user->laboratories()->where('id',$id)->delete();
-        $products = $laboratory->products;
-        foreach ($products as $key => $product) {
-            $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
-            if($install_num==0){
-                $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+        
+        if($laboratory->customized){
+            $products = $laboratory->products;
+            foreach ($products as $key => $product) {
+                $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
+                if($install_num==0){
+                    $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+                }
             }
+        }else{
+            $user->products()->updateExistingPivot($laboratory->collection_product_id, ['installed'=>0]);
         }
+
         return $this->successResponse(['id'=>$id]);
 
     }
