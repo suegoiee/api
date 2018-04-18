@@ -14,7 +14,7 @@ class Laboratory extends UanalyzeModel
 
     protected $hidden=['user_id','created_at', 'updated_at', 'deleted_at'];
 
-	protected $appends = [ 'avatar' ];
+	protected $appends = [ 'avatar', 'master' ];
 	
 	public function avatars()
     {
@@ -30,4 +30,12 @@ class Laboratory extends UanalyzeModel
         $user_id = $this->user_id;
 		return $this->belongsToMany('App\Product')->with(['users'])->orderBy('pivot_sort', 'ASC')->withPivot('sort')->withTimestamps();
 	}
+    public function collection_products(){
+        $user_id = $this->user_id;
+        return $this->belongsTo('App\Product','id','collection_product_id')->with(['users'])->withPivot('sort')->withTimestamps();
+    }
+    public function getMasterAttribute()
+    {
+        return $this->collection_products()->first();
+    }
 }
