@@ -46,12 +46,36 @@ class EcpayController extends Controller
             $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
             if($ecpay){
                 $ecpay->feedbacks()->create($feedback_data);
-                if($feedback_data['RtnCode']==1){
-                    $this->order_update($ecpay->order_id,1);
-                }else{
-                    $this->order_update($ecpay->order_id,2);
+                $order = $ecpay->order;
+                switch ($order->paymentType) {
+                    case 'credit':case 'webatm':
+                        if($feedback_data['RtnCode']==1){
+                            $this->order_update($ecpay->order_id,1);
+                        }else{
+                            $this->order_update($ecpay->order_id,2);
+                        }
+                        return '1|OK';
+                    case 'atm':
+                        if($feedback_data['RtnCode']==1){
+                            $this->order_update($ecpay->order_id,1);
+                        }else if($feedback_data['RtnCode']==2){
+                            $this->order_update($ecpay->order_id,3);
+                        }else{
+                            $this->order_update($ecpay->order_id,4);
+                        }
+                        return '1|OK';
+                    case 'barcode':case 'cvs':
+                        if($feedback_data['RtnCode']==1){
+                            $this->order_update($ecpay->order_id,1);
+                        }else if($feedback_data['RtnCode']==10100073){
+                            $this->order_update($ecpay->order_id,3);
+                        }else{
+                            $this->order_update($ecpay->order_id,4);
+                        }
+                        return '1|OK';
+                    default:
+                        return '0|Payment type error';
                 }
-                return '1|OK';
             }else{
                 return '0|Ecpay record not found';
             }

@@ -6,6 +6,7 @@
                     <th>{{trans('order.admin.id')}}</th>
                     <th>{{trans('order.admin.price')}}</th>
                     <th>{{trans('order.admin.status')}}</th>
+                    <th>{{trans('order.admin.paymentType')}}</th>
                     <th>{{trans('order.admin.created_at')}}</th>
                 </tr>
             </thead>
@@ -15,6 +16,7 @@
                     <td>{{$order->id}}</td>
                     <td>{{$order->price}}</td>
                     <td>{{trans('order.admin.status_'.$order->status)}}</td>
+                    <td>{{trans('order.admin.paymentType_'.$order->paymentType)}}</td>
                     <td>{{$order->created_at}}</td>
                 </tr>
                 @endforeach

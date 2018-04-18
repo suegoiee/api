@@ -50,10 +50,9 @@
 	vertical-align: inherit;
 	max-height: 100%
 }
-.list-group-item .category{
-	width: 10%;
-}
 .list-group-item .type{
 	width: 10%;
 }
-
+.list-group-item .category{
+	width: 10%;
+}

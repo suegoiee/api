@@ -48,9 +48,10 @@ Route::middleware(['auth:api'])->group(function(){
 		]]);
 	Route::put('/user/orders/{order}/payment','OrderController@orderPayment');
 	Route::resource('/user/orders', 'OrderController', ['only' => [
-			'index','show', 'store','destroy'
+			'index','show','store','destroy'
 		]]);
-
+	Route::post('/user/orders/trial','OrderController@trial')->name('orders.trial');
+	
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
 	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');
 	Route::put('/user/products/sort', 'UserProductController@sorted');
@@ -59,6 +60,7 @@ Route::middleware(['auth:api'])->group(function(){
 		]]);
 
 	Route::delete('/user/laboratories/{laboratory}/products','LaboratoryController@removeProducts')->name('laboratories.product.destroy');
+	Route::put('/user/laboratories/{laboratory}/products/sort','LaboratoryController@productSorted')->name('laboratories.product.sort');
 	Route::put('/user/laboratories/sort', 'LaboratoryController@sorted');
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
 			'index','show', 'store', 'update','destroy'
@@ -68,6 +70,12 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::get('/user/lab_avatar/{module_id}','AvatarController@show')->name('laboratories.avatar.show');
 	Route::put('/user/lab_avatar/{module_id}','AvatarController@update')->name('laboratories.avatar.update');
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
+
+	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
+
+	Route::get('/user/notifications','NotificationController@index')->name('notifications.index');
+
+	Route::put('/user/notifications/{notification}','NotificationController@update')->name('notifications.update');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -135,15 +143,20 @@ Route::middleware(['client:company'])->group(function(){
 	Route::put('/companies/{company}','StockController@update')->name('companies.update');
 	Route::delete('/companies/{company}','StockController@destroy')->name('companies.destroy');
 });
-
 Route::middleware(['client:article'])->group(function(){
 	Route::post('/articles','ArticleController@store')->name('articles.store');
 	Route::put('/articles/{article}','ArticleController@update')->name('articles.update');
 	Route::delete('/articles/{article}','ArticleController@destroy')->name('articles.destroy');
 });
+Route::middleware(['client:promocode'])->group(function(){
+	Route::get('/promocodes','PromocodeController@index')->name('promocodes.index');
+	Route::post('/promocodes','PromocodeController@store')->name('promocodes.store');
+	Route::put('/promocodes/{promocode}','PromocodeController@update')->name('promocodes.update');
+	Route::delete('/promocodes/{promocode}','PromocodeController@destroy')->name('promocodes.destroy');
+});
 
 //Admin
-Route::get('/ip', function(){return Request::ip();});
+//Route::get('/ip', function(){return Request::ip();});
 Route::group(['middleware' => ['ip','admin'] ],function(){
 	Route::get('/', 'HomeController@index');
 });
@@ -190,4 +203,15 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/articles/{article}/delete','Admin\ArticleController@destroy');
 	Route::delete('/articles','Admin\ArticleController@destroy');
 	Route::resource('/articles', 'Admin\ArticleController');
+
+	Route::get('/promocodes/{promocode}/delete','Admin\PromocodeController@destroy');
+	Route::delete('/promocodes','Admin\PromocodeController@destroy');
+	Route::resource('/promocodes', 'Admin\PromocodeController', ['except' => [
+    	'show'
+	]]);
+	Route::get('/promocodes/{promocode}','Admin\PromocodeController@show')->name('promocodes.show')->where('promocode','[0-9]+');
+	Route::get('/promocodes/import','Admin\PromocodeController@importView');
+	Route::post('/promocodes/import','Admin\PromocodeController@import');
+
 });
+Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');

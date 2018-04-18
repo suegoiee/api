@@ -10,6 +10,9 @@
 .actions span:hover{
 	color:#F44336;
 }
+.breadcrumb .float-right{
+	margin-left: 5px;
+}
 .pagination .page-number.active{
 	background-color: #BBDEFB;
 	border-radius:2px; 

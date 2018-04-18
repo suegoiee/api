@@ -11,7 +11,7 @@ class Order extends UanalyzeModel
     protected $dates = ['deleted_at'];
     protected $appends = ['user_nickname', 'no'];
     protected $fillable = [
-        'user_id','status','price','memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title'
+        'user_id','status','price','memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title','paymentType'
     ];
     protected $hidden = [
         'user','user_id','profile'
@@ -28,16 +28,24 @@ class Order extends UanalyzeModel
     }
 
     public function products(){
-        return $this->belongsToMany('App\Product')->select(['id','name','type','price','expiration']);
+        return $this->belongsToMany('App\Product')->select(['id','name','type','price','expiration'])->withPivot('unit_price','quantity');
     }
 
     public function getUserNicknameAttribute(){
-        $nickname = $this->user->profile->nickname;
+        $user = $this->user;
+        $profile = $user ? $this->user->profile : false;
+
+        $nickname = $profile ? $profile->nickname : '-';
+
         return $nickname;
     }
 
     public function getNoAttribute(){
         $no =  '103'.str_pad($this->id, 5, '0', STR_PAD_LEFT);
         return $no;
+    }
+    public function promocodes()
+    {
+        return $this->belongsToMany('App\Promocode');
     }
 }

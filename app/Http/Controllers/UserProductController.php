@@ -51,30 +51,56 @@ class UserProductController extends Controller
         $products = [];
         $result = [];
         foreach ($_products as $key => $product) {
-            $product_data = $this->productRepository->get($product);
-            $old_product = $user->products()->where('id',$product)->first();
+            $quantity = isset($product['quantity'])? (int)$product['quantity'] : 1;
+            $product_data = $this->productRepository->get($product["id"]);
 
+            $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-
-            $deadline = $this->getExpiredDate($product_data->expiration, $old_deadline);
-
+            $expiration = (int)$product_data->expiration * $quantity;
+            $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
+            $collections_ids = [];
+            $collection_products = [];
             $collections =[];
             if($product_data->type=='collection'){
                 if($installed==0){
                     if($user->products()->where('id',$product_data->id)->count()==0){
-                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name,'customized'=>0]);
+                        $customized = $product_data->model ? 0 : 1;
+                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized, 'collection_product_id' => $customized? 0: $product_data->id]);
                         $this->create_avatar($laboratory, $product_data->avatar_small);
-                        $laboratory->products()->syncWithoutDetaching($product_data->id);
+                        if($customized ==1){
+                            foreach ($product_data->collections as $key => $collection_product) {
+                                $old_collection_product = $user->products()->where('id',$collection_product->id)->first();
+                                $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
+                                $collection_deadline = $this->getExpiredDate($expiration, $old_collection_deadline);
+                                $collection_installed = 1;
+                                array_push($collections_ids, $collection_product->id);
+                                $collection_products[ $collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
+                            }
+                            $laboratory->products()->syncWithoutDetaching($collections_ids);
+                        }else{
+
+                            foreach ($product_data->collections as $key => $collection_product) {
+                                array_push($collections_ids, $collection_product->id);
+                            }
+                            $laboratory->products()->sync($collections_ids);
+                        }
                     }
                     $installed = 1;
                 }
                 $collections = $product_data->collections;
             }
             $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
-            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections]);
+            
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
+
+            if($product_data->type=='collection' && !$product_data->model){
+                $user->products()->syncWithoutDetaching($collection_products);
+            }else{
+                $user->products()->syncWithoutDetaching([ $product_data->id =>['deadline'=>$deadline,'installed'=>$installed]]);
+            }
         }
-        $user->products()->syncWithoutDetaching($products);
+        //$user->products()->syncWithoutDetaching($products);
 
         return $this->successResponse($result);
     }
@@ -104,9 +130,14 @@ class UserProductController extends Controller
         }
         if($product->type=='collection'){
             if($product->pivot->installed==0){
-                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0]);
+                $customized = $product->model ? 0 : 1;
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized, 'collection_product_id' => $customized? 0: $product->id ]);
                 $this->create_avatar($laboratory, $product->avatar_small);
-                $laboratory->products()->syncWithoutDetaching($product->id);
+                $collection_product_ids = [];
+                foreach ($product->collections as $key => $collection_product) {
+                    array_push($collection_product_ids, $collection_product->id);
+                }
+                $laboratory->products()->syncWithoutDetaching($collection_product_ids);
             }
         }
         $user->products()->updateExistingPivot($product->id,['installed'=>1]);
@@ -120,11 +151,13 @@ class UserProductController extends Controller
         if(!$product){
             return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
-        if($product->type=='collection'){
-            $laboratory = $product->laboratories()->where('user_id',$user->id)->first();
+        if($product->type=='collection' && $product->model ){
+            $laboratory = $user->laboratories()->where('collection_product_id', $product->id)->first();
+            
             if($laboratory){
                 $laboratory->delete();
             }
+
         }
         $request->user()->products()->updateExistingPivot($id,['installed'=>0]);
 
@@ -171,7 +204,7 @@ class UserProductController extends Controller
     protected function productValidator(array $data)
     {
         return Validator::make($data, [
-            'products.*' => 'exists:products,id',
+            'products.*.id' => 'exists:products,id',
         ]);        
     }
     private function getExpiredDate($days, $expired = 0){
@@ -191,9 +224,14 @@ class UserProductController extends Controller
         return $date->addDays($days);
     }
     private function create_avatar($laboratory, $avatar){
-        $contents = new File(storage_path('app/public/'.$avatar->path));
-        $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
-        $data = ['path' => $path,'type'=>'normal'];
-        return $laboratory->avatars()->create($data);
+        if($avatar){
+            if(Storage::disk('public')->exists($avatar->path)){
+                $contents = new File(storage_path('app/public/'.$avatar->path));
+                $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
+                $data = ['path' => $path,'type'=>'normal'];
+                return $laboratory->avatars()->create($data);
+            }
+        }
+        return false;
     }
 }

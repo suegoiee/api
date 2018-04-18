@@ -4,6 +4,7 @@ namespace App\Repositories;
 class Repository
 {
 	protected $model;
+	protected $uniqueKey;
 	public function makeHidden($attribute){
 		$this->model = $this->model->makeHidden($attribute);
 	}
@@ -64,6 +65,19 @@ class Repository
 	}
 	public function create($data){
 		return $this->model->create($data);
+	}
+	public function insertArray($array=[]){
+		$result = ['success'=>0,'errors'=>[]];
+		foreach ($array as $data) {
+			$modelData = $this->model->where($this->uniqueKey, $data[$this->uniqueKey])->first();
+			if(!$modelData){
+				$this->model->insert($data);
+				$result['success']++;
+			}else{
+				array_push($result['errors'], $modelData);
+			}
+        }
+        return $result;
 	}
 	public function update($id,$data){
 		$this->model->where($this->model->getKeyName(),$id)->update($data);
