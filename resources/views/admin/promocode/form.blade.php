@@ -38,7 +38,7 @@
     <label class="form-control-label col-sm-2" for="user_id">{{trans($module_name.'.admin.user_id')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
     	 <select class="chosen-select" id="user_id" name="user_id" data-placeholder="{{trans('form.do_select')}}">
-    	 	<option hidden selected> {{trans('form.do_select')}}</option>
+    	 	<option hidden selected value="0"> {{trans('form.do_select')}}</option>
             @foreach($users as $user)
                 <option value="{{$user->id}}" {{$data && $data->user_id == $user->id ? 'selected':''}} >{{$user->email}} ( No.{{$user->id}}, {{$user->profile->nickname}})</option>
             @endforeach
