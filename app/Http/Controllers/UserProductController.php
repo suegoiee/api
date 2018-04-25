@@ -66,7 +66,7 @@ class UserProductController extends Controller
                 if($installed==0){
                     if($user->products()->where('id',$product_data->id)->count()==0){
                         $customized = $product_data->model ? 0 : 1;
-                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized, 'collection_product_id' => $customized? 0: $product_data->id]);
+                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized, 'collection_product_id' => $product_data->id]);
                         $this->create_avatar($laboratory, $product_data->avatar_small);
                         if($customized ==1){
                             foreach ($product_data->collections as $key => $collection_product) {
@@ -131,7 +131,7 @@ class UserProductController extends Controller
         if($product->type=='collection'){
             if($product->pivot->installed==0){
                 $customized = $product->model ? 0 : 1;
-                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized, 'collection_product_id' => $customized? 0: $product->id ]);
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized, 'collection_product_id' => $product->id ]);
                 $this->create_avatar($laboratory, $product->avatar_small);
                 $collection_product_ids = [];
                 foreach ($product->collections as $key => $collection_product) {
