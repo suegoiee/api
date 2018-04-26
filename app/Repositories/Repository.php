@@ -37,8 +37,12 @@ class Repository
 		$query = $this->model->with($with);
 		foreach ($where as $key => $value) {
 			$field_array = explode('.', $key);
-			if(count($field_array)>1){ 
-				$query = $query->where($field_array[0], $field_array[1], $value);
+			if(count($field_array)>1){
+				if($field_array[1] == 'in'){
+					$query = $query->whereIn($field_array[0], $value);
+				}else{
+					$query = $query->where($field_array[0], $field_array[1], $value);
+				}
 			}else{
 				$query = $query->where($key,$value);
 			}

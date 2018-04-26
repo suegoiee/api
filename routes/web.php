@@ -27,6 +27,9 @@ Route::post('/ecpay/feedback','EcpayController@feedback');
 Route::get('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/auth/facebook', 'Auth\FacebookController@login');
 
+Route::get('/stocks/models', 'StockModelController@getModelProducts');
+Route::post('/stocks/models', 'StockModelController@getModelProducts');
+
 Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){
