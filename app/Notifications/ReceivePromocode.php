@@ -52,7 +52,7 @@ class ReceivePromocode extends Notification
         return (new MailMessage)
             ->subject(env('APP_NAME').' 優惠券贈送')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->view('emails.receivePromocode', $data);
+            ->markdown('emails.receivePromocode', $data);
     }
 
     /**
@@ -63,7 +63,7 @@ class ReceivePromocode extends Notification
      */
     public function toArray($notifiable)
     {
-        $promocodes = $this->user->promocodes()->whereIn('id', $this->promocode_ids)->get()->makeHidden(['created_at', 'updated_at']);
+        $promocodes = $this->user->promocodes()->whereIn('id', $this->promocode_ids)->get()->makeHidden(['user_id','offer','order_id','send','created_at', 'updated_at','user']);
         return [
             'promocodes'=>$promocodes
         ];

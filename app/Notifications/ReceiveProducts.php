@@ -55,7 +55,7 @@ class ReceiveProducts extends Notification
         return (new MailMessage)
             ->subject(env('APP_NAME').' 產品贈送')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->view('emails.receiveProducts', $data);
+            ->markdown('emails.receiveProducts', $data);
     }
 
     /**
