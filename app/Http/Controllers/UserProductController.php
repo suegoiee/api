@@ -65,7 +65,7 @@ class UserProductController extends Controller
             if($product_data->type=='collection'){
                 if($installed==0){
                     if($user->products()->where('id',$product_data->id)->count()==0){
-                        $customized = $product_data->model ? 0 : 1;
+                        $customized = 0;
                         $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized, 'collection_product_id' => $product_data->id]);
                         $this->create_avatar($laboratory, $product_data->avatar_small);
                         if($customized ==1){
@@ -79,7 +79,6 @@ class UserProductController extends Controller
                             }
                             $laboratory->products()->syncWithoutDetaching($collections_ids);
                         }else{
-
                             foreach ($product_data->collections as $key => $collection_product) {
                                 array_push($collections_ids, $collection_product->id);
                             }
@@ -93,14 +92,14 @@ class UserProductController extends Controller
             $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
             
             array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
-
+/*
             if($product_data->type=='collection' && !$product_data->model){
                 $user->products()->syncWithoutDetaching($collection_products);
             }else{
                 $user->products()->syncWithoutDetaching([ $product_data->id =>['deadline'=>$deadline,'installed'=>$installed]]);
-            }
+            }*/
         }
-        //$user->products()->syncWithoutDetaching($products);
+        $user->products()->syncWithoutDetaching($products);
 
         return $this->successResponse($result);
     }
@@ -130,7 +129,7 @@ class UserProductController extends Controller
         }
         if($product->type=='collection'){
             if($product->pivot->installed==0){
-                $customized = $product->model ? 0 : 1;
+                $customized = 0;
                 $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized, 'collection_product_id' => $product->id ]);
                 $this->create_avatar($laboratory, $product->avatar_small);
                 $collection_product_ids = [];
@@ -151,7 +150,7 @@ class UserProductController extends Controller
         if(!$product){
             return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
-        if($product->type=='collection' && $product->model ){
+        if($product->type=='collection'){
             $laboratory = $user->laboratories()->where('collection_product_id', $product->id)->first();
             
             if($laboratory){
