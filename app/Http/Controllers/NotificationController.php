@@ -20,7 +20,7 @@ class NotificationController extends Controller
         foreach ($_notifications as $key => $notification) {
             $type = explode("\\", $notification->type);
             $status = $notification->read_at ? 1 : 0 ;
-            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data,'status'=>$status]);
+            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data, 'status'=>$status]);
         }
         return $this->successResponse($notifications);
     }
@@ -31,7 +31,7 @@ class NotificationController extends Controller
         $notifications = [];
         foreach ($_notifications as $key => $notification) {
             $type = explode("\\", $notification->type);
-            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data]);
+            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data, 'status'=>0]);
         }
         return $this->successResponse($notifications);
     }

@@ -76,7 +76,7 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
 
 	Route::get('/user/notifications','NotificationController@index')->name('notifications.index');
-
+	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@update')->name('notifications.update');
 });
 
