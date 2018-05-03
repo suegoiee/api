@@ -248,7 +248,7 @@ class OrderController extends Controller
         $data=[
             'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
             'PaymentInfoURL' => env('ECPAY_PAYMENTINFO_URL',url('/')).'/ecpay/feedback',
-            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')),
+            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')).'?order_status=created',
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,
