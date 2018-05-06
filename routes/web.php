@@ -75,9 +75,9 @@ Route::middleware(['auth:api'])->group(function(){
 
 	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
 
-	Route::get('/user/notifications','NotificationController@index')->name('notifications.index');
+	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
-	Route::put('/user/notifications/{notification}','NotificationController@update')->name('notifications.update');
+	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -156,6 +156,12 @@ Route::middleware(['client:promocode'])->group(function(){
 	Route::put('/promocodes/{promocode}','PromocodeController@update')->name('promocodes.update');
 	Route::delete('/promocodes/{promocode}','PromocodeController@destroy')->name('promocodes.destroy');
 });
+Route::middleware(['client:notificationMessage'])->group(function(){
+	Route::get('/notificationMessages','NotificationMessageController@index')->name('notificationMessages.index');
+	Route::post('/notificationMessages','NotificationMessageController@store')->name('notificationMessages.store');
+	Route::put('/notificationMessages/{notification}','NotificationMessageController@update')->name('notificationMessages.update');
+	Route::delete('/notificationMessages/{notification}','NotificationMessageController@destroy')->name('notificationMessages.destroy');
+});
 
 //Admin
 //Route::get('/ip', function(){return Request::ip();});
@@ -214,6 +220,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/promocodes/{promocode}','Admin\PromocodeController@show')->name('promocodes.show')->where('promocode','[0-9]+');
 	Route::get('/promocodes/import','Admin\PromocodeController@importView');
 	Route::post('/promocodes/import','Admin\PromocodeController@import');
+
+	Route::get('/notificationMessages/{notificationMessage}/delete','Admin\NotificationMessageController@destroy');
+	Route::delete('/notificationMessages','Admin\NotificationMessageController@destroy');
+	Route::resource('/notificationMessages', 'Admin\NotificationMessageController');
 
 });
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');

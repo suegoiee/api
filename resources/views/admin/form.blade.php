@@ -22,11 +22,18 @@
         @include('admin.'.$module_name.'.form')
         {{ $data ? method_field('PUT'):'' }}
         {{ csrf_field() }}
-        <div class="actions form-group text-center" >
+        @if(isset($send_actions))
+            <div class="actions form-group text-center" >
+                <button type="submit" name="action" value="save_exit" class="btn btn-info" id="send_btn">{{trans('form.send')}}</button>
+                <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
+            </div>
+        @else
+            <div class="actions form-group text-center" >
             <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
             <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
             <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
         </div>
+        @endif
     </form>
 @endsection
 
@@ -47,6 +54,12 @@ $(function(){
         return false;
       }
     });
+   $('#form').submit(function(event){
+        if(confirm('確定發送通知 ?')){
+            return true;
+        }
+        return false;
+   });
 });
 </script>
 <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>

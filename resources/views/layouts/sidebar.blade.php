@@ -59,6 +59,12 @@
                 <span class="text">{{trans('promocode.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/notificationMessages')}}">
+                <span class="oi oi-bullhorn"></span>
+                <span class="text">{{trans('notificationMessage.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">

@@ -12,7 +12,7 @@ class NotificationController extends Controller
 	   
     }
 
-    public function index(Request $request)
+    public function read(Request $request)
     {
         $user = $request->user();
         $_notifications = $user->notifications;//->sortBy('read_at');
@@ -36,7 +36,7 @@ class NotificationController extends Controller
         return $this->successResponse($notifications);
     }
 
-    public function update(Request $request, $id)
+    public function markRead(Request $request, $id)
     {
         $now = Carbon::now();
         $user = $request->user();
