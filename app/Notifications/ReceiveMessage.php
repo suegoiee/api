@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SendMessage extends Notification
+class ReceiveMessage extends Notification
 {
     use Queueable;
 
@@ -33,7 +33,7 @@ class SendMessage extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','mail'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -53,7 +53,7 @@ class SendMessage extends Notification
         return (new MailMessage)
             ->subject(env('APP_NAME').' 通知')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->markdown('emails.sendMessage', $data);
+            ->markdown('emails.receiveMessage', $data);
     }
 
     /**

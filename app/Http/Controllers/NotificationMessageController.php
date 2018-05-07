@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Repositories\UserRepository;
 use App\Repositories\NotificationMessageRepository;
-use App\Notifications\SendMessage;
+use App\Notifications\ReceiveMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,7 +51,7 @@ class NotificationMessageController extends Controller
         $notificationMessage = $this->notificationMessageRepository->create($request_data);
         $users = $this->userRepository->getsWith([],['id.in'=>$user_ids]);
         foreach ($users as $key => $user) {
-            $user->notify(new SendMessage($user, $request->input('content','')));
+            $user->notify(new ReceiveMessage($user, $request->input('content','')));
         }
 
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
@@ -94,7 +94,7 @@ class NotificationMessageController extends Controller
         
         $users = $this->userRepository->getsWith([],['id.in'=>$user_ids]);
         foreach ($users as $key => $user) {
-            $user->notify(new SendMessage($user, $request->input('content','')));
+            $user->notify(new ReceiveMessage($user, $request->input('content','')));
         }
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
     }
