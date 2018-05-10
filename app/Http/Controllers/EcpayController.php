@@ -97,4 +97,37 @@ class EcpayController extends Controller
             ]);
         return json_decode((string) $response->getBody(), true);
     }
+    public function result(Request $request)
+    {
+        $feedback_data = $request->all();
+        $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
+        if($ecpay){
+            $order = $ecpay->order;
+            switch ($order->paymentType) {
+                case 'credit':case 'webatm':
+                        if($feedback_data['RtnCode']==1){
+                            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=1');
+                        }
+                        return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
+                case 'atm':
+                        if($feedback_data['RtnCode']==1){
+                            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=1');
+                        }else if($feedback_data['RtnCode']==2){
+                            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=3');
+                        }
+                        return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=4');
+                case 'barcode':case 'cvs':
+                        if($feedback_data['RtnCode']==1){
+                            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=1');
+                        }else if($feedback_data['RtnCode']==10100073){
+                            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=3');
+                        }
+                        return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=4');
+                default:
+                        return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
+            }
+        }else{
+            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
+        }
+    }
 }

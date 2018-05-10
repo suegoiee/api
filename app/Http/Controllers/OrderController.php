@@ -248,7 +248,8 @@ class OrderController extends Controller
         $data=[
             'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
             'PaymentInfoURL' => env('ECPAY_PAYMENTINFO_URL',url('/')).'/ecpay/feedback',
-            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')).'?order_status=success',
+            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')),
+            'OrderResultURL' => env('ECPAY_ORDER_RESULT_URL',url('/')).'/ecpay/result',
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,
@@ -261,15 +262,16 @@ class OrderController extends Controller
         switch ($order->paymentType) {
             case 'credit':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::Credit;
-                $data['OrderResultURL'] = env('ECPAY_BACK_URL',url('/')).'ecpay/result',
                 break;
             case 'atm':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::ATM;
+                $data['ClientBackURL'] = env('ECPAY_BACK_URL',url('/')).'?order_status=3';
                 //$extendData['PaymentInfoURL'] = '';
                 //$extendData['expireDate'] = '';
                 break;
             case 'barcode':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::BARCODE;
+                $data['ClientBackURL'] = env('ECPAY_BACK_URL',url('/')).'?order_status=3';
                 //$extendData['Desc_1'] = '';
                 //$extendData['Desc_2'] = '';
                 //$extendData['Desc_3'] = '';
@@ -280,6 +282,7 @@ class OrderController extends Controller
                 break;
             case 'cvs':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::CVS;
+                $data['ClientBackURL'] = env('ECPAY_BACK_URL',url('/')).'?order_status=3';
                 //$extendData['Desc_1'] = '';
                 //$extendData['Desc_2'] = '';
                 //$extendData['Desc_3'] = '';
