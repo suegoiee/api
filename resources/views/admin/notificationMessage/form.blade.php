@@ -2,7 +2,7 @@
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="data_content">{{trans($module_name.'.admin.content')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
-        <textarea class="form-control" id="data_content" name="content" placeholder="{{trans($module_name.'.admin.content')}}">{{@$data->content}}</textarea>
+        <textarea class="form-control" rows="10" id="data_content" name="content" placeholder="{{trans($module_name.'.admin.content')}}">{{@$data->content}}</textarea>
     </div>
     <div class="col-sm-2 text-danger msg">
                 
@@ -12,6 +12,15 @@
     <label class="form-control-label col-sm-2" for="all_user">{{trans($module_name.'.admin.all_user')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
         <input type="checkbox" class="" id="all_user" name="all_user" value="1" {{ $data && $data->user_ids==null ? 'checked':'' }} >
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="send_email">{{trans($module_name.'.admin.send_email')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="checkbox" class="" id="send_email" name="send_email" value="1" {{ $data && $data->send_email==1 ? 'checked':'' }} >
     </div>
     <div class="col-sm-2 text-danger msg">
                 

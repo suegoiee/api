@@ -12,6 +12,7 @@ return [
         'content' => '訊息',
         'all_user'=>'通知全會員',
         'user_ids' => '通知對象',
+        'send_email'=>'寄送Email',
         'created_at' => $module_name.'時間',
     ],
 ];

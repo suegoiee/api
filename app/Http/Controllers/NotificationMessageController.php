@@ -35,7 +35,8 @@ class NotificationMessageController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['content','user_ids']);
+        $request_data = $request->only(['content']);
+        $request_data['send_email'] = $request->input('send_email', 0);
         $all_user = $request->input('all_user', 0);
         if(!$all_user){
             $user_ids = $request->input('user_ids',[]);
@@ -49,9 +50,11 @@ class NotificationMessageController extends Controller
             $request_data['user_ids'] = NULL;
         }
         $notificationMessage = $this->notificationMessageRepository->create($request_data);
-        $users = $this->userRepository->getsWith([],['id.in'=>$user_ids]);
+        $users = count($user_ids) > 0 ? 
+                    $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
+                    $this->userRepository->gets() ;
         foreach ($users as $key => $user) {
-            $user->notify(new ReceiveMessage($user, $request->input('content','')));
+            $user->notify(new ReceiveMessage($user, $notificationMessage->content, $notificationMessage->send_email));
         }
 
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
@@ -77,6 +80,7 @@ class NotificationMessageController extends Controller
         }
 
         $request_data = $request->only(['content']);
+        $request_data['send_email'] = $request->input('send_email', 0);
         $all_user = $request->input('all_user', 0);
         if(!$all_user){
             $user_ids = $request->input('user_ids',[]);
@@ -92,9 +96,11 @@ class NotificationMessageController extends Controller
 
         $notificationMessage = $this->notificationMessageRepository->update($id,$request_data);
         
-        $users = $this->userRepository->getsWith([],['id.in'=>$user_ids]);
+        $users = count($user_ids) > 0 ? 
+                    $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
+                    $this->userRepository->gets() ;
         foreach ($users as $key => $user) {
-            $user->notify(new ReceiveMessage($user, $request->input('content','')));
+            $user->notify(new ReceiveMessage($user, $notificationMessage->content, $notificationMessage->send_email));
         }
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
     }

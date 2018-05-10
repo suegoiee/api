@@ -9,6 +9,6 @@ class NotificationMessage extends UanalyzeModel
 {
 	protected $table="notification_messages";
     protected $fillable = [
-        'content','user_ids'
+        'content','user_ids','send_email'
     ];
 }

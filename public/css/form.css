@@ -39,6 +39,24 @@
 .chosen-container-single .chosen-single{
 	padding: .5rem .75rem;
 }
+.pop_windows{
+	z-index: 1000;
+	position: absolute;
+	top:0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(.3, .3, .3, 0.5);
+}
+.pop_windows > div{
+	width: 30%;
+	height: 100px;
+	line-height: 100px;
+	margin: 20% auto 0;
+	text-align: center;
+	background-color: #FFF;
+	border-radius: 5px;
+}
 input[type=checkbox]{
 	width: 20px;
     height: 20px;
