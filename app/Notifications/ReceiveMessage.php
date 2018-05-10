@@ -18,11 +18,16 @@ class ReceiveMessage extends Notification
      * @return void
      */
     protected $user;
+    protected $notification_types;
     protected $notificationMessage;
-    public function __construct($user, $notificationMessage='')
+    public function __construct($user, $notificationMessage='', $send_email=0)
     {
         $this->user = $user;
         $this->notificationMessage = $notificationMessage;
+        $this->notification_types = ['database'];
+        if($send_email){
+            array_push($this->notification_types, 'mail');
+        }
     }
 
     /**
@@ -33,7 +38,7 @@ class ReceiveMessage extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return $this->notification_types;
     }
 
     /**
