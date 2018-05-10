@@ -248,7 +248,7 @@ class OrderController extends Controller
         $data=[
             'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
             'PaymentInfoURL' => env('ECPAY_PAYMENTINFO_URL',url('/')).'/ecpay/feedback',
-            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')).'?order_status=created',
+            'ClientBackURL' => env('ECPAY_BACK_URL',url('/')).'?order_status=success',
             'MerchantTradeNo' => $merchant_trade_no,
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'TotalAmount' => $order->price,
@@ -261,6 +261,7 @@ class OrderController extends Controller
         switch ($order->paymentType) {
             case 'credit':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::Credit;
+                $data['OrderResultURL'] = env('ECPAY_BACK_URL',url('/')).'ecpay/result',
                 break;
             case 'atm':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::ATM;

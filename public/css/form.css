@@ -44,6 +44,9 @@ input[type=checkbox]{
     height: 20px;
     vertical-align: -webkit-baseline-middle;
 }
+input[type=text]{
+	height: 43px;
+}
 @media (max-width: 768px) {
 	.form-control-label{
 		text-align: left;

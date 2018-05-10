@@ -101,6 +101,9 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/blogs','Front\ArticleController@index');
 	Route::get('/blogs/{slug}','Front\ArticleController@index');
 	Route::get('/archives/{slug}','Front\ArticleController@show');
+
+	Route::get('/edms','EdmController@onPublishList');
+	Route::get('/edms/{edm}','EdmController@onPublish');
 });
 
 
@@ -161,6 +164,13 @@ Route::middleware(['client:notificationMessage'])->group(function(){
 	Route::post('/notificationMessages','NotificationMessageController@store')->name('notificationMessages.store');
 	Route::put('/notificationMessages/{notification}','NotificationMessageController@update')->name('notificationMessages.update');
 	Route::delete('/notificationMessages/{notification}','NotificationMessageController@destroy')->name('notificationMessages.destroy');
+});
+Route::middleware(['client:edm'])->group(function(){
+	Route::get('/edms/all','EdmController@index')->name('edms.index');
+	Route::get('/edms/{edm}/all','EdmController@show')->name('edms.show');
+	Route::post('/edms','EdmController@store')->name('edms.store');
+	Route::put('/edms/{edm}','EdmController@update')->name('edms.update');
+	Route::delete('/edms/{edm}','EdmController@destroy')->name('edms.destroy');
 });
 
 //Admin
@@ -224,6 +234,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/notificationMessages/{notificationMessage}/delete','Admin\NotificationMessageController@destroy');
 	Route::delete('/notificationMessages','Admin\NotificationMessageController@destroy');
 	Route::resource('/notificationMessages', 'Admin\NotificationMessageController');
+
+	Route::get('/edms/{edm}/delete','Admin\EdmController@destroy');
+	Route::delete('/edms','Admin\EdmController@destroy');
+	Route::resource('/edms', 'Admin\EdmController');
 
 });
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');

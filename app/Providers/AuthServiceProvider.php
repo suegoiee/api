@@ -43,6 +43,7 @@ class AuthServiceProvider extends ServiceProvider
             'article'=>'create update delete',
             'promocode'=>'create update delete',
             'notificationMessage'=>'create update delete',
+            'edm'=>'create update delete',
 			]);
     }
 }

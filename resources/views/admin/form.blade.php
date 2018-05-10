@@ -5,7 +5,10 @@
     <link rel="stylesheet" href="{{asset('thirdparty/chosen/chosen.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
 
-     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
+    @if($module_name=='edm')
+        <link rel="stylesheet" href="{{asset('css/'.$module_name.'/sorted.css')}}">
+    @endif
 @endsection
 @section('content')
     <ol class="breadcrumb">
@@ -54,14 +57,11 @@ $(function(){
         return false;
       }
     });
-   $('#form').submit(function(event){
-        if(confirm('確定發送通知 ?')){
-            return true;
-        }
-        return false;
-   });
 });
 </script>
+@if($module_name=='edm')
+<script src="{{asset('thirdparty/jquery-ui-sortable/jquery-ui.min.js')}}"></script>
+@endif
 <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>
 <script src="{{asset('thirdparty/ckeditor/ckeditor.js')}}"></script>
 @endsection

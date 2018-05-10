@@ -12,6 +12,12 @@
             </ul>
         </li>-->
         <li>
+            <a href="{{url('/admin/edms')}}">
+                <span class="oi oi-flag"></span>
+                <span class="text">{{trans('edm.admin.menu_title')}}</span>
+            </a>
+        </li>
+        <li>
             <a href="{{url('/admin/products')}}">
                 <span class="oi oi-box"></span>
                 <span class="text">{{trans('product.admin.menu_title')}}</span>
@@ -55,7 +61,7 @@
         </li>
         <li>
             <a href="{{url('/admin/promocodes')}}">
-                <span class="oi oi-flag"></span>
+                <span class="oi oi-bookmark"></span>
                 <span class="text">{{trans('promocode.admin.menu_title')}}</span>
             </a>
         </li>

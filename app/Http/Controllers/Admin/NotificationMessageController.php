@@ -18,7 +18,7 @@ class NotificationMessageController extends AdminController
 
     public function index()
     {
-        $notificationMessages = $this->moduleRepository->gets();
+        $notificationMessages = $this->moduleRepository->getsWith([],[],["updated_at"=>'DESC']);
 
         $data = [
             'module_name'=> $this->moduleName,
