@@ -68,8 +68,13 @@ class LaboratoryController extends Controller
         $laboratory = $user->laboratories()->create($request_data);
 
         $products = $request->input('products',[]);
-        $laboratory->products()->syncWithoutDetaching($products);
+        $products_data = [];
+        foreach ($products as $key => $value) {
+            $products_data[$value]=['sort'=>$key];
+        }
+        $laboratory->products()->syncWithoutDetaching($products_data);
         $products_install = [];
+
         $products = is_array($products) ? $products:[$products];
         foreach ($products as $key => $product) {
             $product_data = $user->products()->find($product);
