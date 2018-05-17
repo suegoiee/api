@@ -152,12 +152,19 @@ class LaboratoryController extends Controller
         }
         $products = $request->input('products');
 
+
         $products_install = $products ? (is_array($products) ? $products:[$products]) : [];
         if(count($products_install)==0){
         	return $this->failedResponse(['message'=>[trans('product.cant_no_products')]]);
         }
         $products_remove = $laboratory->products()->whereNotIn('id',$products_install)->get();
-        $laboratory->products()->sync($products_install);
+
+        $products_data = [];
+        foreach ($products_install as $key => $value) {
+            $products_data[$value]=['sort'=>$key];
+        }
+        $laboratory->products()->sync($products_data);
+
         foreach ($products_install as $key => $product) {
             $user->products()->updateExistingPivot($product,['installed'=>1]);
         }
