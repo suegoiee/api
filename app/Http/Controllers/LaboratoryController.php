@@ -45,7 +45,7 @@ class LaboratoryController extends Controller
                     $collection->makeHidden(['avatar_small','avatar_detail']);
                 }
             }
-            //$laboratory->products=$laboratory->products->sortBy('sort');
+            $laboratory->products=$laboratory->products->sortBy('sort');
         }
         return $this->successResponse($laboratories);
     }
