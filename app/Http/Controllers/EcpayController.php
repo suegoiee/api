@@ -102,12 +102,15 @@ class EcpayController extends Controller
         $feedback_data = $request->all();
         $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
         if($ecpay){
+            $ecpay->feedbacks()->create($feedback_data);
             $order = $ecpay->order;
             switch ($order->paymentType) {
                 case 'credit':case 'webatm':
                         if($feedback_data['RtnCode']==1){
+                            $this->order_update($ecpay->order_id,1);
                             return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=1');
                         }
+                        $this->order_update($ecpay->order_id,2);
                         return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
                 case 'atm':
                         if($feedback_data['RtnCode']==1){
