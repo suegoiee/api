@@ -99,7 +99,7 @@ class EcpayController extends Controller
     }
     public function result(Request $request)
     {
-        $feedback_data = $request->all();
+        $feedback_data = Ecpay::checkOutFeedback();
         $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
         if($ecpay){
             $ecpay->feedbacks()->create($feedback_data);
