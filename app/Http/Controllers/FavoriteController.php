@@ -34,7 +34,7 @@ class FavoriteController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['code','name']);
+        $request_data = $request->only(['stock_code','stock_name']);
 
         $user->favorites()->create($request_data);
 
@@ -64,19 +64,19 @@ class FavoriteController extends Controller
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $stock_code = $request->input('code');
+        $stock_code = $request->input('stock_code');
 
-        $user->favorites()->where('code',$stock_code)->delete();
+        $user->favorites()->where('stock_code',$stock_code)->delete();
 
-        return $this->successResponse(['code'=>$stock_code]);
+        return $this->successResponse(['stock_code'=>$stock_code]);
 
     }
 
     protected function favoriteValidator(array $data, $user_id)
     {
         return Validator::make($data, [
-            'code' => 'required|unique:favorites,code,NULL,id,user_id,'.$user_id,
-            'name' => 'required',
+            'stock_code' => 'required|unique:favorites,stock_code,NULL,id,user_id,'.$user_id,
+            'stock_name' => 'required',
         ]);        
     }
 }

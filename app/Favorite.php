@@ -11,7 +11,7 @@ class Favorite extends UanalyzeModel
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name','code'
+        'stock_name','stock_code'
     ];
 
     protected $hidden = [
