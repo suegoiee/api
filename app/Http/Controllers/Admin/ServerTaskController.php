@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\LaboratoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -34,5 +35,9 @@ class ServerTaskController extends AdminController
         ob_flush(); 
         flush();
     }
-   
+   public function clearOAuthTokenTable(){
+	DB::table('oauth_access_tokens')->truncate();
+	DB::table('oauth_refresh_tokens')->truncate();
+	echo 'clear table success!';
+   }
 }

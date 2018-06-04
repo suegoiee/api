@@ -243,3 +243,4 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 
 });
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
+Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
