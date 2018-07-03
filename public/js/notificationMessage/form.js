@@ -1,4 +1,15 @@
 $(function(){
+    var ckeditor_config = {
+        filebrowserImageUploadUrl : url('admin/ckeditor/images'),
+        removeButtons:'About'
+    }
+    CKEDITOR.replace( 'data_content',ckeditor_config);
+    CKEDITOR.config.height=200;
+    CKEDITOR.config.extraPlugins = 'uploadimage';
+    CKEDITOR.config.uploadUrl = url('admin/ckeditor/images'),
+    CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
+    CKEDITOR.config.removeButtons='About',
+    CKEDITOR.config.extraPlugins = 'youtube';
     $('#all_user').change(function(event){
         if($(this).prop('checked')){
             $('#user_selection').hide();

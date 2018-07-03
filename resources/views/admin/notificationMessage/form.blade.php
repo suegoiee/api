@@ -1,4 +1,14 @@
-
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="type">{{trans($module_name.'.admin.type')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control" id="type" name="type" >
+            <option value="0"  {{ $data && $data->type=='0' ? 'selected':'' }} >{{trans($module_name.'.admin.type_0')}}</option>
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="data_content">{{trans($module_name.'.admin.content')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
