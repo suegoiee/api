@@ -47,6 +47,8 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::resource('/user/credit_cards', 'CreditCardController', ['only' => [
 		'index','store','show', 'update', 'destroy'
 	]]);
+
+	Route::delete('/user/favorites/','FavoriteController@destroy');
 	Route::resource('/user/favorites', 'FavoriteController', ['only' => [
 			'index', 'store', 'destroy'
 		]]);

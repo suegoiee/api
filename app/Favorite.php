@@ -15,5 +15,7 @@ class Favorite extends UanalyzeModel
     public function user(){
     	return $this->belongsTo('App\User');
     }
-
+    public function company(){
+    	return $this->hasOne('App\Stock', 'stock_code', 'stock_code');
+    }
 }
