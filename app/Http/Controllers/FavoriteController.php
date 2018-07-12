@@ -19,7 +19,9 @@ class FavoriteController extends Controller
     {
         $favorites = $request->user()->favorites;
         foreach ($favorites as $key => $favorite) {
-            $favorite->stock_name = $favorite->company->stock_name;
+            $favorite->stock_name = $favorite->company ? $favorite->company->stock_name:'';
+            $favorite->id = $key+1;
+            //$favorite->sort= $key+1;
         }
 
         return $this->successResponse($favorites?$favorites->makeHidden(['company']):[]);
@@ -50,7 +52,7 @@ class FavoriteController extends Controller
 
         if(!$favorite){
             $stock = $user->favorites()->create(['stock_code'=>$stock_code, 'stock_name'=>$stock->stock_name]);
-            return $this->successResponse($stock);
+            return $this->successResponse(['stock_code'=>$stock_code, 'stock_name'=>$stock->stock_name]);
         }else{
             return $this->failedResponse(['message'=>'The stock code has already been taken.']);
         }

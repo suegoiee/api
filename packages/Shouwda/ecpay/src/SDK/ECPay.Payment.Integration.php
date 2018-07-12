@@ -1549,6 +1549,21 @@ class ECPay_CheckMacValue{
         
         return $sMacValue ;
     }
+    static function Replace_Symbol_Decode($sParameters){
+            if(!empty($sParameters)){
+                
+                $sParameters = str_replace('-', '%2d', $sParameters);
+                $sParameters = str_replace('_', '%5f', $sParameters);
+                $sParameters = str_replace('.', '%2e', $sParameters);
+                $sParameters = str_replace('!', '%21', $sParameters);
+                $sParameters = str_replace('*', '%2a', $sParameters);
+                $sParameters = str_replace('(', '%28', $sParameters);
+                $sParameters = str_replace(')', '%29', $sParameters);
+                $sParameters = str_replace('+', '%20', $sParameters);
+            }
+
+            return $sParameters ;
+        }
     /**
     * 自訂排序使用
     */

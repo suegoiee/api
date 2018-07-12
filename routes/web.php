@@ -57,6 +57,8 @@ Route::middleware(['auth:api'])->group(function(){
 			'index','show','store','destroy'
 		]]);
 	Route::post('/user/orders/trial','OrderController@trial')->name('orders.trial');
+	Route::get('/user/invoices/{RelatedNumber}','EcpayController@invoiceQuery')->name('invoices.show');
+	
 	
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
 	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');

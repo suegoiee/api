@@ -42,6 +42,7 @@ class EcpayController extends Controller
     public function feedback(Request $request){
         try {
             $feedback_data = Ecpay::checkOutFeedback();
+            $feedback_data['data']= json_encode($feedback_data);
             //$feedback_data = $request->all();
             $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
             if($ecpay){
@@ -100,6 +101,8 @@ class EcpayController extends Controller
     public function result(Request $request)
     {
         $feedback_data = Ecpay::checkOutFeedback();
+
+        $feedback_data['data']= json_encode($feedback_data);
         $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
         if($ecpay){
             $ecpay->feedbacks()->create($feedback_data);
@@ -132,5 +135,33 @@ class EcpayController extends Controller
         }else{
             return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
         }
+    }
+    public function invoiceQuery($relateNumber){
+        Ecpay::invoiceMethod('INVOICE_SEARCH', 'Query/Issue');
+        Ecpay::setInvoice('RelateNumber', $relateNumber);
+        $origin_invoice = Ecpay::invoiceCheckOut();
+        $invoice = [
+            'create_date' => $origin_invoice['IIS_Create_Date'],
+            'category' => $origin_invoice['IIS_Category'],
+            'identifier' => $origin_invoice['IIS_Identifier'],
+            'number' => $origin_invoice['IIS_Number'],
+            'random_number' => $origin_invoice['IIS_Random_Number'],
+            'sales_amount' => $origin_invoice['IIS_Sales_Amount'],
+            'check_number' => $origin_invoice['IIS_Check_Number'],
+            'upload_date' => $origin_invoice['IIS_Upload_Date'],
+            'upload_status' => $origin_invoice['IIS_Upload_Status'],
+            'invoice_remark' => $origin_invoice['InvoiceRemark'],
+            'pos_barcode' => $origin_invoice['PosBarCode'],
+            'qrcode_left' => $origin_invoice['QRCode_Left'],
+            'qrcode_right' => $origin_invoice['QRCode_Right'],
+            'print_flag' => $origin_invoice['IIS_Print_Flag'],
+            'turnkey_status' => $origin_invoice['IIS_Turnkey_Status'],
+            'issue_status' => $origin_invoice['IIS_Issue_Status'],
+            'invalid_status' => $origin_invoice['IIS_Invalid_Status'],
+            'remain_allowance_amt' => $origin_invoice['IIS_Remain_Allowance_Amt'],
+            'award_flag' => $origin_invoice['IIS_Award_Flag'],
+            'award_type' => $origin_invoice['IIS_Award_Type'],
+        ];
+        return $this->successResponse($invoice);
     }
 }

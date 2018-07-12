@@ -14,8 +14,9 @@ class ChangeCodeAndNameToStockCodeAndStockNameFavoritesTable extends Migration
     public function up()
     {
         Schema::table('favorites', function (Blueprint $table) {
-		  $table->renameColumn('code','stock_name');
-		  $table->renameColumn('name','stock_code');
+		      $table->renameColumn('code','stock_code');
+		      $table->renameColumn('name','stock_name');
+              $table->dropUnique('favorites_code_unique');
         });
     }
 
@@ -29,6 +30,7 @@ class ChangeCodeAndNameToStockCodeAndStockNameFavoritesTable extends Migration
         Schema::table('favorites', function (Blueprint $table) {
 		  $table->renameColumn('stock_code','code');
 		  $table->renameColumn('stock_name','name');
+          //$table->string('code',6)->unique()->change();
         });
     }
 }

@@ -44,7 +44,7 @@ class OrderController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType']);
+        $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode']);
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
         $request_data['use_invoice'] =  $request->input('use_invoice',0);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
@@ -132,14 +132,17 @@ class OrderController extends Controller
         }
 
         $request_data = $request->only('status');
-
+        $pre_order = $this->orderRepository->get($id);
+        if($pre_order->status==1){
+            return $this->successResponse($pre_order?$pre_order:[]);
+        }
         $order = $this->orderRepository->update($id,$request_data);
 
         if(!$order){
             return $this->notFoundResponse();
         }
         $user = $order->user;
-        if($order->status==1){
+        if( $order->status==1){
             $order_products = $order->products;
             $product_data = [];
             foreach ($order_products as $key => $product) {
@@ -224,7 +227,14 @@ class OrderController extends Controller
     private function ecpay_form($order){
         $merchant_trade_no = $order->user->id.time();
         $order->ecpays()->create(['MerchantTradeNo'=>$merchant_trade_no]);
+        $relate_number = str_pad($order->user->id, 6, '0', STR_PAD_LEFT).'i'.(microtime(true)*10000); 
+        $order->update(['RelateNumber'=>$relate_number]);
         $items = [];
+        $invoiceItems = [];
+        $item_name = '';
+        $item_count = '';
+        $item_price = '';
+        $item_word = '';
         foreach ($order->products as $key => $product) {
             $item = [
                 'Name' => $product->name, 
@@ -233,7 +243,15 @@ class OrderController extends Controller
                 'Quantity' => (int)$product->pivot->quantity, 
                 'URL' => "#"
                 ];
+            $invoiceItem=[
+                'Name'=>$product->name,
+                'Count'=>$product->pivot->quantity,
+                'Word'=>'期',
+                'Price'=>$product->pivot->unit_price,
+                'TaxType'=>1,
+            ];
             array_push($items, $item);
+            array_push($invoiceItems, $invoiceItem);
         }
         foreach ($order->promocodes as $key => $promocode) {
             $item = [
@@ -257,8 +275,26 @@ class OrderController extends Controller
             'ChoosePayment' => \ECPay_PaymentMethod::Credit,
             'ChooseSubPayment' => \ECPay_PaymentMethodItem::None,
             'Items' => $items,
+            'InvoiceMark'=>$order->use_invoice==1 ? 'Y':'',
         ];
         $extendData = [];
+        if($order->use_invoice==1){
+            $extendData['CustomerID'] = 'm'.str_pad($order->user->id, 6, '0', STR_PAD_LEFT);
+            $extendData['CustomerName'] = urlencode($order->invoice_name);
+            $extendData['CustomerAddr'] = urlencode($order->invoice_address);
+            $extendData['CustomerPhone'] = $order->invoice_phone;
+            $extendData['CustomerEmail'] = $order->user->email;
+            if($order->company_id && count($order->company_id) <= 8){
+                $extendData['CustomerIdentifier'] = $order->company_id;
+            }
+            $extendData['TaxType'] = 1;
+            $extendData['Donation'] = $order->invoice_type==0 ? 1:'';
+            $extendData['LoveCode']= $order->invoice_type==0 ? $order->LoveCode:'';
+            $extendData['Print'] = 0;
+            $extendData['InvoiceItems'] = $invoiceItems;
+            $extendData['RelateNumber'] = $order->RelateNumber;
+            $extendData['InvType'] = '07';
+        }
         switch ($order->paymentType) {
             case 'credit':
                 $data['ChoosePayment'] = \ECPay_PaymentMethod::Credit;
