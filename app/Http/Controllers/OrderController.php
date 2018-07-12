@@ -275,7 +275,7 @@ class OrderController extends Controller
             'ChoosePayment' => \ECPay_PaymentMethod::Credit,
             'ChooseSubPayment' => \ECPay_PaymentMethodItem::None,
             'Items' => $items,
-            'InvoiceMark'=>$order->use_invoice==1 ? 'Y':'',
+            'InvoiceMark'=>$order->use_invoice==2 ? 'Y':'',
         ];
         $extendData = [];
         if($order->use_invoice==1){
