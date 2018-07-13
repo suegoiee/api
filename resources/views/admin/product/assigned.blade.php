@@ -7,7 +7,7 @@
     <div class="col-sm-10">
         <select class="form-control chosen-select" id="products" name="products[][id]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
             @foreach($products as $product)
-                <option value="{{$product->id}}">{{$product->name}}</option>
+                <option value="{{$product->id}}">{{$product->name}} ({{$product->status==1 ? '上架':'下架'}})</option>
             @endforeach
         </select>
     </div>

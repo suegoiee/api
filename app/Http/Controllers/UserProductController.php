@@ -24,7 +24,7 @@ class UserProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = $request->user()->products()->with('faqs')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
+        $products = $request->user()->products()->with('faqs')->orderBy('product_user.sort', 'asc')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline;
