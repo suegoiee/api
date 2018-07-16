@@ -23,7 +23,7 @@ class CompanyController extends AdminController
             'actions'=>['new'],
             'table_data' => $company,
             'table_head' =>['stock_code','stock_name','stock_industries','industries','type'],
-            'table_formatter' =>[],
+            'table_formatter' =>['stock_industries'],
         ];
         return view('admin.list',$data);
     }
