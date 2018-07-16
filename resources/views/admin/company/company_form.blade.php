@@ -19,7 +19,15 @@
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="stock_industries">{{trans($module_name.'.admin.stock_industries')}}</label>
     <div class="col-sm-8">
-        <input type="text" class="form-control" id="stock_industries" name="stock_industries" placeholder="{{trans($module_name.'.admin.stock_industries')}}" value="{{@$data->stock_industries}}">
+        <select class="form-control" id="stock_industries" name="stock_industries">
+            <option value="0"{{$data && $data->stock_industries==0 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_0')}}</option>
+            <option value="1"{{$data && $data->stock_industries==1 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_1')}}</option>
+            <option value="2"{{$data && $data->stock_industries==2 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_2')}}</option>
+            <option value="3"{{$data && $data->stock_industries==3 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_3')}}</option>
+            <option value="4"{{$data && $data->stock_industries==4 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_4')}}</option>
+            <option value="5"{{$data && $data->stock_industries==5 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_5')}}</option>
+            <option value="6"{{$data && $data->stock_industries==6 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_6')}}</option>
+        </select>
     </div>
     <div class="col-sm-2 text-danger msg">
                 
