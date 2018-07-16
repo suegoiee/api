@@ -19,6 +19,9 @@ return [
         'user_id'=>'擁有者',
         'user'=>'擁有者',
         'used_at'=>'已使用',
+        'type'=>'類型',
+        'type_0'=>'非指名優惠券',
+        'type_1'=>'指名優惠券',
 
         'promocodefile'=>'優惠卷CSV'
     ],

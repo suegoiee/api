@@ -2,27 +2,32 @@
 
 namespace App\Notifications;
 
-use App\Repositories\PromocodeRepository;
+use App\Repositories\NotificationMessageRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ReceivePromocode extends Notification
+class Others extends Notification
 {
     use Queueable;
 
-    protected $promocode_ids;
-    protected $user;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $promocode_ids = [])
+    protected $user;
+    protected $notification_types;
+    protected $notificationMessage;
+    public function __construct($user, $notificationMessage='', $send_email=0)
     {
-        $this->promocode_ids = $promocode_ids;
         $this->user = $user;
+        $this->notificationMessage = $notificationMessage;
+        $this->notification_types = ['database'];
+        if($send_email){
+            array_push($this->notification_types, 'mail');
+        }
     }
 
     /**
@@ -33,7 +38,7 @@ class ReceivePromocode extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','mail'];
+        return $this->notification_types;
     }
 
     /**
@@ -44,15 +49,16 @@ class ReceivePromocode extends Notification
      */
     public function toMail($notifiable)
     {
-        $promocodes = $this->user->promocodes()->whereIn('id', $this->promocode_ids)->get()->makeHidden(['created_at', 'updated_at']);
+
         $data = [
-            'promocodes' => $promocodes,
+            'contents' => $this->notificationMessage,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
+
         return (new MailMessage)
-            ->subject(env('APP_NAME').' 優惠券贈送')
+            ->subject(env('APP_NAME').' 通知')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->markdown('emails.receivePromocode', $data);
+            ->markdown('emails.receiveMessage', $data);
     }
 
     /**
@@ -63,9 +69,8 @@ class ReceivePromocode extends Notification
      */
     public function toArray($notifiable)
     {
-        $promocodes = $this->user->promocodes()->whereIn('id', $this->promocode_ids)->get()->makeHidden(['user_id','offer','order_id','send','created_at', 'updated_at','user']);
         return [
-            'promocodes'=>$promocodes
+            'content' => $this->notificationMessage,
         ];
     }
 }

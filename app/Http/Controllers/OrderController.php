@@ -70,10 +70,17 @@ class OrderController extends Controller
         foreach ($promocodes as $key => $value) {
             if($this->promocodeRepository->check($user->id, $value)){
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
-                if( !isset($promocode->used_at) && (!isset($promocode->deadline) || strtotime($promocode->deadline. ' +1 day') > time())){
+                if(!$promocode){
+                    $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$value]);
+                }
+                if( (!isset($promocode->used_at) || ($promocode->used()->where('user_id',$user->id)->count()==0)) && (!isset($promocode->deadline) || strtotime($promocode->deadline. ' +1 day') > time())){
                     
                     $order_price = $order_price <= $promocode->offer ? 0 : $order_price - $promocode->offer;
-                    $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
+                    if($promocode->type==1){
+                        $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
+                    }else{
+                        $promocode->used()->attach($user->id);
+                    }
                     array_push($promocode_ids, $promocode->id);
                 }
             }
@@ -158,7 +165,11 @@ class OrderController extends Controller
             $promocodes = $order->promocodes;
             $cancel_promocode_ids = [];
             foreach ($promocodes as $key => $promocode) {
-                $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                if($promocode->type==1){
+                    $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                }else{
+                    $promocode->used()->detach([$user->id]);
+                }
                 array_push($cancel_promocode_ids, $promocode->id); 
             }
             $order->promocodes()->detach($cancel_promocode_ids);
@@ -177,7 +188,12 @@ class OrderController extends Controller
             $promocodes = $order->promocodes;
             $cancel_promocode_ids = [];
             foreach ($promocodes as $key => $promocode) {
-                $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                if($promocode->type==1){
+                    $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                }else{
+                    $promocode->used()->detach([$user->id]);
+                }
+                
                 array_push($cancel_promocode_ids, $promocode->id); 
             }
             $order->promocodes()->detach($cancel_promocode_ids);
@@ -355,7 +371,10 @@ class OrderController extends Controller
                 $result['promocodes'][$value]=[ 'msg' => 'not exists','error'=>1];
             }else{
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
-                if($promocode->used_at!=null){
+                if(!$promocode){
+                    $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$value]);
+                }
+                if($promocode->used_at!=null || $promocode->used()->where('user_id',$user->id)->count()!=0){
                     $result['promocodes'][$value]=[ 'msg' => 'used','error'=>2];
                 }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
                     $result['promocodes'][$value]=[ 'msg' => 'Expired','error'=>3];

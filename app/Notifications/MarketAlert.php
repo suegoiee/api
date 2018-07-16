@@ -2,27 +2,32 @@
 
 namespace App\Notifications;
 
-use App\Repositories\ProductRepository;
+use App\Repositories\NotificationMessageRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ReceiveProducts extends Notification
+class MarketAlert extends Notification
 {
     use Queueable;
 
-    protected $product_ids;
-    protected $user;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $product_ids = [])
+    protected $user;
+    protected $notification_types;
+    protected $notificationMessage;
+    public function __construct($user, $notificationMessage='', $send_email=0)
     {
-        $this->product_ids = $product_ids;
         $this->user = $user;
+        $this->notificationMessage = $notificationMessage;
+        $this->notification_types = ['database'];
+        if($send_email){
+            array_push($this->notification_types, 'mail');
+        }
     }
 
     /**
@@ -33,7 +38,7 @@ class ReceiveProducts extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','mail'];
+        return $this->notification_types;
     }
 
     /**
@@ -44,18 +49,16 @@ class ReceiveProducts extends Notification
      */
     public function toMail($notifiable)
     {
-        $products = $this->user->products()->whereIn('id', $this->product_ids)->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
-        foreach ($products as $key => $product) {
-            $product->deadline = $product->pivot->deadline;
-        }
+
         $data = [
-            'products' => $products,
+            'contents' => $this->notificationMessage,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
+
         return (new MailMessage)
-            ->subject(env('APP_NAME').' 產品贈送')
+            ->subject(env('APP_NAME').' 通知')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->markdown('emails.receiveProducts', $data);
+            ->markdown('emails.receiveMessage', $data);
     }
 
     /**
@@ -66,12 +69,8 @@ class ReceiveProducts extends Notification
      */
     public function toArray($notifiable)
     {
-        $products = $this->user->products()->whereIn('id', $this->product_ids)->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
-        foreach ($products as $key => $product) {
-            $product->deadline = $product->pivot->deadline;
-        }
         return [
-            'products'=>$products
+            'content' => $this->notificationMessage,
         ];
     }
 }

@@ -13,6 +13,9 @@ class PromocodeRepository extends Repository
 		return (boolean)$this->model->where('user_id',$user_id)->where('id',$id)->count();
 	}
 	public function check($user_id, $code){
-		return (boolean)$this->model->where('user_id',$user_id)->where('code',$code)->count();
+		return (boolean)$this->model->where('user_id',$user_id)->orWhere(function ($query){
+                $query->where('user_id',0)
+                      ->where('type', 0);
+            })->where('code',$code)->count();
 	}
 }

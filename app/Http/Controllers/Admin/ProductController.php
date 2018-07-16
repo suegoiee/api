@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use App\Notifications\ReceiveProducts;
+use App\Notifications\ProductReceive;
 use App\Repositories\TagRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
@@ -179,7 +179,7 @@ class ProductController extends AdminController
             $result = $this->addProducts($user_id, $product_ids);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
-                $user->notify(new ReceiveProducts($user, $product_ids));
+                $user->notify(new ProductReceive($user, $product_ids));
             }
         }
         return redirect('admin/products');

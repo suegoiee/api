@@ -8,6 +8,18 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="type">{{trans($module_name.'.admin.type')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+         <select class="form-control" id="type" name="type" data-placeholder="{{trans('form.do_select')}}">
+            <option value="0" {{$data && $data->type == '0' ? 'selected':''}} >{{trans($module_name.'.admin.type_0')}}</option>
+            <option value="1" {{$data && $data->type == '1' ? 'selected':''}} >{{trans($module_name.'.admin.type_1')}}</option>
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
     <label class="form-control-label col-sm-2" for="code">{{trans($module_name.'.admin.code')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
         <input type="text" class="form-control" id="code" name="code" placeholder="{{trans($module_name.'.admin.code')}}" value="{{@$data->code}}">
@@ -34,7 +46,7 @@
                 
     </div>
 </div>
-<div class="form-group row">
+<div class="form-group row {{!isset($data) || $data->type == '0' ? 'hide':''}}">
     <label class="form-control-label col-sm-2" for="user_id">{{trans($module_name.'.admin.user_id')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
     	 <select class="chosen-select" id="user_id" name="user_id" data-placeholder="{{trans('form.do_select')}}">

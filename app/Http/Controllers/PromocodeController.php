@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Traits\OauthToken;
 use App\Repositories\PromocodeRepository;
 use App\Repositories\UserRepository;
-use App\Notifications\ReceivePromocode;
+use App\Notifications\PromocodeReceive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,13 +38,19 @@ class PromocodeController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at']);
+        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type']);
+        if($request_data['type']=='0'){
+            $request_data['user_id']=0;
+            $request_data['send']=0;
+        }
+        $request_data['used_at'] = $request_data['used_at'] ? date('Y-m-d H:i:s') : null;
         $promocode = $this->promocodeRepository->create($request_data);
-
-        if($request_data['user_id']!=0 && $promocode->send == 0){
-            $user = $this->userRepository->get($request_data['user_id']);
-            $user->notify(new ReceivePromocode($user, [$promocode->id]));
-            $promocode->update(['send'=>1]);
+        if($request_data['type']=='1'){
+            if($request_data['user_id']!=0 && $promocode->send == 0){
+                $user = $this->userRepository->get($request_data['user_id']);
+                $user->notify(new PromocodeReceive($user, [$promocode->id]));
+                $promocode->update(['send'=>1]);
+            }
         }
         
         return $this->successResponse($promocode?$promocode:[]);
@@ -75,15 +81,21 @@ class PromocodeController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at']);
-        $request_data['used_at'] = $request_data['used_at'] ? date('Y-m-d H:i:s') : null;
-        $promocode = $this->promocodeRepository->update($id,$request_data);
-        if($request_data['user_id']!=0 && $promocode->send == 0){
-            $user = $this->userRepository->get($request_data['user_id']);
-            $user->notify(new ReceivePromocode($user, [$promocode->id]));
-            $promocode->update(['send'=>1]);
+        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type']);
+        if($request_data['type']=='0'){
+            $request_data['user_id']=0;
+            $request_data['send']=0;
         }
-
+        $old_promocode = $this->promocodeRepository->get($id);
+        $request_data['used_at'] = !$old_promocode->used_at && $request_data['used_at'] ? date('Y-m-d H:i:s') : null;
+        $promocode = $this->promocodeRepository->update($id,$request_data);
+        if($request_data['type']=='1'){
+            if($request_data['user_id']!=0 && $promocode->send == 0){
+                $user = $this->userRepository->get($request_data['user_id']);
+                $user->notify(new PromocodeReceive($user, [$promocode->id]));
+                $promocode->update(['send'=>1]);
+            }
+        }
         return $this->successResponse($promocode?$promocode:[]);
     }
 

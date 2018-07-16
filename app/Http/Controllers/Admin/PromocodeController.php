@@ -19,12 +19,19 @@ class PromocodeController extends AdminController
     public function index(Request $request)
     {
         $query_string=[];
-
-        $promocodes = $this->moduleRepository->getsWith(['user']);
+        if($request->has('type')){
+            $where['type'] = $request->input('type',0);
+            $query_string = $request->only(['type']);
+        }else{
+            $where['type'] = $request->input('type',0);
+            $query_string['type'] = $request->input('type',0);
+        }
+        $promocodes = $this->moduleRepository->getsWith(['user','used'], $where,['updated_at'=>'DESC']);
 
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>['import','new'],
+            'tabs'=>['type'=>[0,1]],
             'query_string' => $query_string,
             'table_data' => $promocodes,
             'table_head' =>['name','code','offer','user_name','deadline', 'used_at'],

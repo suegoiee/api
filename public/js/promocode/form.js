@@ -1,6 +1,14 @@
 $(function(){
 
 	$("#user_id").chosen();
+    $("#type").change(function(event){
+        if( $(this).val()==0){
+            $("#user_id").parent().parent().addClass('hide');
+        }else{
+            $("#user_id").parent().parent().removeClass('hide');
+            $("#user_id_chosen").css('width','100%');
+        }
+    });
     $("#deadline").datetimepicker({
         icons:{
             time: 'oi oi-clock',
