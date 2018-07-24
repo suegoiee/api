@@ -14,8 +14,9 @@ class CreateProductPromocodeTable extends Migration
     public function up()
     {
         Schema::create('product_promocode', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->integer('promocode_id')->unsigned();
+            $table->integer('product_id')->unsigned();
+            $table->primary(['promocode_id', 'product_id']);
         });
     }
 

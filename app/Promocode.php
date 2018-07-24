@@ -25,4 +25,8 @@ class Promocode extends UanalyzeModel
     {
         return $this->belongsToMany('App\User', 'promocode_used','promocode_id','user_id');
     }
+    public function products()
+    {
+        return $this->belongsToMany('App\Product');
+    }
 }
