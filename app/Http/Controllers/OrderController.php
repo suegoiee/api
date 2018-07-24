@@ -62,9 +62,10 @@ class OrderController extends Controller
             }
             //array_push($product_ids, $value['id']);
             $product_ids[$value['id']] = ['unit_price'=>$product->price , 'quantity' => $value['quantity']];
-            array_push($product_data, $product);
+            $product_collect= collect($product);
+            $product_collect->put('quantity', $value['quantity']);
+            array_push($product_data, $product_collect);
         }
-
         $promocodes = $request->input('promocodes',[]);
         $promocode_ids = [];
         foreach ($promocodes as $key => $value) {
@@ -110,8 +111,9 @@ class OrderController extends Controller
         if($order_price==0){
             $this->orderRepository->update($order->id, ['status'=>1]);
         }
-
-        $order['products'] = $product_data;
+        foreach ($order->products as $key => $product) {
+            $product->quantity = $product->pivot->quantity;
+        }
         return $this->successResponse($order?$order:[]);
     }
     public function show(Request $request, $id)

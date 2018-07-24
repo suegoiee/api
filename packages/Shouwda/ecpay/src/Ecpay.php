@@ -1,6 +1,6 @@
 <?php
 namespace Shouwda\Ecpay;
-include('SDK/Ecpay_Invoice.php');
+include('SDK/Invoice/Ecpay_Invoice.php');
 
 use Shouwda\Ecpay\SDK;
 use Illuminate\Support\ServiceProvider;
