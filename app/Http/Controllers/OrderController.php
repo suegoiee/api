@@ -68,20 +68,27 @@ class OrderController extends Controller
         }
         $promocodes = $request->input('promocodes',[]);
         $promocode_ids = [];
+
         foreach ($promocodes as $key => $value) {
             if($this->promocodeRepository->check($user->id, $value)){
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
                 if(!$promocode){
                     $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$value]);
                 }
-                if( (!isset($promocode->used_at) || ($promocode->used()->where('user_id',$user->id)->count()==0)) && (!isset($promocode->deadline) || strtotime($promocode->deadline. ' +1 day') > time())){
+
+                if( ( !isset($promocode->used_at) || ($promocode->used()->where('user_id',$user->id)->count()==0)) &&
+                    ( !isset($promocode->deadline) || strtotime($promocode->deadline. ' +1 day') > time()) &&
+                    !in_array($promocode->id, $promocode_ids) &&
+                    ($promocode->specific==0 || $promocode->products()->whereIn('id', array_keys($product_ids))->count()!=0) ){
                     
                     $order_price = $order_price <= $promocode->offer ? 0 : $order_price - $promocode->offer;
+
                     if($promocode->type==1){
                         $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
                     }else{
                         $promocode->used()->attach($user->id);
                     }
+
                     array_push($promocode_ids, $promocode->id);
                 }
             }
@@ -363,8 +370,10 @@ class OrderController extends Controller
         $user = $request->user();
         $products = $request->input('products',[]);
         $promocodes = $request->input('promocodes',[]);
+        $product_ids = [];
         $result = ['total_price'=>0, 'promocodes'=>[]];
         foreach ($products as $key => $value) {
+            array_push($product_ids, $value['id']);
             $product = $this->productRepository->getWith($value['id'],['collections']);
             $result['total_price'] += $product->price * (int)$value['quantity'];
         }
@@ -373,13 +382,19 @@ class OrderController extends Controller
                 $result['promocodes'][$value]=[ 'msg' => 'not exists','error'=>1];
             }else{
                 $promocode = $this->promocodeRepository->getBy(['user_id'=>$user->id,'code'=>$value]);
+
                 if(!$promocode){
                     $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$value]);
                 }
+
                 if($promocode->used_at!=null || $promocode->used()->where('user_id',$user->id)->count()!=0){
-                    $result['promocodes'][$value]=[ 'msg' => 'used','error'=>2];
+                    $result['promocodes'][$value]=[ 'msg' => 'Used','error'=>2];
                 }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
                     $result['promocodes'][$value]=[ 'msg' => 'Expired','error'=>3];
+                }else if( $promocode->specific==1 && $promocode->products()->whereIn('id',$product_ids)->count()==0){
+                    $result['promocodes'][$value]=[ 'msg' => 'Not match','error'=>4];
+                }else if(array_key_exists($value,$result['promocodes'])){
+                    continue;
                 }else{
                     $result['promocodes'][$value]=['name'=>$promocode->name, 'offer'=>$promocode->offer];
                     $result['total_price'] = $result['total_price'] <= $promocode->offer ? 0 : $result['total_price'] - $promocode->offer;

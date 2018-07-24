@@ -162,7 +162,7 @@ class ProductController extends AdminController
     }
     public function assignedView(UserRepository $userRepository)
     {
-        $products = $this->moduleRepository->getsWith([],[],['status'=>'DESC']);
+        $products = $this->moduleRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']);
         $users = $userRepository->gets();
         $data = [
             'module_name'=> $this->moduleName,

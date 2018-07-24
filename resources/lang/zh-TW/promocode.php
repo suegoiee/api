@@ -22,6 +22,8 @@ return [
         'type'=>'類型',
         'type_0'=>'非指名優惠券',
         'type_1'=>'指名優惠券',
+        'specific'=>'套用指定產品',
+        'products'=>'產品',
 
         'promocodefile'=>'優惠卷CSV'
     ],

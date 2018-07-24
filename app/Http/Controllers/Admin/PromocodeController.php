@@ -1,18 +1,20 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use App\Repositories\PromocodeRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class PromocodeController extends AdminController
 {	
     protected $userRepository;
-    public function __construct(PromocodeRepository $promocodeRepository, UserRepository $userRepository)
+    protected $productRepository;
+    public function __construct(PromocodeRepository $promocodeRepository, UserRepository $userRepository,ProductRepository $productRepository)
     {
         $this->moduleName='promocode';
         $this->moduleRepository = $promocodeRepository;
         $this->userRepository = $userRepository;
-
+        $this->productRepository = $productRepository;
         $this->token = $this->clientCredentialsGrantToken();
     }
 
@@ -45,6 +47,7 @@ class PromocodeController extends AdminController
         $data = [
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->gets(),
+            'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
             'data' => null,
         ];
         return view('admin.form',$data);
@@ -57,6 +60,7 @@ class PromocodeController extends AdminController
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->gets(),
             'data' => $this->moduleRepository->getWith($id,['user']),
+            'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
         ];
         return view('admin.form',$data);
     }

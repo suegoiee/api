@@ -29,6 +29,25 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="specific">{{trans($module_name.'.admin.specific')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="checkbox" class="" id="specific" name="specific" value="1" {{ $data && $data->specific != null ? 'checked':'' }} >
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row {{ (!isset($data) || $data->specific==0)? 'hide':''}}" id="products_select">
+    <label class="form-control-label col-sm-2" for="specific">{{trans($module_name.'.admin.products')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <select class="form-control chosen-select" id="products" name="products[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @foreach($products as $product)
+                <option value="{{$product->id}}" {{$data->products()->where('id',$product->id)->count()!=0 ? 'selected':''}} >{{$product->name}} ({{$product->status==1 ? '上架':'下架'}})</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+<div class="form-group row">
     <label class="form-control-label col-sm-2" for="offer">{{trans($module_name.'.admin.offer')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
         <input type="text" class="form-control" id="offer" name="offer" placeholder="{{trans($module_name.'.admin.offer')}}" value="{{@$data->offer}}">
