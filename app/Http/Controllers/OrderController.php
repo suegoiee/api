@@ -294,7 +294,7 @@ class OrderController extends Controller
             'InvoiceMark'=>$order->use_invoice==2 ? 'Y':'',
         ];
         $extendData = [];
-        if($order->use_invoice==1){
+        if($order->use_invoice==2){
             $extendData['CustomerID'] = 'm'.str_pad($order->user->id, 6, '0', STR_PAD_LEFT);
             $extendData['CustomerName'] = urlencode($order->invoice_name);
             $extendData['CustomerAddr'] = urlencode($order->invoice_address);
