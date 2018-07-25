@@ -78,6 +78,7 @@ class PromocodeController extends AdminController
         $result = ['success'=>0, 'errors'=>[]];
         if($file){
             $insertArray = [];
+            $promocodes = [];
             $ignoreLine = true;
             while (($line = fgetcsv($file)) !== FALSE) {
                 if($ignoreLine){
@@ -88,11 +89,25 @@ class PromocodeController extends AdminController
                     'name'=>$line[0],
                     'code'=>$line[1],
                     'offer'=>$line[2],
-                    'deadline'=>$line[3]!=''?$line[3]:null
+                    'deadline'=>$line[3]!=''?$line[3]:null,
+                    'type'=>$line[4],
+                    'user_id'=>$line[5]!='' ? $line[5]:0,
+                    'specific'=>$line[6]
                 ];
+                $promocodes[$line[1]]=$lineData;
+                $promocodes[$line[1]]['products']=[];
+                foreach ($line as $key => $col) {
+                    if($key<=6){
+                        continue;
+                    }
+                    array_push($promocodes[$line[1]]['products'], $col);
+                }
                 array_push($insertArray, $lineData);
             }
             $resultInsert = $this->moduleRepository->insertArray($insertArray);
+            foreach ($resultInsert['data'] as $key => $data) {
+                $data->products()->sync($promocodes[$data->code]['products']);
+            }
             $result['success']= $resultInsert['success'];
             foreach ($resultInsert['errors'] as $key => $error) {
                 array_push($result['errors'], $error->code.' '.trans('import.is_exist'));

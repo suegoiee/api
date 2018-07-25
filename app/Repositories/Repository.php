@@ -71,11 +71,13 @@ class Repository
 		return $this->model->create($data);
 	}
 	public function insertArray($array=[]){
-		$result = ['success'=>0,'errors'=>[]];
+		$result = ['success'=>0,'errors'=>[],'data'=>[]];
 		foreach ($array as $data) {
 			$modelData = $this->model->where($this->uniqueKey, $data[$this->uniqueKey])->first();
 			if(!$modelData){
 				$this->model->insert($data);
+				$modelData = $this->model->where($this->uniqueKey, $data[$this->uniqueKey])->first();
+				array_push($result['data'], $modelData);
 				$result['success']++;
 			}else{
 				array_push($result['errors'], $modelData);
