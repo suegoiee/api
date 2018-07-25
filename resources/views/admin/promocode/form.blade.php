@@ -42,7 +42,7 @@
     <div class="col-sm-8">
         <select class="form-control chosen-select" id="products" name="products[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
             @foreach($products as $product)
-                <option value="{{$product->id}}" {{$data->products()->where('id',$product->id)->count()!=0 ? 'selected':''}} >{{$product->name}} ({{$product->status==1 ? '上架':'下架'}})</option>
+                <option value="{{$product->id}}" {{ $data && $data->products()->where('id',$product->id)->count()!=0 ? 'selected':''}} >{{$product->name}} ({{$product->status==1 ? '上架':'下架'}})</option>
             @endforeach
         </select>
     </div>
