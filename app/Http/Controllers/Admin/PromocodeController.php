@@ -100,7 +100,9 @@ class PromocodeController extends AdminController
                     if($key<=6){
                         continue;
                     }
-                    array_push($promocodes[$line[1]]['products'], $col);
+                    if($col!='' && $this->productRepository->get($col)){
+                        array_push($promocodes[$line[1]]['products'], $col);
+                    }
                 }
                 array_push($insertArray, $lineData);
             }
