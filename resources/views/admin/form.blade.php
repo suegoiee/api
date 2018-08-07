@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
 
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
-    @if($module_name=='edm')
+    @if($module_name=='edm' || $module_name=='product')
         <link rel="stylesheet" href="{{asset('css/'.$module_name.'/sorted.css')}}">
     @endif
 @endsection
@@ -59,7 +59,7 @@ $(function(){
     });
 });
 </script>
-@if($module_name=='edm')
+@if($module_name=='edm' || $module_name=='product')
 <script src="{{asset('thirdparty/jquery-ui-sortable/jquery-ui.min.js')}}"></script>
 @endif
 <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>

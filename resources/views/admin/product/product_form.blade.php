@@ -23,6 +23,11 @@
     <label class="form-control-label col-sm-2" for="collections">{{trans($module_name.'.admin.collections')}}</label>
     <div class="col-sm-8">
         <select class="form-control chosen-select" id="collections" name="collections[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @if($data)
+                @foreach($data->collections->sortBy('sort') as $product)
+                    <option value="{{$product->id}}" selected>{{$product->name}}</option>
+                @endforeach
+            @endif
             @foreach($collections as $product)
                 <option value="{{$product->id}}" {{$data && $data->collections->where('id',$product->id)->count()>0 ? 'selected':''}} >{{$product->name}}</option>
             @endforeach

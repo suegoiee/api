@@ -49,7 +49,11 @@ class ProductController extends Controller
 
         if( $product->type =='collection' ){
             $collections = $request->input('collections',[]);
-            $product->collections()->attach($collections);
+            $update_collections = [];
+            foreach ($collections as $key => $collection) {
+                $update_collections[$collection] = ['sort' => $key];
+            }
+            $product->collections()->attach($update_collections);
         }
 
         $faqs = $request->input('faqs',[]);
@@ -92,7 +96,7 @@ class ProductController extends Controller
     public function onShelf(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWithByStatus($id, ['tags','collections','faqs']);
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs']);
 
         return $this->successResponse($product?$product:[]);
     }
@@ -118,7 +122,12 @@ class ProductController extends Controller
         $product->tags()->sync($tags);
         
         $collections = $request->input('collections',[]);
-        $product->collections()->sync($collections);
+        $update_collections = [];
+        foreach ($collections as $key => $collection) {
+            $update_collections[$collection] = ['sort' => $key];
+        }
+        $product->collections()->sync($update_collections);
+        //$product->collections()->sync($collections);
 
         $faqs = $request->input('faqs',[]);
         $faq_ids = [];

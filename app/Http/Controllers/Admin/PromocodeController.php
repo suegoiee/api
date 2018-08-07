@@ -96,11 +96,13 @@ class PromocodeController extends AdminController
                 ];
                 $promocodes[$line[1]]=$lineData;
                 $promocodes[$line[1]]['products']=[];
+
                 foreach ($line as $key => $col) {
                     if($key<=6){
                         continue;
                     }
-                    if($col!='' && $this->productRepository->get($col)){
+                    if($col != '' && $this->productRepository->get($col)){
+                        
                         array_push($promocodes[$line[1]]['products'], $col);
                     }
                 }

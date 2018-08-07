@@ -46,12 +46,12 @@ class ProductController extends AdminController
 
     public function edit($id)
     {
-
+        $product =  $this->moduleRepository->getWith($id,['tags','collections']);
         $data = [
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
-            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id',[$id]),
-            'data' => $this->moduleRepository->getWith($id,['tags','collections']),
+            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
+            'data' => $product,
         ];
         return view('admin.form',$data);
     }
