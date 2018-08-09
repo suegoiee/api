@@ -144,7 +144,8 @@ $(function(){
             data: formData,
             dataType : 'json',
             complete: function(response) {
-                $('#response_data').val(JSON.stringify(JSON.parse(response.responseText),null,2));
+                show_response(response.responseText);
+                //$('#response_data').val(JSON.stringify(JSON.parse(response.responseText),null,2));
                 //$('#response_data').val(response.responseText);
             }
         });
@@ -209,7 +210,14 @@ $(function(){
     });
     $('#method').change();
     function show_response(response){
-        var data = JSON.stringify(response);
+        var data;
+        try{
+            data =  JSON.stringify(JSON.parse(response),null,2);
+            //data = JSON.stringify(response);
+        }catch (e) {
+            data = response;
+        }
+
         $('#response_data').val(data);
     }
 
