@@ -79,9 +79,9 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/user/lab_avatar/{module_id}','AvatarController@update')->name('laboratories.avatar.update');
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
 
-	Route::get('user/promocodes','PromocodeController@list')->name('promocodes.index');
-	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
-	Route::get('/promocodes/query','PromocodeController@show');
+	Route::get('user/promocodes','PromocodeController@list')->name('user.promocodes.index');
+	Route::get('user/promocodes/{promocode}','PromocodeController@show')->name('user.promocodes.show')->where('promocode', '[0-9]+');
+	Route::get('user/promocodes/query','PromocodeController@show');
 
 	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');

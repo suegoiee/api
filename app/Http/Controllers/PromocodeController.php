@@ -30,11 +30,12 @@ class PromocodeController extends Controller
         $user = $request->user();
         $promocodes = $user->promocodes()->with(['products'=>function($query){
             $query->select(['id','name','info_short','price']);
-        }])->get()->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id']);
+        }])->get();
         $promocode_unassigned = $this->promocodeRepository->getsWith(['user','products'=>function($query){
             $query->select(['id','name','info_short','price']);
-        }],['type'=>0],['updated_at'=>'DESC'])->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id']);
-        $promocodes = $promocodes->merge($promocode_unassigned);
+        }],['type'=>0],['updated_at'=>'DESC']);
+
+        $promocodes = $promocodes->merge($promocode_unassigned)->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id','send']);
         return $this->successResponse($promocodes);
     }
     public function create()
