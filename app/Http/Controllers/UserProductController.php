@@ -74,13 +74,20 @@ class UserProductController extends Controller
                                 $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
                                 $collection_deadline = $this->getExpiredDate($expiration, $old_collection_deadline);
                                 $collection_installed = 1;
-                                array_push($collections_ids, $collection_product->id);
-                                $collection_products[ $collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
+
+                                $collection_sort = $collection_product->pivot->sort;
+
+                                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+
+                                $collection_products[$collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
                             }
                             $laboratory->products()->syncWithoutDetaching($collections_ids);
                         }else{
                             foreach ($product_data->collections as $key => $collection_product) {
-                                array_push($collections_ids, $collection_product->id);
+                                $collection_sort = $collection_product->pivot->sort;
+
+                                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                                //array_push($collections_ids, $collection_product->id);
                             }
                             $laboratory->products()->sync($collections_ids);
                         }
@@ -134,7 +141,9 @@ class UserProductController extends Controller
                 $this->create_avatar($laboratory, $product->avatar_small);
                 $collection_product_ids = [];
                 foreach ($product->collections as $key => $collection_product) {
-                    array_push($collection_product_ids, $collection_product->id);
+                    $collection_sort = $collection_product->pivot->sort;
+                    $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                    //array_push($collection_product_ids, $collection_product->id);
                 }
                 $laboratory->products()->syncWithoutDetaching($collection_product_ids);
             }
