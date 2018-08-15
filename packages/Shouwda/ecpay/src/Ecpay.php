@@ -1,10 +1,10 @@
 <?php
 namespace Shouwda\Ecpay;
-include('SDK/Invoice/Ecpay_Invoice.php');
 
 use Shouwda\Ecpay\SDK;
 use Illuminate\Support\ServiceProvider;
 
+include('SDK/Invoice/Ecpay_Invoice.php');
 class Ecpay
 {
  	protected $ecpay;

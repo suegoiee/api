@@ -44,7 +44,7 @@ class OrderController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['price', 'memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode']);
+        $request_data = $request->only(['memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode']);
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
         $request_data['use_invoice'] =  $request->input('use_invoice',0);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
@@ -55,15 +55,16 @@ class OrderController extends Controller
         $order_price = 0;
         foreach($products as $key => $value) {
             $product = $this->productRepository->getWith($value['id'],['collections']);
-            $order_price += $product->price * (int)$value['quantity'];
+            $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
+            $order_price += $product->price * (int)$quantity;
             if($product->price==0){
                 array_push($product_free,['id'=>$product->id, 'quantity'=>1]);
                 //$result = $this->addProducts($user->id, [['id'=>$product->id, 'quantity'=>1]]);
             }
             //array_push($product_ids, $value['id']);
-            $product_ids[$value['id']] = ['unit_price'=>$product->price , 'quantity' => $value['quantity']];
+            $product_ids[$value['id']] = ['unit_price'=>$product->price , 'quantity' => $quantity];
             $product_collect= collect($product);
-            $product_collect->put('quantity', $value['quantity']);
+            $product_collect->put('quantity', $quantity);
             array_push($product_data, $product_collect);
         }
         $promocodes = $request->input('promocodes',[]);
@@ -281,12 +282,20 @@ class OrderController extends Controller
         foreach ($order->promocodes as $key => $promocode) {
             $item = [
                 'Name' => $promocode->name, 
-                'Price' => $promocode->offer, 
+                'Price' => -($promocode->offer), 
                 'Currency'=> 'NTD', 
                 'Quantity' => 1, 
                 'URL' => "#"
                 ];
             array_push($items, $item);
+            $invoiceItem=[
+                'Name'=>$promocode->name,
+                'Count'=>1,
+                'Word'=>'期',
+                'Price'=> -($promocode->offer),
+                'TaxType'=>1,
+            ];
+            array_push($invoiceItems, $invoiceItem);
         }
         $data=[
             'ReturnURL' => env('ECPAY_RETURN_URL',url('/')).'/ecpay/feedback',
@@ -375,7 +384,8 @@ class OrderController extends Controller
         foreach ($products as $key => $value) {
             array_push($product_ids, $value['id']);
             $product = $this->productRepository->getWith($value['id'],['collections']);
-            $result['total_price'] += $product->price * (int)$value['quantity'];
+            $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
+            $result['total_price'] += $product->price * (int)$quantity;
         }
         foreach ($promocodes as $key => $value) {
             if(!$this->promocodeRepository->check($user->id, $value)){
