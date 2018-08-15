@@ -136,7 +136,17 @@ class EcpayController extends Controller
             return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
         }
     }
-    public function invoiceQuery($relateNumber){
+    public function invoiceQuery(Request $request, $order_id){
+        $user = $request->user();
+        $order = $user->orders()->find($order_id);
+        if($order){
+            $relateNumber = $order->RelateNumber;
+            if(!$relateNumber){
+                return $this->successResponse([]);
+            }
+        }else{
+            return $this->successResponse([]);
+        }
         Ecpay::invoiceMethod('INVOICE_SEARCH', 'Query/Issue');
         Ecpay::setInvoice('RelateNumber', $relateNumber);
         try{
