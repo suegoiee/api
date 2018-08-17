@@ -315,7 +315,7 @@ class OrderController extends Controller
         if($order->use_invoice==2){
             $extendData['CustomerID'] = 'm'.str_pad($order->user->id, 6, '0', STR_PAD_LEFT);
             $extendData['CustomerName'] = urlencode($order->invoice_name);
-            $extendData['CustomerAddr'] = urlencode($order->invoice_address);
+            $extendData['CustomerAddr'] = '';//$order->invoice_address);
             $extendData['CustomerPhone'] = $order->invoice_phone;
             $extendData['CustomerEmail'] = $order->user->email;
             if($order->company_id && count($order->company_id) <= 8){
