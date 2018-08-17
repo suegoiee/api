@@ -25,7 +25,7 @@ class PromocodeController extends Controller
         $promocodes = $this->promocodeRepository->getsWith(['user'],[],['updated_at'=>'DESC'])->get();
         return $this->successResponse($promocodes);
     }
-    public function list(Request $request)
+    public function getList(Request $request)
     {
         $user = $request->user();
         $promocodes = $user->promocodes()->with(['products'=>function($query){

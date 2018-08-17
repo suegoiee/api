@@ -79,7 +79,7 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/user/lab_avatar/{module_id}','AvatarController@update')->name('laboratories.avatar.update');
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
 
-	Route::get('user/promocodes','PromocodeController@list')->name('user.promocodes.index');
+	Route::get('user/promocodes','PromocodeController@getList')->name('user.promocodes.index');
 	Route::get('user/promocodes/{promocode}','PromocodeController@show')->name('user.promocodes.show')->where('promocode', '[0-9]+');
 	Route::get('user/promocodes/query','PromocodeController@show');
 
