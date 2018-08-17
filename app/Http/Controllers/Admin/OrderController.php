@@ -29,7 +29,7 @@ class OrderController extends AdminController
             $query_string['status'] = $request->input('status',0);
         }
 
-        $orders = $this->moduleRepository->getsWith(['user','products'], $where)->orderBy('created_at','DESC');
+        $orders = $this->moduleRepository->getsWith(['user','products'], $where, ['created_at'=>'DESC']);
 
         $data = [
             'module_name'=> $this->moduleName,
