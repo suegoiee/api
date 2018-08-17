@@ -77,8 +77,8 @@ class OrderController extends Controller
                     $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$value]);
                 }
 
-                if( ( !isset($promocode->used_at) || ($promocode->used()->where('user_id',$user->id)->count()==0)) &&
-                //if( ( !isset($promocode->used_at) || ($promocode->used()->count()==0)) &&
+                //if( ( !isset($promocode->used_at) || ($promocode->used()->where('user_id',$user->id)->count()==0)) &&
+                if( ( !isset($promocode->used_at) || ($promocode->used()->count()==0)) &&
                     ( !isset($promocode->deadline) || strtotime($promocode->deadline. ' +1 day') > time()) &&
                     !in_array($promocode->id, $promocode_ids) &&
                     ($promocode->specific==0 || $promocode->products()->whereIn('id', array_keys($product_ids))->count()!=0) ){
@@ -398,8 +398,8 @@ class OrderController extends Controller
                     $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$value]);
                 }
 
-                if($promocode->used_at!=null || $promocode->used()->where('user_id',$user->id)->count()!=0){
-                //if($promocode->used_at!=null || $promocode->used()->count()!=0){
+                //if($promocode->used_at!=null || $promocode->used()->where('user_id',$user->id)->count()!=0){
+                if($promocode->used_at!=null || $promocode->used()->count()!=0){
                     $result['promocodes'][$value]=[ 'msg' => 'Used','error'=>2];
                 }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
                     $result['promocodes'][$value]=[ 'msg' => 'Expired','error'=>3];
