@@ -25,7 +25,7 @@ return [
         'stock_industries_1'=>'CI',
         'stock_industries_2'=>'BASI',
         'stock_industries_3'=>'BD',
-        'stock_industries_4'=>'FB',
+        'stock_industries_4'=>'FH',
         'stock_industries_5'=>'INS',
         'stock_industries_6'=>'MIM',
         'industries' => '產業名稱',
