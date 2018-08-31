@@ -10,12 +10,13 @@ class TagController extends AdminController
 {	
     protected $stockgRepository;
 
-    public function __construct(TagRepository $tagRepository, StockRepository $stockRepository)
+    public function __construct(Request $request, TagRepository $tagRepository, StockRepository $stockRepository)
     {
+        parent::__construct($request);
         $this->moduleName='tag';
         $this->moduleRepository = $tagRepository;
         $this->stockRepository = $stockRepository;
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

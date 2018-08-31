@@ -34,6 +34,7 @@ Route::post('/stocks/products', 'StockModelController@getModelProducts');
 Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){
+	Route::get('/auth/login','Auth\TokenController@isLogin');
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
 
 	Route::get('/user/info','ProfileController@show')->name('info.show');

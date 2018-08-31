@@ -10,14 +10,15 @@ class ProductController extends AdminController
 {	
     protected $tagRepository;
     protected $userRepository;
-    public function __construct(ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
+    public function __construct(Request $request, ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
     {
+        parent::__construct($request);
         $this->moduleName='product';
         $this->moduleRepository = $productRepository;
         $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

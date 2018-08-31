@@ -57,6 +57,14 @@ class TokenController extends Controller
         }
         return $this->successResponse($this->refreshGrantToken($request));
     }
+    public function isLogin(Request $request)
+    {
+        $user = $request->user();
+        if($user){
+            return $this->successResponse(['login success']);
+        }
+        return $this->failedResponse(['login failed']);
+    }
 
     protected function validator(array $data)
     {

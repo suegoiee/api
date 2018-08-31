@@ -5,12 +5,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class OrderController extends AdminController
 {	
-    public function __construct(OrderRepository $orderRepository)
+    public function __construct(Request $request, OrderRepository $orderRepository)
     {
+        parent::__construct($request);
         $this->moduleName='order';
         $this->moduleRepository = $orderRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index(Request $request)
