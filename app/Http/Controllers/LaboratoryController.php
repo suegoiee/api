@@ -22,7 +22,9 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $start_time = microtime();
         $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get()->makeHidden(['collection_product_id']);
+        $end_time = microtime();
         foreach ($laboratories as $laboratory) {
             $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
             
@@ -47,6 +49,7 @@ class LaboratoryController extends Controller
             }
             $laboratory->products=$laboratory->products->sortBy('sort');
         }
+       // return $this->successResponse($end_time - $start_time);
         return $this->successResponse($laboratories);
     }
 

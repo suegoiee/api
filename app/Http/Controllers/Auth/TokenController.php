@@ -46,7 +46,11 @@ class TokenController extends Controller
                 $user->touch();
             }
         }
+        $start_time = microtime();
         $response = $this->passwordGrantToken($request);
+        $end_time = microtime();
+        //return $this->successResponse($end_time - $start_time);
+        
         return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)
