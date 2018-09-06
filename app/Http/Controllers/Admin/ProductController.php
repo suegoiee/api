@@ -174,13 +174,14 @@ class ProductController extends AdminController
     }
     public function assigned(Request $request)
     {   
+        $send_email = $request->input('send_email',0) ? true : false;
         $product_ids = $request->input('products', []);
         $user_ids = $request->input('users', []);
         foreach ($user_ids as $key => $user_id) {
             $result = $this->addProducts($user_id, $product_ids);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
-                $user->notify(new ProductReceive($user, $product_ids));
+                $user->notify(new ProductReceive($user, $product_ids, $send_email));
             }
         }
         return redirect('admin/products');

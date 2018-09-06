@@ -14,15 +14,17 @@ class ProductReceive extends Notification
 
     protected $product_ids;
     protected $user;
+    protected $send_email;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $product_ids = [])
+    public function __construct($user, $product_ids = [], $send_email=false)
     {
         $this->product_ids = $product_ids;
         $this->user = $user;
+        $this->send_email = $send_email;
     }
 
     /**
@@ -33,7 +35,10 @@ class ProductReceive extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','mail'];
+        if($this->send_email){
+            return ['database','mail'];
+        }
+        return ['database'];
     }
 
     /**

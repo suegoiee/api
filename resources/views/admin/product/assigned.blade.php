@@ -1,4 +1,10 @@
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="send_email">{{trans($module_name.'.admin.send_email')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="checkbox" class="" id="send_email" name="send_email" value="1" >
+    </div>
+</div>
+<div class="form-group row">
     <div class="col-sm-1"></div>
     <label class="text col-sm-8" for="products">{{trans($module_name.'.admin.assigned_products')}}</label>
 </div>
