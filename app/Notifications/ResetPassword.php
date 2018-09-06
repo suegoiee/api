@@ -47,7 +47,7 @@ class ResetPassword extends Notification
             ->subject(env('APP_NAME').' 密碼重設')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
             ->line('我們收到您想要重設密碼的要求。')
-            ->action('重設密碼', env('RESET_PASSWORD_REDIRECT').'?token='.$this->token)
+            ->action('重設密碼', env('RESET_PASSWORD_REDIRECT','http://pro.uanalyze.com.tw/reset-password').'?token='.$this->token)
             ->line('此連結將於1小時後過期。')
             ->line('如果您並未要求重設密碼，就不需做任何動作。');
     }
