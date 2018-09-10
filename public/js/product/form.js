@@ -11,6 +11,7 @@ $(function(){
     CKEDITOR.config.removeButtons='About',
     CKEDITOR.config.extraPlugins = 'youtube';
     $('#collections').multiSelect({
+        keepOrder: true,
         selectableHeader: "<div class='text-center'>可選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         afterInit: function(ms){
@@ -34,18 +35,58 @@ $(function(){
                         that.$selectionUl.focus();
                         return false;
                     }
-                });
+                });/*
+            $( "#collections_select .ms-selection .ms-list" ).sortable({
+                placeholder: "ui-state-highlight",
+                start: function(event, ui) {
+                    //var start_pos = ui.item.index();
+                    var start_pos = $( "#collections_select .ms-selection .ms-list .ms-elem-selection" ).map(function(index, item){return $(item).attr('id');}).toArray().indexOf(ui.item.attr("id"));
+                    ui.item.data('start_index', start_pos);
+                },
+                stop: function( event, ui ) {
+                    var start_pos = ui.item.data('start_index');
+                    
+                    //var current_pos = ui.item.index();
+                    console.log( ui.item.attr('id'));
+                    var current_pos = $( "#collections_select .ms-selection .ms-list .ms-elem-selection" ).map(function(index, item){return $(item).attr('id');}).toArray().indexOf(ui.item.attr("id"));
+                    var start_option = that.$element.find('option').eq(start_pos);
+                    var temp = {val:start_option.val(), html:start_option.html()};
+                    if(start_pos<=current_pos){
+                        for (var i = start_pos; i < current_pos; i++) {
+                            var option_1 = that.$element.find('option').eq(i);
+                            var option_2 = that.$element.find('option').eq(i+1);
+                            option_1.val(option_2.val());
+                            option_1.html(option_2.html());
+                        }
+                    }else{
+                        for (var i = start_pos; i > current_pos; i--) {
+                            var option_1 = that.$element.find('option').eq(i);
+                            var option_2 = that.$element.find('option').eq(i-1);
+                            option_1.val(option_2.val());
+                            option_1.html(option_2.html());
+                        }
+                    }
+                    var current_option = that.$element.find('option').eq(current_pos);
+                    current_option.val(temp.val);
+                    current_option.html(temp.html);
+                    console.log(that.sanitize())
+                    console.log(that.$element.val());
+                    //$('#collections').multiSelect('refresh');
+                }
+            });*/console.log(that.$element.val());
         },
-        afterSelect: function(){
+        afterSelect: function(value){
             this.qs1.cache();
             this.qs2.cache();
+            console.log(value);
+            this.$element.find('[value='+value+']').insertAfter($('#collections :last-child'));
+            console.log(this.$element.val());
         },
         afterDeselect: function(){
             this.qs1.cache();
             this.qs2.cache();
         }
     });
-    
 	$("#tags").chosen();
     $('#type').change(function(event){
         var type = $(this).val();

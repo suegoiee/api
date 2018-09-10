@@ -2,22 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\StockRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class FavoriteController extends Controller
 {	
 
-    public function __construct()
+    protected $stockRepository;
+    public function __construct(StockRepository $stockRepository)
     {
-
+        $this->stockRepository = $stockRepository;
     }
 
     public function index(Request $request)
     {
         $favorites = $request->user()->favorites;
+        foreach ($favorites as $key => $favorite) {
+            $favorite->stock_name = $favorite->company ? $favorite->company->stock_name:'';
+            $favorite->id = $key+1;
+            //$favorite->sort= $key+1;
+        }
 
-        return $this->successResponse($favorites?$favorites:[]);
+        return $this->successResponse($favorites?$favorites->makeHidden(['company']):[]);
     }
 
     public function create()
@@ -34,11 +41,21 @@ class FavoriteController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['code','name']);
+        $stock_code = $request->input('stock_code');
+        
+        $stock = $this->stockRepository->getBy(['stock_code'=>$stock_code]);
+        if(!$stock){
+            return $this->failedResponse(['message'=>'The stock code not exists.']);
+        }
 
-        $user->favorites()->create($request_data);
+        $favorite = $user->favorites()->where('stock_code', $stock_code)->first();
 
-        return $this->successResponse($request_data);
+        if(!$favorite){
+            $stock = $user->favorites()->create(['stock_code'=>$stock_code, 'stock_name'=>$stock->stock_name]);
+            return $this->successResponse(['stock_code'=>$stock_code, 'stock_name'=>$stock->stock_name]);
+        }else{
+            return $this->failedResponse(['message'=>'The stock code has already been taken.']);
+        }
     }
 
     public function show(Request $request, $id)
@@ -56,27 +73,26 @@ class FavoriteController extends Controller
 
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, $stock_code=0)
     {
+        $stock_code = $stock_code != 0 ? $stock_code : $request->input('stock_code');
         $user = $request->user();
+
+        $favorite = $user->favorites()->where('stock_code', $stock_code)->first();
         
-        $validator = $this->favoriteValidator($request->all());
-        if($validator->fails()){
-            return $this->validateErrorResponse($validator->errors()->all());
+        if($favorite){
+            $favorite->delete();
+            return $this->successResponse($favorite);
+        }else{
+            return $this->failedResponse(['message'=>'The stock code not exists.']);
         }
-        $stock_code = $request->input('code');
-
-        $user->favorites()->where('code',$stock_code)->delete();
-
-        return $this->successResponse(['code'=>$stock_code]);
-
     }
 
     protected function favoriteValidator(array $data, $user_id)
     {
         return Validator::make($data, [
-            'code' => 'required|unique:favorites,code,NULL,id,user_id,'.$user_id,
-            'name' => 'required',
+            'stock_code' => 'required|unique:favorites,stock_code,NULL,id,user_id,'.$user_id,
+            //'stock_name' => 'required',
         ]);        
     }
 }

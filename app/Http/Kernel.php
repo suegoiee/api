@@ -18,6 +18,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \Illuminate\Session\Middleware\StartSession::class,
     ];
 
     /**
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
         'apiToken'=>\Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         'ip'=>\App\Http\Middleware\RestrictIPMiddleware::class,
+        'adminToken'=>\App\Http\Middleware\AdminToken::class,
     ];
 }

@@ -1,0 +1,65 @@
+.list-group-header{
+	line-height: 1.25;
+	height: 30px;
+	padding:5px 10px; 
+	width: 100%;
+	//font-size: 1.2em; 
+	font-weight: bold;
+}
+.list-group-header div{
+	height: 30px;
+}
+#sortable { 
+ 	list-style-type: none; 
+ 	margin: 0; 
+ 	padding: 0; 
+ 	width: 100%; 
+}
+#sortable li { 
+	padding:5px 10px; 
+	width: 100%;
+	//font-size: 1.2em; 
+	line-height: 1.25;
+	//height: 43px;
+}
+#sortable li.ui-state-default{
+	cursor: n-resize;
+}
+#sortable li.ui-state-default:hover{
+	background: #ECEFF1;
+}
+#sortable li.ui-state-highlight{ 
+	height: 43px;
+	border: 1px dashed #555;
+}
+.list-group-item{
+	overflow: hidden;
+	width: 100%;
+}
+.list-group-item>div{
+	float: left;
+	line-height: 1.25;
+	height: 43px;
+	text-align: center;
+}
+.list-group-item .cursor{
+	width: 5%;
+	vertical-align: middle;
+	line-height: 43px;
+}
+.list-group-item .col_title{
+	width: 30%;
+}
+.list-group-item .col_image {
+	width: 25%;
+}
+.list-group-item .col_image img{
+	vertical-align: inherit;
+	max-height: 100%
+}
+.list-group-item .col_link{
+	width: 25%;
+}
+.list-group-item .col_actions{
+	width: 10%;
+}

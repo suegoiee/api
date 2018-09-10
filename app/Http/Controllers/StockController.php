@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\StockRepository;
+use App\Repositories\StockIndustryRepository;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class StockController extends Controller
 {	
-    protected $StockRepository;
-    public function __construct(StockRepository $stockRepository)
+    protected $stockRepository;
+    protected $stockIndustryRepository;
+    public function __construct(StockRepository $stockRepository, StockIndustryRepository $stockIndustryRepository) 
     {
 	   $this->stockRepository = $stockRepository;
+       $this->stockIndustryRepository = $stockIndustryRepository;
     }
 
     public function index()
@@ -44,6 +48,18 @@ class StockController extends Controller
         $request_data = $request->only(['stock_code','stock_name','stock_industries','industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type']);
 
         $stock = $this->stockRepository->create($request_data);
+        $stockIndustry = $this->stockIndustryRepository->getBy(['stock_code'=>$request_data['stock_code']]);
+        if($stockIndustry){
+            if($request_data['stock_industries']==0){
+                $stockIndustry->destroy();
+            }else{
+                $stockIndustry->update(['industry_id'=>$request_data['stock_industries']]);
+            }
+        }else{
+            $this->stockIndustryRepository->create(['stock_code'=>$request_data['stock_code'], 'industry_id'=>$request_data['stock_industries']]);
+        }
+
+
 
         $events = $request->input('events',[]);
         foreach ($events as $key => $event) {
@@ -98,6 +114,16 @@ class StockController extends Controller
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $stock = $this->stockRepository->update($id,$data);
+        $stockIndustry = $this->stockIndustryRepository->getBy(['stock_code'=>$request_data['stock_code']]);
+        if($stockIndustry){
+            if($request_data['stock_industries']==0){
+                $stockIndustry->delete();
+            }else{
+                $stockIndustry->update(['industry_id'=>$request_data['stock_industries']]);
+            }
+        }else{
+            $this->stockIndustryRepository->create(['stock_code'=>$request_data['stock_code'], 'industry_id'=>$request_data['stock_industries']]);
+        }
 
         $events = $request->input('events',[]);
         $event_ids = [];

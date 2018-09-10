@@ -22,19 +22,34 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get();
+        $start_time = microtime();
+        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get()->makeHidden(['collection_product_id']);
+        $end_time = microtime();
         foreach ($laboratories as $laboratory) {
-            $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
+            $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+            
+            if(!$laboratory->customized){
+                $collect_product = $user->products()->find($laboratory->collection_product_id);
+                $deadline = $collect_product? $collect_product->pivot->deadline:0;
+            }
+
             foreach ($laboratory->products as $product) {
                 $product_user = $product->users()->find($user->id);
-                $product->installed = $product_user ? $product_user->pivot->installed : 0;
-                $product->deadline = $product_user ? $product_user->pivot->deadline : null;
+                if(!$laboratory->customized){
+                    $product->installed = 1;
+                    $product->deadline = $deadline;
+                }else{
+                    $product->installed = $product_user ? $product_user->pivot->installed : 0;
+                    $product->deadline = $product_user ? $product_user->pivot->deadline : null;
+                }
                 $product->sort = $product->pivot->sort;
                 foreach ( $product->collections as $collection){
                     $collection->makeHidden(['avatar_small','avatar_detail']);
                 }
             }
+            $laboratory->products=$laboratory->products->sortBy('sort');
         }
+       // return $this->successResponse($end_time - $start_time);
         return $this->successResponse($laboratories);
     }
 
@@ -53,11 +68,17 @@ class LaboratoryController extends Controller
 
         $request_data = $request->only(['title','layout','sort']);
         $request_data['customized']=1;
+        $request_data['sort'] = isset($request_data['sort']) ? $request_data['sort']:0;
         $laboratory = $user->laboratories()->create($request_data);
 
         $products = $request->input('products',[]);
-        $laboratory->products()->syncWithoutDetaching($products);
+        $products_data = [];
+        foreach ($products as $key => $value) {
+            $products_data[$value]=['sort'=>$key];
+        }
+        $laboratory->products()->syncWithoutDetaching($products_data);
         $products_install = [];
+
         $products = is_array($products) ? $products:[$products];
         foreach ($products as $key => $product) {
             $product_data = $user->products()->find($product);
@@ -80,16 +101,27 @@ class LaboratoryController extends Controller
         }
 
         $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->find($id);
-        $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
+        $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+
+        if(!$laboratory->customized){
+            $collect_product = $user->products()->find($laboratory->collection_product_id);
+            $deadline = $collect_product? $collect_product->pivot->deadline:0;
+        }
         foreach ($laboratory->products as $product) {
             $product_user = $product->users()->find($user->id);
-            $product->installed = $product_user ? $product_user->pivot->installed : 0;
-            $product->deadline = $product_user ? $product_user->pivot->deadline : null;
+            if(!$laboratory->customized){
+                $product->installed = 1;
+                $product->deadline = $deadline;
+            }else{
+                $product->installed = $product_user ? $product_user->pivot->installed : 0;
+                $product->deadline = $product_user ? $product_user->pivot->deadline : null;
+            }
             $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){
                 $collection->makeHidden(['avatar_small','avatar_detail']);
             }
          }
+         $laboratory->products=$laboratory->products->sortBy('sort');
 
         return $this->successResponse($laboratory?$laboratory:[]);
     }
@@ -124,12 +156,19 @@ class LaboratoryController extends Controller
         }
         $products = $request->input('products');
 
+
         $products_install = $products ? (is_array($products) ? $products:[$products]) : [];
         if(count($products_install)==0){
         	return $this->failedResponse(['message'=>[trans('product.cant_no_products')]]);
         }
         $products_remove = $laboratory->products()->whereNotIn('id',$products_install)->get();
-        $laboratory->products()->sync($products_install);
+
+        $products_data = [];
+        foreach ($products_install as $key => $value) {
+            $products_data[$value]=['sort'=>$key];
+        }
+        $laboratory->products()->sync($products_data);
+
         foreach ($products_install as $key => $product) {
             $user->products()->updateExistingPivot($product,['installed'=>1]);
         }
@@ -182,13 +221,19 @@ class LaboratoryController extends Controller
         }
         $laboratory = $user->laboratories()->find($id);
         $user->laboratories()->where('id',$id)->delete();
-        $products = $laboratory->products;
-        foreach ($products as $key => $product) {
-            $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
-            if($install_num==0){
-                $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+        
+        if($laboratory->customized){
+            $products = $laboratory->products;
+            foreach ($products as $key => $product) {
+                $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
+                if($install_num==0){
+                    $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+                }
             }
+        }else{
+            $user->products()->updateExistingPivot($laboratory->collection_product_id, ['installed'=>0]);
         }
+
         return $this->successResponse(['id'=>$id]);
 
     }

@@ -1,30 +1,40 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use App\Repositories\PromocodeRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class PromocodeController extends AdminController
 {	
     protected $userRepository;
-    public function __construct(PromocodeRepository $promocodeRepository, UserRepository $userRepository)
+    protected $productRepository;
+    public function __construct(Request $request, PromocodeRepository $promocodeRepository, UserRepository $userRepository,ProductRepository $productRepository)
     {
+        parent::__construct($request);
         $this->moduleName='promocode';
         $this->moduleRepository = $promocodeRepository;
         $this->userRepository = $userRepository;
-
-        $this->token = $this->clientCredentialsGrantToken();
+        $this->productRepository = $productRepository;
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index(Request $request)
     {
         $query_string=[];
-
-        $promocodes = $this->moduleRepository->getsWith(['user']);
+        if($request->has('type')){
+            $where['type'] = $request->input('type',0);
+            $query_string = $request->only(['type']);
+        }else{
+            $where['type'] = $request->input('type',0);
+            $query_string['type'] = $request->input('type',0);
+        }
+        $promocodes = $this->moduleRepository->getsWith(['user','used'], $where,['updated_at'=>'DESC']);
 
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>['import','new'],
+            'tabs'=>['type'=>[0,1]],
             'query_string' => $query_string,
             'table_data' => $promocodes,
             'table_head' =>['name','code','offer','user_name','deadline', 'used_at'],
@@ -38,6 +48,7 @@ class PromocodeController extends AdminController
         $data = [
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->gets(),
+            'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
             'data' => null,
         ];
         return view('admin.form',$data);
@@ -50,6 +61,7 @@ class PromocodeController extends AdminController
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->gets(),
             'data' => $this->moduleRepository->getWith($id,['user']),
+            'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
         ];
         return view('admin.form',$data);
     }
@@ -67,6 +79,7 @@ class PromocodeController extends AdminController
         $result = ['success'=>0, 'errors'=>[]];
         if($file){
             $insertArray = [];
+            $promocodes = [];
             $ignoreLine = true;
             while (($line = fgetcsv($file)) !== FALSE) {
                 if($ignoreLine){
@@ -77,11 +90,29 @@ class PromocodeController extends AdminController
                     'name'=>$line[0],
                     'code'=>$line[1],
                     'offer'=>$line[2],
-                    'deadline'=>$line[3]!=''?$line[3]:null
+                    'deadline'=>$line[3]!=''?$line[3]:null,
+                    'type'=>$line[4],
+                    'user_id'=>$line[5]!='' ? $line[5]:0,
+                    'specific'=>$line[6]
                 ];
+                $promocodes[$line[1]]=$lineData;
+                $promocodes[$line[1]]['products']=[];
+
+                foreach ($line as $key => $col) {
+                    if($key<=6){
+                        continue;
+                    }
+                    if($col != '' && $this->productRepository->get($col)){
+                        
+                        array_push($promocodes[$line[1]]['products'], $col);
+                    }
+                }
                 array_push($insertArray, $lineData);
             }
             $resultInsert = $this->moduleRepository->insertArray($insertArray);
+            foreach ($resultInsert['data'] as $key => $data) {
+                $data->products()->sync($promocodes[$data->code]['products']);
+            }
             $result['success']= $resultInsert['success'];
             foreach ($resultInsert['errors'] as $key => $error) {
                 array_push($result['errors'], $error->code.' '.trans('import.is_exist'));

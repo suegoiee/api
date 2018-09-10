@@ -7,12 +7,13 @@ class CompanyController extends AdminController
 {	
     protected $stockRepository;
 
-    public function __construct(StockRepository $stockRepository)
+    public function __construct(Request $request, StockRepository $stockRepository)
     {
+        parent::__construct($request);
         $this->moduleName='company';
         $this->moduleRepository = $stockRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()
@@ -23,7 +24,7 @@ class CompanyController extends AdminController
             'actions'=>['new'],
             'table_data' => $company,
             'table_head' =>['stock_code','stock_name','stock_industries','industries','type'],
-            'table_formatter' =>[],
+            'table_formatter' =>['stock_industries'],
         ];
         return view('admin.list',$data);
     }

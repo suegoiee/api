@@ -12,48 +12,35 @@ class NotificationController extends Controller
 	   
     }
 
-    public function index(Request $request)
+    public function read(Request $request)
+    {
+        $user = $request->user();
+        $_notifications = $user->notifications;//->sortBy('read_at');
+        $notifications = [];
+        foreach ($_notifications as $key => $notification) {
+            $type = explode("\\", $notification->type);
+            $status = $notification->read_at ? 1 : 0 ;
+            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data, 'status'=>$status]);
+        }
+        return $this->successResponse($notifications);
+    }
+    public function unRead(Request $request)
     {
         $user = $request->user();
         $_notifications = $user->unreadNotifications;
         $notifications = [];
         foreach ($_notifications as $key => $notification) {
             $type = explode("\\", $notification->type);
-            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data]);
+            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data, 'status'=>0]);
         }
         return $this->successResponse($notifications);
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        
-    }
-
-    public function show(Request $request, $id)
-    {
-        
-    }
-    public function edit($id)
-    {
-      
-    }
-
-    public function update(Request $request, $id)
+    public function markRead(Request $request, $id)
     {
         $now = Carbon::now();
         $user = $request->user();
-        $notifications = $user->unreadNotifications->where('id',$id)->update(['read_at' => $now]);
+        $notifications = $user->unreadNotifications()->where('id',$id)->update(['read_at' => $now]);
         return $this->successResponse(['id'=>$id,'read_at'=>$now->toDateTimeString()]);
     }
-
-    public function destroy(Request $request, $id)
-    {
-        
-    }
-
 }

@@ -7,6 +7,7 @@ use App\Traits\OauthToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Events\UserRegistered;
 use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
@@ -45,8 +46,10 @@ class RegisterController extends Controller
         ]);
     }
 
-    protected function registered(Request $request,$user)
+    protected function registered(Request $request, $user)
     {
+        $adminToken = $this->clientCredentialsGrantToken();
+        event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
         $token['user'] = $user;
         $token['profile'] = $this->createProfile($request,$user);

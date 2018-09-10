@@ -20,16 +20,21 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
-
 Route::post('/allpay/feedback','AllpayController@feedback');
 Route::post('/ecpay/feedback','EcpayController@feedback');
+
+Route::get('/ecpay/result','EcpayController@result');
+Route::post('/ecpay/result','EcpayController@result');
 
 Route::get('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/auth/facebook', 'Auth\FacebookController@login');
 
+Route::post('/stocks/products', 'StockModelController@getModelProducts');
+
 Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){
+	Route::get('/auth/login','Auth\TokenController@isLogin');
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
 
 	Route::get('/user/info','ProfileController@show')->name('info.show');
@@ -43,6 +48,8 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::resource('/user/credit_cards', 'CreditCardController', ['only' => [
 		'index','store','show', 'update', 'destroy'
 	]]);
+
+	Route::delete('/user/favorites/','FavoriteController@destroy');
 	Route::resource('/user/favorites', 'FavoriteController', ['only' => [
 			'index', 'store', 'destroy'
 		]]);
@@ -51,6 +58,8 @@ Route::middleware(['auth:api'])->group(function(){
 			'index','show','store','destroy'
 		]]);
 	Route::post('/user/orders/trial','OrderController@trial')->name('orders.trial');
+	Route::get('/user/invoices/{RelatedNumber}','EcpayController@invoiceQuery')->name('invoices.show');
+	
 	
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
 	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');
@@ -71,11 +80,13 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/user/lab_avatar/{module_id}','AvatarController@update')->name('laboratories.avatar.update');
 	Route::delete('/user/lab_avatar/{module_id}','AvatarController@destroy')->name('laboratories.avatar.destroy');
 
-	Route::get('/promocodes/{promocode}','PromocodeController@show')->name('promocodes.show')->where('promocode', '[0-9]+');
+	Route::get('user/promocodes','PromocodeController@getList')->name('user.promocodes.index');
+	Route::get('user/promocodes/{promocode}','PromocodeController@show')->name('user.promocodes.show')->where('promocode', '[0-9]+');
+	Route::get('user/promocodes/query','PromocodeController@show');
 
-	Route::get('/user/notifications','NotificationController@index')->name('notifications.index');
-
-	Route::put('/user/notifications/{notification}','NotificationController@update')->name('notifications.update');
+	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
+	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
+	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -99,6 +110,9 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/blogs','Front\ArticleController@index');
 	Route::get('/blogs/{slug}','Front\ArticleController@index');
 	Route::get('/archives/{slug}','Front\ArticleController@show');
+
+	Route::get('/edms','EdmController@onPublishList');
+	Route::get('/edms/{edm}','EdmController@onPublish');
 });
 
 
@@ -153,6 +167,19 @@ Route::middleware(['client:promocode'])->group(function(){
 	Route::post('/promocodes','PromocodeController@store')->name('promocodes.store');
 	Route::put('/promocodes/{promocode}','PromocodeController@update')->name('promocodes.update');
 	Route::delete('/promocodes/{promocode}','PromocodeController@destroy')->name('promocodes.destroy');
+});
+Route::middleware(['client:notificationMessage'])->group(function(){
+	Route::get('/notificationMessages','NotificationMessageController@index')->name('notificationMessages.index');
+	Route::post('/notificationMessages','NotificationMessageController@store')->name('notificationMessages.store');
+	Route::put('/notificationMessages/{notification}','NotificationMessageController@update')->name('notificationMessages.update');
+	Route::delete('/notificationMessages/{notification}','NotificationMessageController@destroy')->name('notificationMessages.destroy');
+});
+Route::middleware(['client:edm'])->group(function(){
+	Route::get('/edms/all','EdmController@index')->name('edms.index');
+	Route::get('/edms/{edm}/all','EdmController@show')->name('edms.show');
+	Route::post('/edms','EdmController@store')->name('edms.store');
+	Route::put('/edms/{edm}','EdmController@update')->name('edms.update');
+	Route::delete('/edms/{edm}','EdmController@destroy')->name('edms.destroy');
 });
 
 //Admin
@@ -212,4 +239,16 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::get('/promocodes/{promocode}','Admin\PromocodeController@show')->name('promocodes.show')->where('promocode','[0-9]+');
 	Route::get('/promocodes/import','Admin\PromocodeController@importView');
 	Route::post('/promocodes/import','Admin\PromocodeController@import');
+
+	Route::get('/notificationMessages/{notificationMessage}/delete','Admin\NotificationMessageController@destroy');
+	Route::delete('/notificationMessages','Admin\NotificationMessageController@destroy');
+	Route::resource('/notificationMessages', 'Admin\NotificationMessageController');
+
+	Route::get('/edms/{edm}/delete','Admin\EdmController@destroy');
+	Route::delete('/edms','Admin\EdmController@destroy');
+	Route::resource('/edms', 'Admin\EdmController');
+
 });
+Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
+Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
+Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');

@@ -5,7 +5,10 @@
     <link rel="stylesheet" href="{{asset('thirdparty/chosen/chosen.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
 
-     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
+    @if($module_name=='edm' || $module_name=='product')
+        <link rel="stylesheet" href="{{asset('css/'.$module_name.'/sorted.css')}}">
+    @endif
 @endsection
 @section('content')
     <ol class="breadcrumb">
@@ -22,11 +25,18 @@
         @include('admin.'.$module_name.'.form')
         {{ $data ? method_field('PUT'):'' }}
         {{ csrf_field() }}
-        <div class="actions form-group text-center" >
+        @if(isset($send_actions))
+            <div class="actions form-group text-center" >
+                <button type="submit" name="action" value="save_exit" class="btn btn-info" id="send_btn">{{trans('form.send')}}</button>
+                <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
+            </div>
+        @else
+            <div class="actions form-group text-center" >
             <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
             <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
             <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
         </div>
+        @endif
     </form>
 @endsection
 
@@ -49,6 +59,9 @@ $(function(){
     });
 });
 </script>
+@if($module_name=='edm' || $module_name=='product')
+<script src="{{asset('thirdparty/jquery-ui-sortable/jquery-ui.min.js')}}"></script>
+@endif
 <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>
 <script src="{{asset('thirdparty/ckeditor/ckeditor.js')}}"></script>
 @endsection

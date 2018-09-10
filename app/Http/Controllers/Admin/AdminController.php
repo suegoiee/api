@@ -12,9 +12,32 @@ class AdminController extends Controller
     protected $moduleName;
     protected $moduleRepository;
     protected $token;
-    public function __construct()
+    public function __construct(Request $request)
     {
        //$this->token = $this->clientCredentialsGrantToken();
+        if(!$this->getAccessToken($request)){
+            $request->session()->put('access_token', $this->clientCredentialsGrantToken());
+        }
+        $this->token = $request->session()->get('access_token');
+    }
+    protected function checkLogin($request){
+        if(!$this->getAccessToken($request)){
+            $request->session()->put('access_token', $this->clientCredentialsGrantToken());
+        }
+        $this->token = $request->session()->get('access_token');
+    }
+    protected function getAccessToken(Request $request){
+        $http = new \GuzzleHttp\Client;
+        $response = $http->request('get',url('/auth/login'),[
+                'headers'=>[
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'',
+                ],
+                'form_params' => $request->all(),
+            ]);
+
+        $response_data = json_decode((string) $response->getBody(), true);
+        return $response_data['status']=='success';
     }
 
     public function store(Request $request)

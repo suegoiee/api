@@ -29,8 +29,12 @@ function deadlineFormatter(value,row,index){
 }
 
 function used_atFormatter(value,row,index){
-	if(value != null){
-		return '是';
+	if(row.type==1){
+		if(value != null){
+			return '是';
+		}
+		return '否';
+	}else{
+		return row.used.length;
 	}
-	return '否';
 }

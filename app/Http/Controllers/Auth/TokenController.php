@@ -46,7 +46,11 @@ class TokenController extends Controller
                 $user->touch();
             }
         }
+        $start_time = microtime();
         $response = $this->passwordGrantToken($request);
+        $end_time = microtime();
+        //return $this->successResponse($end_time - $start_time);
+        
         return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)
@@ -56,6 +60,14 @@ class TokenController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
         return $this->successResponse($this->refreshGrantToken($request));
+    }
+    public function isLogin(Request $request)
+    {
+        $user = $request->user();
+        if($user){
+            return $this->successResponse(['login success']);
+        }
+        return $this->failedResponse(['login failed']);
     }
 
     protected function validator(array $data)

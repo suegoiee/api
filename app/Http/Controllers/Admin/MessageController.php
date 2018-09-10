@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class MessageController extends AdminController
 {	
-    public function __construct(MessageRepository $messageRepository)
+    public function __construct(Request $request, MessageRepository $messageRepository)
     {
+        parent::__construct($request);
         $this->moduleName='message';
         $this->moduleRepository = $messageRepository;
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

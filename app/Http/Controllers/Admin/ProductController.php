@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use App\Notifications\ReceiveProducts;
+use App\Notifications\ProductReceive;
 use App\Repositories\TagRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
@@ -10,14 +10,15 @@ class ProductController extends AdminController
 {	
     protected $tagRepository;
     protected $userRepository;
-    public function __construct(ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
+    public function __construct(Request $request, ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
     {
+        parent::__construct($request);
         $this->moduleName='product';
         $this->moduleRepository = $productRepository;
         $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()
@@ -46,12 +47,12 @@ class ProductController extends AdminController
 
     public function edit($id)
     {
-
+        $product =  $this->moduleRepository->getWith($id,['tags','collections']);
         $data = [
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
-            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id',[$id]),
-            'data' => $this->moduleRepository->getWith($id,['tags','collections']),
+            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
+            'data' => $product,
         ];
         return view('admin.form',$data);
     }
@@ -162,7 +163,7 @@ class ProductController extends AdminController
     }
     public function assignedView(UserRepository $userRepository)
     {
-        $products = $this->moduleRepository->getsWith([],['status'=>1]);
+        $products = $this->moduleRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']);
         $users = $userRepository->gets();
         $data = [
             'module_name'=> $this->moduleName,
@@ -173,13 +174,14 @@ class ProductController extends AdminController
     }
     public function assigned(Request $request)
     {   
+        $send_email = $request->input('send_email',0) ? true : false;
         $product_ids = $request->input('products', []);
         $user_ids = $request->input('users', []);
         foreach ($user_ids as $key => $user_id) {
             $result = $this->addProducts($user_id, $product_ids);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
-                $user->notify(new ReceiveProducts($user, $product_ids));
+                $user->notify(new ProductReceive($user, $product_ids, $send_email));
             }
         }
         return redirect('admin/products');

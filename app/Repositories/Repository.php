@@ -37,8 +37,12 @@ class Repository
 		$query = $this->model->with($with);
 		foreach ($where as $key => $value) {
 			$field_array = explode('.', $key);
-			if(count($field_array)>1){ 
-				$query = $query->where($field_array[0], $field_array[1], $value);
+			if(count($field_array)>1){
+				if($field_array[1] == 'in'){
+					$query = $query->whereIn($field_array[0], $value);
+				}else{
+					$query = $query->where($field_array[0], $field_array[1], $value);
+				}
 			}else{
 				$query = $query->where($key,$value);
 			}
@@ -67,11 +71,13 @@ class Repository
 		return $this->model->create($data);
 	}
 	public function insertArray($array=[]){
-		$result = ['success'=>0,'errors'=>[]];
+		$result = ['success'=>0,'errors'=>[],'data'=>[]];
 		foreach ($array as $data) {
 			$modelData = $this->model->where($this->uniqueKey, $data[$this->uniqueKey])->first();
 			if(!$modelData){
 				$this->model->insert($data);
+				$modelData = $this->model->where($this->uniqueKey, $data[$this->uniqueKey])->first();
+				array_push($result['data'], $modelData);
 				$result['success']++;
 			}else{
 				array_push($result['errors'], $modelData);
