@@ -23,33 +23,8 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         $start_time = microtime();
-        $laboratories = $user->laboratories()->with(['products','products.collections','products.faqs'])->orderBy('sort')->get()->makeHidden(['collection_product_id']);
+        $laboratories = $user->laboratories()->orderBy('sort')->get();
         $end_time = microtime();
-        foreach ($laboratories as $laboratory) {
-            $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
-            
-            if(!$laboratory->customized){
-                $collect_product = $user->products()->find($laboratory->collection_product_id);
-                $deadline = $collect_product? $collect_product->pivot->deadline:0;
-            }
-
-            foreach ($laboratory->products as $product) {
-                $product_user = $product->users()->find($user->id);
-                if(!$laboratory->customized){
-                    $product->installed = 1;
-                    $product->deadline = $deadline;
-                }else{
-                    $product->installed = $product_user ? $product_user->pivot->installed : 0;
-                    $product->deadline = $product_user ? $product_user->pivot->deadline : null;
-                }
-                $product->sort = $product->pivot->sort;
-                foreach ( $product->collections as $collection){
-                    $collection->makeHidden(['avatar_small','avatar_detail']);
-                }
-            }
-            $laboratory->products=$laboratory->products->sortBy('sort');
-        }
-       // return $this->successResponse($end_time - $start_time);
         return $this->successResponse($laboratories);
     }
 
