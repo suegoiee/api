@@ -35,7 +35,7 @@ class UserRegisteredListener
                     'Authorization' => 'Bearer '.$token['access_token'],
                 ],
                 'form_params' => [
-                    'products' => [['id'=>42,'quanatity'=>1]],
+                    'products' => [['id'=>42,'quantity'=>1]],
                     'user_id' => $user['id'],
                 ],
             ]);
