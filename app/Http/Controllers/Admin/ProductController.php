@@ -10,14 +10,15 @@ class ProductController extends AdminController
 {	
     protected $tagRepository;
     protected $userRepository;
-    public function __construct(ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
+    public function __construct(Request $request, ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
     {
+        parent::__construct($request);
         $this->moduleName='product';
         $this->moduleRepository = $productRepository;
         $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()
@@ -173,13 +174,14 @@ class ProductController extends AdminController
     }
     public function assigned(Request $request)
     {   
+        $send_email = $request->input('send_email',0) ? true : false;
         $product_ids = $request->input('products', []);
         $user_ids = $request->input('users', []);
         foreach ($user_ids as $key => $user_id) {
             $result = $this->addProducts($user_id, $product_ids);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
-                $user->notify(new ProductReceive($user, $product_ids));
+                $user->notify(new ProductReceive($user, $product_ids, $send_email));
             }
         }
         return redirect('admin/products');

@@ -7,12 +7,13 @@ class CompanyController extends AdminController
 {	
     protected $stockRepository;
 
-    public function __construct(StockRepository $stockRepository)
+    public function __construct(Request $request, StockRepository $stockRepository)
     {
+        parent::__construct($request);
         $this->moduleName='company';
         $this->moduleRepository = $stockRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

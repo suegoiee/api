@@ -9,13 +9,13 @@ class ArticleController extends AdminController
 {	
     protected $tagRepository;
 
-    public function __construct(ArticleRepository $articleRepository, TagRepository $tagRepository)
+    public function __construct(Request $request, ArticleRepository $articleRepository, TagRepository $tagRepository)
     {
+        parent::__construct($request);
         $this->moduleName = 'article';
         $this->moduleRepository = $articleRepository;
         $this->tagRepository = $tagRepository;
-
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

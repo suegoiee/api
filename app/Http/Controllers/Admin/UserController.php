@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class UserController extends AdminController
 {	
-    public function __construct(UserRepository $userRepository)
+    public function __construct(Request $request, UserRepository $userRepository)
     {
+        parent::__construct($request);
         $this->moduleName='user';
         $this->moduleRepository = $userRepository;
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

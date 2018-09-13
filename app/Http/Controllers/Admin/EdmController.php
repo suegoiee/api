@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Validator;
 class EdmController extends AdminController
 {	
     use ImageStorage;
-    public function __construct(EdmRepository $edmRepository)
+    public function __construct(Request $request, EdmRepository $edmRepository)
     {
+        parent::__construct($request);
         $this->moduleName='edm';
         $this->moduleRepository = $edmRepository;
 
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

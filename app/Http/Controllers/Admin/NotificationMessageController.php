@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Validator;
 class NotificationMessageController extends AdminController
 {	
     protected $userRepository;
-    public function __construct(NotificationMessageRepository $notificationMessageRepository,UserRepository $userRepository)
+    public function __construct(Request $request, NotificationMessageRepository $notificationMessageRepository,UserRepository $userRepository)
     {
+        parent::__construct($request);
         $this->moduleName='notificationMessage';
         $this->moduleRepository = $notificationMessageRepository;
         $this->userRepository = $userRepository;
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()

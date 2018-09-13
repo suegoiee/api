@@ -9,13 +9,14 @@ class PromocodeController extends AdminController
 {	
     protected $userRepository;
     protected $productRepository;
-    public function __construct(PromocodeRepository $promocodeRepository, UserRepository $userRepository,ProductRepository $productRepository)
+    public function __construct(Request $request, PromocodeRepository $promocodeRepository, UserRepository $userRepository,ProductRepository $productRepository)
     {
+        parent::__construct($request);
         $this->moduleName='promocode';
         $this->moduleRepository = $promocodeRepository;
         $this->userRepository = $userRepository;
         $this->productRepository = $productRepository;
-        $this->token = $this->clientCredentialsGrantToken();
+        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index(Request $request)
