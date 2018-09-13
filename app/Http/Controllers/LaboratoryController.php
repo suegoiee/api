@@ -23,8 +23,9 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         $start_time = microtime();
-        $laboratories = $user->laboratories()->orderBy('sort')->get();
-        $end_time = microtime();
+        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id']);
+        $end_time = microtime();       
+       // return $this->successResponse($end_time - $start_time);
         return $this->successResponse($laboratories);
     }
 
