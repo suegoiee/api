@@ -8,6 +8,7 @@ use Facebook;
 use App\Traits\OauthToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Events\UserRegistered;
 use Illuminate\Support\Facades\Validator;
 
 class FacebookController extends Controller
@@ -60,6 +61,8 @@ class FacebookController extends Controller
 
     protected function registered(Request $request,$user)
     {
+        $adminToken = $this->clientCredentialsGrantToken();
+        event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
         $token['user'] = $user;
         $token['profile'] = $this->createProfile($request,$user);
