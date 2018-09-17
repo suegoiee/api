@@ -8,6 +8,7 @@ use Facebook;
 use App\Traits\OauthToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Events\UserRegistered;
 use Illuminate\Support\Facades\Validator;
 
 class FacebookController extends Controller
