@@ -60,6 +60,8 @@ class FacebookController extends Controller
 
     protected function registered(Request $request,$user)
     {
+        $adminToken = $this->clientCredentialsGrantToken();
+        event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
         $token['user'] = $user;
         $token['profile'] = $this->createProfile($request,$user);
