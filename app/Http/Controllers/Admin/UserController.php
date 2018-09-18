@@ -19,7 +19,7 @@ class UserController extends AdminController
     {
         $users = $this->moduleRepository->getsWith(['profile']);
         foreach ($users as $key => $user) {
-            $user->nickname = $user->profile->nickname;
+            $user->nickname = $user->profile? $user->profile->nickname:'';
         }
         $data = [
             'module_name'=> $this->moduleName,
