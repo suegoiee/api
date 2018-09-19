@@ -1,3 +1,6 @@
+function nicknameFormatter(value,row,index){
+	return row.profile.nickname;
+}
 function actionFormatter(value,row,index){
 	var actions='<div class="actions">';
 	actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'"><span class="oi oi-eye"></span></a>';

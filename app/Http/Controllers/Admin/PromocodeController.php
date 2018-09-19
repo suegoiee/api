@@ -47,7 +47,7 @@ class PromocodeController extends AdminController
     {
         $data = [
             'module_name'=> $this->moduleName,
-            'users' => $this->userRepository->gets(),
+            'users' => $this->userRepository->getsWith(['profile']),
             'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
             'data' => null,
         ];
@@ -59,7 +59,7 @@ class PromocodeController extends AdminController
 
         $data = [
             'module_name'=> $this->moduleName,
-            'users' => $this->userRepository->gets(),
+            'users' => $this->userRepository->getsWith(['profile']),
             'data' => $this->moduleRepository->getWith($id,['user']),
             'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
         ];

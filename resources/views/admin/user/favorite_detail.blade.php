@@ -11,8 +11,8 @@
             <tbody>
                 @foreach($data->favorites as $key => $favorite)
                 <tr>
-                    <td>{{$favorite->code}}</td>
-                    <td>{{$favorite->name}}</td>
+                    <td>{{$favorite->stock_code}}</td>
+                    <td>{{$favorite->stock_name}}</td>
                     <td>{{$favorite->created_at}}</td>
                 </tr>
                 @endforeach
