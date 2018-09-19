@@ -71,7 +71,7 @@
     	 <select class="chosen-select" id="user_id" name="user_id" data-placeholder="{{trans('form.do_select')}}">
     	 	<option hidden selected value="0"> {{trans('form.do_select')}}</option>
             @foreach($users as $user)
-                <option value="{{$user->id}}" {{$data && $data->user_id == $user->id ? 'selected':''}} >{{$user->email}} ( No.{{$user->id}}, {{$user->profile->nickname}})</option>
+                <option value="{{$user->id}}" {{$data && $data->user_id == $user->id ? 'selected':''}} >{{$user->email}} ( No.{{$user->id}}, {{$user->profile? $user->profile->nickname:''}})</option>
             @endforeach
         </select>
     </div>
