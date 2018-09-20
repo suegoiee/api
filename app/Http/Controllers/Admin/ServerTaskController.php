@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\LaboratoryRepository;
+use App\Repositories\ProductRepository;
+use App\Repositories\Repository;
 use App\Repositories\StockRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -67,6 +69,20 @@ class ServerTaskController extends AdminController
                 default:
                     $stockRepository->update($stock->no, ['stock_industries'=>0]);
                 break;
+            }
+        }
+    }
+    public function extendProductExpired(ProductRepository $productRepository, Request $request)
+    {
+        $id = $request->input('product_id',0);
+        $extend = $request->input('extend_date',0);
+        if($id){
+            $product = $productRepository->getWith($id, ['users']);
+            echo $product->name.'<br>';
+            foreach ($product->users as $key => $user) {
+                echo $user->email.': '.($user->profile? $user->profile->name:'').'[ deadline:'.$user->pivot->deadline.' =>'.date('Y-m-d H:i:s', strtotime($user->pivot->deadline.' +1 day')).']<br>';
+                $user->pivot->deadline = date('Y-m-d H:i:s', strtotime($user->pivot->deadline.' +1 day'));
+                $user->pivot->save();
             }
         }
     }
