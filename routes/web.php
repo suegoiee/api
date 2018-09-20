@@ -248,6 +248,8 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::delete('/edms','Admin\EdmController@destroy');
 	Route::resource('/edms', 'Admin\EdmController');
 
+	Route::delete('/analysts','Admin\AnalystController@destroy');
+	Route::resource('/analysts', 'Admin\AnalystController');
 });
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
