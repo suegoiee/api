@@ -1,5 +1,5 @@
 function nicknameFormatter(value,row,index){
-	return row.profile.nickname;
+	return row.profile ? row.profile.nickname:'';
 }
 function actionFormatter(value,row,index){
 	var actions='<div class="actions">';
