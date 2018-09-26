@@ -51,7 +51,7 @@
     <div class="col-sm-8">
     	 <select class="chosen-select" id="user_ids" name="user_ids[]" data-placeholder="{{trans('form.do_select')}}"  multiple="multiple">
             @foreach($users as $user)
-                <option value="{{$user->id}}" {{($data && in_array($user->id, $data->user_ids)) ? 'selected':''}} >{{$user->email}} ( No.{{$user->id}}, {{$user->profile->nickname}})</option>
+                <option value="{{$user->id}}" {{($data && in_array($user->id, $data->user_ids)) ? 'selected':''}} >{{$user->email}} ( No.{{$user->id}}, {{$user->profile ? $user->profile->nickname:''}})</option>
             @endforeach
 
         </select>
