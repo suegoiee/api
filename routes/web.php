@@ -184,12 +184,12 @@ Route::middleware(['client:edm'])->group(function(){
 
 //Admin
 //Route::get('/ip', function(){return Request::ip();});
-Route::group(['middleware' => ['ip','admin'] ],function(){
-	Route::get('/', 'HomeController@index');
-});
+Route::get('/', function(){echo 'running...';});
+
 Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
-	Route::get('/login', 'Admin\Auth\LoginController@loginForm')->name('login');
+	Route::get('/login', 'Admin\Auth\LoginController@loginForm')->name('admin.login');
 	Route::post('/login', 'Admin\Auth\LoginController@login');
+	Route::get('/', 'HomeController@index')->name('admin.home');
 });
 
 Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' => 'admin'],function(){
@@ -248,9 +248,39 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 	Route::delete('/edms','Admin\EdmController@destroy');
 	Route::resource('/edms', 'Admin\EdmController');
 
+	Route::get('/analysts/{analyst}/delete','Admin\AnalystController@destroy');
 	Route::delete('/analysts','Admin\AnalystController@destroy');
 	Route::resource('/analysts', 'Admin\AnalystController');
+
+	Route::get('/analysts/{analyst}/grants/{grant}/delete','Admin\AnalystController@grantDestroy');
+	Route::delete('/analysts/{analyst}/grants','Admin\AnalystController@grantDestroy');
+
+	Route::get('/analysts/{analyst}/grants', 'Admin\AnalystController@grantList');
+	Route::get('/analysts/{analyst}/grants/create', 'Admin\AnalystController@grantCreate');
+	Route::get('/analysts/{analyst}/grants/{grant}/edit', 'Admin\AnalystController@grantEdit');
+	Route::post('/analysts/{analyst}/grants', 'Admin\AnalystController@grantStore');
+	Route::put('/analysts/{analyst}/grants/{grant}', 'Admin\AnalystController@grantUpdate');
+	Route::get('/analysts/{analyst}/grants/details', 'Admin\AnalystController@details');
+
+	Route::get('/analysts/{analyst}/grants/amounts', 'Admin\AnalystController@getAmounts');
 });
+
+Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
+	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
+	Route::post('/login', 'Analyst\Auth\LoginController@login');
+	Route::get('/logout', 'Analyst\Auth\LoginController@logout');
+});
+
+Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],function(){
+	Route::get('/', 'Analyst\HomeController@index')->name('analyst.home');
+	Route::post('/logout', 'Analyst\Auth\LoginController@logout');
+
+	Route::get('/orders', 'Analyst\OrderController@index')->name('analyst.order.index');
+	
+	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
+	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
+});
+
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');

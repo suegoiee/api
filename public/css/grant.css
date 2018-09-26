@@ -1,0 +1,11 @@
+h3{
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-bottom: 0;
+}
+.detail_table tr >td{
+    text-align: right;
+}
+.detail_table tr:not(.bg-light) >th{
+    padding-left: 2rem;
+}

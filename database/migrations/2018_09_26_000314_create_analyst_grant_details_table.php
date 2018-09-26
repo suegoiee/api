@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAnalystsTable extends Migration
+class CreateAnalystGrantDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateAnalystsTable extends Migration
      */
     public function up()
     {
-        Schema::create('analysts', function (Blueprint $table) {
+        Schema::create('analyst_grant_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email')->unique();
-            $table->string('name');
-            $table->string('no');
-            $table->string('password');
-            $table->rememberToken();
+            $table->integer('analyst_grant_id')->unsigned();
+            $table->string('category')->default('');
+            $table->string('name')->default('');
+            $table->integer('amount');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -32,6 +30,6 @@ class CreateAnalystsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('analysts');
+        Schema::dropIfExists('analyst_grant_details');
     }
 }
