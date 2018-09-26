@@ -29,7 +29,7 @@ class PromocodeController extends AdminController
             $where['type'] = $request->input('type',0);
             $query_string['type'] = $request->input('type',0);
         }
-        $promocodes = $this->moduleRepository->getsWith(['user','used'], $where,['updated_at'=>'DESC']);
+        $promocodes = $this->moduleRepository->getsWith(['user','user.profile','used'], $where,['updated_at'=>'DESC']);
 
         $data = [
             'module_name'=> $this->moduleName,
