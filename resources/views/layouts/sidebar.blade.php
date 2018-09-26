@@ -71,6 +71,12 @@
                 <span class="text">{{trans('notificationMessage.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/analysts')}}">
+                <span class="oi oi-audio-spectrum"></span>
+                <span class="text">{{trans('analyst.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">

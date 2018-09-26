@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Auth;
+namespace App\Http\Controllers\Analyst\Auth;
 
 use Auth;
 use Hash;
@@ -9,17 +9,17 @@ use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/analyst';
     public function __construct()
     {
-       
+
     }
     public function loginForm()
     {
-        if(Auth::guard('admin')->check()){
-            return redirect()->route('admin.home');
+        if(Auth::guard('analyst')->check()){
+            return redirect()->route('analyst.home');
         }
-        return view('admin.auth.login');
+        return view('analyst.auth.login');
     }
 
     public function login(Request $request)
@@ -35,7 +35,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'email' => 'required',
             'password' => 'required'
         ]);
     }
@@ -47,21 +47,23 @@ class LoginController extends Controller
     }
     protected function credentials(Request $request)
     {
-        return $request->only('name', 'password');
+        return $request->only('email', 'password');
     }
 
     protected function sendLoginResponse(Request $request)
     {
+        //$request->session()->put('admin_name',$request->input('name'));
+        //$request->session()->put('admin',true);
         $request->session()->regenerate();
-        return redirect($this->redirectTo);
+        return redirect()->intended($this->redirectTo);
     }
 
     protected function sendFailedLoginResponse(Request $request)
     {
        return redirect()->back()
-            ->withInput($request->only('name'))
+            ->withInput($request->only('email'))
             ->withErrors([
-                'name' => trans('auth.failed'),
+                'email' => trans('auth.failed'),
             ]);
     }
 
@@ -77,6 +79,6 @@ class LoginController extends Controller
 
     protected function guard()
     {
-        return Auth::guard('admin');
+        return Auth::guard('analyst');
     }
 }
