@@ -46,6 +46,6 @@ class Order extends UanalyzeModel
     }
     public function promocodes()
     {
-        return $this->belongsToMany('App\Promocode');
+        return $this->belongsToMany('App\Promocode')->withPivot('overflow_offer');
     }
 }
