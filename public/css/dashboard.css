@@ -1,0 +1,44 @@
+.counter_border{
+	padding: 15px;
+	width: 25%;
+	float:left;
+}
+.counter{
+	background: #EDEDED;
+	border-radius: 10px;
+	text-align: center;
+	padding: 15px;
+}
+.counter .title{
+	color: #999;
+}
+.counter .number{
+	font-size: 72px;
+	line-height: 80px;
+	color: #333;
+}
+.counter.products{
+	background: #E1F5FE;
+}
+.counter.clients{
+	background: #EFEBE9;
+}
+.counter.orders{
+	background: #E0F2F1;
+}
+@media screen and (max-width: 961px){
+	.counter .title{
+		font-size: 12px;
+	}
+	.counter .number{
+		font-size: 48px;
+		line-height: 48px;
+		color: #333;
+	}	
+}
+
+@media screen and (max-width: 768px){
+	.counter_border{
+		width: 50%;
+	}
+}

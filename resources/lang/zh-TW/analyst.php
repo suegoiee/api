@@ -142,5 +142,9 @@
 		    'old_password_error'=>'原密碼錯誤!',
 		    'invalid_credential'=>'The user credentials were incorrect.',
 		],
-
+		'dashboard'=>[
+			'product_title'=>'上架中產品',
+			'client_title'=>'購買的使用者',
+			'order_title'=>'本月訂單數'
+		],
 	];

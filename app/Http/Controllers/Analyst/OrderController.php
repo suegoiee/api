@@ -44,16 +44,19 @@ class OrderController extends AnalystController
                     $order_product->product_name = $product->name;
                     $order_product->product_id = $product->id;
                     $offer = 0;
+                    $overflow_offer = 0;
                     foreach ($order->promocodes as $key3 => $promocode){
                         if($promocode->products()->where('id',$product->id)->count())
                         {
-                            $offer+=$promocode->offer;
+                            $offer += $promocode->offer;
+                            $overflow_offer += $promocode->pivot->overflow_offer;
                         }
                     }
                     $order_product->product_price = $product->pivot->unit_price * $product->pivot->quantity;
-                    $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
+                    $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price - $offer + $overflow_offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
                     $order_product->platform_fee = ($order_product->order_price - $order_product->handle_fee)*0.2853;
+                    $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     array_push($order_products, $order_product);
                 }
             }

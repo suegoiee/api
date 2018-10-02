@@ -61,7 +61,7 @@
             <h2 class="text-danger mx-auto">{{$grant->year_month}} {{trans('analyst.grant_detail_table')}}</h2>
         </div>
         <div class="row">
-            <table class="table col-sm-8 table-sm detail_table mx-auto" id="detail_table">
+            <table class="table table-sm detail_table mx-auto" id="detail_table">
                 <tbody>
                 <tr class="bg-light">
                     <th width="70%">{{trans('analyst.admin.detail_price')}}</th>
