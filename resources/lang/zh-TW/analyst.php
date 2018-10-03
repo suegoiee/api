@@ -91,7 +91,7 @@
         'platform_fee'=>'平台手續費',
         'order_price'=>'實際付款金額',
         'id' => '編號',
-        'no' => '訂單編號',
+		'no'=>'客戶識別碼',
         'price' => '訂單金額',
         'user_nickname' => '訂購者',
         'memo' => '備註',

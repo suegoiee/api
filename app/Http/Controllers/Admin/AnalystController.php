@@ -44,7 +44,7 @@ class AnalystController extends AdminController
             'actions'=>['new'],
 
             'table_data' => $grants,
-            'table_head' =>['id','statment_no','year_month'],
+            'table_head' =>['id','statement_no','year_month'],
             'table_formatter' =>[],
         ];
         return view('admin.analyst.grant_list',$data);
@@ -239,7 +239,8 @@ class AnalystController extends AdminController
                     $order_product->product_price = $product->pivot->unit_price * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = ($order_product->order_price - $order_product->handle_fee)*0.2853;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
+                    $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     $sumOfOrderPrice += $order_product->order_price;
                     $sumOfHandleFee += $order_product->handle_fee;
                     $sumOfPlatformFee += $order_product->platform_fee;
@@ -305,7 +306,8 @@ class AnalystController extends AdminController
                     $order_product->product_price = $product->pivot->unit_price * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = ($order_product->order_price - $order_product->handle_fee)*0.2853;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
+                    $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     array_push($order_products, $order_product);
                 }
             }
@@ -321,7 +323,7 @@ class AnalystController extends AdminController
             'query_string' => $query_string,
             'table_data' => $order_products,
             'table_head' =>['product_name', 'product_id', 'product_price','no','user_nickname','order_price','status','created_at','paymentType','handle_fee','platform_fee'],
-            'table_formatter' =>['status','paymentType'],
+            'table_formatter' =>['status','paymentType', 'platform_fee'],
             'table_action'=>false,
             'table_js'=>'order/table',
         ];

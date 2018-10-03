@@ -3,6 +3,10 @@ function actionFormatter(value,row,index){
 	actions+='</div>';
 	return actions;
 }
+function platform_feeFormatter(value,row,index){
+	
+	return Math.round(value*100)/100;
+}
 function paymentTypeFormatter(value,row,index){
 	switch(value){
 		case '':return '免費';
