@@ -76,7 +76,7 @@ class OrderController extends Controller
                 }else{
                     $promocode->used()->attach($user->id);
                 }
-                $promocode_ids[$promocode->id] = ['overflow_offer'=>$value['overflow_offer']];
+                $promocode_ids[$promocode->id] = ['overflow_offer'=>(isset($value['overflow_offer']) ? $value['overflow_offer'] : 0)];
             }
         }
         $order_price = $trail_result['total_price'];
@@ -368,7 +368,7 @@ class OrderController extends Controller
 
         return $this->successResponse($result);
     }
-    function getOrderTrail($user, $products,$promocode_codes)
+    function getOrderTrail($user, $products, $promocode_codes)
     {
         $product_ids = collect($products)->map(function($item, $key){return $item['id'];})->toArray();
         $product_offers = [];
@@ -433,6 +433,7 @@ class OrderController extends Controller
             $result['promocodes'][$product_promocode->code] = ['name'=>$product_promocode->name, 'offer'=>$product_promocode->offer,'overflow_offer'=>$product_promocode->overflow_offer];
             $result['total_price'] = $result['total_price'] <= ($product_promocode->offer-$product_promocode->overflow_offer) ? 0 : $result['total_price'] - ($product_promocode->offer-$product_promocode->overflow_offer);
         }
+
         foreach ($product_offers as $key => $product_promocode) {
             if(!array_key_exists($product_promocode->code, $result['promocodes'])){
                 $result['promocodes'][$product_promocode->code] = [ 'msg' => 'This promocode of the product is in use','error'=>5];
