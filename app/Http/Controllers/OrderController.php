@@ -399,7 +399,7 @@ class OrderController extends Controller
                     if($promocode->specific==1){
                         array_push($product_offers, $promocode);
                     }else{
-                        $result['promocodes'][$promocode->code] = ['name'=>$promocode->name, 'offer'=>$promocode->offer];
+                        $result['promocodes'][$promocode->code] = ['name'=>$promocode->name, 'offer'=>$promocode->offer, 'overflow_offer'=>0];
                         $order_offer += $promocode->offer;
                     }
                 }
@@ -430,7 +430,7 @@ class OrderController extends Controller
             }
         }
         foreach ($order_promocodes as $key => $product_promocode) {
-            $result['promocodes'][$product_promocode->code] = ['name'=>$product_promocode->name, 'offer'=>$product_promocode->offer,'overflow_offer'=>$product_promocode->overflow_offer];
+            $result['promocodes'][$product_promocode->code] = ['name'=>$product_promocode->name, 'offer'=>$product_promocode->offer, 'overflow_offer'=>$product_promocode->overflow_offer];
             $result['total_price'] = $result['total_price'] <= ($product_promocode->offer-$product_promocode->overflow_offer) ? 0 : $result['total_price'] - ($product_promocode->offer-$product_promocode->overflow_offer);
         }
 

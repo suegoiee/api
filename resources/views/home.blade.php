@@ -97,7 +97,7 @@
 </form>
 <div class="row pt-5">
     <h4 class="pt-3">Response:</h4>
-    <div class="form-control" id="response_data" rows="10" ></div>
+    <textarea class="form-control" id="response_data" rows="10" ></textarea>
 </div>
 @endsection
 
@@ -219,7 +219,7 @@
         }
 
         $('#response_data').val(data);
-        $('#response_data').html(data);
+        //$('#response_data').html(data);
     }
 
     $('#posts').on('change','.input_type',function(event){
