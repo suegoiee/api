@@ -58,10 +58,9 @@ class GrantController extends AnalystController
         switch ($paymentType) {
             case '':return 0;
             case 'credit':return ($price*0.0275<5) ? 5:( $price * 0.0275);
-            case 'webatm':case 'atm':($price*0.0275<5) ? 5:($price*0.0275>26)?26:($price*0.0275);
+            case 'webatm':case 'atm':return ($price*0.01<5) ? 5:(($price*0.01>26)?26:($price*0.01));
             case 'cvs':return strtotime($date) < strtotime('2018-09-01')? 26:30;
             default:return 0;
         }
-
     }
 }

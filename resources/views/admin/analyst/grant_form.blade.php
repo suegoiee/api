@@ -77,7 +77,7 @@
             <div class="col-sm-2">
                         
             </div>
-            <table class="table col-sm-8 table-sm detail_table" id="detail_table">
+            <table class="col-sm-8 table-sm detail_table" id="detail_table">
                 <tbody>
                 <tr class="bg-light">
                     <th width="70%">{{trans($module_name.'.admin.detail_price')}}</th>
