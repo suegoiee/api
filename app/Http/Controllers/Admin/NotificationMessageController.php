@@ -44,7 +44,7 @@ class NotificationMessageController extends AdminController
     {
         $data = [
             'module_name' => $this->moduleName,
-            'users' => $this->userRepository->gets(),
+            'users' => $this->userRepository->getsWith(['profile']),
             'data' => null,
             'send_actions'=>true
         ];
@@ -56,7 +56,7 @@ class NotificationMessageController extends AdminController
         $notificationMessage->user_ids = $notificationMessage->user_ids ? json_decode($notificationMessage->user_ids) : [];
         $data = [
             'module_name' => $this->moduleName,
-            'users' => $this->userRepository->gets(),
+            'users' => $this->userRepository->getsWith(['profile']),
             'data' => $notificationMessage,
             'send_actions'=>true
         ];

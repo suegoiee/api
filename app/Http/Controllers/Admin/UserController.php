@@ -18,14 +18,11 @@ class UserController extends AdminController
     public function index()
     {
         $users = $this->moduleRepository->getsWith(['profile']);
-        foreach ($users as $key => $user) {
-            $user->nickname = $user->profile->nickname;
-        }
         $data = [
             'module_name'=> $this->moduleName,
             'table_data' => $users,
             'table_head' =>['id','email','nickname','updated_at','created_at'],
-            'table_formatter' =>[],
+            'table_formatter' =>['nickname'],
         ];
         return view('admin.list',$data);
     }

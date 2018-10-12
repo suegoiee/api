@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class FavoriteStockAlert extends Notification
+class FavoriteStockAlert extends Notification implements ShouldQueue
 {
     use Queueable;
 

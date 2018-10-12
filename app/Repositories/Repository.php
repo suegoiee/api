@@ -33,7 +33,7 @@ class Repository
 			return $this->model->get();
 		}
 	}
-	public function getsWith($with=[],$where=[],$order=[]){
+	public function getsWith($with=[],$where=[],$order=[], $whereHas=[]){
 		$query = $this->model->with($with);
 		foreach ($where as $key => $value) {
 			$field_array = explode('.', $key);
@@ -49,6 +49,9 @@ class Repository
 		}
 		foreach ($order as $key => $value) {
 			$query = $query->orderBy($key,$value);
+		}
+		foreach ($whereHas as $key => $value) {
+			$query = $query->whereHas($key, $value);
 		}
 		return $query->get();
 	}

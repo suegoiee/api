@@ -33,14 +33,14 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-		<a class="navbar-brand" href="{{ url('/') }}">Uanalyze Admin</a>
+		<a class="navbar-brand" href="{{ url('/admin') }}">Uanalyze Admin</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarCollapse">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item active">
-					<a class="nav-link" href="{{ url('/') }}">API Explorer <span class="sr-only">(current)</span></a>
+					<a class="nav-link" href="{{ url('/admin') }}">API Explorer <span class="sr-only">(current)</span></a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -74,12 +74,12 @@
 			@include('layouts.sidebar')
 		@endif
         <div id="content" class="w-100">
-            <div class="w-100 px-4 pt-4">
+            <div class="px-4 pt-4 h-100">
                 @yield('content')
             </div>
-            <footer class="footer pt-5">
-                <div class="container-fluid ">
-                    <span class="text-muted">Version 0.1.0 . Copyright © 2017. All rights reserved.</span>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <span class="text-muted author">Version 0.1.0 . Copyright © 2017. All rights reserved.</span>
                 </div>
             </footer>
         </div>

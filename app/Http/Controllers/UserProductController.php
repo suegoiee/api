@@ -27,7 +27,7 @@ class UserProductController extends Controller
         $products = $request->user()->products()->with('faqs')->orderBy('product_user.sort', 'asc')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
-            $product->deadline = $product->pivot->deadline;
+            $product->deadline = $product->pivot->deadline ? $product->pivot->deadline:0;
             $product->sort = $product->pivot->sort;
             $product->faqs = $product->faqs;
         }
@@ -116,7 +116,7 @@ class UserProductController extends Controller
         
         $product = $request->user()->products()->with(['tags','collections','faqs'])->find($id);
         $product->installed = $product->pivot->installed;
-        $product->deadline = $product->pivot->deadline;
+        $product->deadline = $product->pivot->deadline ? $product->pivot->deadline:0;
         $product->sort = $product->pivot->sort;
 
         return $this->successResponse($product?$product->makeHidden(['model','column','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at' , 'avatar_detail','pivot']):[]);

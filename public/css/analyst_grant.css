@@ -1,0 +1,21 @@
+
+.detail_table tr td{
+    text-align: right;
+}
+.detail_table tr td>span{
+    padding-right: .75rem;
+}
+
+.detail_table tr td input{
+    text-align: right;
+}
+.detail_table tr:not(.bg-light) th{
+	padding-left: 2rem;
+}
+.detail_table .remove{
+	cursor: pointer;
+}
+.detail_table .remove:hover{
+	color:red;
+}
+

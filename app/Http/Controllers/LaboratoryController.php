@@ -22,11 +22,8 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $start_time = microtime();
         $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id']);
-        $end_time = microtime();       
-       // return $this->successResponse($end_time - $start_time);
-        return $this->successResponse($laboratories);
+       return $this->successResponse($laboratories);
     }
 
     public function create()
@@ -81,16 +78,16 @@ class LaboratoryController extends Controller
 
         if(!$laboratory->customized){
             $collect_product = $user->products()->find($laboratory->collection_product_id);
-            $deadline = $collect_product? $collect_product->pivot->deadline:0;
+            $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
         }
         foreach ($laboratory->products as $product) {
             $product_user = $product->users()->find($user->id);
             if(!$laboratory->customized){
                 $product->installed = 1;
-                $product->deadline = $deadline;
+                $product->deadline = $deadline ? $deadline : 0;
             }else{
                 $product->installed = $product_user ? $product_user->pivot->installed : 0;
-                $product->deadline = $product_user ? $product_user->pivot->deadline : null;
+                $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
             }
             $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){

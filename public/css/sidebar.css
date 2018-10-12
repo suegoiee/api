@@ -15,7 +15,7 @@
 }
 
 .sidebar ul li a {
-    padding:20px 10px;
+    padding:10px;
     font-size: 1.1em;
     display: block;
     text-align: left;
@@ -60,7 +60,7 @@
 
 .sidebar ul.main-menu {
     padding: 10px 0;
-    border-bottom: 1px solid #616161;
+    //border-bottom: 1px solid #616161;
 }
 .sidebar-toggler{
     margin:0;
@@ -100,10 +100,10 @@
     }
 
     .sidebar ul li a {
-        padding: 20px 10px;
+        padding: 10px;
     }
     .sidebar.active ul li a {
-        padding: 20px 10px;
+        padding: 10px;
         font-size: 1.2em;
         text-align: center;
     }

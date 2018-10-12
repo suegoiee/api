@@ -9,13 +9,16 @@ use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
-    protected $redirectTo = '/';
+    protected $redirectTo = '/admin';
     public function __construct()
     {
        
     }
     public function loginForm()
     {
+        if(Auth::guard('admin')->check()){
+            return redirect()->route('admin.home');
+        }
         return view('admin.auth.login');
     }
 
@@ -49,10 +52,8 @@ class LoginController extends Controller
 
     protected function sendLoginResponse(Request $request)
     {
-        //$request->session()->put('admin_name',$request->input('name'));
-        //$request->session()->put('admin',true);
         $request->session()->regenerate();
-        return redirect()->intended($this->redirectTo);
+        return redirect($this->redirectTo);
     }
 
     protected function sendFailedLoginResponse(Request $request)
@@ -69,7 +70,7 @@ class LoginController extends Controller
         //$request->session()->flush();
         $this->guard()->logout();
 
-        $request->session()->regenerate();
+        //$request->session()->regenerate();
 
         return redirect($this->redirectTo);
     }
