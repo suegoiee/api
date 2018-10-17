@@ -34,12 +34,12 @@ class Handler extends ExceptionHandler
     {
         //parent::report($exception);
          // this is from the parent method
-        return $logger->error($exception);
         try {
             $logger = $this->container->make(\Psr\Log\LoggerInterface::class);
         } catch (Exception $ex) {
             throw $exception; // throw the original exception
         }
+        return $logger->error($exception);
 
         // this is the new custom handling of guzzle exceptions
         if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
