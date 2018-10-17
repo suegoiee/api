@@ -34,6 +34,7 @@ class Handler extends ExceptionHandler
     {
         //parent::report($exception);
          // this is from the parent method
+        return $logger->error($exception);
         try {
             $logger = $this->container->make(\Psr\Log\LoggerInterface::class);
         } catch (Exception $ex) {
