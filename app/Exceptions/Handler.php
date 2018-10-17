@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
             );
 
             // log your new custom guzzle error message
-            return $logger->error((string) $exception->getResponse()->getBody());
+            return $logger->error((string) $exception->getResponse()?$exception->getResponse()->getBody():'');
         }
 
         // make sure to still log non-guzzle exceptions
