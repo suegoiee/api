@@ -12,7 +12,11 @@
 */
 
 //API
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailTest;
+Route::get('/test/mail', function(){
+    Mail::to('shouwda@gmail.com')->send(new MailTest());
+});
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
