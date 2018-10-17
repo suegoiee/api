@@ -39,8 +39,6 @@ class Handler extends ExceptionHandler
         } catch (Exception $ex) {
             throw $exception; // throw the original exception
         }
-        return $logger->error($exception);
-
         // this is the new custom handling of guzzle exceptions
         if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
             // get the full text of the exception (including stack trace),
