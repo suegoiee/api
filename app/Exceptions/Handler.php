@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
             // with the full text of the entire response body.
             $message = str_replace(
                 rtrim($exception->getMessage()),
-                (string) $exception->getResponse()->getBody(),
+                (string) $exception->getResponse()?$exception->getResponse()->getBody():'',
                 (string) $exception
             );
 
