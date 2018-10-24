@@ -18,7 +18,7 @@ class User  extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'is_socialite', 'version'
+        'email', 'password', 'is_socialite', 'version', 'mail_verified_at'
     ];
 
     /**
@@ -70,5 +70,4 @@ class User  extends Authenticatable
     {
         return $this->hasMany('App\Promocode');
     }
-
 }

@@ -23,6 +23,10 @@ Route::get('/test/url', function(){
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
+Route::get('/auth/verified','Auth\VerifiedUserController@verified');
+
+Route::get('/auth/facebook/email','Auth\FacebookController@email_exist');
+
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -39,8 +43,12 @@ Route::post('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/stocks/products', 'StockModelController@getModelProducts');
 
 Route::middleware(['auth'])->group(function(){
+
 });
 Route::middleware(['auth:api'])->group(function(){
+	Route::post('/auth/email','Auth\VerifiedUserController@sendVerifyEmail');
+});
+Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/auth/login','Auth\TokenController@isLogin');
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
 

@@ -17,7 +17,14 @@ class FacebookController extends Controller
     public function __construct()
     {
     }
-
+    public function email_exist(Request $request)
+    {
+        $user = User::where('email',$request->input('email'))->first();
+        if($user){
+            return $this->successResponse(['email_exists'=>1]);
+        }
+        return $this->successResponse(['email_exists'=>0]);
+    }   
     public function login(Request $request)
     {
 
@@ -64,13 +71,15 @@ class FacebookController extends Controller
         $adminToken = $this->clientCredentialsGrantToken();
         event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
+        $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['user'] = $user;
-        $token['profile'] = $this->createProfile($request,$user);
+        $token['profile'] = $this->createProfile($request, $user);
         return $this->successResponse($token);
     }
     protected function logined(Request $request,$user)
     {
         $token = $this->passwordGrantToken($request);
+        $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['user'] = $user;
         $token['profile'] = $this->updateProfile($request,$user);
         return $this->successResponse($token);
