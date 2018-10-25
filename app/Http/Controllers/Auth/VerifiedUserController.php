@@ -42,11 +42,11 @@ class VerifiedUserController extends Controller
     }
     protected function sendVerifyResponse()
     {	
-	   return $this->successResponse(['message'=>['Verify email was sent']]);
+	   return $this->successResponse(['message'=>['Verify email has been sent']]);
     }
     protected function sendWasVerifiedResponse()
     {   
-       return $this->successResponse(['message'=>['The email was verified']]);
+       return $this->successResponse(['message'=>['The email has verified']]);
     }
 
     protected function sendVerifyFailedResponse()
