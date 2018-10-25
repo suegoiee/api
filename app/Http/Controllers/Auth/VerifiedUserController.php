@@ -33,6 +33,9 @@ class VerifiedUserController extends Controller
     {
         
         $user = $request->user();
+        if($user->mail_verified_at){
+            return $this->successResponse(['message'=>['The email was verified']]);
+        }
         $verify = Verify_user::create(['email'=>$user->email,'token'=>md5(rand(1, 10) . microtime())]);
         $response = Mail::to($user->email)->send(new VerifyMail($user, $verify->token));
         return $this->sendVerifyResponse();
@@ -40,6 +43,10 @@ class VerifiedUserController extends Controller
     protected function sendVerifyResponse()
     {	
 	   return $this->successResponse(['message'=>['Verify email was sent']]);
+    }
+    protected function sendWasVerifiedResponse()
+    {   
+       return $this->successResponse(['message'=>['The email was verified']]);
     }
 
     protected function sendVerifyFailedResponse()
