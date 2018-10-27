@@ -3,15 +3,15 @@
     <div class="col-sm-8">
         <select class="form-control" id="type" name="type" >
             <option value="Announcement"  {{ $data && $data->type=='Announcement' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Announcement')}}</option>
-            <option value="TermOfService"  {{ $data && $data->type=='TermOfService' ? 'selected':'' }} >{{trans($module_name.'.admin.type_TermOfService')}}</option>
-            <option value="NewFeature"  {{ $data && $data->type=='NewFeature' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewFeature')}}</option>
-            <option value="NewProduct"  {{ $data && $data->type=='NewProduct' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewProduct')}}</option>
+            <!--<option value="TermOfService"  {{ $data && $data->type=='TermOfService' ? 'selected':'' }} >{{trans($module_name.'.admin.type_TermOfService')}}</option>-->
+            <!--<option value="NewFeature"  {{ $data && $data->type=='NewFeature' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewFeature')}}</option>-->
+            <!--<option value="NewProduct"  {{ $data && $data->type=='NewProduct' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewProduct')}}</option>-->
             <option value="Promotion"  {{ $data && $data->type=='Promotion' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Promotion')}}</option>
             <option value="MarketAlert"  {{ $data && $data->type=='MarketAlert' ? 'selected':'' }} >{{trans($module_name.'.admin.type_MarketAlert')}}</option>
-            <option value="StockAlert"  {{ $data && $data->type=='StockAlert' ? 'selected':'' }} >{{trans($module_name.'.admin.type_StockAlert')}}</option>
+            <!--<option value="StockAlert"  {{ $data && $data->type=='StockAlert' ? 'selected':'' }} >{{trans($module_name.'.admin.type_StockAlert')}}</option>-->
             <option value="FavoriteStockAlert"  {{ $data && $data->type=='FavoriteStockAlert' ? 'selected':'' }} >{{trans($module_name.'.admin.type_FavoriteStockAlert')}}</option>
-            <option value="ProductReceive"  {{ $data && $data->type=='ProductReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_ProductReceive')}}</option>
-            <option value="PromocodeReceive"  {{ $data && $data->type=='PromocodeReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_PromocodeReceive')}}</option>
+            <!--<option value="ProductReceive"  {{ $data && $data->type=='ProductReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_ProductReceive')}}</option>-->
+            <!--<option value="PromocodeReceive"  {{ $data && $data->type=='PromocodeReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_PromocodeReceive')}}</option>-->
             <option value="Others"  {{ $data && $data->type=='Others' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Others')}}</option>
         </select>
     </div>
