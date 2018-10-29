@@ -41,6 +41,10 @@ class FacebookController extends Controller
         		return $this->validateErrorResponse([trans('auth.facebook_error')]);
         	}
         }else{
+            $n_user = User::where('is_socialite',0)->where('email',$request->input('email'))->first();
+            if($n_user ){
+                return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
+            }
         	$user = $this->create($request->all());
         	return $this->registered($request,$user);
         }
