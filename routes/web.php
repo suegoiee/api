@@ -294,6 +294,7 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	
 	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
+	Route::get('/promocodes', 'Analyst\PromocodeController@show')->name('analyst.promocode.index');
 });
 
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
