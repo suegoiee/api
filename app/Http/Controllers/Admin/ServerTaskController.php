@@ -87,7 +87,7 @@ class ServerTaskController extends AdminController
             }
         }
     }
-    public function verifiedFBuser(UserRepository $userRepository)
+    public function verifiedFBUser(UserRepository $userRepository)
     {
         $users = $userRepository->getsWith(['users'],['is_socialite'=>1]);
         foreach ($users as $key => $user) {
