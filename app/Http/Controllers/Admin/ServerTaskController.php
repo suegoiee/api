@@ -89,7 +89,7 @@ class ServerTaskController extends AdminController
     }
     public function verifiedFBUser(UserRepository $userRepository)
     {
-        $users = $userRepository->getsWith(['users'],['is_socialite'=>1]);
+        $users = $userRepository->getsWith([],['is_socialite'=>1]);
         foreach ($users as $key => $user) {
             echo $user->email.': '.($user->profile? $user->profile->name:'').'[ mail_verified_at:'.date('Y-m-d H:i:s').']<br>';
                 $user->mail_verified_at = date('Y-m-d H:i:s');
