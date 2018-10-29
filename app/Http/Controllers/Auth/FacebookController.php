@@ -63,7 +63,7 @@ class FacebookController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'is_socialite' => 1,
-            'mail_verified_at'=>dete('Y-m-d H:i:s'),
+            'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);
     }
 
