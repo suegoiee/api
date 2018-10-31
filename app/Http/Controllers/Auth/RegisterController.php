@@ -34,7 +34,6 @@ class RegisterController extends Controller
             return $this->failedResponse(['message'=>$profileValidator->errors()->all()]);
         }
         event(new Registered($user = $this->create($request->all())));
-        
         return $this->registered($request,$user);
     }
 
@@ -52,6 +51,7 @@ class RegisterController extends Controller
         event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
         $token['user'] = $user;
+        $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['profile'] = $this->createProfile($request,$user);
         return $this->successResponse($token);
     }

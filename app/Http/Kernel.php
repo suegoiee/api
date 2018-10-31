@@ -80,5 +80,6 @@ class Kernel extends HttpKernel
         'apiToken'=>\Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         'ip'=>\App\Http\Middleware\RestrictIPMiddleware::class,
         'adminToken'=>\App\Http\Middleware\AdminToken::class,
+        'verifyUser'=>\App\Http\Middleware\VerifyEmailMiddleware::class,
     ];
 }

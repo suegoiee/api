@@ -17,7 +17,14 @@ class FacebookController extends Controller
     public function __construct()
     {
     }
-
+    public function email_exist(Request $request)
+    {
+        $user = User::where('email',$request->input('email'))->first();
+        if($user){
+            return $this->successResponse(['email_exists'=>1]);
+        }
+        return $this->successResponse(['email_exists'=>0]);
+    }   
     public function login(Request $request)
     {
 
@@ -34,6 +41,10 @@ class FacebookController extends Controller
         		return $this->validateErrorResponse([trans('auth.facebook_error')]);
         	}
         }else{
+            $n_user = User::where('is_socialite',0)->where('email',$request->input('email'))->first();
+            if($n_user ){
+                return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
+            }
         	$user = $this->create($request->all());
         	return $this->registered($request,$user);
         }
@@ -55,7 +66,8 @@ class FacebookController extends Controller
         return User::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'is_socialite' => '1',
+            'is_socialite' => 1,
+            'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);
     }
 
@@ -64,13 +76,15 @@ class FacebookController extends Controller
         $adminToken = $this->clientCredentialsGrantToken();
         event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
+        $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['user'] = $user;
-        $token['profile'] = $this->createProfile($request,$user);
+        $token['profile'] = $this->createProfile($request, $user);
         return $this->successResponse($token);
     }
     protected function logined(Request $request,$user)
     {
         $token = $this->passwordGrantToken($request);
+        $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['user'] = $user;
         $token['profile'] = $this->updateProfile($request,$user);
         return $this->successResponse($token);

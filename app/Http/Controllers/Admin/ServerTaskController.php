@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\UserRepository;
 use App\Repositories\LaboratoryRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\Repository;
@@ -85,5 +86,14 @@ class ServerTaskController extends AdminController
                 $user->pivot->save();
             }
         }
+    }
+    public function verifiedFBUser(UserRepository $userRepository)
+    {
+        $users = $userRepository->getsWith([],['is_socialite'=>1]);
+        foreach ($users as $key => $user) {
+            echo $user->email.': '.($user->profile? $user->profile->name:'').'[ mail_verified_at:'.date('Y-m-d H:i:s').']<br>';
+                $user->mail_verified_at = date('Y-m-d H:i:s');
+                $user->save();
+            }
     }
 }

@@ -49,8 +49,7 @@ class TokenController extends Controller
         $start_time = microtime();
         $response = $this->passwordGrantToken($request);
         $end_time = microtime();
-        //return $this->successResponse($end_time - $start_time);
-        
+        $response['verified']= $user->mail_verified_at ? 1 : 0;
         return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)

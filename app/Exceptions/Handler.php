@@ -39,7 +39,6 @@ class Handler extends ExceptionHandler
         } catch (Exception $ex) {
             throw $exception; // throw the original exception
         }
-
         // this is the new custom handling of guzzle exceptions
         if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
             // get the full text of the exception (including stack trace),
@@ -52,7 +51,7 @@ class Handler extends ExceptionHandler
             );
 
             // log your new custom guzzle error message
-            return $logger->error((string) $exception->getResponse()->getBody());
+            return $logger->error($exception);
         }
 
         // make sure to still log non-guzzle exceptions
@@ -74,24 +73,14 @@ class Handler extends ExceptionHandler
             	'error' => ['title'=> 'Sorry, something went wrong.']
         	];
 
-        	// If the app is in debug mode
-        	/*if (config('app.debug')) {
-           	 	// Add the exception class name, message and stack trace to response
-            	//$response['error']['exception'] = get_class($exception); // Reflection might be better here
-                if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
-                    $exception_response = json_decode($exception->getResponse()->getBody(),true);
-                    $response['error']['type'] = $exception_response['error'];
-                    $response['error']['message'] = [$exception_response['message']];
-                    //$response['error']['trace'] = $exception->getTrace();
-                }else if($exception instanceof AuthenticationException){
-                    $response['error']['message'] = ['Unauthenticated.'];
-                }
-        	}*/
             if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
                 $message_response = $exception->getResponse();
                 $message_body = $message_response ? $exception->getResponse()->getBody() : $message_response;
+
                 $exception_response = json_decode($message_body,true);
+
                 $response['error']['type'] = isset($exception_response['error']) ? $exception_response['error'] : 'error';
+
                 $response['error']['message'] = [(isset($exception_response['message']) ? $exception_response['message']:$message_body)];
                 //$response['error']['trace'] = $exception->getTrace();
             }else if($exception instanceof AuthenticationException){

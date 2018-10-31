@@ -12,10 +12,21 @@
 */
 
 //API
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailTest;
+Route::get('/test/mail', function(){
+    Mail::to('shouwda@gmail.com')->send(new MailTest());
+});
+Route::get('/test/url', function(){
+    return url('/');
+});
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
+Route::get('/auth/verified','Auth\VerifiedUserController@verified');
+
+Route::get('/auth/facebook/email','Auth\FacebookController@email_exist');
+
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -32,8 +43,12 @@ Route::post('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/stocks/products', 'StockModelController@getModelProducts');
 
 Route::middleware(['auth'])->group(function(){
+
 });
 Route::middleware(['auth:api'])->group(function(){
+	Route::post('/auth/email','Auth\VerifiedUserController@sendVerifyEmail');
+});
+Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/auth/login','Auth\TokenController@isLogin');
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
 
@@ -279,9 +294,11 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	
 	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
+	Route::get('/promocodes', 'Analyst\PromocodeController@show')->name('analyst.promocode.index');
 });
 
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');
 Route::get('/server/extendProductExpired', 'Admin\ServerTaskController@extendProductExpired');
+Route::get('/server/verifiedFBUser', 'Admin\ServerTaskController@verifiedFBUser');

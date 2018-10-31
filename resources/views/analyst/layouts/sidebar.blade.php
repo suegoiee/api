@@ -17,7 +17,19 @@
                     </a></li>
             </ul>
         </li>
-        
+        <li>
+            <a href="#promocode_list" data-toggle="collapse" aria-expanded="false">
+                {{trans('analyst.menu_promocode_title')}}
+            </a>
+            <ul class="collapse list-unstyled" id="promocode_list">
+                <li>
+                    <a href="{{url('/analyst/promocodes')}}">
+                        <span class="oi oi-bullhorn"></span>
+                        <span class="text">{{trans('analyst.detail_promocode_title')}}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">
