@@ -15,7 +15,7 @@
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailTest;
 Route::get('/test/mail', function(){
-    Mail::to('shouwda@gmail.com')->send(new MailTest());
+    Mail::to('dragon19290@gmail.com')->send(new MailTest());
 });
 Route::get('/test/url', function(){
     return url('/');
