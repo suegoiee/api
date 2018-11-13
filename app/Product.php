@@ -22,6 +22,9 @@ class Product extends UanalyzeModel
     public function users(){
     	return $this->belongsToMany('App\User')->withPivot('deadline','installed')->withTimestamps();
     }
+    public function plans(){
+        return $this->hasMany('App\Product_price');
+    }
 
     public function faqs(){
         return $this->hasMany('App\Product_faq');

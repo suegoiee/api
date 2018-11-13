@@ -223,4 +223,28 @@ $(function(){
             
         }
     });
+    var price_add_index = 1;
+    $('#price_add').on('click', function(event){
+        event.preventDefault();
+        var tr_html = '<tr>'+
+                    '<td>'+
+                        '<input class="form-control" type="hidden" name="prices[new_'+price_add_index+'][id]" value="0">'+
+                        '<input class="form-control" type="text" name="prices[new_'+price_add_index+'][expiration]" value="" placeholder="0為無期限">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input class="form-control" type="text" name="prices[new_'+price_add_index+'][price]" value="" placeholder="0為免費">'+
+                    '</td>'+
+                    '<td>'+
+                        '<button class="btn btn-danger remove"><span class="oi oi-x"></span></button>'+
+                    '</td>'+
+                '</tr>'; 
+        $('#new_price_list').append(tr_html);
+        price_add_index++;
+    });
+    $('#price_table').on('click', '.remove',function(event){
+        event.preventDefault();
+        if(confirm('確定刪除？')){
+            $(this).parent().parent().remove();
+        }
+    });
 });

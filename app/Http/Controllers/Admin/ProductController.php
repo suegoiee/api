@@ -23,13 +23,13 @@ class ProductController extends AdminController
 
     public function index()
     {
-        $product = $this->moduleRepository->getsWith(['tags','collections'],[],['status'=>'DESC','updated_at'=>'DESC']);
+        $product = $this->moduleRepository->getsWith(['tags','collections','plans'],[],['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>['assigned','sorted','new'],
             'table_data' => $product,
-            'table_head' =>['id','name','type','model','price','status'],
-            'table_formatter' =>['status'],
+            'table_head' =>['id','name','type','model','plans','status'],
+            'table_formatter' =>['plans', 'status'],
         ];
         return view('admin.list',$data);
     }

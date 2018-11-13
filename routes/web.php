@@ -12,14 +12,6 @@
 */
 
 //API
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailTest;
-Route::get('/test/mail', function(){
-    Mail::to('dragon19290@gmail.com')->send(new MailTest());
-});
-Route::get('/test/url', function(){
-    return url('/');
-});
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');

@@ -56,18 +56,25 @@ class OrderController extends Controller
         foreach($products as $key => $value) {
             $product = $this->productRepository->getWith($value['id'],['collections']);
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-            $order_price += $product->price * (int)$quantity;
-            if($product->price==0){
+            $order_plan = $product->plans()->where('expiration',$quantity)->first();
+            if(!$order_plan){
+                return $this->failedResponse(['product plan is not exists']);
+            }
+            $order_price += $order_plan->price;
+            if($order_plan->price==0){
                 array_push($product_free,['id'=>$product->id, 'quantity'=>1]);
             }
-            $product_ids[$value['id']] = ['unit_price'=>$product->price , 'quantity' => $quantity];
-            $product_collect= collect($product);
+            $product_ids[$value['id']] = ['unit_price'=>$order_plan->price , 'quantity' => $quantity];
+            $product_collect = collect($product);
             $product_collect->put('quantity', $quantity);
             array_push($product_data, $product_collect);
         }
         $promocodes = $request->input('promocodes',[]);
         $promocode_ids = [];
         $trail_result = $this->getOrderTrail($user, $products, $promocodes);
+        if(isset($trail_result['error'])){
+            return $this->failedResponse(['product plan is not exists']);
+        }
         foreach ($trail_result['promocodes'] as $key => $value) {
             if(!isset($value['error'])){
                 $promocode = $this->promocodeRepository->getBy(['code'=>$key]);
@@ -365,7 +372,9 @@ class OrderController extends Controller
         $products = $request->input('products',[]);
         $promocode_codes = $request->input('promocodes',[]);
         $result = $this->getOrderTrail($user, $products, $promocode_codes);
-
+        if(!$result){
+            return $this->failedResponse(['plans error']);
+        }
         return $this->successResponse($result);
     }
     function getOrderTrail($user, $products, $promocode_codes)
@@ -410,7 +419,12 @@ class OrderController extends Controller
             $product = $this->productRepository->getWith($value['id'],['collections']);
             if($product){
                 $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-                $product_price = $product->price * (int)$quantity;
+
+                $product_plan = $product->plans()->where('expiration',$quantity)->first();
+                if(!$product_plan){
+                    return false;
+                }
+                $product_price = $product_plan->price;
                 $result['total_price'] += $product_price;
                 $result['origin_price'] += $product_price;
                 $min_diff = $product_price;

@@ -15,8 +15,10 @@ class CreateProductPricesTable extends Migration
     {
         Schema::create('product_prices', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('product_id')->unsigned();
             $table->integer('price')->default(0);
             $table->integer('expiration')->default(0);
+            $table->integer('active')->default(0);
             $table->timestamps();
         });
     }

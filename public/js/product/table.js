@@ -5,3 +5,11 @@ function statusFormatter(value,row,index){
 	}
 	return value;
 }
+function plansFormatter(value, row, index){
+	var html = '';
+	for (var i = 0; i < value.length; i++) {
+		html += '<div>'+value[i].price+'</div>';
+		break
+	}
+	return html;
+}

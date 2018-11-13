@@ -73,6 +73,7 @@
                 
     </div>
 </div>
+<!--
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="price">{{trans($module_name.'.admin.price')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8 input-group">
@@ -93,6 +94,7 @@
                 
     </div>
 </div>
+-->
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="status">{{trans($module_name.'.admin.status')}}</label>
     <div class="col-sm-8">

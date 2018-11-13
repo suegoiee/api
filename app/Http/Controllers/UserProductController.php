@@ -56,7 +56,11 @@ class UserProductController extends Controller
 
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            $expiration = (int)$product_data->expiration * $quantity;
+            $product_plan = $product_data->plans()->where('expiration', $quantity)->first();
+            if(!$product_plan){
+                continue;
+            }
+            $expiration = $product_plan->expiration;
             $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
             $collections_ids = [];
@@ -99,12 +103,6 @@ class UserProductController extends Controller
             $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
             
             array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
-/*
-            if($product_data->type=='collection' && !$product_data->model){
-                $user->products()->syncWithoutDetaching($collection_products);
-            }else{
-                $user->products()->syncWithoutDetaching([ $product_data->id =>['deadline'=>$deadline,'installed'=>$installed]]);
-            }*/
         }
         $user->products()->syncWithoutDetaching($products);
 
@@ -193,7 +191,7 @@ class UserProductController extends Controller
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $user_products=$request->user()->products();
+        $user_products = $request->user()->products();
         $sorted_products = $request->input('sorted_products', []);
         foreach ($sorted_products as $key => $product) {
             $user_products->updateExistingPivot($product, ['sort'=>$key]);
@@ -215,8 +213,8 @@ class UserProductController extends Controller
             'products.*.id' => 'exists:products,id',
         ]);        
     }
-    private function getExpiredDate($days, $expired = 0){
-        if($days==0){
+    private function getExpiredDate($months, $expired = 0){
+        if($months==0){
             return null;
         }
         $now = Carbon::now('Asia/Taipei');
@@ -229,7 +227,7 @@ class UserProductController extends Controller
         $date->hour = 0;
         $date->minute = 0;
         $date->second = 0;
-        return $date->addDays($days);
+        return $date->addMonths($months);
     }
     private function create_avatar($laboratory, $avatar){
         if($avatar){
