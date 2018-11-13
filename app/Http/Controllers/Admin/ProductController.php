@@ -23,7 +23,9 @@ class ProductController extends AdminController
 
     public function index()
     {
-        $product = $this->moduleRepository->getsWith(['tags','collections','plans'],[],['status'=>'DESC','updated_at'=>'DESC']);
+        $product = $this->moduleRepository->getsWith(['tags','collections','plans'=>function($query){
+            $query->where('active',1);
+        }],[],['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
             'module_name'=> $this->moduleName,
             'actions'=>['assigned','sorted','new'],

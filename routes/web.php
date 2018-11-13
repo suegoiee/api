@@ -293,4 +293,6 @@ Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLa
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');
 Route::get('/server/extendProductExpired', 'Admin\ServerTaskController@extendProductExpired');
+Route::get('/server/addProductPlans', 'Admin\ServerTaskController@addProductPlans');
+
 Route::get('/server/verifiedFBUser', 'Admin\ServerTaskController@verifiedFBUser');
