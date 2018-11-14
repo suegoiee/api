@@ -107,7 +107,7 @@ class ServerTaskController extends AdminController
             }else{
                 $product->plans()->create(['price'=>0,'expiration'=>0, 'active'=>0]);
                 $product->plans()->create(['price'=>$product->price,'expiration'=>1, 'active'=>1]);
-                $product->plans()->create(['price'=>$product->price,'expiration'=>1, 'active'=>1]);
+                $product->plans()->create(['price'=>$product->price*6,'expiration'=>6, 'active'=>1]);
                 $product->plans()->create(['price'=>$product->price*12,'expiration'=>12, 'active'=>1]);
             }
         }
