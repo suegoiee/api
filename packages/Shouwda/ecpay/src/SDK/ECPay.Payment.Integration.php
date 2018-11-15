@@ -391,7 +391,8 @@ abstract class ECPay_InvType {
   // 特種稅額
   const Special = '08';
 }
-
+if(!class_exists('ECPay_EncryptType'))
+{
 abstract class ECPay_EncryptType {
     // MD5(預設)
     const ENC_MD5 = 0;
@@ -399,7 +400,7 @@ abstract class ECPay_EncryptType {
     // SHA256
     const ENC_SHA256 = 1;
 }
-
+}
 /**
  * AllInOne short summary.
  *
@@ -1497,6 +1498,8 @@ class ECPay_AndroidPay extends ECPay_Verification
 /**
 *  檢查碼
 */
+if(!class_exists('ECPay_CheckMacValue'))
+{
 class ECPay_CheckMacValue{
 
     static function generate($arParameters = array(),$HashKey = '' ,$HashIV = '',$encType = 0){
@@ -1573,6 +1576,6 @@ class ECPay_CheckMacValue{
     }
 
 }
-
+}
 
 ?>
