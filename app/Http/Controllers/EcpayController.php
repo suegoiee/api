@@ -6,7 +6,7 @@ use Ecpay;
 
 use App\Traits\OauthToken;
 use App\Repositories\EcpayRepository;
-use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
+//use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
