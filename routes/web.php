@@ -191,7 +191,7 @@ Route::middleware(['client:edm'])->group(function(){
 
 //Admin
 //Route::get('/ip', function(){return Request::ip();});
-Route::get('/', function(){echo 'running...';});
+Route::get('/', 'HomeController@home');
 
 Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
 	Route::get('/login', 'Admin\Auth\LoginController@loginForm')->name('admin.login');
