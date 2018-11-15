@@ -96,4 +96,23 @@ class ServerTaskController extends AdminController
                 $user->save();
             }
     }
+    public function addProductPlans(ProductRepository $productRepository)
+    {
+        $products = $productRepository->gets();
+        foreach ($products as $key => $product) {
+            echo $product->name.' : price=>'.$product->price.', expiration=>'.$product->expiration.'<br>';
+            $product->plans()->delete();
+            if($product->price==0){ 
+                $product->plans()->create(['price'=>0,'expiration'=>($product->expiration==8888? 0:$product->expiration), 'active'=>1]);
+                $product->plans()->create(['price'=>0,'expiration'=>1, 'active'=>0]);
+                $product->plans()->create(['price'=>0,'expiration'=>6, 'active'=>0]);
+                $product->plans()->create(['price'=>0,'expiration'=>12, 'active'=>0]);
+            }else{
+                $product->plans()->create(['price'=>0,'expiration'=>0, 'active'=>0]);
+                $product->plans()->create(['price'=>$product->price,'expiration'=>1, 'active'=>1]);
+                $product->plans()->create(['price'=>$product->price*6,'expiration'=>6, 'active'=>1]);
+                $product->plans()->create(['price'=>$product->price*12,'expiration'=>12, 'active'=>1]);
+            }
+        }
+    }
 }

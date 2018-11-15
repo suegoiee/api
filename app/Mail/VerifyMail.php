@@ -34,6 +34,6 @@ class VerifyMail extends Mailable
         return $this->subject(env('APP_NAME').' 信箱驗證')
                 ->from(env('APP_EMAIL','no-reply@uanalyze.com.tw'),env('APP_SYSTEM_NAME','Service'))
                 ->markdown('emails.verifyUser')
-                ->with(['nickname'=>$this->user->profile ? $this->user->profile->nickname:'', 'email'=>$this->user->email,'token'=>$this->token]);
+                ->with(['nickname'=>$this->user->profile ? $this->user->profile->nickname:'', 'email'=>urlencode($this->user->email),'token'=>$this->token]);
     }
 }

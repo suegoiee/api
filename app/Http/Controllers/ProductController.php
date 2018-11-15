@@ -23,9 +23,8 @@ class ProductController extends Controller
     }
     public function onShelves()
     {
-        $product = $this->productRepository->getsWithByStatus(['tags'=>function($query){$query->select('name');},'faqs'])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at']);
-
-        return $this->successResponse($product?$product:[]);
+        $products = $this->productRepository->getsWithByStatus(['tags'=>function($query){$query->select('name');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at']);
+        return $this->successResponse($products?$products:[]);
     }
 
     public function create()
@@ -41,8 +40,10 @@ class ProductController extends Controller
         }
 
         $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq']);
-        $request_data['expiration'] = $request_data['expiration']? $request_data['expiration']:0;
+        $request_data['expiration'] = isset($request_data['expiration'])? $request_data['expiration']:0;
+        $request_data['price'] = isset($request_data['price'])? $request_data['price']:0;
         $product = $this->productRepository->create($request_data);
+
 
         $tags = $request->input('tags',[]);
         $product->tags()->attach($tags);
@@ -55,34 +56,22 @@ class ProductController extends Controller
             }
             $product->collections()->attach($update_collections);
         }
+        $plans = $request->input('plans',[]);
+        foreach ($plans as $key => $plan) {
+            if($plan['id']==0){
+                $product->plans()->create(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0 ]);
+            }else{
+                $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])? $plan['active']:0 ]);
+            }
+        }
 
         $faqs = $request->input('faqs',[]);
         foreach ($faqs as $key => $faq) {
-            # code...
             if(isset($faq['question'])||isset($faq['answer'])){
                 $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
             }
         }
-        /*
-        $avatar_small = $request->file('avatar_small');
-        if($avatar_small){
-            $avatar_small_data = [
-                'path' => $this->storeAvatar($product->id,$request->file('avatar_small'),'product'),
-                'type' => 'small'
-            ];
-            $product->avatar()->create($avatar_small);
-        }
-
-        $avatar_detail = $request->file('avatar_detail');
-        if($avatar_detail){
-            foreach ($avatar_detail as $key => $avatar) {
-                $avatar_data = [
-                    'path' => $this->storeAvatar($product->id,$request->file('avatar_small'),'product'),
-                    'type' => 'detail'
-                ];
-                $product->avatar()->create($avatar_data);
-            }
-        }*/
+        
         return $this->successResponse($product?$product:[]);
     }
 
@@ -96,8 +85,8 @@ class ProductController extends Controller
     public function onShelf(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs']);
-
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at']);
+        $product->plans->makeHidden('id');
         return $this->successResponse($product?$product:[]);
     }
 
@@ -128,7 +117,14 @@ class ProductController extends Controller
         }
         $product->collections()->sync($update_collections);
         //$product->collections()->sync($collections);
-
+        $plans = $request->input('plans',[]);
+        foreach ($plans as $key => $plan) {
+            if($plan['id']==0){
+                $product->plans()->create(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0]);
+            }else{
+                $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0]);
+            }
+        }
         $faqs = $request->input('faqs',[]);
         $faq_ids = [];
         foreach ($faqs as $key => $faq) {
@@ -167,7 +163,7 @@ class ProductController extends Controller
             'info_short'=>'required|max:255',
             'info_more' => 'string',
             'type'=>'required|max:255',
-            'price'=>'required|numeric',
+            //'price'=>'required|numeric',
             'faq'=>'string',
         ]);        
     }
@@ -181,7 +177,7 @@ class ProductController extends Controller
             'info_short'=>'max:255',
             'info_more'=>'string',
             'type'=>'max:255',
-            'price'=>'numeric',
+            //'price'=>'numeric',
             'faq'=>'string',
         ]);        
     }

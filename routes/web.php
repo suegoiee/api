@@ -12,14 +12,6 @@
 */
 
 //API
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailTest;
-Route::get('/test/mail', function(){
-    Mail::to('shouwda@gmail.com')->send(new MailTest());
-});
-Route::get('/test/url', function(){
-    return url('/');
-});
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
@@ -301,4 +293,6 @@ Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLa
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');
 Route::get('/server/extendProductExpired', 'Admin\ServerTaskController@extendProductExpired');
+Route::get('/server/addProductPlans', 'Admin\ServerTaskController@addProductPlans');
+
 Route::get('/server/verifiedFBUser', 'Admin\ServerTaskController@verifiedFBUser');
