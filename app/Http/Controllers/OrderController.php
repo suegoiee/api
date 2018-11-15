@@ -62,7 +62,7 @@ class OrderController extends Controller
             }
             $order_price += $order_plan->price;
             if($order_plan->price==0){
-                array_push($product_free,['id'=>$product->id, 'quantity'=>1]);
+                array_push($product_free,['id'=>$product->id, 'quantity'=>$quantity]);
             }
             $product_ids[$value['id']] = ['unit_price'=>$order_plan->price , 'quantity' => $quantity];
             $product_collect = collect($product);
@@ -258,12 +258,12 @@ class OrderController extends Controller
                 'Name' => $product->name, 
                 'Price' => $product->pivot->unit_price, 
                 'Currency'=> 'NTD', 
-                'Quantity' => (int)$product->pivot->quantity, 
+                'Quantity' => 1, 
                 'URL' => "#"
                 ];
             $invoiceItem=[
                 'Name'=>$product->name,
-                'Count'=>$product->pivot->quantity,
+                'Count'=>1,
                 'Word'=>'期',
                 'Price'=>$product->pivot->unit_price,
                 'TaxType'=>1,
