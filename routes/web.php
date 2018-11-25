@@ -12,6 +12,7 @@
 */
 
 //API
+
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
@@ -33,7 +34,6 @@ Route::get('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/auth/facebook', 'Auth\FacebookController@login');
 
 Route::post('/stocks/products', 'StockModelController@getModelProducts');
-
 Route::middleware(['auth'])->group(function(){
 
 });
@@ -198,7 +198,6 @@ Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
 	Route::post('/login', 'Admin\Auth\LoginController@login');
 	Route::get('/', 'HomeController@index')->name('admin.home');
 });
-
 Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' => 'admin'],function(){
 	Route::post('/logout', 'Admin\Auth\LoginController@logout');
 
@@ -271,13 +270,11 @@ Route::group(['middleware' => ['ip','admin','auth:admin','apiToken'],'prefix' =>
 
 	Route::get('/analysts/{analyst}/grants/amounts', 'Admin\AnalystController@getAmounts');
 });
-
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
 	Route::post('/login', 'Analyst\Auth\LoginController@login');
 	Route::get('/logout', 'Analyst\Auth\LoginController@logout');
 });
-
 Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/', 'Analyst\HomeController@index')->name('analyst.home');
 	Route::post('/logout', 'Analyst\Auth\LoginController@logout');
@@ -286,9 +283,8 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	
 	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
-	Route::get('/promocodes', 'Analyst\PromocodeController@show')->name('analyst.promocode.index');
+	//Route::get('/promocodes', 'Analyst\PromocodeController@show')->name('analyst.promocode.index');
 });
-
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');

@@ -15,10 +15,14 @@ class AdminController extends Controller
     public function __construct(Request $request)
     {
        //$this->token = $this->clientCredentialsGrantToken();
-        if(!$this->getAccessToken($request)){
-            $request->session()->put('access_token', $this->clientCredentialsGrantToken());
-        }
-        $this->token = $request->session()->get('access_token');
+        $that = $this;
+        $this->middleware(function ($request, $next) use ($that){
+            if(!$this->getAccessToken($request)){
+                $session()->put('access_token', $that->clientCredentialsGrantToken($request));
+            }
+            $that->token = $request->session()->get('access_token');
+            return $next($request);
+        });
     }
     protected function checkLogin($request){
         if(!$this->getAccessToken($request)){
@@ -26,7 +30,7 @@ class AdminController extends Controller
         }
         $this->token = $request->session()->get('access_token');
     }
-    protected function getAccessToken(Request $request){
+    protected function getAccessToken(Request $request){/*
         $http = new \GuzzleHttp\Client;
         $response = $http->request('get',url('/auth/login'),[
                 'headers'=>[
@@ -34,9 +38,19 @@ class AdminController extends Controller
                     'Authorization' => 'Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'',
                 ],
                 'form_params' => $request->all(),
-            ]);
+            ]);*/
+        $request->request->add($request->all());
+        $request->header->add([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'',
+        ]);
+        $tokenRequest = $request->create(
+            env('APP_URL').'/auth/login',
+            'get'
+        );
+        $instance = Route::dispatch($tokenRequest);
 
-        $response_data = json_decode((string) $response->getBody(), true);
+        $response_data = json_decode($instance->getContent(), true);
         return $response_data['status']=='success';
     }
 
