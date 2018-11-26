@@ -24,6 +24,7 @@ class TagController extends AdminController
         $tags = $this->moduleRepository->gets();
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $tags,
@@ -37,6 +38,7 @@ class TagController extends AdminController
     {
         $stocks = $this->stockRepository->gets();
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name' => $this->moduleName,
             'data' => null,
             'stocks' => $stocks,
@@ -49,6 +51,7 @@ class TagController extends AdminController
         $tag = $this->moduleRepository->get($id);
         $stocks = $this->stockRepository->gets();
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data' => $tag,
             'stocks' => $stocks,

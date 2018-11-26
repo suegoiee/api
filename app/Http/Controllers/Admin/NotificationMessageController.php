@@ -22,6 +22,7 @@ class NotificationMessageController extends AdminController
         $notificationMessages = $this->moduleRepository->getsWith([],[],["updated_at"=>'DESC']);
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $notificationMessages,
@@ -34,6 +35,7 @@ class NotificationMessageController extends AdminController
     {
         $notificationMessage = $this->moduleRepository->get($id);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'title_field'=> $notificationMessage->name,
             'data' => $notificationMessage,
@@ -43,6 +45,7 @@ class NotificationMessageController extends AdminController
      public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name' => $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
             'data' => null,
@@ -55,6 +58,7 @@ class NotificationMessageController extends AdminController
         $notificationMessage = $this->moduleRepository->get($id);
         $notificationMessage->user_ids = $notificationMessage->user_ids ? json_decode($notificationMessage->user_ids) : [];
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name' => $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
             'data' => $notificationMessage,

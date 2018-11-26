@@ -72,7 +72,7 @@
 		@if(Auth::guard('analyst')->check())
 			@include('analyst.layouts.sidebar')
 		@endif
-        <div id="content" class="w-100">
+        <div id="content">
             <div class="px-4 pt-4 h-100">
                 @yield('content')
             </div>

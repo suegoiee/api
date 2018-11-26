@@ -22,6 +22,7 @@ class EdmController extends AdminController
     {
         $edm = $this->moduleRepository->getsWith([],[],['status'=>'DESC','sort'=>'ASC','updated_at'=>'DESC']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $edm,
@@ -34,6 +35,7 @@ class EdmController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data'=>null,
         ];
@@ -60,6 +62,7 @@ class EdmController extends AdminController
     {
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data' => $this->moduleRepository->getWith($id),
         ];

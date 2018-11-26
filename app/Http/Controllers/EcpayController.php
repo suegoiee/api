@@ -86,17 +86,18 @@ class EcpayController extends Controller
     }
     private function order_update($order_id, $status){
         $token = $this->clientCredentialsGrantToken();
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('put',url('/user/orders/'.$order_id),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$token['access_token'],
-                ],
-                'form_params' => [
-                    'status' => $status
-                ],
-            ]);
-        return json_decode((string) $response->getBody(), true);
+        $tokenRequest = Request::create(
+            env('APP_URL').'/user/orders/'.$order_id,
+            'post'
+        );
+        $tokenRequest->request->add([
+            'status' => $status
+        ]);
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);
+        $instance = Route::dispatch($tokenRequest);
+
+        return json_decode($instance->getContent(), true);
     }
     public function result(Request $request)
     {

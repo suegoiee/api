@@ -26,6 +26,28 @@
 .counter.orders{
 	background: #E0F2F1;
 }
+
+.panel {
+	border:1px solid #AAA;
+	margin: 1em;
+	padding: 1em;
+	width: 100%;
+}
+.panel .price{
+	font-size: 2em;
+}
+.panel .price_label{
+    padding-top: 16px;
+    color: #AAA;
+}
+.pull-right{
+
+    float: right;
+}
+.pull-left{
+    float: left;
+}
+
 @media screen and (max-width: 961px){
 	.counter .title{
 		font-size: 12px;

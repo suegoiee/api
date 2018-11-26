@@ -17,4 +17,10 @@
 			<div class="number" data-endnumber="{{$order_num}}">0</div>
 		</div>
 	</div>
+	<div class="counter_border">
+		<div class="counter promocodes">
+			<div class="title">@lang('analyst.dashboard.promocode_title')</div>
+			<div class="number" data-endnumber="{{$promocode_num}}">0</div>
+		</div>
+	</div>
 </div>

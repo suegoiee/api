@@ -5,6 +5,7 @@
 @endsection
 @section('content')
     @include('analyst.dashboard.counter')
+    @include('analyst.dashboard.panel')
 @endsection
 
 @section('javascript')

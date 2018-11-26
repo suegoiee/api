@@ -229,18 +229,19 @@ class OrderController extends Controller
     }
     private function addProducts($user_id, $products){
         $token = $this->clientCredentialsGrantToken();
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('post',url('/user/products'),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$token['access_token'],
-                ],
-                'form_params' => [
-                    'products' => $products,
-                    'user_id' => $user_id
-                ],
-            ]);
-        return json_decode((string) $response->getBody(), true);
+        $tokenRequest = Request::create(
+            env('APP_URL').'/user/products',
+            'post'
+        );
+        $tokenRequest->request->add([
+            'products' => $products,
+            'user_id' => $user_id,
+        ]);
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);
+        $instance = Route::dispatch($tokenRequest);
+
+        return json_decode($instance->getContent(), true);
     }
     private function ecpay_form($order){
         $merchant_trade_no = $order->user->id.time();

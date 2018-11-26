@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\OauthToken;
+use Illuminate\Support\Facades\Route;
 class AdminController extends Controller
 {	
     use OauthToken;
@@ -17,8 +18,8 @@ class AdminController extends Controller
        //$this->token = $this->clientCredentialsGrantToken();
         $that = $this;
         $this->middleware(function ($request, $next) use ($that){
-            if(!$this->getAccessToken($request)){
-                $session()->put('access_token', $that->clientCredentialsGrantToken($request));
+            if(!$that->getAccessToken($request)){
+                $request->session()->put('access_token', $that->clientCredentialsGrantToken($request));
             }
             $that->token = $request->session()->get('access_token');
             return $next($request);
@@ -30,7 +31,7 @@ class AdminController extends Controller
         }
         $this->token = $request->session()->get('access_token');
     }
-    protected function getAccessToken(Request $request){/*
+    protected function getAccessToken($request){/*
         $http = new \GuzzleHttp\Client;
         $response = $http->request('get',url('/auth/login'),[
                 'headers'=>[
@@ -40,10 +41,8 @@ class AdminController extends Controller
                 'form_params' => $request->all(),
             ]);*/
         $request->request->add($request->all());
-        $request->header->add([
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'',
-        ]);
+        $request->headers->set('Accept','application/json');
+        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
         $tokenRequest = $request->create(
             env('APP_URL').'/auth/login',
             'get'
@@ -56,31 +55,32 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('post',url('/'.str_plural($this->moduleName)),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$this->token['access_token'],
-                ],
-                'form_params' => $request->all(),
-            ]);
+        $request->request->add($request->all());
+        $request->headers->set('Accept','application/json');
+        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $tokenRequest = $request->create(
+            env('APP_URL').'/'.str_plural($this->moduleName),
+            'post'
+        );
+        $instance = Route::dispatch($tokenRequest);
 
-        $response_data = json_decode((string) $response->getBody(), true);
+        $response_data = json_decode($instance->getContent(), true);
+
         return $this->adminResponse($request,$response_data);
     }
 
     public function update(Request $request, $id)
     {
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('put',url('/'.str_plural($this->moduleName).'/'.$id),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$this->token['access_token'],
-                ],
-                'form_params' => $request->all(),
-            ]);
+        $request->request->add($request->all());
+        $request->headers->set('Accept','application/json');
+        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $tokenRequest = $request->create(
+            env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
+            'put'
+        );
+        $instance = Route::dispatch($tokenRequest);
 
-        $response_data = json_decode((string) $response->getBody(), true);
+        $response_data = json_decode($instance->getContent(), true);
 
         return $this->adminResponse($request,$response_data);
     }

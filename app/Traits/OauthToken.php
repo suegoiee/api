@@ -3,31 +3,25 @@ namespace App\Traits;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\PersonalAccessClient;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 trait OauthToken
 {
-    protected function clientCredentialsGrantToken($request){
+    protected function clientCredentialsGrantToken(){
         $client = PersonalAccessClient::first()->client;
-        /*$http = new \GuzzleHttp\Client;
-        $response = $http->post(url('oauth/token'), [
-            'form_params' => [
-                'grant_type' => 'client_credentials',
-                'client_id' => $client->id,
-                'client_secret' => $client->secret,
-                'scope' => 'user-product product order tag message company article promocode notificationMessage edm',
-            ],
-        ]);*/
-        $request->add([
+        
+        $tokenRequest = Request::create(
+            env('APP_URL').'/oauth/token',
+            'post'
+        );
+        $tokenRequest->request->add([
             'grant_type' => 'client_credentials',
             'client_id' => $client->id,
             'client_secret' => $client->secret,
             'scope' => 'user-product product order tag message company article promocode notificationMessage edm',
         ]);
-        $tokenRequest = $request->create(
-            env('APP_URL').'/oauth/token',
-            'post'
-        );
         $instance = Route::dispatch($tokenRequest);
+
 
         return json_decode($instance->getContent(), true);
     }

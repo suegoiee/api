@@ -5,6 +5,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Route;
 class PromocodeController extends AdminController
 {	
     protected $userRepository;
@@ -32,6 +33,7 @@ class PromocodeController extends AdminController
         $promocodes = $this->moduleRepository->getsWith(['user','user.profile','used'], $where,['updated_at'=>'DESC']);
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['import','new'],
             'tabs'=>['type'=>[0,1]],
@@ -46,6 +48,7 @@ class PromocodeController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
             'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
@@ -58,6 +61,7 @@ class PromocodeController extends AdminController
     {
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
             'data' => $this->moduleRepository->getWith($id,['user']),
@@ -68,7 +72,9 @@ class PromocodeController extends AdminController
 
     public function importView()
     {
-        $data = ['module_name'=> $this->moduleName];
+        $data = [
+            'actionName'=>__FUNCTION__,
+            'module_name'=> $this->moduleName];
         return view('admin.import', $data);
     }
 

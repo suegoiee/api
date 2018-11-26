@@ -8,7 +8,7 @@
         <li class="breadcrumb-item"><a href="{{url('/admin/'.str_plural($module_name))}}"><span class="">{{trans($module_name.'.admin.title')}}</span></a></li>
         <li class="breadcrumb-item active">
             <span class="">
-                {{trans($module_name.'.admin.'.(explode('@',Route::getCurrentRoute()->getActionName())[1]).'_title')}}
+                {{trans($module_name.'.admin.'.$actionName.'_title')}}
             </span>
         </li>
     </ol>

@@ -22,3 +22,7 @@
     color: #333;
     background: #DDD;
 }
+#content {
+    overflow: hidden;
+    width: 100%;
+}
