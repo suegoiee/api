@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Notifications\VerifyMailSend;
 use App\Mail\VerifyMail;
 use App\Verify_user;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +38,9 @@ class VerifiedUserController extends Controller
             return $this->successResponse(['message'=>['The email was verified']]);
         }
         $verify = Verify_user::create(['email'=>$user->email,'token'=>md5(rand(1, 10) . microtime())]);
-        $response = Mail::to($user->email)->send(new VerifyMail($user, $verify->token));
+        $user->notify(new VerifyMailSend($user, $verify->token));
+        //$response = Mail::to($user->email)->send(new VerifyMail($user, $verify->token));
+
         return $this->sendVerifyResponse();
     }
     protected function sendVerifyResponse()
