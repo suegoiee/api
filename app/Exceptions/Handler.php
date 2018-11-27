@@ -121,8 +121,10 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        $uri = $request->path();
+        $actionMethod = $request->method();
         if ($request->wantsJson()){//->expectsJson()) {
-            return response()->json(['error' => ['message'=>['Unauthenticated.']]], 401);
+            return response()->json(['status'=>'error','error'=>['message'=>['unauthorized']], 'uri'=>$uri, 'method'=>$actionMethod], 401);
         }
         $guard = array_get($exception->guards(), 0);
         switch ($guard) {
@@ -133,7 +135,7 @@ class Handler extends ExceptionHandler
                     $login = 'analyst.login';
                     break;
                 default:
-                    return redirect()->back();
+                    return response()->json(['status'=>'error','error'=>['message'=>['unauthorized']], 'uri'=>$uri, 'method'=>$actionMethod], 401);
                     break;
         }
         return redirect()->guest(route($login));

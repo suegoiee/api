@@ -7,22 +7,19 @@ use Illuminate\Http\Request;
 
 trait OauthToken
 {
-    protected function clientCredentialsGrantToken(){
+    protected function clientCredentialsGrantToken($request){
         $client = PersonalAccessClient::first()->client;
-        
-        $tokenRequest = Request::create(
-            env('APP_URL').'/oauth/token',
-            'post'
-        );
-        $tokenRequest->request->add([
+        $request->request->add([
             'grant_type' => 'client_credentials',
             'client_id' => $client->id,
             'client_secret' => $client->secret,
             'scope' => 'user-product product order tag message company article promocode notificationMessage edm',
         ]);
+        $tokenRequest = $request->create(
+            env('APP_URL').'/oauth/token',
+            'post'
+        );
         $instance = Route::dispatch($tokenRequest);
-
-
         return json_decode($instance->getContent(), true);
     }
 

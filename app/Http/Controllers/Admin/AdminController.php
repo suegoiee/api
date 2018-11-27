@@ -7,23 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\OauthToken;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\PersonalAccessClient;
 class AdminController extends Controller
 {	
     use OauthToken;
     protected $moduleName;
     protected $moduleRepository;
     protected $token;
-    public function __construct(Request $request)
+    public function __construct($request)
     {
-       //$this->token = $this->clientCredentialsGrantToken();
-        $that = $this;
-        $this->middleware(function ($request, $next) use ($that){
-            if(!$that->getAccessToken($request)){
-                $request->session()->put('access_token', $that->clientCredentialsGrantToken($request));
-            }
-            $that->token = $request->session()->get('access_token');
-            return $next($request);
-        });
+        $this->token = $this->clientCredentialsGrantToken($request);
     }
     protected function checkLogin($request){
         if(!$this->getAccessToken($request)){
@@ -31,15 +24,7 @@ class AdminController extends Controller
         }
         $this->token = $request->session()->get('access_token');
     }
-    protected function getAccessToken($request){/*
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('get',url('/auth/login'),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'',
-                ],
-                'form_params' => $request->all(),
-            ]);*/
+    protected function getAccessToken($request){
         $request->request->add($request->all());
         $request->headers->set('Accept','application/json');
         $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
@@ -55,13 +40,15 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $request->request->add($request->all());
-        $request->headers->set('Accept','application/json');
-        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $this->token = $request->session()->get('access_token');
+
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName),
             'post'
         );
+        $tokenRequest->request->add($request->all());
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
         $instance = Route::dispatch($tokenRequest);
 
         $response_data = json_decode($instance->getContent(), true);
@@ -71,13 +58,14 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->request->add($request->all());
-        $request->headers->set('Accept','application/json');
-        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $this->token = $request->session()->get('access_token');
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
             'put'
         );
+        $tokenRequest->request->add($request->all());
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
         $instance = Route::dispatch($tokenRequest);
 
         $response_data = json_decode($instance->getContent(), true);
