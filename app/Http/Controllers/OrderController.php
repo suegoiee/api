@@ -11,6 +11,7 @@ use App\Repositories\PromocodeRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Route;
 
 class OrderController extends Controller
 {	
@@ -92,10 +93,10 @@ class OrderController extends Controller
             foreach ($product_ids as $key => $product) {
                 array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity']]);
             }
-            $result = $this->addProducts($user->id, $product_pass);
+            $result = $this->addProducts($request, $user->id, $product_pass);
         }else{
             if(count($product_free)>0){
-                $result = $this->addProducts($user->id, $product_free);
+                $result = $this->addProducts($request, $user->id, $product_free);
             }
 
         }
@@ -161,7 +162,7 @@ class OrderController extends Controller
                 }
             }
             if(count($product_data)>0){
-                $this->addProducts($user->id, $product_data);
+                $this->addProducts($request, $user->id, $product_data);
             }
         }else if($order->status==2 || $order->status==4){
             $promocodes = $order->promocodes;
@@ -227,16 +228,16 @@ class OrderController extends Controller
         $order['form_html'] = $ecpay_form;
         return $this->successResponse($order?$order:[]);
     }
-    private function addProducts($user_id, $products){
-        $token = $this->clientCredentialsGrantToken();
-        $tokenRequest = Request::create(
-            env('APP_URL').'/user/products',
-            'post'
-        );
-        $tokenRequest->request->add([
+    private function addProducts($request, $user_id, $products){
+        $token = $this->clientCredentialsGrantToken($request);
+        $request->request->add([
             'products' => $products,
             'user_id' => $user_id,
         ]);
+        $tokenRequest = $request->create(
+            url('/user/products'),
+            'post'
+        );
         $tokenRequest->headers->set('Accept','application/json');
         $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);
         $instance = Route::dispatch($tokenRequest);

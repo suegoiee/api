@@ -20,7 +20,7 @@ class AdminController extends Controller
     }
     protected function checkLogin($request){
         if(!$this->getAccessToken($request)){
-            $request->session()->put('access_token', $this->clientCredentialsGrantToken());
+            $request->session()->put('access_token', $this->clientCredentialsGrantToken($request));
         }
         $this->token = $request->session()->get('access_token');
     }
@@ -40,8 +40,6 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $this->token = $request->session()->get('access_token');
-
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName),
             'post'
@@ -58,7 +56,6 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->token = $request->session()->get('access_token');
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
             'put'

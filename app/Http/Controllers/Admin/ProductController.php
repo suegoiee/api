@@ -62,7 +62,6 @@ class ProductController extends AdminController
     }
     public function store(Request $request)
     {
-        $this->token = $request->session()->get('access_token');
         $request->request->add($request->all());
         $request->headers->set('Accept','application/json');
         $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
@@ -112,17 +111,15 @@ class ProductController extends AdminController
 
     public function update(Request $request, $id)
     {
-        $this->token = $request->session()->get('access_token');
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
             'put'
         );
         $tokenRequest->request->add($request->all());
         $tokenRequest->headers->set('Accept','application/json');
-        $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $tokenRequest->headers->set('Authorization','Bearer '.(isset($this->token['access_token'])? $this->token['access_token']:''));
         $instance = Route::dispatch($tokenRequest);
         $response_product = json_decode($instance->getContent(), true);
-
         if($response_product['status']=='success'){
             $requet_avatars = $request->only('avatars');
 
@@ -190,7 +187,7 @@ class ProductController extends AdminController
         $product_ids = $request->input('products', []);
         $user_ids = $request->input('users', []);
         foreach ($user_ids as $key => $user_id) {
-            $result = $this->addProducts($user_id, $product_ids);
+            $result = $this->addProducts($request, $user_id, $product_ids);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
                 $user->notify(new ProductReceive($user, $product_ids, $send_email));
@@ -216,19 +213,19 @@ class ProductController extends AdminController
         }
         return redirect('admin/products');
     }
-    private function addProducts($user_id, $products){
-        $tokenRequest = Request::create(
-            env('APP_URL').'/user/products',
-            'post'
-        );
-        $tokenRequest->request->add([
+    private function addProducts($request, $user_id, $products){
+        $request->request->add([
             'products' => $products,
             'user_id' => $user_id,
         ]);
+        $tokenRequest = $request->create(
+            url('/user/products'),
+            'post'
+        );
         $tokenRequest->headers->set('Accept','application/json');
-        $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
-        $instance = Route::dispatch($tokenRequest);
+        $tokenRequest->headers->set('Authorization','Bearer '.(isset($this->token['access_token'])? $this->token['access_token']:''));
 
-        return  json_decode($instance->getContent(), true);
+        $instance = Route::dispatch($tokenRequest);
+        return json_decode($instance->getContent(), true);
     }
 }

@@ -16,7 +16,7 @@ trait OauthToken
             'scope' => 'user-product product order tag message company article promocode notificationMessage edm',
         ]);
         $tokenRequest = $request->create(
-            env('APP_URL').'/oauth/token',
+            url('/oauth/token'),
             'post'
         );
         $instance = Route::dispatch($tokenRequest);

@@ -19,6 +19,8 @@ class AdminToken
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        return $next($request);
+        //test
         $token = $request->session()->get('access_token');
         $tokenRequest = $request->create(
             env('APP_URL').'/auth/login',
@@ -26,7 +28,7 @@ class AdminToken
         );
         $tokenRequest->request->add($request->all());
         $tokenRequest->headers->set('Accept','application/json');
-        $tokenRequest->headers->set('Authorization','Bearer '.isset($token['access_token'])? $token['access_token']:'');
+        $tokenRequest->headers->set('Authorization','Bearer '.(isset($token['access_token'])? $token['access_token']:''));
         $instance = Route::dispatch($tokenRequest);
         $response_data = json_decode($instance->getContent(), true);
 
