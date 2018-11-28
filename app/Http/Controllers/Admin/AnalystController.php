@@ -24,6 +24,7 @@ class AnalystController extends AdminController
     {
         $analysts = $this->moduleRepository->getsWith();
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'tools'=>['options'=>false],
@@ -39,6 +40,7 @@ class AnalystController extends AdminController
         $analyst = $this->moduleRepository->get($id);
         $grants = $analyst->grants;
         $data = [
+            'actionName'=>__FUNCTION__,
             'analyst'=>$analyst,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
@@ -53,6 +55,7 @@ class AnalystController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data'=>null,
             'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC']),
@@ -64,6 +67,7 @@ class AnalystController extends AdminController
     {   
         $analyst = $this->moduleRepository->get($id);
         $data = [
+            'actionName'=>__FUNCTION__,
             'analyst'=>$analyst,
             'module_name'=> $this->moduleName,
             'data'=>null,
@@ -76,6 +80,7 @@ class AnalystController extends AdminController
     {
         $analyst = $this->moduleRepository->get($id);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data' => $analyst,
             'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC']),
@@ -87,6 +92,7 @@ class AnalystController extends AdminController
         $analyst = $this->moduleRepository->get($analyst_id);
         $grant = $analyst->grants()->find($id);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'analyst'=>$analyst,
             'data' => $grant,
@@ -98,6 +104,7 @@ class AnalystController extends AdminController
     {
         $analyst = $this->moduleRepository->get($id);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'title_field'=> $analyst->profile->nick_name,
             'data' => $analyst,
@@ -313,6 +320,7 @@ class AnalystController extends AdminController
         }
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'subtitle'=>'detail_page',
             'actions'=>[],

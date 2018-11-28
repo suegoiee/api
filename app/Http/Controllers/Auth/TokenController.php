@@ -62,6 +62,7 @@ class TokenController extends Controller
     }
     public function isLogin(Request $request)
     {
+        dd($request);
         $user = $request->user();
         if($user){
             return $this->successResponse(['login success']);

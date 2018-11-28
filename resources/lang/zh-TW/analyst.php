@@ -147,6 +147,10 @@
 		'dashboard'=>[
 			'product_title'=>'上架中產品',
 			'client_title'=>'購買的使用者',
-			'order_title'=>'本月訂單數'
+			'order_title'=>'本月訂單數',
+			'promocode_title'=>'優惠券使用數',
+			'doller'=>'元',
+			'sales_amount_title'=>'*尚未扣稅以及手續費',
+			'account_title'=>'本月產品銷售額'
 		],
 	];

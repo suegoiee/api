@@ -6,6 +6,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Route;
 class ProductController extends AdminController
 {	
     protected $tagRepository;
@@ -17,8 +18,6 @@ class ProductController extends AdminController
         $this->moduleRepository = $productRepository;
         $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
-
-        //$this->token = $this->clientCredentialsGrantToken();
     }
 
     public function index()
@@ -27,6 +26,7 @@ class ProductController extends AdminController
             $query->where('active',1);
         }],[],['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['assigned','sorted','new'],
             'table_data' => $product,
@@ -39,6 +39,7 @@ class ProductController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'single']),
@@ -51,6 +52,7 @@ class ProductController extends AdminController
     {
         $product =  $this->moduleRepository->getWith($id,['tags','collections']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
@@ -60,16 +62,17 @@ class ProductController extends AdminController
     }
     public function store(Request $request)
     {
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('post',url('/'.str_plural($this->moduleName)),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$this->token['access_token'],
-                ],
-                'form_params' => $request->all(),
-            ]);
+        $request->request->add($request->all());
+        $request->headers->set('Accept','application/json');
+        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $tokenRequest = $request->create(
+            env('APP_URL').'/'.str_plural($this->moduleName),
+            'post'
+        );
+        $instance = Route::dispatch($tokenRequest);
 
-        $response_product = json_decode((string) $response->getBody(), true);
+        $response_product= json_decode($instance->getContent(), true);
+
         if($response_product['status']=='success'){
             $requet_avatars = $request->only('avatars');
             $avatars = $requet_avatars['avatars'];
@@ -80,6 +83,7 @@ class ProductController extends AdminController
                 $file_path = $avatar['avatar']->getPathname();
                 $file_mime = $avatar['avatar']->getmimeType();
                 $file_org  = $avatar['avatar']->getClientOriginalName();
+                $http = new \GuzzleHttp\Client;
                 $response = $http->request('post',url('/'.str_plural($this->moduleName)).'/avatar/'.$response_product['data']['id'],[
                         'headers'=>[
                             'Accept' => 'application/json',
@@ -107,16 +111,15 @@ class ProductController extends AdminController
 
     public function update(Request $request, $id)
     {
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('put',url('/'.str_plural($this->moduleName).'/'.$id),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$this->token['access_token'],
-                ],
-                'form_params' => $request->all(),
-            ]);
-
-        $response_product = json_decode((string) $response->getBody(), true);
+        $tokenRequest = $request->create(
+            env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
+            'put'
+        );
+        $tokenRequest->request->add($request->all());
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.(isset($this->token['access_token'])? $this->token['access_token']:''));
+        $instance = Route::dispatch($tokenRequest);
+        $response_product = json_decode($instance->getContent(), true);
         if($response_product['status']=='success'){
             $requet_avatars = $request->only('avatars');
 
@@ -128,6 +131,7 @@ class ProductController extends AdminController
                 $file_path = $avatar['avatar']->getPathname();
                 $file_mime = $avatar['avatar']->getmimeType();
                 $file_org  = $avatar['avatar']->getClientOriginalName();
+                $http = new \GuzzleHttp\Client;
                 $response = $http->request('post',url('/'.str_plural($this->moduleName)).'/avatar/'.$response_product['data']['id'],[
                         'headers'=>[
                             'Accept' => 'application/json',
@@ -150,15 +154,17 @@ class ProductController extends AdminController
                 $response_avatar = json_decode((string) $response->getBody(), true);
             }
             if($request->input('deleted')){
-                $response = $http->request('delete',url('/'.str_plural($this->moduleName)).'/avatar/'.$response_product['data']['id'],[
-                        'headers'=>[
-                            'Accept' => 'application/json',
-                            'Authorization' => 'Bearer '.$this->token['access_token'],
-                        ],
-                        'form_params' => $request->only('deleted'),
-                    ]);
+                
+                $request->request->add($request->only('deleted'));
+                $request->headers->set('Accept','application/json');
+                $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+                $tokenRequest = $request->create(
+                    env('APP_URL').'/'.str_plural($this->moduleName).'/avatar/'.$response_product['data']['id'],
+                    'delete'
+                );
+                $instance = Route::dispatch($tokenRequest);
 
-                $response_avatar = json_decode((string) $response->getBody(), true);
+                $response_avatar = json_decode($instance->getContent(), true);
             }
         }
         return $this->adminResponse($request,$response_product);
@@ -168,6 +174,7 @@ class ProductController extends AdminController
         $products = $this->moduleRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']);
         $users = $userRepository->getsWith(['profile']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'products' =>$products,
             'users' => $users,
@@ -180,7 +187,7 @@ class ProductController extends AdminController
         $product_ids = $request->input('products', []);
         $user_ids = $request->input('users', []);
         foreach ($user_ids as $key => $user_id) {
-            $result = $this->addProducts($user_id, $product_ids);
+            $result = $this->addProducts($request, $user_id, $product_ids);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
                 $user->notify(new ProductReceive($user, $product_ids, $send_email));
@@ -192,6 +199,7 @@ class ProductController extends AdminController
     {
         $products = $this->moduleRepository->getsWith([],['status'=>1], ['sort'=>'ASC']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'products' =>$products,
         ];
@@ -205,19 +213,19 @@ class ProductController extends AdminController
         }
         return redirect('admin/products');
     }
-    private function addProducts($user_id, $products){
-        $token = $this->token;
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('post',url('/user/products'),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$token['access_token'],
-                ],
-                'form_params' => [
-                    'products' => $products,
-                    'user_id' => $user_id,
-                ],
-            ]);
-        return json_decode((string) $response->getBody(), true);
+    private function addProducts($request, $user_id, $products){
+        $request->request->add([
+            'products' => $products,
+            'user_id' => $user_id,
+        ]);
+        $tokenRequest = $request->create(
+            url('/user/products'),
+            'post'
+        );
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.(isset($this->token['access_token'])? $this->token['access_token']:''));
+
+        $instance = Route::dispatch($tokenRequest);
+        return json_decode($instance->getContent(), true);
     }
 }

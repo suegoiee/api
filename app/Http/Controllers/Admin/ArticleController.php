@@ -22,6 +22,7 @@ class ArticleController extends AdminController
     {
         $article = $this->moduleRepository->getsWith(['tags'],[],['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $article,
@@ -34,6 +35,7 @@ class ArticleController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
             'data'=>null,
@@ -45,6 +47,7 @@ class ArticleController extends AdminController
     {
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
             'data' => $this->moduleRepository->getWith($id,['tags',]),

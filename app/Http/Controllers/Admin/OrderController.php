@@ -33,6 +33,7 @@ class OrderController extends AdminController
         $orders = $this->moduleRepository->getsWith(['user','user.profile','products'], $where, ['created_at'=>'DESC']);
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>[],
             'tabs'=>['status'=>[0,1]],
@@ -47,6 +48,7 @@ class OrderController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data'=>null,
         ];
@@ -57,6 +59,7 @@ class OrderController extends AdminController
     {
 
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data' => $this->moduleRepository->getWith($id,['products']),
         ];

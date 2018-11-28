@@ -27,4 +27,23 @@ return [
 
         'promocodefile'=>'優惠卷CSV'
     ],
+    'analyst'=>[
+        'id' => '編號',
+        'menu_title'=>'優惠券列表',
+        'index_title'=>'優惠券明細',
+        'name' => '名稱',
+        'code' => '優惠碼',
+        'user_name' => '擁有者',
+        'offer' => '折扣',
+        'deadline' => '使用期限',
+        'user_id'=>'擁有者',
+        'user'=>'擁有者',
+        'used'=>'已使用',
+        'used_at'=>'已使用',
+        'type'=>'類型',
+        'type_0'=>'非指名優惠券',
+        'type_1'=>'指名優惠券',
+        'specific'=>'套用指定產品',
+        'products'=>'產品',
+    ],
 ];

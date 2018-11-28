@@ -25,9 +25,9 @@
     <thead class="thead-inverse text-center">
         <tr>
             @foreach($table_head as $th)
-                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="'.$th.'Formatter"':'' !!} data-sortable="true"
+                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="'.$th.'Formatter"':'' !!} data-sortable="true" {!!isset($table_sorter) && in_array($th,$table_sorter)?'data-sorter="'.$th.'Sorter"':'' !!}
                 >
-                {{trans('analyst.admin.'.$th)}}
+                {{trans($module_name.'.analyst.'.$th)}}
                 </th>
             @endforeach
             @if($table_action)

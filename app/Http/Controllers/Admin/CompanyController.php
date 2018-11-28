@@ -20,6 +20,7 @@ class CompanyController extends AdminController
     {
         $company = $this->moduleRepository->getsWith(['events'],[],['updated_at'=>'DESC','stock_code'=>'ASC']);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $company,
@@ -32,6 +33,7 @@ class CompanyController extends AdminController
     public function create()
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data'=>null,
             'industries'=> $this->moduleRepository->getIndustreis(),
@@ -44,6 +46,7 @@ class CompanyController extends AdminController
         $company = $this->moduleRepository->getWith($id,['events']);
         $company->id = $company->no;
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data' => $company,
             'industries'=> $this->moduleRepository->getIndustreis(),

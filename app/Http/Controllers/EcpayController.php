@@ -9,6 +9,7 @@ use App\Repositories\EcpayRepository;
 //use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Route;
 
 class EcpayController extends Controller
 {	
@@ -51,27 +52,27 @@ class EcpayController extends Controller
                 switch ($order->paymentType) {
                     case 'credit':case 'webatm':
                         if($feedback_data['RtnCode']==1){
-                            $this->order_update($ecpay->order_id,1);
+                            $this->order_update($request, $ecpay->order_id,1);
                         }else{
-                            $this->order_update($ecpay->order_id,2);
+                            $this->order_update($request, $ecpay->order_id,2);
                         }
                         return '1|OK';
                     case 'atm':
                         if($feedback_data['RtnCode']==1){
-                            $this->order_update($ecpay->order_id,1);
+                            $this->order_update($request, $ecpay->order_id,1);
                         }else if($feedback_data['RtnCode']==2){
-                            $this->order_update($ecpay->order_id,3);
+                            $this->order_update($request, $ecpay->order_id,3);
                         }else{
-                            $this->order_update($ecpay->order_id,4);
+                            $this->order_update($request, $ecpay->order_id,4);
                         }
                         return '1|OK';
                     case 'barcode':case 'cvs':
                         if($feedback_data['RtnCode']==1){
-                            $this->order_update($ecpay->order_id,1);
+                            $this->order_update($request, $ecpay->order_id,1);
                         }else if($feedback_data['RtnCode']==10100073){
-                            $this->order_update($ecpay->order_id,3);
+                            $this->order_update($request, $ecpay->order_id,3);
                         }else{
-                            $this->order_update($ecpay->order_id,4);
+                            $this->order_update($request, $ecpay->order_id,4);
                         }
                         return '1|OK';
                     default:
@@ -84,19 +85,23 @@ class EcpayController extends Controller
             return '0|'.$e->getMessage();
         }
     }
-    private function order_update($order_id, $status){
-        $token = $this->clientCredentialsGrantToken();
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('put',url('/user/orders/'.$order_id),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$token['access_token'],
-                ],
-                'form_params' => [
-                    'status' => $status
-                ],
-            ]);
-        return json_decode((string) $response->getBody(), true);
+    public function testorder(Request $request){
+        return $this->order_update($request,4765,1);
+    }
+    private function order_update($request, $order_id, $status){
+        $token = $this->clientCredentialsGrantToken($request);
+        $request->request->add([
+            'status' => $status
+        ]);
+        $tokenRequest = $request->create(
+            url('/user/orders/'.$order_id),
+            'put'
+        );
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);
+        $instance = Route::dispatch($tokenRequest);
+
+        return json_decode($instance->getContent(), true);
     }
     public function result(Request $request)
     {
@@ -110,10 +115,10 @@ class EcpayController extends Controller
             switch ($order->paymentType) {
                 case 'credit':case 'webatm':
                         if($feedback_data['RtnCode']==1){
-                            $this->order_update($ecpay->order_id,1);
+                            $this->order_update($request, $ecpay->order_id,1);
                             return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=1');
                         }
-                        $this->order_update($ecpay->order_id,2);
+                        $this->order_update($request, $ecpay->order_id,2);
                         return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=2');
                 case 'atm':
                         if($feedback_data['RtnCode']==1){

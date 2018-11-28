@@ -103,8 +103,10 @@ class ProductController extends Controller
         }
 
         $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq']);
-        $data = array_filter($request_data, function($item){return $item!=null;});
-
+        $request_data['model'] = $request_data['model'] ? $request_data['model']:'';
+        $request_data['column'] = $request_data['column'] ? $request_data['column']:'';
+        $data = array_filter($request_data, function($item){return $item!==null;});
+        
         $product = $this->productRepository->update($id,$data);
 
         $tags = $request->input('tags',[]);
