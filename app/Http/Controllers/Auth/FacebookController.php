@@ -73,7 +73,7 @@ class FacebookController extends Controller
 
     protected function registered(Request $request,$user)
     {
-        $adminToken = $this->clientCredentialsGrantToken();
+        $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
         $token['verified'] = $user->mail_verified_at ? 1 : 0;

@@ -47,7 +47,7 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
-        $adminToken = $this->clientCredentialsGrantToken();
+        $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken));
         $token = $this->passwordGrantToken($request);
         $token['user'] = $user;

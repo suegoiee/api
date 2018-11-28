@@ -28,16 +28,18 @@ class UserRegisteredListener
     {
         $user = $event->user; 
         $token = $event->token;
-        $http = new \GuzzleHttp\Client;
-        $response = $http->request('post',url('/user/products'),[
-                'headers'=>[
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer '.$token['access_token'],
-                ],
-                'form_params' => [
-                    'products' => [['id'=>42,'quantity'=>0]],
-                    'user_id' => $user['id'],
-                ],
-            ]);
+        $tokenRequest = Request::create(
+            url('/user/products'),
+            'post'
+        );
+        $tokenRequest->request->add([
+            'products' => [['id'=>42,'quantity'=>0]],
+            'user_id' => $user['id'],
+        ]);
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);
+        $instance = Route::dispatch($tokenRequest);
+
+        return json_decode($instance->getContent(), true);
     }
 }
