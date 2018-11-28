@@ -5,6 +5,8 @@ namespace App\Listeners;
 use App\Events\UserRegistered;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Request; 
+use Illuminate\Support\Facades\Route;
 
 class UserRegisteredListener
 {
