@@ -62,19 +62,21 @@ class ProductController extends AdminController
     }
     public function store(Request $request)
     {
-        $request->request->add($request->all());
-        $request->headers->set('Accept','application/json');
-        $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $requet_avatars = $request->only('avatars');
+        //$request->request->add($request->all());
         $tokenRequest = $request->create(
-            env('APP_URL').'/'.str_plural($this->moduleName),
+            url('/'.str_plural($this->moduleName)),
             'post'
         );
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.$this->token['access_token']);
+        
         $instance = Route::dispatch($tokenRequest);
 
         $response_product= json_decode($instance->getContent(), true);
-
+        
         if($response_product['status']=='success'){
-            $requet_avatars = $request->only('avatars');
+            //$requet_avatars = $request->only('avatars');
             $avatars = $requet_avatars['avatars'];
             foreach ($avatars as $key => $avatar) {
                 if(!array_key_exists('avatar',$avatar)){
@@ -111,17 +113,18 @@ class ProductController extends AdminController
 
     public function update(Request $request, $id)
     {
+        $requet_avatars = $request->only('avatars');
+        $tokenRequest->request->add($request->all());
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
             'put'
         );
-        $tokenRequest->request->add($request->all());
         $tokenRequest->headers->set('Accept','application/json');
         $tokenRequest->headers->set('Authorization','Bearer '.(isset($this->token['access_token'])? $this->token['access_token']:''));
         $instance = Route::dispatch($tokenRequest);
         $response_product = json_decode($instance->getContent(), true);
         if($response_product['status']=='success'){
-            $requet_avatars = $request->only('avatars');
+            //$requet_avatars = $request->only('avatars');
 
             $avatars = $requet_avatars['avatars'];
             foreach ($avatars as $key => $avatar) {
