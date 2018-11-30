@@ -62,22 +62,18 @@ class ProductController extends AdminController
     }
     public function store(Request $request)
     {
-        $requet_avatars = $request->only('avatars');
-        //$request->request->add($request->all());
-        $tokenRequest = $request->create(
-            url('/'.str_plural($this->moduleName)),
-            'post'
-        );
-        //$tokenRequest->request->add($request->all());
-        $tokenRequest->headers->set('Accept','application/json');
-        $tokenRequest->headers->set('Authorization','Bearer '.$this->token['access_token']);
-        
-        $instance = Route::dispatch($tokenRequest);
-
-        $response_product= json_decode($instance->getContent(), true);
+        $http = new \GuzzleHttp\Client;
+        $response = $http->request('post',url('/'.str_plural($this->moduleName)),[
+                'headers'=>[
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$this->token['access_token'],
+                ],
+                'form_params' => $request->all(),
+            ]);
+        $response_product = json_decode((string) $response->getBody(), true);
         
         if($response_product['status']=='success'){
-            //$requet_avatars = $request->only('avatars');
+            $requet_avatars = $request->only('avatars');
             $avatars = $requet_avatars['avatars'];
             foreach ($avatars as $key => $avatar) {
                 if(!array_key_exists('avatar',$avatar)){
@@ -114,16 +110,16 @@ class ProductController extends AdminController
 
     public function update(Request $request, $id)
     {
-        $requet_avatars = $request->only('avatars');
-        //$request->request->add($request->all());
-        $tokenRequest = $request->create(
-            env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
-            'put'
-        );
-        $tokenRequest->headers->set('Accept','application/json');
-        $tokenRequest->headers->set('Authorization','Bearer '.(isset($this->token['access_token'])? $this->token['access_token']:''));
-        $instance = Route::dispatch($tokenRequest);
-        $response_product = json_decode($instance->getContent(), true);
+        $http = new \GuzzleHttp\Client;
+        $response = $http->request('put',url('/'.str_plural($this->moduleName).'/'.$id),[
+                'headers'=>[
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$this->token['access_token'],
+                ],
+                'form_params' => $request->all(),
+            ]);
+        $response_product = json_decode((string) $response->getBody(), true);
+        
         if($response_product['status']=='success'){
             //$requet_avatars = $request->only('avatars');
 
@@ -159,16 +155,15 @@ class ProductController extends AdminController
             }
             if($request->input('deleted')){
                 
-                $request->request->add($request->only('deleted'));
-                $request->headers->set('Accept','application/json');
-                $request->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
-                $tokenRequest = $request->create(
-                    env('APP_URL').'/'.str_plural($this->moduleName).'/avatar/'.$response_product['data']['id'],
-                    'delete'
-                );
-                $instance = Route::dispatch($tokenRequest);
+                $response = $http->request('delete',url('/'.str_plural($this->moduleName)).'/avatar/'.$response_product['data']['id'],[
+                        'headers'=>[
+                            'Accept' => 'application/json',
+                            'Authorization' => 'Bearer '.$this->token['access_token'],
+                        ],
+                        'form_params' => $request->only('deleted'),
+                    ]);
 
-                $response_avatar = json_decode($instance->getContent(), true);
+                $response_avatar = json_decode((string) $response->getBody(), true);
             }
         }
         return $this->adminResponse($request,$response_product);
