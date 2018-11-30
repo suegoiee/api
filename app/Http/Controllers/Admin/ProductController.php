@@ -63,11 +63,12 @@ class ProductController extends AdminController
     public function store(Request $request)
     {
         $requet_avatars = $request->only('avatars');
-        $request->request->add($request->all());
+        //$request->request->add($request->all());
         $tokenRequest = $request->create(
             url('/'.str_plural($this->moduleName)),
             'post'
         );
+        //$tokenRequest->request->add($request->all());
         $tokenRequest->headers->set('Accept','application/json');
         $tokenRequest->headers->set('Authorization','Bearer '.$this->token['access_token']);
         
@@ -114,7 +115,7 @@ class ProductController extends AdminController
     public function update(Request $request, $id)
     {
         $requet_avatars = $request->only('avatars');
-        $request->request->add($request->all());
+        //$request->request->add($request->all());
         $tokenRequest = $request->create(
             env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
             'put'
