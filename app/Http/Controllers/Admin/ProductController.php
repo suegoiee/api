@@ -121,7 +121,7 @@ class ProductController extends AdminController
         $response_product = json_decode((string) $response->getBody(), true);
         
         if($response_product['status']=='success'){
-            //$requet_avatars = $request->only('avatars');
+            $requet_avatars = $request->only('avatars');
 
             $avatars = $requet_avatars['avatars'];
             foreach ($avatars as $key => $avatar) {
