@@ -16,10 +16,10 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-	<title>優分析股市AI機器人 - 優分析專欄</title>
-	<meta name="description" content="優分析股市AI機器人">
+	<title>優分析股市策略平台 - 優分析專欄</title>
+	<meta name="description" content="優分析股市策略平台">
 	<meta name="author" content="優分析 Uanalyze ">
-	<meta property="og:title" content="優分析股市AI機器人 - 自動鎖定超級強勢股">
+	<meta property="og:title" content="優分析股市策略平台 - 自動鎖定超級強勢股">
 	<meta property="og:type" content="website">
 	<meta property="og:site_name" content="優分析 Uanalyze">
 
@@ -53,7 +53,7 @@
 
 	   	<div style="display:inline">  
 			   	<ul id="nav" class="nav">
-	            	<li><a  class="btn-orange" href="https://pro.uanalyze.com.tw">立即使用機器人</a></li>
+	            	<li><a  class="btn-orange" href="https://pro.uanalyze.com.tw">立即使用優分析</a></li>
 			   	</ul> <!-- end #nav -->		
 	   	</div> 
 
