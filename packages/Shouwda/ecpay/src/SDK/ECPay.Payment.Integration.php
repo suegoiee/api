@@ -3,6 +3,8 @@
 /**
  * 付款方式。
  */
+if(!class_exists('ECPay_PaymentMethod'))
+{
 abstract class ECPay_PaymentMethod {
 
     /**
@@ -41,10 +43,13 @@ abstract class ECPay_PaymentMethod {
     const AndroidPay = 'AndroidPay';
 
 }
+}
 
 /**
  * 付款方式子項目。
  */
+if(!class_exists('ECPay_PaymentMethodItem'))
+{
 abstract class ECPay_PaymentMethodItem {
 
     /**
@@ -210,10 +215,12 @@ abstract class ECPay_PaymentMethodItem {
     const COD = 'COD';
 
 }
-
+}
 /**
  * 額外付款資訊。
  */
+if(!class_exists('ECPay_ExtraPaymentInfo'))
+{
 abstract class ECPay_ExtraPaymentInfo {
 
     /**
@@ -227,10 +234,13 @@ abstract class ECPay_ExtraPaymentInfo {
     const No = 'N';
 
 }
+}
 
 /**
  * 額外付款資訊。
  */
+if(!class_exists('ECPay_DeviceType'))
+{
 abstract class ECPay_DeviceType {
 
     /**
@@ -244,10 +254,13 @@ abstract class ECPay_DeviceType {
     const Mobile = 'M';
 
 }
+}
 
 /**
  * 信用卡訂單處理動作資訊。
  */
+if(!class_exists('ECPay_ActionType'))
+{
 abstract class ECPay_ActionType {
 
     /**
@@ -271,10 +284,12 @@ abstract class ECPay_ActionType {
     const N = 'N';
 
 }
-
+}
 /**
  * 定期定額的週期種類。
  */
+if(!class_exists('ECPay_PeriodType'))
+{
 abstract class ECPay_PeriodType {
 
     /**
@@ -298,10 +313,12 @@ abstract class ECPay_PeriodType {
     const Day = 'D';
 
 }
-
+}
 /**
  * 電子發票開立註記。
  */
+if(!class_exists('ECPay_InvoiceState'))
+{
 abstract class ECPay_InvoiceState {
     /**
      * 需要開立電子發票。
@@ -313,10 +330,13 @@ abstract class ECPay_InvoiceState {
      */
     const No = '';
 }
+}
 
 /**
  * 電子發票載具類別
  */
+if(!class_exists('ECPay_CarruerType'))
+{
 abstract class ECPay_CarruerType {
   // 無載具
   const None = '';
@@ -330,7 +350,7 @@ abstract class ECPay_CarruerType {
   // 買受人手機條碼
   const Cellphone = '3';
 }
-
+}
 /**
  * 電子發票列印註記
  */
