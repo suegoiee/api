@@ -381,6 +381,8 @@ abstract class ECPay_Donation {
 /**
  * 通關方式
  */
+if(!class_exists('ECPay_ClearanceMark'))
+{
 abstract class ECPay_ClearanceMark {
   // 經海關出口
   const Yes = '1';
@@ -388,10 +390,12 @@ abstract class ECPay_ClearanceMark {
   // 非經海關出口
   const No = '2';
 }
-
+}
 /**
  * 課稅類別
  */
+if(!class_exists('ECPay_TaxType'))
+{
 abstract class ECPay_TaxType {
   // 應稅
   const Dutiable = '1';
@@ -405,16 +409,19 @@ abstract class ECPay_TaxType {
   // 應稅與免稅混合(限收銀機發票無法分辦時使用，且需通過申請核可)
   const Mix = '9';
 }
-
+}
 /**
  * 字軌類別
  */
+if(!class_exists('ECPay_InvType'))
+{
 abstract class ECPay_InvType {
   // 一般稅額
   const General = '07';
   
   // 特種稅額
   const Special = '08';
+}
 }
 if(!class_exists('ECPay_EncryptType'))
 {
