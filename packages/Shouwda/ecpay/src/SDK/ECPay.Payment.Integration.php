@@ -354,6 +354,8 @@ abstract class ECPay_CarruerType {
 /**
  * 電子發票列印註記
  */
+if(!class_exists('ECPay_PrintMark'))
+{
 abstract class ECPay_PrintMark {
   // 不列印
   const No = '0';
@@ -361,10 +363,13 @@ abstract class ECPay_PrintMark {
   // 列印
   const Yes = '1';
 }
+}
 
 /**
  * 電子發票捐贈註記
  */
+if(!class_exists('ECPay_Donation'))
+{
 abstract class ECPay_Donation {
   // 捐贈
   const Yes = '1';
@@ -372,7 +377,7 @@ abstract class ECPay_Donation {
   // 不捐贈
   const No = '2';
 }
-
+}
 /**
  * 通關方式
  */
