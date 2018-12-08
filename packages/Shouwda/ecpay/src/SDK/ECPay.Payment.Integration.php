@@ -3,6 +3,8 @@
 /**
  * 付款方式。
  */
+if(!class_exists('ECPay_PaymentMethod'))
+{
 abstract class ECPay_PaymentMethod {
 
     /**
@@ -41,10 +43,13 @@ abstract class ECPay_PaymentMethod {
     const AndroidPay = 'AndroidPay';
 
 }
+}
 
 /**
  * 付款方式子項目。
  */
+if(!class_exists('ECPay_PaymentMethodItem'))
+{
 abstract class ECPay_PaymentMethodItem {
 
     /**
@@ -210,10 +215,12 @@ abstract class ECPay_PaymentMethodItem {
     const COD = 'COD';
 
 }
-
+}
 /**
  * 額外付款資訊。
  */
+if(!class_exists('ECPay_ExtraPaymentInfo'))
+{
 abstract class ECPay_ExtraPaymentInfo {
 
     /**
@@ -227,10 +234,13 @@ abstract class ECPay_ExtraPaymentInfo {
     const No = 'N';
 
 }
+}
 
 /**
  * 額外付款資訊。
  */
+if(!class_exists('ECPay_DeviceType'))
+{
 abstract class ECPay_DeviceType {
 
     /**
@@ -244,10 +254,13 @@ abstract class ECPay_DeviceType {
     const Mobile = 'M';
 
 }
+}
 
 /**
  * 信用卡訂單處理動作資訊。
  */
+if(!class_exists('ECPay_ActionType'))
+{
 abstract class ECPay_ActionType {
 
     /**
@@ -271,10 +284,12 @@ abstract class ECPay_ActionType {
     const N = 'N';
 
 }
-
+}
 /**
  * 定期定額的週期種類。
  */
+if(!class_exists('ECPay_PeriodType'))
+{
 abstract class ECPay_PeriodType {
 
     /**
@@ -298,10 +313,12 @@ abstract class ECPay_PeriodType {
     const Day = 'D';
 
 }
-
+}
 /**
  * 電子發票開立註記。
  */
+if(!class_exists('ECPay_InvoiceState'))
+{
 abstract class ECPay_InvoiceState {
     /**
      * 需要開立電子發票。
@@ -313,10 +330,13 @@ abstract class ECPay_InvoiceState {
      */
     const No = '';
 }
+}
 
 /**
  * 電子發票載具類別
  */
+if(!class_exists('ECPay_CarruerType'))
+{
 abstract class ECPay_CarruerType {
   // 無載具
   const None = '';
@@ -330,10 +350,12 @@ abstract class ECPay_CarruerType {
   // 買受人手機條碼
   const Cellphone = '3';
 }
-
+}
 /**
  * 電子發票列印註記
  */
+if(!class_exists('ECPay_PrintMark'))
+{
 abstract class ECPay_PrintMark {
   // 不列印
   const No = '0';
@@ -341,10 +363,13 @@ abstract class ECPay_PrintMark {
   // 列印
   const Yes = '1';
 }
+}
 
 /**
  * 電子發票捐贈註記
  */
+if(!class_exists('ECPay_Donation'))
+{
 abstract class ECPay_Donation {
   // 捐贈
   const Yes = '1';
@@ -352,10 +377,12 @@ abstract class ECPay_Donation {
   // 不捐贈
   const No = '2';
 }
-
+}
 /**
  * 通關方式
  */
+if(!class_exists('ECPay_ClearanceMark'))
+{
 abstract class ECPay_ClearanceMark {
   // 經海關出口
   const Yes = '1';
@@ -363,10 +390,12 @@ abstract class ECPay_ClearanceMark {
   // 非經海關出口
   const No = '2';
 }
-
+}
 /**
  * 課稅類別
  */
+if(!class_exists('ECPay_TaxType'))
+{
 abstract class ECPay_TaxType {
   // 應稅
   const Dutiable = '1';
@@ -380,16 +409,19 @@ abstract class ECPay_TaxType {
   // 應稅與免稅混合(限收銀機發票無法分辦時使用，且需通過申請核可)
   const Mix = '9';
 }
-
+}
 /**
  * 字軌類別
  */
+if(!class_exists('ECPay_InvType'))
+{
 abstract class ECPay_InvType {
   // 一般稅額
   const General = '07';
   
   // 特種稅額
   const Special = '08';
+}
 }
 if(!class_exists('ECPay_EncryptType'))
 {
@@ -410,7 +442,8 @@ abstract class ECPay_EncryptType {
  * @author charlie
  */
 
-
+if(!class_exists('ECPay_AllInOne'))
+{
 class ECPay_AllInOne {
 
     public $ServiceURL = 'ServiceURL';
@@ -549,10 +582,12 @@ class ECPay_AllInOne {
     }
     
 }
-
+}
 /**
 * 抽象類
 */
+if(!class_exists('ECPay_Aio'))
+{
 abstract class ECPay_Aio
 {
     
@@ -581,10 +616,12 @@ abstract class ECPay_Aio
     }
 
 }
-
+}
 /**
 *  產生訂單
 */
+if(!class_exists('ECPay_Send'))
+{
 class ECPay_Send extends ECPay_Aio
 {   
     //付款方式物件
@@ -669,8 +706,9 @@ class ECPay_Send extends ECPay_Aio
     }
 
 }
-
-
+}
+if(!class_exists('ECPay_CheckOutFeedback'))
+{
 class ECPay_CheckOutFeedback extends ECPay_Aio 
 {
     static function CheckOut($arParameters = array(),$HashKey = '' ,$HashIV = ''){
@@ -712,8 +750,9 @@ class ECPay_CheckOutFeedback extends ECPay_Aio
         return $arFeedback;
     }
 }
-
-
+}
+if(!class_exists('ECPay_QueryTradeInfo'))
+{
 class ECPay_QueryTradeInfo extends ECPay_Aio
 {
     static function CheckOut($arParameters = array(),$HashKey ='',$HashIV ='',$ServiceURL = ''){
@@ -762,8 +801,9 @@ class ECPay_QueryTradeInfo extends ECPay_Aio
 
     }    
 }
-
-
+}
+if(!class_exists('ECPay_QueryPeriodCreditCardTradeInfo'))
+{
 class ECPay_QueryPeriodCreditCardTradeInfo extends ECPay_Aio
 {
     static function CheckOut($arParameters = array(),$HashKey ='',$HashIV ='',$ServiceURL = ''){
@@ -799,8 +839,9 @@ class ECPay_QueryPeriodCreditCardTradeInfo extends ECPay_Aio
         return $arFeedback ;
     }
 }
-
-
+}
+if(!class_exists('ECPay_DoAction'))
+{
 class ECPay_DoAction extends ECPay_Aio
 {
     static function CheckOut($arParameters = array(),$HashKey ='',$HashIV ='',$ServiceURL = ''){
@@ -839,7 +880,9 @@ class ECPay_DoAction extends ECPay_Aio
 
     }
 }
-
+}
+if(!class_exists('ECPay_AioCapture'))
+{
 class ECPay_AioCapture extends ECPay_Aio
 {
     static function Capture($arParameters=array(),$HashKey='',$HashIV='',$ServiceURL=''){
@@ -872,7 +915,9 @@ class ECPay_AioCapture extends ECPay_Aio
 
     }
 }
-
+}
+if(!class_exists('ECPay_TradeNoAio'))
+{
 class ECPay_TradeNoAio extends ECPay_Aio
 {   
     static function CheckOut($target = "_self",$arParameters = array(),$HashKey='',$HashIV='',$ServiceURL=''){
@@ -905,7 +950,9 @@ class ECPay_TradeNoAio extends ECPay_Aio
         exit;
     }
 }
-
+}
+if(!class_exists('ECPay_QueryTrade'))
+{
 class ECPay_QueryTrade extends ECPay_Aio
 {
     static function CheckOut($arParameters = array(),$HashKey ='',$HashIV ='',$ServiceURL = ''){
@@ -938,7 +985,9 @@ class ECPay_QueryTrade extends ECPay_Aio
         return $arFeedback ;
     }
 }
-
+}
+if(!class_exists('ECPay_FundingReconDetail'))
+{
 class ECPay_FundingReconDetail extends ECPay_Aio
 {   
     static function CheckOut($target = "_self",$arParameters = array(),$HashKey='',$HashIV='',$ServiceURL=''){
@@ -971,13 +1020,14 @@ class ECPay_FundingReconDetail extends ECPay_Aio
         exit;
     }
 }
+}
 
 
 
 
 
-
-
+if(!class_exists('ECPay_Verification'))
+{
 Abstract class ECPay_Verification
 {
     // 電子發票延伸參數。
@@ -1364,11 +1414,13 @@ Abstract class ECPay_Verification
     }
 
 }
-
+}
 
 /**
 *  付款方式：超商代碼
 */
+if(!class_exists('ECPay_CVS'))
+{
 class ECPay_CVS extends ECPay_Verification
 {
     public  $arPayMentExtend = array(
@@ -1387,11 +1439,13 @@ class ECPay_CVS extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 
 /**
 * 付款方式 : BARCODE 
 */
+if(!class_exists('ECPay_BARCODE'))
+{
 class ECPay_BARCODE extends ECPay_Verification
 {
     public  $arPayMentExtend = array(
@@ -1410,10 +1464,12 @@ class ECPay_BARCODE extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 /**
 *  付款方式 ATM
 */
+if(!class_exists('ECPay_ATM'))
+{
 class ECPay_ATM extends ECPay_Verification
 {
     public  $arPayMentExtend = array(
@@ -1428,10 +1484,12 @@ class ECPay_ATM extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 /**
 *  付款方式 WebATM
 */
+if(!class_exists('ECPay_WebATM'))
+{
 class ECPay_WebATM extends ECPay_Verification
 {
     public  $arPayMentExtend = array();
@@ -1442,10 +1500,12 @@ class ECPay_WebATM extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 /**
 * 付款方式 : 信用卡
 */
+if(!class_exists('ECPay_Credit'))
+{
 class ECPay_Credit extends ECPay_Verification
 {
     public $arPayMentExtend = array(
@@ -1468,10 +1528,12 @@ class ECPay_Credit extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 /**
 *  付款方式：全功能
 */
+if(!class_exists('ECPay_ALL'))
+{
 class ECPay_ALL extends ECPay_Verification
 {
     public  $arPayMentExtend = array();
@@ -1480,10 +1542,12 @@ class ECPay_ALL extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 /**
 * 付款方式 : Android Pay
 */
+if(!class_exists('ECPay_AndroidPay'))
+{
 class ECPay_AndroidPay extends ECPay_Verification
 {
     public $arPayMentExtend = array();
@@ -1493,7 +1557,7 @@ class ECPay_AndroidPay extends ECPay_Verification
         return $arExtend ;
     }
 }
-
+}
 
 /**
 *  檢查碼
