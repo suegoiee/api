@@ -386,14 +386,17 @@ class OrderController extends Controller
             }
         }
         $promocode_codes = $request->input('promocodes',[]);
-        $orders = $this->delOrderByUsePromocode($user, $promocode_codes);
+        $check_order = $this->delOrderByUsePromocode($user, $promocode_codes);
         $result = $this->getOrderTrail($user, $products, $promocode_codes);
         if(!$result){
             return $this->failedResponse(['message'=>['plans error']]);
         }
+        $result['check_order'] = $check_order;
         return $this->successResponse($result);
     }
     function delOrderByUsePromocode($user, $promocode_codes){
+        $order_check = [];
+        $check_order = 0;
         foreach ($promocode_codes as $key => $promocode_code) {
             $orders = $user->orders()->with('promocodes')->whereIn('status', [0, 2, 4])->whereHas('promocodes', function($query)use($promocode_code){
                 $query->where('code',$promocode_code);
@@ -413,7 +416,14 @@ class OrderController extends Controller
                 $order->promocodes()->detach($cancel_promocode_ids);
                 $order->delete();
             }
+            if($orders->count()!=0){
+                $order_check[$promocode_code]=1;
+                $check_order=1;
+            }else{
+                $order_check[$promocode_code]=0;
+            }
         }
+        return $check_order;
     }
     function getOrderTrail($user, $products, $promocode_codes)
     {
