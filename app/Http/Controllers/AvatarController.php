@@ -65,8 +65,11 @@ class AvatarController extends Controller
     public function show(Request $request, $module_id = 0)
     {
         $moduleRepository = $this->moduleRepository($request,$module_id, false);
-
-        $avatar = $moduleRepository->avatars()->orderBy('created_at', 'desc')->get();
+        if($moduleRepository){
+            $avatar = $moduleRepository->avatars()->orderBy('created_at', 'desc')->get();
+        }else{
+            return $this->failedResponse(['message'=>[$this->getModuleName().' invalid']]);
+        }
         return $this->successResponse($avatar);
     }
 
@@ -120,7 +123,10 @@ class AvatarController extends Controller
         }
         $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
         $this->destroyAvatar($deleted);
-        return $this->successResponse(['path'=>$deleted]);
+        if(count($deleted)==0){
+            return $this->successResponse(['path'=>$deleted,'message'=>['No avatars to delete.'],'deleted'=>0]);
+        }
+        return $this->successResponse(['path'=>$deleted,'message'=>['Delete success.'],'deleted'=>1]);
     }
 
     protected function avatarValidator(array $data)

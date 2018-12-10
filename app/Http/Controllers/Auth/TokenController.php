@@ -49,7 +49,10 @@ class TokenController extends Controller
         $start_time = microtime();
         $response = $this->passwordGrantToken($request);
         $end_time = microtime();
-        $response['verified']= $user->mail_verified_at ? 1 : 0;
+        if(isset($response['error'])){
+            return $this->failedResponse(['message'=>[trans('auth.invalid_credential')]]);
+        }
+        $response['verified']= $user && $user->mail_verified_at ? 1 : 0;
         return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)
@@ -58,7 +61,11 @@ class TokenController extends Controller
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        return $this->successResponse($this->refreshGrantToken($request));
+        $response = $this->refreshGrantToken($request);
+        if(isset($response['error'])){
+            return $this->failedResponse(['message'=>[trans('auth.refresh_token_invalid')]]);
+        }
+        return $this->successResponse($response);
     }
     public function isLogin(Request $request)
     {
@@ -66,7 +73,7 @@ class TokenController extends Controller
         if($user){
             return $this->successResponse(['login success']);
         }
-        return $this->failedResponse(['login failed']);
+        return $this->successResponse(['login failed']);
     }
 
     protected function validator(array $data)

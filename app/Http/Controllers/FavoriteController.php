@@ -45,7 +45,7 @@ class FavoriteController extends Controller
         
         $stock = $this->stockRepository->getBy(['stock_code'=>$stock_code]);
         if(!$stock){
-            return $this->failedResponse(['message'=>'The stock code not exists.']);
+            return $this->failedResponse(['message'=>['The stock code not exists.']]);
         }
 
         $favorite = $user->favorites()->where('stock_code', $stock_code)->first();
@@ -54,7 +54,7 @@ class FavoriteController extends Controller
             $stock = $user->favorites()->create(['stock_code'=>$stock_code, 'stock_name'=>$stock->stock_name]);
             return $this->successResponse(['stock_code'=>$stock_code, 'stock_name'=>$stock->stock_name]);
         }else{
-            return $this->failedResponse(['message'=>'The stock code has already been taken.']);
+            return $this->failedResponse(['message'=>['The stock code has already been taken.']]);
         }
     }
 
@@ -82,9 +82,9 @@ class FavoriteController extends Controller
         
         if($favorite){
             $favorite->delete();
-            return $this->successResponse($favorite);
+            return $this->successResponse(['message'=>['The stock was deleted from favorites'], 'deleted'=>1]);
         }else{
-            return $this->failedResponse(['message'=>'The stock code not exists.']);
+            return $this->failedResponse(['message'=>['The stock code not exists.']]);
         }
     }
 

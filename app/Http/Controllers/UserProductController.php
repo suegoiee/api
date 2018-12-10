@@ -24,7 +24,9 @@ class UserProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = $request->user()->products()->with('faqs')->orderBy('product_user.sort', 'asc')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
+        $products = $request->user()->products()->with(['faqs','plans'=>function($query){
+            $query->where('active',1);
+        }])->orderBy('product_user.sort', 'asc')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot','price']);
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline ? $product->pivot->deadline:0;
@@ -112,12 +114,14 @@ class UserProductController extends Controller
     public function show(Request $request, $id)
     {
         
-        $product = $request->user()->products()->with(['tags','collections','faqs'])->find($id);
+        $product = $request->user()->products()->with(['tags','collections','faqs','plans'=>function($query){
+            $query->where('active',1);
+        }])->find($id);
         $product->installed = $product->pivot->installed;
         $product->deadline = $product->pivot->deadline ? $product->pivot->deadline:0;
         $product->sort = $product->pivot->sort;
 
-        return $this->successResponse($product?$product->makeHidden(['model','column','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at' , 'avatar_detail','pivot']):[]);
+        return $this->successResponse($product?$product->makeHidden(['model','column','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at' , 'avatar_detail','pivot','price']):[]);
     }
 
     public function edit($id)
@@ -148,7 +152,7 @@ class UserProductController extends Controller
         }
         $user->products()->updateExistingPivot($product->id,['installed'=>1]);
 
-        return $this->successResponse(['message'=>[$product->name.' installed']]);
+        return $this->successResponse(['message'=>[$product->name.' installed'], 'installed'=>1]);
     }
     public function uninstall(Request $request, $id)
     {
@@ -168,7 +172,7 @@ class UserProductController extends Controller
         $request->user()->products()->updateExistingPivot($id,['installed'=>0]);
 
 
-        return $this->successResponse(['message'=>[$product->name.' uninstalled']]);
+        return $this->successResponse(['message'=>[$product->name.' uninstalled'],'install'=>0]);
     }
 
     public function update(Request $request, $id)
@@ -194,6 +198,9 @@ class UserProductController extends Controller
         $user_products = $request->user()->products();
         $sorted_products = $request->input('sorted_products', []);
         foreach ($sorted_products as $key => $product) {
+            if($user_products->where('id',$product)->count()==0){
+                return $this->failedResponse(['message'=>['The product is invalid']]);
+            }
             $user_products->updateExistingPivot($product, ['sort'=>$key]);
         }
 
