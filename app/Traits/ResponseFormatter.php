@@ -67,13 +67,13 @@ trait ResponseFormatter
                 case 'The avatar field is required.':                       return 'E400119';
                 case 'The avatar must be an image.':                        return 'E400120';
                 case 'The avatar may not be greater than 1024 kilobytes.':  return 'E400121';
-                case '尚無存取權限。':                                        return 'E400122';
+                case '尚無存取權限。':                                         return 'E400122';
                 case 'The product is invalid':                              return 'E400123';
-                case '需至少有一項產品。':                                     return 'E400124';
-                case 'The selected products is invalid.':                   return 'E400125';
+                case '需至少有一項產品。':                                      return 'E400124';
+                case 'The selected products is invalid.':                   return 'E400123';
                 case 'Collection product can\'t add to customize lab':      return 'E400126';
                 case 'The selected laboratory is invalid.':                 return 'E400127';
-                case 'The selected product is invalid.':                    return 'E400128';
+                case 'The selected product is invalid.':                    return 'E400123';
                 case '無法個別刪除。':                                         return 'E400129';
                 case 'laboratories invalid':                                return 'E400130';
                 case 'The stock code field is required.':                   return 'E400131';
@@ -87,6 +87,8 @@ trait ResponseFormatter
                 case 'The selected invoice type is invalid.':               return 'E400139';
                 case 'plans error':                                         return 'E400140';
                 case 'order.delete_error':                                  return 'E400141';
+                case 'The promocode is invalid':                            return 'E400142';
+                case 'The name field is required.':                         return 'E400143';
             }
         }
     }

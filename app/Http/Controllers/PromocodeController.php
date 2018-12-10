@@ -28,14 +28,15 @@ class PromocodeController extends Controller
     public function getList(Request $request)
     {
         $user = $request->user();
-        $promocodes = $user->promocodes()->with(['products'=>function($query){
+        $promocodes = $user->promocodes()->get();
+        /*$promocode_unassigned = $this->promocodeRepository->getsWith(['user','products'=>function($query){
             $query->select(['id','name','info_short','price']);
-        }])->get();
-        $promocode_unassigned = $this->promocodeRepository->getsWith(['user','products'=>function($query){
-            $query->select(['id','name','info_short','price']);
-        }],['type'=>0],['updated_at'=>'DESC']);
+        }],['type'=>0],['updated_at'=>'DESC']);*/
 
-        $promocodes = $promocodes->merge($promocode_unassigned)->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id','send']);
+        $promocodes = $promocodes/*->merge($promocode_unassigned)*/->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id','send','type','specific']);
+        foreach ($promocodes as $key => $promocode) {
+            $promocode->used = $promocode->used_at ? 1 : 0;
+        }
         return $this->successResponse($promocodes);
     }
     public function create()
@@ -83,16 +84,21 @@ class PromocodeController extends Controller
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
 
-            $promocode = $this->promocodeRepository->get($id);
+            $promocode = $this->promocodeRepository->getWith($id,['products'=>function($query){
+            $query->select(['id','name']);
+        }]);
         }else{
             $code = $request->input('code','');
             if($this->promocodeRepository->check($user->id, $code)){
-                $promocode = $this->promocodeRepository->getBy(['code'=>$code]);
+                $promocode = $this->promocodeRepository->getWith(['products'=>function($query){
+            $query->select(['id','name']);
+        }],['code'=>$code]);
             }else{
-                $promocode = false;
+                return $this->failedResponse(['message'=>['The promocode is invalid']]);
             }
         }
-        return $this->successResponse($promocode ? $promocode->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id']) : []);
+        $promocode->used = $promocode->used_at ? 1 : ($promocode->used()->count()>0 ? 1:0); 
+        return $this->successResponse($promocode ? $promocode->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id','type','specific','send']) : []);
     }
 
     public function edit($id)

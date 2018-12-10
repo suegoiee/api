@@ -57,16 +57,16 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $tokenRequest = $request->create(
-            env('APP_URL').'/'.str_plural($this->moduleName).'/'.$id,
+            url('/'.str_plural($this->moduleName).'/'.$id),
             'put'
         );
         $tokenRequest->request->add($request->all());
         $tokenRequest->headers->set('Accept','application/json');
         $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
         $instance = Route::dispatch($tokenRequest);
+        dd( $instance);
 
         $response_data = json_decode($instance->getContent(), true);
-
         return $this->adminResponse($request,$response_data);
     }
 

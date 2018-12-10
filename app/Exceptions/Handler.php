@@ -99,8 +99,8 @@ class Handler extends ExceptionHandler
                 $response['error']['message'] = ['Method not found.'];
                 $response['error']['code'] = "E400005";
             }else if($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException){
-                $response['error']['message'] = ['Method not found.'];
-                $response['error']['code'] = "E400006";
+                $response['error']['message'] = ['Unauthenticated.'];
+                $response['error']['code'] = "E400001";
             }else if($exception instanceof OAuthServerException){
                 $response['error']['message'] = ['The user credentials were incorrect.'];
                 $response['error']['code'] = "E400007";

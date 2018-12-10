@@ -35,6 +35,7 @@ return [
         'use_invoice' => '使用發票',
         'use_invoice_0' => '不使用',
         'use_invoice_1' => '使用',
+        'use_invoice_2' => '使用電子發票',
         'invoice_type' => '發票類型',
         'invoice_type_0' => '捐贈',
         'invoice_type_1' => '二聯',

@@ -129,7 +129,10 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $order = $user->orders()->with(['products','products.collections'])->find($id);
+        $order = $user->orders()->with(['products','products.collections','promocodes'=>function($query){
+            $query->select(['id','name','offer','deadline']);
+        }])->find($id);
+        $order->promocodes->makeHidden(['pivot']);
 
         return $this->successResponse($order?$order:[]);
     }
@@ -192,7 +195,7 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $order = $this->orderRepository->get($id);
-        if($order && $order->status==0){
+        if($order && ($order->status==0 || $order->status==2 || $order->status==4)){
             $promocodes = $order->promocodes;
             $cancel_promocode_ids = [];
             foreach ($promocodes as $key => $promocode) {
@@ -383,11 +386,34 @@ class OrderController extends Controller
             }
         }
         $promocode_codes = $request->input('promocodes',[]);
+        $orders = $this->delOrderByUsePromocode($user, $promocode_codes);
         $result = $this->getOrderTrail($user, $products, $promocode_codes);
         if(!$result){
             return $this->failedResponse(['message'=>['plans error']]);
         }
         return $this->successResponse($result);
+    }
+    function delOrderByUsePromocode($user, $promocode_codes){
+        foreach ($promocode_codes as $key => $promocode_code) {
+            $orders = $user->orders()->with('promocodes')->whereIn('status', [0, 2, 4])->whereHas('promocodes', function($query)use($promocode_code){
+                $query->where('code',$promocode_code);
+            })->get();
+            foreach ($orders as $key => $order) {
+                $promocodes = $order->promocodes;
+                $cancel_promocode_ids = [];
+                foreach ($promocodes as $key => $promocode) {
+                    if($promocode->type==1){
+                        $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                    }else{
+                        $promocode->used()->detach([$user->id]);
+                    }
+                    
+                    array_push($cancel_promocode_ids, $promocode->id); 
+                }
+                $order->promocodes()->detach($cancel_promocode_ids);
+                $order->delete();
+            }
+        }
     }
     function getOrderTrail($user, $products, $promocode_codes)
     {
