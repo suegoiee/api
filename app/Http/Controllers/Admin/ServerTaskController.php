@@ -6,6 +6,7 @@ use App\Repositories\LaboratoryRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\Repository;
 use App\Repositories\StockRepository;
+use App\Repositories\PromocodeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -112,6 +113,16 @@ class ServerTaskController extends AdminController
                 $product->plans()->create(['price'=>$product->price,'expiration'=>1, 'active'=>1]);
                 $product->plans()->create(['price'=>$product->price*6,'expiration'=>6, 'active'=>1]);
                 $product->plans()->create(['price'=>$product->price*12,'expiration'=>12, 'active'=>1]);
+            }
+        }
+    }
+    public function addProductToPromocode(PromocodeRepository $promocodeRepository)
+    {
+        $promocodes = $promocodeRepository->getsWith([],['offer'=>3800]);
+        foreach ($promocodes as $key => $promocode) {
+            if($promocode->products()->count()==0){
+                echo $promocode->name.PHP_EOL;
+               $promocode->products()->sync(69);
             }
         }
     }

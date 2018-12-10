@@ -289,5 +289,6 @@ Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAut
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');
 Route::get('/server/extendProductExpired', 'Admin\ServerTaskController@extendProductExpired');
 Route::get('/server/addProductPlans', 'Admin\ServerTaskController@addProductPlans');
+Route::get('/server/addProductToPromocode', 'Admin\ServerTaskController@addProductToPromocode');
 
 Route::get('/server/verifiedFBUser', 'Admin\ServerTaskController@verifiedFBUser');

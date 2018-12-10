@@ -3,6 +3,9 @@ function actionFormatter(value,row,index){
 	actions+='</div>';
 	return actions;
 }
+function promocodesFormatter(value,row,index){
+	return value;
+}
 function platform_feeFormatter(value,row,index){
 	
 	return Math.round(value*100)/100;
