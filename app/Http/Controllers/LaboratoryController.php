@@ -6,6 +6,7 @@ use Storage;
 use Illuminate\Http\File;
 use App\Traits\ImageStorage;
 use App\Repositories\LaboratoryRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,10 +14,12 @@ class LaboratoryController extends Controller
 {	
     use ImageStorage;
     protected $laboratoryRepository;
+    protected $productRepository;
 
-    public function __construct(LaboratoryRepository $laboratoryRepository)
+    public function __construct(LaboratoryRepository $laboratoryRepository, ProductRepository $productRepository)
     {
 	   $this->laboratoryRepository = $laboratoryRepository;
+       $this->productRepository = $productRepository;
     }
 
     public function index(Request $request)
@@ -96,7 +99,7 @@ class LaboratoryController extends Controller
          }
          $laboratory->products=$laboratory->products->sortBy('sort');
 
-        return $this->successResponse($laboratory?$laboratory:[]);
+        return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
     }
 
     public function edit($id)
@@ -131,6 +134,12 @@ class LaboratoryController extends Controller
 
 
         $products_install = $products ? (is_array($products) ? $products:[$products]) : [];
+        foreach ($products_install as $key => $product_install) {
+            $product_install_data = $this->productRepository->get($product_install);
+            if($product_install_data && $product_install_data->type=='collection'){
+                return $this->failedResponse(['message'=>['Collection product can\'t add to customize lab']]);
+            }
+        }
         if(count($products_install)==0){
         	return $this->failedResponse(['message'=>[trans('product.cant_no_products')]]);
         }
@@ -152,7 +161,7 @@ class LaboratoryController extends Controller
 	        }
         }
 
-        return $this->successResponse($laboratory?$laboratory:[]);
+        return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
     }
 
     public function removeProducts(Request $request, $id)
@@ -179,7 +188,9 @@ class LaboratoryController extends Controller
 	            if($install_num==0){
 	                $user->products()->updateExistingPivot($product_data->id, ['installed'=>0]);
 	            }
-        	}
+        	}else{
+                return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+            }
         }
 
         return $this->successResponse(['products'=>$products_remove]);
@@ -207,19 +218,17 @@ class LaboratoryController extends Controller
             $user->products()->updateExistingPivot($laboratory->collection_product_id, ['installed'=>0]);
         }
 
-        return $this->successResponse(['id'=>$id]);
+        return $this->successResponse(['message'=>['The laboratory was deleted.'], 'deleted'=>1]);
 
     }
     public function sorted(Request $request)
     {
         $user = $request->user();
-        $validator = Validator::make($request->all(), [
-            'sorted_laboratories.*' => 'exists:laboratories,id,user_id,'.$user->id.',deleted_at,NULL']);   
-        if($validator->fails()){
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
         $sorted_laboratories = $request->input('sorted_laboratories', []);
         foreach ($sorted_laboratories as $key => $laboratory) {
+            if($user->laboratories()->where('id', $laboratory)->count()==0){
+                return $this->failedResponse(['message'=>['The selected laboratory is invalid.']]);
+            }
             $user->laboratories()->where('id', $laboratory)->update(['sort' => $key]);
         }
 
@@ -231,18 +240,14 @@ class LaboratoryController extends Controller
         if(!($this->laboratoryRepository->isOwner($user->id,$id))){
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
-        $validator = Validator::make($request->all(), [
-            'sorted_products.*' => 'exists:laboratory_product,product_id,laboratory_id,'.$id
-        ]);
-        if($validator->fails()){
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
+        
         $laboratory = $user->laboratories()->find($id);
-        $laboratory_products=$laboratory->products();
-
         $sorted_products = $request->input('sorted_products', []);
         foreach ($sorted_products as $key => $product) {
-            $laboratory_products->updateExistingPivot($product, ['sort'=>$key]);
+            if($laboratory->products()->where('id', $product)->count()==0){
+                return $this->failedResponse(['message'=>['The selected product is invalid.']]);
+            }
+            $laboratory->products()->updateExistingPivot($product, ['sort'=>$key]);
         }
 
         return $this->successResponse(['sorted_products'=>$sorted_products]);

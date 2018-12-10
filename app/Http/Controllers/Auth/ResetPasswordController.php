@@ -25,17 +25,13 @@ class ResetPasswordController extends Controller
     	$validator = $this->forgetPasswordValidator($request->all());
     	if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
-       }
+        }
 
         $response = $this->broker()->reset(
             $this->credentials($request), function ($user, $password) {
                 $this->resetPassword($user, $password);
             }
         );
-
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
         return $response == Password::PASSWORD_RESET
                     ? $this->sendResetResponse($request, $response)
                     : $this->sendResetFailedResponse($request, $response);
@@ -98,7 +94,7 @@ class ResetPasswordController extends Controller
     protected function sendResetResponse(Request $request, $response='')
     {
         //$token = $this->passwordGrantToken($request);
-        return $this->successResponse(['message'=>[trans('auth.password_reset_success')]], trans($response));
+        return $this->successResponse(['message'=>[trans('auth.password_reset_success')],'reset'=>1], trans($response));
     }
 
     protected function sendResetFailedResponse(Request $request, $response='')

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 trait OauthToken
 {
-    protected function clientCredentialsGrantToken($request){
+    protected function clientCredentialsGrantToken( $request){
         $client = PersonalAccessClient::first()->client;
         $request->request->add([
             'grant_type' => 'client_credentials',

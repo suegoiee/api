@@ -41,6 +41,6 @@ class NotificationController extends Controller
         $now = Carbon::now();
         $user = $request->user();
         $notifications = $user->unreadNotifications()->where('id',$id)->update(['read_at' => $now]);
-        return $this->successResponse(['id'=>$id,'read_at'=>$now->toDateTimeString()]);
+        return $this->successResponse(['id'=>$id,'status'=>1,'read_at'=>$now->toDateTimeString()]);
     }
 }

@@ -33,9 +33,11 @@ class MessageController extends Controller
         }
 
         $request_data = $request->only(['name','email','category','content']);
+        $request_data['category'] =  $request_data['category'] ? $request_data['category'] :'others';
+        $request_data['content'] =  $request_data['content'] ? $request_data['content'] :'';
         $message = $this->messageRepository->create($request_data);
 
-        return $this->successResponse($message?$message:[]);
+        return $this->successResponse($message?$message->makeHidden(['updated_at']):[]);
     }
 
     public function show(Request $request, $id)
@@ -75,7 +77,7 @@ class MessageController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'email|max:255',
+            'email' => 'required|email|max:255',
         ]);        
     }
 }

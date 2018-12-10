@@ -29,7 +29,7 @@ class EdmController extends Controller
     public function onPublishList()
     {
         $edms = $this->edmRepository->getsWith(['images'], ["status"=>1]);
-        return $this->successResponse($edms);
+        return $this->successResponse($edms->makeHidden(['status']));
     }
 
     public function create()

@@ -23,7 +23,7 @@ class ProductController extends Controller
     }
     public function onShelves()
     {
-        $products = $this->productRepository->getsWithByStatus(['tags'=>function($query){$query->select('name');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at']);
+        $products = $this->productRepository->getsWithByStatus(['tags'=>function($query){$query->select('name');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration']);
         return $this->successResponse($products?$products:[]);
     }
 
@@ -85,7 +85,7 @@ class ProductController extends Controller
     public function onShelf(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at']);
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration']);
         $product->plans->makeHidden('id');
         return $this->successResponse($product?$product:[]);
     }

@@ -39,7 +39,7 @@ class ForgotPasswordController extends Controller
     }
     protected function sendResetLinkResponse(Request $request, $response)
     {	
-	   return $this->successResponse(['message'=>[trans($response)]]);
+	   return $this->successResponse(['message'=>[trans($response)],'sent'=>1]);
     }
 
     protected function sendResetLinkFailedResponse(Request $request, $response)

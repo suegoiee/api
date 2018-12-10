@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Route;
 class OrderController extends AdminController
 {	
     public function __construct(Request $request, OrderRepository $orderRepository)
@@ -64,5 +65,18 @@ class OrderController extends AdminController
             'data' => $this->moduleRepository->getWith($id,['products']),
         ];
         return view('admin.form',$data);
+    }
+    public function update(Request $request, $id)
+    {
+        $tokenRequest = $request->create(
+            url('/user/'.str_plural($this->moduleName).'/'.$id),
+            'put'
+        );
+        $tokenRequest->request->add($request->all());
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $instance = Route::dispatch($tokenRequest);
+        $response_data = json_decode($instance->getContent(), true);
+        return $this->adminResponse($request,$response_data);
     }
 }

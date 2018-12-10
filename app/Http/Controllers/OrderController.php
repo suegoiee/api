@@ -40,26 +40,31 @@ class OrderController extends Controller
     public function store(Request $request)
     {   
         $user = $request->user();
+        $products = $request->input('products',[]);
+        if(count($products)==0){
+            return $this->failedResponse(['message'=>['No product to check order']]);
+        }
         $validator = $this->orderValidator($request->all());
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-
         $request_data = $request->only(['memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode']);
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
         $request_data['use_invoice'] =  $request->input('use_invoice',0);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
-        $products = $request->input('products',[]);
         $product_ids = [];
         $product_data = [];
         $product_free = [];
         $order_price = 0;
         foreach($products as $key => $value) {
             $product = $this->productRepository->getWith($value['id'],['collections']);
+            if(!$product){
+                 return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+            }
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
             $order_plan = $product->plans()->where('expiration',$quantity)->first();
             if(!$order_plan){
-                return $this->failedResponse(['product plan is not exists']);
+                return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
             $order_price += $order_plan->price;
             if($order_plan->price==0){
@@ -74,7 +79,7 @@ class OrderController extends Controller
         $promocode_ids = [];
         $trail_result = $this->getOrderTrail($user, $products, $promocodes);
         if(isset($trail_result['error'])){
-            return $this->failedResponse(['product plan is not exists']);
+            return $this->failedResponse(['message'=>['product plan is not exists']]);
         }
         foreach ($trail_result['promocodes'] as $key => $value) {
             if(!isset($value['error'])){
@@ -124,7 +129,10 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 
-        $order = $user->orders()->with(['products','products.collections'])->find($id);
+        $order = $user->orders()->with(['products','products.collections','promocodes'=>function($query){
+            $query->select(['id','name','offer','deadline']);
+        }])->find($id);
+        $order->promocodes->makeHidden(['pivot']);
 
         return $this->successResponse($order?$order:[]);
     }
@@ -187,7 +195,7 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
         $order = $this->orderRepository->get($id);
-        if($order && $order->status==0){
+        if($order && ($order->status==0 || $order->status==2 || $order->status==4)){
             $promocodes = $order->promocodes;
             $cancel_promocode_ids = [];
             foreach ($promocodes as $key => $promocode) {
@@ -201,7 +209,7 @@ class OrderController extends Controller
             }
             $order->promocodes()->detach($cancel_promocode_ids);
             $this->orderRepository->delete($id);  
-            return $this->successResponse(['id'=>$id]);
+            return $this->successResponse(['message'=>['The order was deleted'], 'deleted'=>1]);
         }
         return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
     }
@@ -210,8 +218,11 @@ class OrderController extends Controller
         return Validator::make($data, [
             //'user_id' => 'required|exists:users,id',
             //'price' => 'required|numeric',
-            'products.id'=>'exists:products,id,status,1',
-            'products.*.id'=>'exists:products,id,status,1',
+            //'products.id'=>'exists:products,id,status,1',
+            //'products.*.id'=>'exists:products,id,status,1',
+            'paymentType'=>'required|in:credit,atm,webatm,cvs,barcode',
+            'use_invoice'=>'in:0,1,2',
+            'invoice_type'=>'in:0,1,2',
         ]);        
     }
     protected function orderPayment(Request $request, $id)
@@ -366,18 +377,43 @@ class OrderController extends Controller
     }
     public function trial(Request $request)
     {
-        $validator = $this->orderValidator($request->all());
-        if($validator->fails()){
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
         $user = $request->user();
         $products = $request->input('products',[]);
+        foreach ($products as $key => $product_id) {
+            $product = $this->productRepository->get($product_id);
+            if(!$product){
+                 return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+            }
+        }
         $promocode_codes = $request->input('promocodes',[]);
+        $orders = $this->delOrderByUsePromocode($user, $promocode_codes);
         $result = $this->getOrderTrail($user, $products, $promocode_codes);
         if(!$result){
-            return $this->failedResponse(['plans error']);
+            return $this->failedResponse(['message'=>['plans error']]);
         }
         return $this->successResponse($result);
+    }
+    function delOrderByUsePromocode($user, $promocode_codes){
+        foreach ($promocode_codes as $key => $promocode_code) {
+            $orders = $user->orders()->with('promocodes')->whereIn('status', [0, 2, 4])->whereHas('promocodes', function($query)use($promocode_code){
+                $query->where('code',$promocode_code);
+            })->get();
+            foreach ($orders as $key => $order) {
+                $promocodes = $order->promocodes;
+                $cancel_promocode_ids = [];
+                foreach ($promocodes as $key => $promocode) {
+                    if($promocode->type==1){
+                        $this->promocodeRepository->update($promocode->id, ['used_at'=>null]);
+                    }else{
+                        $promocode->used()->detach([$user->id]);
+                    }
+                    
+                    array_push($cancel_promocode_ids, $promocode->id); 
+                }
+                $order->promocodes()->detach($cancel_promocode_ids);
+                $order->delete();
+            }
+        }
     }
     function getOrderTrail($user, $products, $promocode_codes)
     {

@@ -25,5 +25,7 @@ return [
     'permission_denied' =>'尚無存取權限。',
     'old_password_error'=>'原密碼錯誤!',
     'invalid_credential'=>'The user credentials were incorrect.',
-    'email_exists'=>'The email already exists'
+    'email_exists'=>'The email already exists',
+    'refresh_token_invalid'=>'The refresh token is invalid.',
+    'facebook_error'=>'Facebook logging error.'
 ];
