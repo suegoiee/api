@@ -16,7 +16,7 @@ trait ResponseFormatter
     protected function validateErrorResponse($message=''){
         $uri = $this->getUri();
         $actionMethod = $this->getMethod();
-        return response()->json(['status'=>'error','error'=>['message'=>$message], 'uri'=>$uri, 'method'=>$actionMethod]);
+        return response()->json(['status'=>'error','error'=>['message'=>$message, 'code'=>'E30001'], 'uri'=>$uri, 'method'=>$actionMethod]);
     }
     protected function unauthorizedResponse(){
         $uri = $this->getUri();
