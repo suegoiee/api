@@ -22,6 +22,7 @@ $(function(){
 				current += increase;
 				that.html(current);
 			}else{
+				that.html(end_number);
 				clearInterval(number_interval_id);
 			}
 		},30);
