@@ -32,7 +32,7 @@ class HomeController extends Controller
                             $overflow_offer += $promocode->pivot->overflow_offer;
                         }
                     }
-                    $product_price = $product->pivot->unit_price * $product->pivot->quantity;
+                    $product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $sales_amounts += $product_price<$offer ? 0:$product_price - $offer + $overflow_offer;
             }
         }

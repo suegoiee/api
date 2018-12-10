@@ -243,7 +243,7 @@ class AnalystController extends AdminController
                             $offer+=$promocode->offer;
                         }
                     }
-                    $order_product->product_price = $product->pivot->unit_price * $product->pivot->quantity;
+                    $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
                     $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
@@ -309,7 +309,7 @@ class AnalystController extends AdminController
                             $offer+=$promocode->offer;
                         }
                     }
-                    $order_product->product_price = $product->pivot->unit_price * $product->pivot->quantity;
+                    $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
                     $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
