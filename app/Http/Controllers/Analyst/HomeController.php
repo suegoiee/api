@@ -18,7 +18,7 @@ class HomeController extends Controller
     		}
     	}
     	$product_ids = $products->map(function($item,$key){return $item->id;});
-    	$orders = $orderRepository->getsWith(['products'],['created_at.>='=>date('Y-08-01'), 'created_at.<'=>date('Y-09-d',strtotime('first day of next month ')),'status'=>1],[],['products'=>function($query) use($product_ids) { $query->whereIn('id',$product_ids); }]);
+    	$orders = $orderRepository->getsWith(['products'],['created_at.>='=>date('Y-m-01'), 'created_at.<'=>date('Y-m-d',strtotime('first day of next month ')),'status'=>1],[],['products'=>function($query) use($product_ids) { $query->whereIn('id',$product_ids); }]);
         $sales_amounts = 0;
         foreach ($orders as $key => $order) {
             $order_products = $order->products()->whereIn('id',$product_ids)->get();
