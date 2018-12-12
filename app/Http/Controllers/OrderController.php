@@ -220,7 +220,7 @@ class OrderController extends Controller
             //'price' => 'required|numeric',
             //'products.id'=>'exists:products,id,status,1',
             //'products.*.id'=>'exists:products,id,status,1',
-            'paymentType'=>'required|in:credit,atm,webatm,cvs,barcode',
+            'paymentType'=>'in:credit,atm,webatm,cvs,barcode',
             'use_invoice'=>'in:0,1,2',
             'invoice_type'=>'in:0,1,2',
         ]);        
