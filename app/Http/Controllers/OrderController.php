@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Ecpay;
+use Shouwda\Ecpay\Ecpay;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
-
+use Shouwda\Ecpay\SDK\ECPay_PaymentMethodItem;
 use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
 use App\Repositories\PromocodeRepository;
@@ -12,18 +12,19 @@ use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
-
 class OrderController extends Controller
 {	
     use OauthToken;
     protected $orderRepository;
     protected $promocodeRepository;
     protected $productRepository;
+    protected $ecpay;
     public function __construct(OrderRepository $orderRepository, ProductRepository $productRepository, PromocodeRepository $promocodeRepository)
     {
-	   $this->orderRepository = $orderRepository;
-       $this->productRepository = $productRepository;
-       $this->promocodeRepository = $promocodeRepository;
+        $this->ecpay = new Ecpay();
+        $this->orderRepository = $orderRepository;
+        $this->productRepository = $productRepository;
+        $this->promocodeRepository = $promocodeRepository;
     }
     public function index(Request $request)
     {
@@ -220,7 +221,7 @@ class OrderController extends Controller
             //'price' => 'required|numeric',
             //'products.id'=>'exists:products,id,status,1',
             //'products.*.id'=>'exists:products,id,status,1',
-            'paymentType'=>'required|in:credit,atm,webatm,cvs,barcode',
+            'paymentType'=>'in:credit,atm,webatm,cvs,barcode',
             'use_invoice'=>'in:0,1,2',
             'invoice_type'=>'in:0,1,2',
         ]);        
@@ -372,8 +373,8 @@ class OrderController extends Controller
             default:
                 break;
         }
-        Ecpay::set($data, null, $extendData);
-        return Ecpay::checkOutString();
+        $this->ecpay->set($data, null, $extendData);
+        return $this->ecpay->checkOutString();
     }
     public function trial(Request $request)
     {

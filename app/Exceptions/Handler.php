@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 use Route;
 use Exception;
+use App\Traits\ResponseFormatter;
 use Illuminate\Auth\AuthenticationException;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Exception\OAuthException;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use ResponseFormatter;
     /**
      * A list of the exception types that should not be reported.
      *
@@ -110,7 +112,7 @@ class Handler extends ExceptionHandler
             }else{
                 $response['error']['exception'] = get_class($exception);
                 $response['error']['message'] = [$exception->getMessage()];
-                $response['error']['code'] = "E400000";
+                $response['error']['code'] = $this->getErrorCode([$exception->getMessage()]);
             }
 
         	// Default response of 400

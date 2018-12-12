@@ -22,14 +22,13 @@
         "classmap": [
             "database/seeds",
             "database/factories",
-            "packages/Shouwda/allpay/src/SDK",
-            "packages/Shouwda/ecpay/src/SDK"
-
+            "packages/Shouwda/allpay/src/SDK"
         ],
         "psr-4": {
             "App\\": "app/",
             "Shouwda\\Allpay\\": "packages/Shouwda/allpay/src/",
             "Shouwda\\Ecpay\\": "packages/Shouwda/ecpay/src/",
+            "Shouwda\\EcpayInvoice\\": "packages/Shouwda/ecpayInvoice/src/",
             "Shouwda\\Facebook\\": "packages/Shouwda/facebook/src/"
         }
     },

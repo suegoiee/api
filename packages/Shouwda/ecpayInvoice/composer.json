@@ -1,7 +1,7 @@
 {
     "name": "shouwda/ecpay",
-    "description": "The Ecpay for Laravel 5 Framework.",
-    "keywords": ["ecpay", "laravel"],
+    "description": "The Ecpay Invoice for Laravel 5 Framework.",
+    "keywords": ["ecpay", "invoice", "laravel"],
     "authors": [
         {
             "name": "shouwda",
@@ -14,7 +14,7 @@
             "src/SDK"
         ],
         "psr-4": {
-            "Shouwda\\Ecpay\\": "src/"
+            "Shouwda\\EcpayInvoice\\": "src/"
         }
     }
 }

@@ -89,6 +89,7 @@ trait ResponseFormatter
                 case 'order.delete_error':                                  return 'E400141';
                 case 'The promocode is invalid':                            return 'E400142';
                 case 'The name field is required.':                         return 'E400143';
+                case 'Invalid LoveCode.':                                   return 'E400144';
             }
         }
     }

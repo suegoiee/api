@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Ecpay;
-
+use Shouwda\Ecpay\Ecpay;
+use Shouwda\EcpayInvoice\EcpayInvoice;
+use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
+use Shouwda\Ecpay\SDK\ECPay_PaymentMethodItem;
 use App\Traits\OauthToken;
 use App\Repositories\EcpayRepository;
-//use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +16,12 @@ class EcpayController extends Controller
 {	
     use OauthToken;
     protected $ecpayRepository;
-
+    protected $ecpay;
+    protected $ecpayInvoice;
     public function __construct(EcpayRepository $ecpayRepository)
     {
+        $this->ecpay = new Ecpay();
+        $this->ecpayInvoice = new EcpayInvoice();
         $this->ecpayRepository = $ecpayRepository;
     }
 
@@ -35,14 +39,14 @@ class EcpayController extends Controller
                     ['Name' => 'Test product', 'Price' => (int)"2000", 'Currency'=>'NTD', 'Quantity' => (int) "1", 'URL' => "" ],
                 ],
         ];
-        Ecpay::set($data);
+        $this->ecpay->set($data);
         echo 'Ecpay post test';
-        echo Ecpay::checkOutString();
+        echo $this->ecpay->checkOutString();
         return '';
     }
     public function feedback(Request $request){
         try {
-            $feedback_data = Ecpay::checkOutFeedback();
+            $feedback_data = $this->ecpay->checkOutFeedback();
             $feedback_data['data']= json_encode($feedback_data);
             //$feedback_data = $request->all();
             $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
@@ -105,7 +109,7 @@ class EcpayController extends Controller
     }
     public function result(Request $request)
     {
-        $feedback_data = Ecpay::checkOutFeedback();
+        $feedback_data = $this->ecpay->checkOutFeedback();
 
         $feedback_data['data']= json_encode($feedback_data);
         $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
@@ -152,10 +156,10 @@ class EcpayController extends Controller
         }else{
             return $this->successResponse([]);
         }
-        Ecpay::invoiceMethod('INVOICE_SEARCH', 'Query/Issue');
-        Ecpay::setInvoice('RelateNumber', $relateNumber);
+        $this->ecpayInvoice->invoiceMethod('INVOICE_SEARCH', 'Query/Issue');
+        $this->ecpayInvoice->setInvoice('RelateNumber', $relateNumber);
         try{
-            $origin_invoice = Ecpay::invoiceCheckOut();
+            $origin_invoice = $this->ecpayInvoice->invoiceCheckOut();
             if($origin_invoice['RtnCode']=='1'){
                 $invoice = [
                     'create_date' => isset($origin_invoice['IIS_Create_Date']) ? $origin_invoice['IIS_Create_Date'] : '',
@@ -181,12 +185,12 @@ class EcpayController extends Controller
                 ];
                 return $this->successResponse($invoice);
             }else{
-                return $this->failedResponse([$origin_invoice['RtnMsg']]);
+                return $this->failedResponse(['message'=>[$origin_invoice['RtnMsg']]]);
             }
         }
         catch (Exception $e)
         {
-            return $this->successResponse([]);
+            return $this->successResponse(['message'=>['ecpay error.']]);
         }
     }
 }

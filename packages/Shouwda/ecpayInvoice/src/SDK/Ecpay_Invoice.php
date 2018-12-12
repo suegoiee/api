@@ -1,12 +1,11 @@
 <?php
+//namespace Shouwda\EcpayInvoice\SDK;
 /*
 電子發票SDK
 @author Wesley
 */
 
 // 執行發票作業項目。
-if(!class_exists('EcpayInvoiceMethod'))
-{
 abstract class EcpayInvoiceMethod
 {
 	// 一般開立發票。
@@ -48,10 +47,8 @@ abstract class EcpayInvoiceMethod
 	// 愛心碼驗證。
 	const CHECK_LOVE_CODE = 'CHECK_LOVE_CODE';
 }
-}
+
 // 電子發票載具類別
-if(!class_exists('EcpayCarruerType'))
-{
 abstract class EcpayCarruerType
 {
 	// 無載具
@@ -66,11 +63,8 @@ abstract class EcpayCarruerType
 	// 買受人手機條碼
 	const Cellphone = '3';
 }
-}
 
 // 電子發票列印註記
-if(!class_exists('EcpayPrintMark'))
-{
 abstract class EcpayPrintMark
 {
 	// 不列印
@@ -79,11 +73,8 @@ abstract class EcpayPrintMark
 	// 列印
 	const Yes = '1';
 }
-}
 
 // 電子發票捐贈註記
-if(!class_exists('EcpayDonation'))
-{
 abstract class EcpayDonation
 {
 	// 捐贈
@@ -92,11 +83,8 @@ abstract class EcpayDonation
 	// 不捐贈
 	const No = '0';
 }
-}
 
 // 通關方式
-if(!class_exists('EcpayClearanceMark'))
-{
 abstract class EcpayClearanceMark
 {
 	// 經海關出口
@@ -105,10 +93,8 @@ abstract class EcpayClearanceMark
 	// 非經海關出口
 	const No = '2';
 }
-}
+
 // 課稅類別
-if(!class_exists('EcpayTaxType'))
-{
 abstract class EcpayTaxType
 {
 	// 應稅
@@ -123,10 +109,8 @@ abstract class EcpayTaxType
 	// 應稅與免稅混合(限收銀機發票無法分辦時使用，且需通過申請核可)
 	const Mix = '9';
 }
-}
+
 // 字軌類別
-if(!class_exists('EcpayInvType'))
-{
 abstract class EcpayInvType
 {
 	// 一般稅額
@@ -135,10 +119,8 @@ abstract class EcpayInvType
 	// 特種稅額
 	const Special = '08';
 }
-}
+
 // 商品單價是否含稅
-if(!class_exists('EcpayVatType'))
-{
 abstract class EcpayVatType
 {
 	// 商品單價含稅價
@@ -147,10 +129,8 @@ abstract class EcpayVatType
 	// 商品單價未稅價
 	const No = '0';
 }
-}
+
 // 延遲註記
-if(!class_exists('EcpayDelayFlagType'))
-{
 abstract class EcpayDelayFlagType
 {
 	// 延遲註記
@@ -159,19 +139,15 @@ abstract class EcpayDelayFlagType
 	// 觸發註記
 	const Trigger = '2';
 }
-}
+
 // 交易類別
-if(!class_exists('EcpayPayTypeCategory'))
-{
 abstract class EcpayPayTypeCategory
 {
 	// ECPAY
 	const Ecpay = '2';
 }
-}
+
 // 通知類別 
-if(!class_exists('EcpayAllowanceNotifyType'))
-{
 abstract class EcpayAllowanceNotifyType
 {
 	// 簡訊通知
@@ -186,11 +162,8 @@ abstract class EcpayAllowanceNotifyType
 	// 皆不通知
 	const None = 'N';
 }
-}
 
 // 發送方式
-if(!class_exists('EcpayNotifyType'))
-{
 abstract class EcpayNotifyType
 {
 	// 簡訊通知
@@ -202,10 +175,8 @@ abstract class EcpayNotifyType
 	// 皆通知
 	const All = 'A';
 }
-}
+
 // 發送內容類型
-if(!class_exists('EcpayInvoiceTagType'))
-{
 abstract class EcpayInvoiceTagType
 {
 	// 發票開立
@@ -223,10 +194,8 @@ abstract class EcpayInvoiceTagType
 	// 發票中獎
 	const Invoice_Winning = 'AW';
 }
-}
+
 // 發送對象
-if(!class_exists('EcpayNotifiedType'))
-{
 abstract class EcpayNotifiedType
 {
 	// 通知客戶
@@ -238,7 +207,7 @@ abstract class EcpayNotifiedType
 	// 皆發送
 	const All = 'A';
 }
-}
+
 if(!class_exists('ECPay_EncryptType'))
 {
 	abstract class ECPay_EncryptType
@@ -250,8 +219,7 @@ if(!class_exists('ECPay_EncryptType'))
 		const ENC_SHA256 = 1;
 	}
 }
-if(!class_exists('EcpayInvoice'))
-{
+
 class EcpayInvoice
 {	
 	public $TimeStamp 	= '';			
@@ -314,14 +282,12 @@ class EcpayInvoice
 		return ECPay_Invoice_Send::CheckOut($arParameters, $this->HashKey, $this->HashIV, $this->Invoice_Method, $this->Invoice_Url);
     	}	
 }
-}
+
 
 
 /**
 *  送出資訊
 */
-if(!class_exists('ECPay_Invoice_Send'))
-{
 class ECPay_Invoice_Send
 { 	
 	// 發票物件
@@ -521,12 +487,10 @@ class ECPay_Invoice_Send
     		return $arParameters ;
     	}
 }
-}
+
 /**
 *  A一般開立 
 */
-if(!class_exists('ECPay_INVOICE'))
-{
 class ECPay_INVOICE
 {
     	// 所需參數
@@ -616,9 +580,9 @@ class ECPay_INVOICE
 				$sItemName 	.= (isset($value2['ItemName']))		? $value2['ItemName'] 		: '' ;
 				$sItemCount 	.= (int) $value2['ItemCount'] ;
 				$sItemWord 	.= (isset($value2['ItemWord'])) 	? $value2['ItemWord'] 		: '' ;
-				$sItemPrice 	.= (int) $value2['ItemPrice'] ;		
+				$sItemPrice 	.= $value2['ItemPrice'] ;		
 				$sItemTaxType 	.= (isset($value2['ItemTaxType'])) 	? $value2['ItemTaxType'] 	: '' ;
-				$sItemAmount	.= (int) $value2['ItemAmount'] ;
+				$sItemAmount	.= $value2['ItemAmount'] ;
 				$sItemRemark 	.= (isset($value2['ItemRemark'])) 	? $value2['ItemRemark'] 	: '' ;
 				
 				if( $nItems_Foreach_Count < $nItems_Count_Total )
@@ -653,6 +617,7 @@ class ECPay_INVOICE
     	function check_extend_string($arParameters = array()){
 		
     		$arErrors = array();
+    		$nCheck_Amount = 0 ; 	// 驗證總金額
 
     		// 4.廠商自訂編號
 	        	
@@ -828,7 +793,7 @@ class ECPay_INVOICE
 		
 		// 13.捐贈註記 Donation
 		
-		// *固定給定下述預設值若為捐贈時，則VAL = '1'，若為不捐贈時，則VAL = '2'
+		// *固定給定下述預設值若為捐贈時，則VAL = '1'，若為不捐贈時，則VAL = '0'
 		if ( ($arParameters['Donation'] != EcpayDonation::Yes ) && ( $arParameters['Donation'] != EcpayDonation::No ) )
 		{
 			array_push($arErrors, "13:Invalid Donation.");
@@ -1024,15 +989,19 @@ class ECPay_INVOICE
 					}
 					
 					// *ItemPrice數字判斷
-	        			if ( !preg_match('/^[-0-9]*$/', $value['ItemPrice']) )
+	        			if ( !preg_match('/(^[-0-9]*$)|([0-9]+\.[0-9]+)/', $value['ItemPrice']) )
 	        			{
-	        				array_push($arErrors, '23:Invalid ItemPrice.A');
+	        				array_push($arErrors, '23:Invalid ItemPrice.');
 	        			}
 	        			
 	        			// *ItemAmount數字判斷
-	        			if ( !preg_match('/^[-0-9]*$/', $value['ItemAmount']) )
+	        			if ( !preg_match('/(^[-0-9]*$)|([0-9]+\.[0-9]+)/', $value['ItemAmount']) )
 	        			{
-	        				array_push($arErrors, '25:Invalid ItemAmount.B');
+	        				array_push($arErrors, '25:Invalid ItemAmount.');
+	        			}
+	        			else
+	        			{
+	        				$nCheck_Amount = $nCheck_Amount + $value['ItemAmount'] ;
 	        			}	
 	        			
 	        			// V1.0.3
@@ -1044,7 +1013,14 @@ class ECPay_INVOICE
 							array_push($arErrors, '143:ItemRemark max length as 40.');
 						}
 					}
-	        		}	
+	        		}
+
+
+	        		// *檢查商品總金額
+				if ( $arParameters['SalesAmount'] != round($nCheck_Amount))
+				{
+					array_push($arErrors, "18.2:Invalid SalesAmount.");
+				}	
 	        	}
 	        }
 
@@ -1092,12 +1068,10 @@ class ECPay_INVOICE
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  B延遲開立 
 */
-if(!class_exists('ECPay_INVOICE_DELAY'))
-{
 class ECPay_INVOICE_DELAY
 {
     	// 所需參數
@@ -1188,9 +1162,9 @@ class ECPay_INVOICE_DELAY
 				$sItemName 	.= (isset($value2['ItemName']))		? $value2['ItemName'] 		: '' ;
 				$sItemCount 	.= (int) $value2['ItemCount'] ;
 				$sItemWord 	.= (isset($value2['ItemWord'])) 	? $value2['ItemWord'] 		: '' ;
-				$sItemPrice 	.= (int) $value2['ItemPrice'] ;		
+				$sItemPrice 	.= $value2['ItemPrice'] ;		
 				$sItemTaxType 	.= (isset($value2['ItemTaxType'])) 	? $value2['ItemTaxType'] 	: '' ;
-				$sItemAmount	.= (int) $value2['ItemAmount'] ;
+				$sItemAmount	.= $value2['ItemAmount'] ;
 				
 				if( $nItems_Foreach_Count < $nItems_Count_Total )
 				{
@@ -1222,6 +1196,7 @@ class ECPay_INVOICE_DELAY
     	function check_extend_string($arParameters = array()){
 		
     		$arErrors = array();
+    		$nCheck_Amount = 0 ; 	// 驗證總金額
 
     		// 4.廠商自訂編號
 	        	
@@ -1385,12 +1360,12 @@ class ECPay_INVOICE_DELAY
 		
 		// 13.捐贈註記 Donation
 		
-		// *固定給定下述預設值若為捐贈時，則VAL = '1'，若為不捐贈時，則VAL = '2'
+		// *固定給定下述預設值若為捐贈時，則VAL = '1'，若為不捐贈時，則VAL = '0'
 		if ( ($arParameters['Donation'] != EcpayDonation::Yes ) && ( $arParameters['Donation'] != EcpayDonation::No ) )
 		{
 			array_push($arErrors, "13:Invalid Donation.");
 		}
-		// *若統一編號有值時，則VAL = '2' (不捐贈)
+		// *若統一編號有值時，則VAL = '0' (不捐贈)
 		if (strlen($arParameters['CustomerIdentifier']) > 0 && $arParameters['Donation'] == EcpayDonation::Yes )
 		{
 			array_push($arErrors, "13:CustomerIdentifier Donation should be No.");
@@ -1527,7 +1502,7 @@ class ECPay_INVOICE_DELAY
 				}
 				
 				$bFind_Tag = strpos($value['ItemPrice'], '|') ;
-				if($bFind_Tag != false || empty($value['ItemPrice']))
+				if($bFind_Tag != false || $value['ItemPrice'] === '')
 				{
 					$bError_Tag = true ;
 					array_push($arErrors, '23:Invalid ItemPrice.');
@@ -1543,7 +1518,7 @@ class ECPay_INVOICE_DELAY
 				}
 				
 				$bFind_Tag = strpos($value['ItemAmount'], '|') ;
-				if($bFind_Tag != false || empty($value['ItemAmount']))
+				if($bFind_Tag != false || $value['ItemAmount'] === '' )
 				{
 					$bError_Tag = true ;
 					array_push($arErrors, '25:Invalid ItemAmount.');
@@ -1569,17 +1544,27 @@ class ECPay_INVOICE_DELAY
 					}
 					
 					// *ItemPrice數字判斷
-	        			if ( !preg_match('/^[-0-9]*$/', $value['ItemPrice']) )
+	        			if ( !preg_match('/(^[-0-9]*$)|([0-9]+\.[0-9]+)/', $value['ItemPrice']) )
 	        			{
-	        				array_push($arErrors, '23:Invalid ItemPrice.A');
+	        				array_push($arErrors, '23:Invalid ItemPrice.');
 	        			}
 	        			
 	        			// *ItemAmount數字判斷
-	        			if ( !preg_match('/^[-0-9]*$/', $value['ItemAmount']) )
+	        			if ( !preg_match('/(^[-0-9]*$)|([0-9]+\.[0-9]+)/', $value['ItemAmount']) )
 	        			{
-	        				array_push($arErrors, '25:Invalid ItemAmount.B');
+	        				array_push($arErrors, '25:Invalid ItemAmount.');
 	        			}
-	        		}	
+	        			else
+	        			{
+	        				$nCheck_Amount = $nCheck_Amount + $value['ItemAmount'] ;
+	        			}
+	        		}
+
+	        		// *檢查商品總金額
+				if ( $arParameters['SalesAmount'] != round($nCheck_Amount))
+				{
+					array_push($arErrors, "18.2:Invalid SalesAmount.");
+				}	
 	        	}
 	        }
 
@@ -1666,12 +1651,10 @@ class ECPay_INVOICE_DELAY
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  C開立折讓 
 */
-if(!class_exists('ECPay_ALLOWANCE'))
-{
 class ECPay_ALLOWANCE
 {
     	// 所需參數
@@ -1742,9 +1725,9 @@ class ECPay_ALLOWANCE
 				$sItemName 	.= (isset($value2['ItemName']))		? $value2['ItemName'] 		: '' ;
 				$sItemCount 	.= (int) $value2['ItemCount'] ;
 				$sItemWord 	.= (isset($value2['ItemWord'])) 	? $value2['ItemWord'] 		: '' ;
-				$sItemPrice 	.= (int) $value2['ItemPrice'] ;		
+				$sItemPrice 	.= $value2['ItemPrice'] ;		
 				$sItemTaxType 	.= (isset($value2['ItemTaxType'])) 	? $value2['ItemTaxType'] 	: '' ;
-				$sItemAmount	.= (int) $value2['ItemAmount'] ;
+				$sItemAmount	.= $value2['ItemAmount'] ;
 				
 				if( $nItems_Foreach_Count < $nItems_Count_Total )
 				{
@@ -1776,6 +1759,7 @@ class ECPay_ALLOWANCE
     	function check_extend_string($arParameters = array()){
 		
     		$arErrors = array();
+    		$nCheck_Amount = 0 ; 	// 驗證總金額
 
 		// 7.客戶名稱 CustomerName
 		// x僅能為中英數字格式
@@ -1867,16 +1851,26 @@ class ECPay_ALLOWANCE
 					}
 					
 					// *ItemPrice數字判斷
-					if ( !preg_match('/^[-0-9]*$/', $value['ItemPrice']) )
+					if ( !preg_match('/(^[-0-9]*$)|([0-9]+\.[0-9]+)/', $value['ItemPrice']) )
 					{
-						array_push($arErrors, '23:Invalid ItemPrice.A');
+						array_push($arErrors, '23:Invalid ItemPrice.');
 					}
 					
 					// *ItemAmount數字判斷
-					if ( !preg_match('/^[-0-9]*$/', $value['ItemAmount']) )
+					if ( !preg_match('/(^[-0-9]*$)|([0-9]+\.[0-9]+)/', $value['ItemAmount']) )
 					{
-						array_push($arErrors, '25:Invalid ItemAmount.B');
+						array_push($arErrors, '25:Invalid ItemAmount.');
 					}
+					else
+	        			{
+	        				$nCheck_Amount = $nCheck_Amount + $value['ItemAmount'] ;
+	        			}
+				}
+
+				// *檢查商品總金額
+				if ( $arParameters['AllowanceAmount'] != round($nCheck_Amount))
+				{
+					array_push($arErrors, "41:Invalid AllowanceAmount.");
 				}	
 			}
 		}
@@ -1968,7 +1962,7 @@ class ECPay_ALLOWANCE
 		else
 		{
 			// *含稅總金額
-			$arParameters['AllowanceAmount'] = (int) $arParameters['AllowanceAmount'] ;	
+			$arParameters['AllowanceAmount'] = $arParameters['AllowanceAmount'] ;	
 		}
 
         	if(sizeof($arErrors)>0) throw new Exception(join('<br>', $arErrors));
@@ -1987,12 +1981,10 @@ class ECPay_ALLOWANCE
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  D發票作廢 
 */
-if(!class_exists('ECPay_INVOICE_VOID'))
-{
 class ECPay_INVOICE_VOID
 {
     	// 所需參數
@@ -2076,12 +2068,10 @@ class ECPay_INVOICE_VOID
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  E折讓作廢
 */
-if(!class_exists('ECPay_ALLOWANCE_VOID'))
-{
 class ECPay_ALLOWANCE_VOID
 {
     	// 所需參數
@@ -2176,14 +2166,10 @@ class ECPay_ALLOWANCE_VOID
 		return $arParameters ;
     	}   
 }
-}
 
 /**
 *  F查詢發票
 */
-
-if(!class_exists('ECPay_INVOICE_SEARCH'))
-{
 class ECPay_INVOICE_SEARCH
 {
     	// 所需參數
@@ -2268,12 +2254,10 @@ class ECPay_INVOICE_SEARCH
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  G查詢作廢發票
 */
-if(!class_exists('ECPay_INVOICE_VOID_SEARCH'))
-{
 class ECPay_INVOICE_VOID_SEARCH
 {
     	// 所需參數
@@ -2344,12 +2328,10 @@ class ECPay_INVOICE_VOID_SEARCH
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  H查詢折讓明細
 */
-if(!class_exists('ECPay_ALLOWANCE_SEARCH'))
-{
 class ECPay_ALLOWANCE_SEARCH
 {
     	// 所需參數
@@ -2436,12 +2418,10 @@ class ECPay_ALLOWANCE_SEARCH
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  I查詢折讓作廢明細
 */
-if(!class_exists('ECPay_ALLOWANCE_VOID_SEARCH'))
-{
 class ECPay_ALLOWANCE_VOID_SEARCH
 {
     	// 所需參數
@@ -2525,12 +2505,10 @@ class ECPay_ALLOWANCE_VOID_SEARCH
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  J發送通知
 */
-if(!class_exists('ECPay_INVOICE_NOTIFY'))
-{
 class ECPay_INVOICE_NOTIFY
 {
     	// 所需參數
@@ -2694,12 +2672,10 @@ class ECPay_INVOICE_NOTIFY
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  K付款完成觸發或延遲開立發票
 */
-if(!class_exists('ECPay_INVOICE_TRIGGER'))
-{
 class ECPay_INVOICE_TRIGGER
 {
     	// 所需參數
@@ -2776,12 +2752,10 @@ class ECPay_INVOICE_TRIGGER
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  L手機條碼驗證
 */
-if(!class_exists('ECPay_CHECK_MOBILE_BARCODE'))
-{
 class ECPay_CHECK_MOBILE_BARCODE
 {
     	// 所需參數
@@ -2850,12 +2824,10 @@ class ECPay_CHECK_MOBILE_BARCODE
 		return $arParameters ;
     	}   
 }
-}
+
 /**
 *  M愛心碼驗證
 */
-if(!class_exists('ECPay_CHECK_LOVE_CODE'))
-{
 class ECPay_CHECK_LOVE_CODE
 {
     	// 所需參數
@@ -2918,7 +2890,7 @@ class ECPay_CHECK_LOVE_CODE
 		return $arParameters ;
     	}   
 }
-}
+
 
 if(!class_exists('ECPay_CheckMacValue'))
 {
@@ -2936,7 +2908,7 @@ if(!class_exists('ECPay_CheckMacValue'))
 
 			if(isset($arParameters)){
 				
-                unset($arParameters['CheckMacValue']);
+                		unset($arParameters['CheckMacValue']);
 				uksort($arParameters, array('ECPay_CheckMacValue','merchantSort'));
 
 				// 組合字串
