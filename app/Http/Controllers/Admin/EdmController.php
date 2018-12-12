@@ -47,7 +47,7 @@ class EdmController extends AdminController
         $data['sort'] = 0; 
         $edm = $this->moduleRepository->create($data);
         $input_images = $request->only('images');
-        $input_images = $input_images['images'];
+        $input_images = is_array($input_images['images']) ? $input_images['images']:[];
         foreach ($input_images as $key => $input_image) {
             $edm->images()->create([ 
                 'title' =>isset($input_image['title'])? $input_image['title']:'',
@@ -74,7 +74,7 @@ class EdmController extends AdminController
         $data = array_filter($request_data, function($item){return $item!=null;});
         $edm = $this->moduleRepository->update($id, $data);
         $images = $request->only('images');
-        $images = $images['images'];
+        $images = is_array($images['images']) ? $images['images']: [];
         $image_ids = [];
         foreach ($images as $key => $image) {
             $image_id = $image['id'];
