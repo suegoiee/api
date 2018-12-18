@@ -20,7 +20,18 @@ class NotificationController extends Controller
         foreach ($_notifications as $key => $notification) {
             $type = explode("\\", $notification->type);
             $status = $notification->read_at ? 1 : 0 ;
-            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$notification->data, 'status'=>$status]);
+            $data = $notification->data;
+            if(!isset($data['content'])){
+                $data['content'] = '';
+            }
+            if(!isset($data['title'])){
+                $data['title'] = '';
+            }
+            if(isset($data['content']) && !is_string($data['content'])){
+                $data['content'] = $data['content']['content'];
+                $data['title'] = $data['content']['title'];
+            }
+            array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$data, 'status'=>$status]);
         }
         return $this->successResponse($notifications);
     }

@@ -70,7 +70,9 @@ class StockAlert extends Notification
     public function toArray($notifiable)
     {
         return [
-            'content' => $this->notificationMessage,
+            
+            'title' => $this->notificationMessage->title,
+            'content' => $this->notificationMessage->content,
         ];
     }
 }
