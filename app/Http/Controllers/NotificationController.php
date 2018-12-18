@@ -29,7 +29,7 @@ class NotificationController extends Controller
             }
             if(isset($data['content']) && !is_string($data['content'])){
                 $data['content'] = $data['content']['content'];
-                $data['title'] = $data['content']['title'];
+                $data['title'] = isset($data['content']['title']) ? $data['content']['title']:'';
             }
             array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$data, 'status'=>$status]);
         }
