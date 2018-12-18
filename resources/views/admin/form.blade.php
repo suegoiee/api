@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-multiselect/css/bootstrap-multiselect.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/chosen/chosen.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-select/css/bootstrap-select.css')}}">
 
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
     @if($module_name=='edm' || $module_name=='product')
@@ -12,7 +13,7 @@
 @endsection
 @section('content')
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{url('/admin/'.str_plural($module_name))}}"><span class="">{{trans($module_name.'.admin.title')}}</span></a></li>
+        <li class="breadcrumb-item"><a href="{{url('/admin/'.str_plural($module_name))}}"><span class="">{{trans($module_name.'.admin.menu_title')}}</span></a></li>
         <li class="breadcrumb-item active">
             <span class="">
                 {{trans($module_name.'.admin.'.$actionName.'_title')}}
@@ -47,6 +48,7 @@
 <script src="{{asset('thirdparty/chosen/chosen.jquery.js')}}"></script>
 <script src="{{asset('thirdparty/jquery.quicksearch/jquery.quicksearch.js')}}"></script>
 <script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('thirdparty/bootstrap-select/js/bootstrap-select.min.js')}}"></script>
 <script src="{{asset('thirdparty/bootstrap4-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
 <script>
 $(function(){

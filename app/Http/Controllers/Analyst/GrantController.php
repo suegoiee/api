@@ -20,6 +20,7 @@ class GrantController extends AnalystController
         $grants =$user->grants()->orderBy('year_month','DESC')->get();
         $query_string=[];
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'subtitle'=>'grant',
             'actions'=>[],

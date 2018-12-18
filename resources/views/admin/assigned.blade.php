@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('css_file')
     <link rel="stylesheet" href="{{asset('css/form.css')}}">
-    <link rel="stylesheet" href="{{asset('thirdparty/multi-select/css/multi-select.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-select/css/bootstrap-select.css')}}">
 @endsection
 @section('content')
     <ol class="breadcrumb">
@@ -23,7 +23,6 @@
 @endsection
 
 @section('javascript')
-<script src="{{asset('thirdparty/jquery.quicksearch/jquery.quicksearch.js')}}"></script>
-<script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('thirdparty/bootstrap-select/js/bootstrap-select.min.js')}}"></script>
 <script src="{{asset('js/'.$module_name.'/assigned.js')}}"></script>
 @endsection

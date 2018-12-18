@@ -26,7 +26,7 @@ class NotificationMessageController extends AdminController
             'module_name'=> $this->moduleName,
             'actions'=>['new'],
             'table_data' => $notificationMessages,
-            'table_head' =>['id','content','created_at'],
+            'table_head' =>['id','title','created_at'],
             'table_formatter' =>[],
         ];
         return view('admin.list',$data);

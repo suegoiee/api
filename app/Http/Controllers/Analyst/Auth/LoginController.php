@@ -54,7 +54,7 @@ class LoginController extends Controller
     {
         //$request->session()->put('admin_name',$request->input('name'));
         //$request->session()->put('admin',true);
-        $request->session()->regenerate();
+        //$request->session()->regenerate();
         return redirect()->intended($this->redirectTo);
     }
 

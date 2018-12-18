@@ -196,7 +196,7 @@ Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
 	Route::post('/login', 'Admin\Auth\LoginController@login');
 	Route::get('/', 'HomeController@index')->name('admin.home');
 });
-Route::group(['middleware' => ['ip','admin','auth:admin','apiToken','adminToken'],'prefix' => 'admin'],function(){
+Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' => 'admin'],function(){
 	Route::post('/logout', 'Admin\Auth\LoginController@logout');
 
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');

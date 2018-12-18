@@ -18,6 +18,7 @@ $(function(){
         }
     });
     $('#all_user').change();
+    /*
     $('#user_ids').multiSelect({
         selectableHeader: "<div class='text-center'>可選使用者</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選使用者</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
@@ -53,6 +54,7 @@ $(function(){
             this.qs2.cache();
         }
     });
+    */
     $("#form").submit(function(){
         $("body").append('<div class="pop_windows"><div>通知處理中....<div></div>');
     });

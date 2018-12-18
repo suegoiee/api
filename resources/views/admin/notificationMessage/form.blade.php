@@ -1,11 +1,20 @@
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="data_title">{{trans($module_name.'.admin.title')}} <span class="text-danger">*</span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="data_title" name="title" placeholder="{{trans($module_name.'.admin.title')}}" value="{{@$data->title}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
     <label class="form-control-label col-sm-2" for="type">{{trans($module_name.'.admin.type')}}</label>
     <div class="col-sm-8">
         <select class="form-control" id="type" name="type" >
             <option value="Announcement"  {{ $data && $data->type=='Announcement' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Announcement')}}</option>
             <!--<option value="TermOfService"  {{ $data && $data->type=='TermOfService' ? 'selected':'' }} >{{trans($module_name.'.admin.type_TermOfService')}}</option>-->
             <!--<option value="NewFeature"  {{ $data && $data->type=='NewFeature' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewFeature')}}</option>-->
-            <!--<option value="NewProduct"  {{ $data && $data->type=='NewProduct' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewProduct')}}</option>-->
+            <option value="NewProduct"  {{ $data && $data->type=='NewProduct' ? 'selected':'' }} >{{trans($module_name.'.admin.type_NewProduct')}}</option>
             <option value="Promotion"  {{ $data && $data->type=='Promotion' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Promotion')}}</option>
             <option value="MarketAlert"  {{ $data && $data->type=='MarketAlert' ? 'selected':'' }} >{{trans($module_name.'.admin.type_MarketAlert')}}</option>
             <!--<option value="StockAlert"  {{ $data && $data->type=='StockAlert' ? 'selected':'' }} >{{trans($module_name.'.admin.type_StockAlert')}}</option>-->
@@ -46,10 +55,19 @@
                 
     </div>
 </div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="send_notice">{{trans($module_name.'.admin.send_notice')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="checkbox" class="" id="send_notice" name="send_notice" value="1" {{ $data && $data->send_notice==1 ? 'checked':'' }} >
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <div class="form-group row" id="user_selection" > 
     <label class="form-control-label col-sm-2" for="user_ids">{{trans($module_name.'.admin.user_ids')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
-    	 <select class="chosen-select" id="user_ids" name="user_ids[]" data-placeholder="{{trans('form.do_select')}}"  multiple="multiple">
+    	 <select class="form-control selectpicker" id="user_ids" name="user_ids[]" data-placeholder="{{trans('form.do_select')}}"  multiple="multiple" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
             @foreach($users as $user)
                 <option value="{{$user->id}}" {{($data && in_array($user->id, $data->user_ids)) ? 'selected':''}} >{{$user->email}} ( No.{{$user->id}}, {{$user->profile ? $user->profile->nickname:''}})</option>
             @endforeach

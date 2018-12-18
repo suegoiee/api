@@ -52,7 +52,7 @@ class PromocodeReceive extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject(env('APP_NAME').' 優惠券贈送')
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->markdown('emails.receivePromocode', $data);
+            ->view('emails.receivePromocode', $data);
     }
 
     /**

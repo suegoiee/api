@@ -35,8 +35,9 @@ class NotificationMessageController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['content', 'type']);
+        $request_data = $request->only(['title', 'content', 'type']);
         $request_data['send_email'] = $request->input('send_email', 0);
+        $request_data['send_notice'] = $request->input('send_notice', 0);
         $all_user = $request->input('all_user', 0);
         $classType = 'App\\Notifications\\'.$request->input('type', 'Others');
         if(!$all_user){
@@ -55,7 +56,7 @@ class NotificationMessageController extends Controller
                     $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
                     $this->userRepository->gets() ;
         foreach ($users as $key => $user) {
-            $user->notify(new $classType($user, $notificationMessage->content, $notificationMessage->send_email));
+            $user->notify(new $classType($user, $notificationMessage));
         }
 
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
@@ -80,8 +81,9 @@ class NotificationMessageController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['content', 'type']);
+        $request_data = $request->only(['title', 'content', 'type']);
         $request_data['send_email'] = $request->input('send_email', 0);
+        $request_data['send_notice'] = $request->input('send_notice', 0);
         $all_user = $request->input('all_user', 0);
         $classType = 'App\\Notifications\\'.$request->input('type', 'Others');
         if(!$all_user){
@@ -102,7 +104,7 @@ class NotificationMessageController extends Controller
                     $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
                     $this->userRepository->gets() ;
         foreach ($users as $key => $user) {
-            $user->notify(new $classType($user, $notificationMessage->content, $notificationMessage->send_email));
+            $user->notify(new $classType($user, $notificationMessage));
         }
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
     }
@@ -116,6 +118,7 @@ class NotificationMessageController extends Controller
     protected function notificationMessageValidator(array $data)
     {
         return Validator::make($data, [
+            'title'=>'required',
             'content'=>'required'
         ]);        
     }

@@ -20,12 +20,15 @@ class Promotion extends Notification implements ShouldQueue
     protected $user;
     protected $notification_types;
     protected $notificationMessage;
-    public function __construct($user, $notificationMessage='', $send_email=0)
+    public function __construct($user, $notificationMessage)
     {
         $this->user = $user;
         $this->notificationMessage = $notificationMessage;
-        $this->notification_types = ['database'];
-        if($send_email){
+        $this->notification_types = [];
+        if($this->notificationMessage->send_notice==1){
+            array_push($this->notification_types, 'database');
+        }
+        if($this->notificationMessage->send_email){
             array_push($this->notification_types, 'mail');
         }
     }
@@ -51,12 +54,12 @@ class Promotion extends Notification implements ShouldQueue
     {
 
         $data = [
-            'contents' => $this->notificationMessage,
+            'content' => $this->notificationMessage->content,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
 
         return (new MailMessage)
-            ->subject(env('APP_NAME').' 通知')
+            ->subject(env('APP_NAME').' 通知 - '.$this->notificationMessage->title)
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
             ->markdown('emails.receiveMessage', $data);
     }
@@ -70,7 +73,8 @@ class Promotion extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'content' => $this->notificationMessage,
+            'title'=>$this->notificationMessage->title,
+            'content' => $this->notificationMessage->content,
         ];
     }
 }

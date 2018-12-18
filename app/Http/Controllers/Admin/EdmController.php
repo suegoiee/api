@@ -18,7 +18,7 @@ class EdmController extends AdminController
         //$this->token = $this->clientCredentialsGrantToken();
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $edm = $this->moduleRepository->getsWith([],[],['status'=>'DESC','sort'=>'ASC','updated_at'=>'DESC']);
         $data = [

@@ -11,7 +11,7 @@
 <div class="form-group row" id="products_select">
     <div class="col-sm-1"></div>
     <div class="col-sm-10">
-        <select class="form-control chosen-select" id="products" name="products[][id]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+        <select class="form-control selectpicker" id="products" name="products[][id]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
             @foreach($products as $product)
                 <option value="{{$product->id}}">{{$product->name}} ({{$product->status==1 ? '上架':'下架'}})</option>
             @endforeach
@@ -25,7 +25,7 @@
 <div class="form-group row" id="users_select">
     <div class="col-sm-1"></div>
     <div class="col-sm-10">
-        <select class="form-control chosen-select" id="users" name="users[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+        <select class="form-control selectpicker" id="users" name="users[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
             @foreach($users as $user)
                 <option value="{{$user->id}}">{{$user->email}} (No.{{$user->id}}, {{$user->profile?$user->profile->nickname:''}})</option>
             @endforeach
