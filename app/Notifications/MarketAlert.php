@@ -73,8 +73,7 @@ class MarketAlert extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'title'=>$this->notificationMessage->title,
-            'content' => $this->notificationMessage->content,
+            'content' => $this->notificationMessage,
         ];
     }
 }
