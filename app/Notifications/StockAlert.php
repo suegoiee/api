@@ -51,12 +51,14 @@ class StockAlert extends Notification
     {
 
         $data = [
+            'title' => $this->notificationMessage->title,
+            'header_pic'=> $this->notificationMessage->type.'_header.jpg',
             'contents' => $this->notificationMessage,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
 
         return (new MailMessage)
-            ->subject(env('APP_NAME').' 通知')
+            ->subject(env('APP_NAME').' 通知 - '.$this->notificationMessage->title)
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
             ->markdown('emails.receiveMessage', $data);
     }

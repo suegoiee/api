@@ -55,6 +55,7 @@ class MarketAlert extends Notification implements ShouldQueue
 
         $data = [
             'title'=> $this->notificationMessage->title,
+            'header_pic'=> $this->notificationMessage->type.'_header.jpg',
             'content' => $this->notificationMessage->content,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
