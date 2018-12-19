@@ -54,6 +54,7 @@ class MarketAlert extends Notification implements ShouldQueue
     {
 
         $data = [
+            'title'=> $this->notificationMessage->title,
             'content' => $this->notificationMessage->content,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
@@ -61,7 +62,7 @@ class MarketAlert extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject(env('APP_NAME').' 通知 - '.$this->notificationMessage->title )
             ->from(env('APP_EMAIL','no-reply@localhost'),env('APP_SYSTEM_NAME','Service'))
-            ->view('emails.receiveMessage', $data);
+            ->view('emails.marketAlert', $data);
     }
 
     /**

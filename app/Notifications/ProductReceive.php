@@ -54,6 +54,7 @@ class ProductReceive extends Notification implements ShouldQueue
             $product->deadline = $product->pivot->deadline;
         }
         $data = [
+            'header_pic'=> $this->notificationMessage->type.'_header.jpg',
             'products' => $products,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
@@ -72,10 +73,15 @@ class ProductReceive extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         $products = $this->user->products()->whereIn('id', $this->product_ids)->get()->makeHidden(['price', 'column', 'model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot']);
+        $content = '優分析贈送了產品';
         foreach ($products as $key => $product) {
             $product->deadline = $product->pivot->deadline;
+            $content.= '<a href="'.env('APP_FRONT_URL','https://pro.uanalyze.com.tw').'/e-com/product-detail/'.$product->id.'">'.$product->name.'</a>';
         }
+        $content .= '給您，可以從 <a href="'.env('APP_FRONT_URL','https://pro.uanalyze.com.tw').'/profile">個人資訊</a> 的已購模組中確認。';
         return [
+            'title'=>'收到贈禮',
+            'content'=>$content,
             'products'=>$products
         ];
     }

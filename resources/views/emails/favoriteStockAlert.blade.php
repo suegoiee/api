@@ -1,6 +1,6 @@
 @extends('emails.layout')
 @section('title')
-	系統公告
+	我的最愛股 - {{$title}}
 @endsection
 @section('content')
 	{!!$content!!}
@@ -9,7 +9,7 @@
 	<a href="{{env('APP_FRONT_URL','https://pro.uanalyze.com.tw')}}" style="text-decoration: none;color: #FFF;">
 @endsection
 @section('btn_text')
-	前往優分析
+	查看詳細資料
 @endsection
 @section('btn_end')
 	</a>

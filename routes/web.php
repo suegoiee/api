@@ -11,6 +11,25 @@
 |
 */
 //API
+Route::get('/notice/email',function(){
+	$data=[
+		'header_pic'=>'FavoriteStockAlert_header.jpg',
+		'content'=>'test',
+		'title'=>'title',
+		'nickname'=>'shouwda',
+		'products'=>[new stdClass()],
+		'promocodes'=>[new stdClass()],
+	];
+	$data['promocodes'][0]->name='test';
+	$data['promocodes'][0]->deadline='2018/12/12';
+	$data['promocodes'][0]->code='asdljslkdjfdf';
+	$data['promocodes'][0]->offer='100';
+	$data['products'][0]->name='test';
+	$data['products'][0]->deadline='2018/12/12';
+	$data['products'][0]->code='asdljslkdjfdf';
+	$data['products'][0]->offer='100';
+	return view('emails.favoriteStockAlert',$data);
+});
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');

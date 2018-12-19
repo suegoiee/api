@@ -46,6 +46,7 @@ class PromocodeReceive extends Notification implements ShouldQueue
     {
         $promocodes = $this->user->promocodes()->whereIn('id', $this->promocode_ids)->get()->makeHidden(['created_at', 'updated_at']);
         $data = [
+            'header_pic'=> $this->notificationMessage->type.'_header.jpg',
             'promocodes' => $promocodes,
             'nickname' => $this->user->profile ? $this->user->profile->nickname : ''
         ];
@@ -64,7 +65,17 @@ class PromocodeReceive extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         $promocodes = $this->user->promocodes()->whereIn('id', $this->promocode_ids)->get()->makeHidden(['user_id','offer','order_id','send','created_at', 'updated_at','user']);
+        $content = '恭喜您獲得優分析';
+        foreach ($promocodes as $key => $promocode) {
+            if($key!=0){
+               $content.= '，';
+            }
+            $content.= $promocode->name.'1組(使用期限:'.($promocode->deadline ? date('Y/m/d', strtotime($promocode->deadline)) :'無期限').')';
+        }
+        $content .= '請於期限內使用完畢。';
         return [
+            'title'=>'恭喜您獲得優惠券',
+            'content'=>$content,
             'promocodes'=>$promocodes
         ];
     }
