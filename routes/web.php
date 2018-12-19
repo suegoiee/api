@@ -11,7 +11,8 @@
 |
 */
 //API
-Route::get('/notice/email',function(){
+/*
+Route::get('/test/notice/email',function(){
 	$data=[
 		'header_pic'=>'FavoriteStockAlert_header.jpg',
 		'content'=>'test',
@@ -29,7 +30,7 @@ Route::get('/notice/email',function(){
 	$data['products'][0]->code='asdljslkdjfdf';
 	$data['products'][0]->offer='100';
 	return view('emails.favoriteStockAlert',$data);
-});
+});*/
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
