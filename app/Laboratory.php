@@ -14,7 +14,7 @@ class Laboratory extends UanalyzeModel
 
     protected $hidden=['user_id','created_at', 'updated_at', 'deleted_at'];
 
-	protected $appends = [ 'avatar', 'master' ];
+	protected $appends = [ 'avatar', 'master', 'pathname' ];
 	
 	public function avatars()
     {
@@ -42,5 +42,9 @@ class Laboratory extends UanalyzeModel
         }
         $collection->faqs=$collection->faqs()->get();
         return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
+    }
+    public function getPathnameAttribute()
+    {
+        return $this->master ? $this->master->pathname : '';
     }
 }

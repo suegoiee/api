@@ -26,7 +26,8 @@ class LaboratoryController extends Controller
     {
         $user = $request->user();
         $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id']);
-       return $this->successResponse($laboratories);
+
+        return $this->successResponse($laboratories);
     }
 
     public function create()
@@ -98,7 +99,7 @@ class LaboratoryController extends Controller
             }
          }
          $laboratory->products=$laboratory->products->sortBy('sort');
-
+        
         return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
     }
 
@@ -134,7 +135,6 @@ class LaboratoryController extends Controller
             }
          }
          $laboratory->products=$laboratory->products->sortBy('sort');
-
         return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
     }
 

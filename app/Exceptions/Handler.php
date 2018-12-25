@@ -108,7 +108,7 @@ class Handler extends ExceptionHandler
                 $response['error']['code'] = "E400007";
             }else if($exception instanceof OAuthException){
                 $response['error']['message'] = ['???'];
-                $response['error']['code'] = "E400008";
+                $response['error']['code'] = "E400000";
             }else{
                 $response['error']['exception'] = get_class($exception);
                 $response['error']['message'] = [$exception->getMessage()];
