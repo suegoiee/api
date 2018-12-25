@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('css_file')
     <link rel="stylesheet" href="{{asset('css/detail.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.css')}}">
 @endsection
 @section('content')
 <ol class="breadcrumb">
@@ -15,6 +16,10 @@
 @endsection
 
 @section('javascript')
+
+<script src="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.js')}}"></script>
+<script src="{{asset('thirdparty/bootstrap-table/locale/bootstrap-table-zh-TW.min.js')}}"></script>
+<script src="{{asset('js/order/detail.js')}}"></script>
 <script>
 $(function(){
    

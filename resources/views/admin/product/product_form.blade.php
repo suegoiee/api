@@ -19,6 +19,15 @@
                 
     </div>
 </div>
+<div class="form-group row" id="pathname_box">
+    <label class="form-control-label col-sm-2" for="pathname">{{trans($module_name.'.admin.pathname')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="pathname" name="pathname" placeholder="{{trans($module_name.'.admin.pathname')}}" value="{{@$data->pathname}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <div class="form-group row" id="collections_select">
     <label class="form-control-label col-sm-2" for="collections">{{trans($module_name.'.admin.collections')}}</label>
     <div class="col-sm-8">

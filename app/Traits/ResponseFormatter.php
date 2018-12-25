@@ -46,6 +46,8 @@ trait ResponseFormatter
         foreach ($messages as $key => $message) {
             switch ($message) {default:return 'E400100';
                 //register
+                case 'The selected email is invalid.':                      return 'E400009';
+                case 'The user credentials were incorrect.':                return 'E400007';
                 case 'The email field is required.':                        return 'E400101';
                 case 'The email has already been taken.':                   return 'E400102';
                 case 'The email must be a valid email address.':            return 'E400103';
@@ -69,7 +71,7 @@ trait ResponseFormatter
                 case 'The avatar may not be greater than 1024 kilobytes.':  return 'E400121';
                 case '尚無存取權限。':                                         return 'E400122';
                 case 'The product is invalid':                              return 'E400123';
-                case '需至少有一項產品。':                                      return 'E400124';
+                case '需至少有一項產品。':                                       return 'E400124';
                 case 'The selected products is invalid.':                   return 'E400123';
                 case 'Collection product can\'t add to customize lab':      return 'E400126';
                 case 'The selected laboratory is invalid.':                 return 'E400127';
@@ -90,6 +92,9 @@ trait ResponseFormatter
                 case 'The promocode is invalid':                            return 'E400142';
                 case 'The name field is required.':                         return 'E400143';
                 case 'Invalid LoveCode.':                                   return 'E400144';
+                case 'The product is uninstalled':                          return 'E400145';
+                case 'No product is match':                                 return 'E400146';
+                case 'The product is not exists':                           return 'E400147';
             }
         }
     }

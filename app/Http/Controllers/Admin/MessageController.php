@@ -17,7 +17,7 @@ class MessageController extends AdminController
 
     public function index()
     {
-        $messages = $this->moduleRepository->gets();
+        $messages = $this->moduleRepository->getsWith([],[],['created_at'=>'DESC']);
 
         $data = [
             'module_name'=> $this->moduleName,

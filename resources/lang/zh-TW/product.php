@@ -29,6 +29,7 @@ return [
         'unit'=>'元',
     	'id'=>'編號',
     	'name'=>'名稱',
+        'pathname'=>'路徑',
     	'type'=>'類型',
     	'type_single'=>'單一',
     	'type_collection'=>'組合',
@@ -58,5 +59,7 @@ return [
         'send_email'=>'是否寄信',
 	],
     'collection_cant_del' =>'無法個別刪除。',
-    'cant_no_products' =>'需至少有一項產品。'
+    'cant_no_products' =>'需至少有一項產品。',
+    'no_product_is_match'=>'No product is match',
+    'product_is_not_exists'=>'The product is not exists',
 ];

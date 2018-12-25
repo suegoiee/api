@@ -1,11 +1,11 @@
 <div class="row justify-content-center">
    <div class="col-sm-10">
-        <table class="table table-bordered table-hover table-striped table-sm">
+        <table class="table table-bordered table-hover table-striped table-sm" data-toggle="table" data-search="true">
             <thead>
                 <tr class="">
-                    <th>{{trans('favorite.admin.code')}}</th>
-                    <th>{{trans('favorite.admin.name')}}</th>
-                    <th>{{trans('favorite.admin.created_at')}}</th>
+                    <th data-sortable="true">{{trans('favorite.admin.code')}}</th>
+                    <th data-sortable="true">{{trans('favorite.admin.name')}}</th>
+                    <th data-sortable="true">{{trans('favorite.admin.created_at')}}</th>
                 </tr>
             </thead>
             <tbody>

@@ -13,4 +13,5 @@ return [
         'created_at' => '建立時間',
         'products'=>'產品',
 	],
+    'product_is_uninstalled'=>'The product is uninstalled'
 ];

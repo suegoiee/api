@@ -99,6 +99,7 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
 			'index','show', 'store', 'update','destroy'
 		]]);
+	Route::get('/user/laboratories/product/{pathname}','LaboratoryController@mapping')->name('laboratories.product.mapping');
 
 	Route::post('/user/lab_avatar/{module_id}','AvatarController@store')->name('laboratories.avatar.store');
 	Route::get('/user/lab_avatar/{module_id}','AvatarController@show')->name('laboratories.avatar.show');

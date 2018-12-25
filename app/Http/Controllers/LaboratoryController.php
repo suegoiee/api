@@ -102,6 +102,42 @@ class LaboratoryController extends Controller
         return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
     }
 
+    public function mapping(Request $request, $pathname)
+    {
+        $user = $request->user();
+        $product = $user->products()->where('pathname', $pathname)->first();
+        if(!$product){
+            return $this->failedResponse(['message'=>[trans('product.no_product_is_match')]]);
+        }
+        $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->where('collection_product_id', $product->id)->first();
+        if(!$laboratory){
+            return $this->failedResponse(['message'=>[trans('laboratory.product_is_uninstalled')]]);        
+        }
+        $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
+
+        if(!$laboratory->customized){
+            $collect_product = $user->products()->find($laboratory->collection_product_id);
+            $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
+        }
+        foreach ($laboratory->products as $product) {
+            $product_user = $product->users()->find($user->id);
+            if(!$laboratory->customized){
+                $product->installed = 1;
+                $product->deadline = $deadline ? $deadline : 0;
+            }else{
+                $product->installed = $product_user ? $product_user->pivot->installed : 0;
+                $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
+            }
+            $product->sort = $product->pivot->sort;
+            foreach ( $product->collections as $collection){
+                $collection->makeHidden(['avatar_small','avatar_detail']);
+            }
+         }
+         $laboratory->products=$laboratory->products->sortBy('sort');
+
+        return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
+    }
+
     public function edit($id)
     {
       

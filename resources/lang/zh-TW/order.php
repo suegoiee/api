@@ -45,6 +45,7 @@ return [
         'invoice_address' => '地址',
         'invoice_title' => '抬頭',
         'company_id' => '統一編號',
+        'use_promocode'=>'使用優惠券',
     ],
     'analyst'=>[
         'menu_title' => '銷售列表',
