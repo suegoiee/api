@@ -44,7 +44,7 @@ class ProductController extends AdminController
             'module_name'=> $this->moduleName,
             'query_string' => $query_string,
             'actions'=>['assigned','sorted','new'],
-            'tabs'=>['type'=>['collection','single'], 'status'=>[0,1]],
+            'tabs'=>['type'=>['collection','single'], 'status'=>[1,0]],
             'table_data' => $product,
             'table_head' =>['id','name','type','model','plans','status'],
             'table_formatter' =>['plans', 'status'],

@@ -34,7 +34,32 @@
                     <td>{{$product->id}}</td>
                     <td>{{$product->name}}</td>
                     <td>{{trans('product.admin.type_'.$product->type)}}</td>
-                    <td>{{$product->price}}</td>
+                    <td>{{$product->pivot->unit_price}}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="promocodes">{{trans($module_name.'.admin.promocodes')}}</label>
+    <div class="col-sm-8">
+        <table class="table table-bordered table-hover table-striped table-sm">
+            <thead>
+                <tr class="">
+                    <th>{{trans('promocode.admin.id')}}</th>
+                    <th>{{trans('promocode.admin.name')}}</th>
+                    <th>{{trans('promocode.admin.code')}}</th>
+                    <th>{{trans('promocode.admin.offer')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($data->promocodes as $key => $promocode)
+                <tr>
+                    <td>{{$promocode->id}}</td>
+                    <td>{{$promocode->name}}</td>
+                    <td>{{$promocode->code}}</td>
+                    <td>{{$promocode->offer}}</td>
                 </tr>
                 @endforeach
             </tbody>
