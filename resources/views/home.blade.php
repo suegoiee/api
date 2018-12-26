@@ -144,6 +144,17 @@
                 data: formData,
                 dataType : 'json',
                 complete: function(response) {
+                    var result = JSON.stringify(JSON.parse(response.responseText),null,2);
+                    var jsonResult = JSON.parse(response.responseText);
+                    if('data' in jsonResult){
+                        if('access_token' in jsonResult.data){
+                            $('.input_key').each(function(index, item){
+                                if($(item).val() == 'Authorization' || $(item).val() == 'authorization'){
+                                    $('.input_value').eq(index).val(jsonResult.data.token_type+' '+jsonResult.data.access_token);
+                                }
+                            });
+                        }
+                    }
                     show_response(response.responseText);
                 //$('#response_data').val(JSON.stringify(JSON.parse(response.responseText),null,2));
                 //$('#response_data').val(response.responseText);
@@ -213,10 +224,10 @@
             var data;
             try{
                 data =  JSON.stringify(JSON.parse(response),null,2);
-            //data = JSON.stringify(response);
-        }catch (e) {
-            data = response;
-        }
+                //data = JSON.stringify(response);
+            }catch (e) {
+                data = response;
+            }
 
         $('#response_data').val(data);
         //$('#response_data').html(data);

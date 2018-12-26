@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Shouwda\Ecpay\Ecpay;
+use Illuminate\Support\Facades\Storage;
 use Shouwda\EcpayInvoice\EcpayInvoice;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethodItem;
@@ -46,6 +47,7 @@ class EcpayController extends Controller
     }
     public function feedback(Request $request){
         try {
+            $this->log(json_encode($request->all()));
             $feedback_data = $this->ecpay->checkOutFeedback();
             $feedback_data['data']= json_encode($feedback_data);
             //$feedback_data = $request->all();
@@ -192,5 +194,8 @@ class EcpayController extends Controller
         {
             return $this->successResponse(['message'=>['ecpay error.']]);
         }
+    }
+    function log($string){
+        Storage::disk('public')->put('debug_info.txt',$string);
     }
 }
