@@ -59,12 +59,15 @@ class PromocodeController extends AdminController
 
     public function edit($id)
     {
-
+        $promocode =  $this->moduleRepository->getWith($id,['user']);
+        if($promocode->type == 0){
+           $promocode->used_at = $promocode->used->count()>0 ? date('Y-m-d H:i:s'):null;
+        }
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
-            'data' => $this->moduleRepository->getWith($id,['user']),
+            'data' => $promocode,
             'products'=>$this->productRepository->getsWith([],[],['status'=>'DESC','updated_at'=>'DESC']),
         ];
         return view('admin.form',$data);

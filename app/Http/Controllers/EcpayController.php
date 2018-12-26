@@ -47,7 +47,6 @@ class EcpayController extends Controller
     }
     public function feedback(Request $request){
         try {
-            $this->log(json_encode($request->all()));
             $feedback_data = $this->ecpay->checkOutFeedback();
             $feedback_data['data']= json_encode($feedback_data);
             //$feedback_data = $request->all();
@@ -111,6 +110,7 @@ class EcpayController extends Controller
     }
     public function result(Request $request)
     {
+        $this->log(json_encode($request->all()));
         $feedback_data = $this->ecpay->checkOutFeedback();
 
         $feedback_data['data']= json_encode($feedback_data);
@@ -196,6 +196,6 @@ class EcpayController extends Controller
         }
     }
     function log($string){
-        Storage::disk('public')->put('debug_info.txt',$string);
+        Storage::disk('public')->put('debug_info.txt','['.date('Y-m-d H:i:s').']'.$string);
     }
 }
