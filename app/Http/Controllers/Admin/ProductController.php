@@ -21,15 +21,30 @@ class ProductController extends AdminController
         $this->userRepository = $userRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $query_string=[];
+        $where=[];
+        if($request->has('status')){
+            $where['status'] = $request->input('status',1);
+            $query_string['status'] = $request->input('status',1);
+        }else if($request->has('type')){
+            $where['type'] = $request->input('type','collection');
+            $query_string['type'] = $request->input('type','collection');
+        }else{
+            $where['type'] = $request->input('type','collection');
+            $query_string['type'] = $request->input('type','collection');
+        }
+
         $product = $this->moduleRepository->getsWith(['tags','collections','plans'=>function($query){
             $query->where('active',1);
-        }],[],['status'=>'DESC','updated_at'=>'DESC']);
+        }],$where,['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
+            'query_string' => $query_string,
             'actions'=>['assigned','sorted','new'],
+            'tabs'=>['type'=>['collection','single'], 'status'=>[0,1]],
             'table_data' => $product,
             'table_head' =>['id','name','type','model','plans','status'],
             'table_formatter' =>['plans', 'status'],
