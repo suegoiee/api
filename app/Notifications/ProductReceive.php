@@ -14,17 +14,25 @@ class ProductReceive extends Notification implements ShouldQueue
 
     protected $product_ids;
     protected $user;
-    protected $send_email;
+    protected $notification_types;
+    protected $notificationMessage;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $product_ids = [], $send_email=false)
+    public function __construct($user, $product_ids = [], $notificationMessage)
     {
         $this->product_ids = $product_ids;
         $this->user = $user;
-        $this->send_email = $send_email;
+        $this->notificationMessage = $notificationMessage;
+        $this->notification_types = [];
+        if($this->notificationMessage->send_notice==1){
+            array_push($this->notification_types, 'database');
+        }
+        if($this->notificationMessage->send_email==1){
+            array_push($this->notification_types, 'mail');
+        }
     }
 
     /**
@@ -35,10 +43,7 @@ class ProductReceive extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        if($this->send_email){
-            return ['database','mail'];
-        }
-        return ['database'];
+        return $this->notification_types;
     }
 
     /**
