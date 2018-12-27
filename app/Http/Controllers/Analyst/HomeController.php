@@ -35,7 +35,7 @@ class HomeController extends Controller
         }
         $pre_orders = $orderRepository->getsWith(['products'],['created_at.<'=>date('Y-m-01'), 'status'=>1],[],['products'=>function($query) use($product_ids) { $query->whereIn('id',$product_ids); }]);
         foreach ($pre_orders as $key => $pre_order) {
-            $client = $order->user;
+            $client = $pre_order->user;
             $clients[$client->id]=$client;
         }
         $promocodes = $promocodeRepository->getsWith(['used','products'],[],[],['products'=>function($query) use($product_ids) { $query->whereIn('id',$product_ids); }]);
