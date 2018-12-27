@@ -118,7 +118,7 @@ class AnalystController extends AdminController
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
 
-        $request_data = $request->only(['email','name','no']);
+        $request_data = $request->only(['email','name','no','ratio']);
         $request_data['password'] = bcrypt($request->input('password'));
         $analyst = $this->moduleRepository->create($request_data);
         $products_ids = $request->input('products', []);
@@ -130,11 +130,11 @@ class AnalystController extends AdminController
     {
         $analyst = $this->moduleRepository->get($analyst_id);
         if(!$analyst){
-             return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$analyst->id.'/grants/create'));
+            return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$analyst->id.'/grants/create'));
         }
-        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee']);
-
-        if($analyst->grants()->where('year_month',$request_data['year_month'])->count()!=0){
+        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee','ratio']);
+        $request_data['year_month'] = $request_data['year_month'] ? $request_data['year_month']:date('Y-m'); 
+        if($analyst->grants()->where('year_month', $request_data['year_month'])->count()!=0){
            return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$analyst->id.'/grants/create'));
         }
         $grant = $analyst->grants()->create($request_data);
@@ -154,7 +154,7 @@ class AnalystController extends AdminController
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
 
-        $request_data = $request->only(['email','name','no']);
+        $request_data = $request->only(['email','name','no','ratio']);
         if($request->input('password')){
             $request_data['password'] = bcrypt($request->input('password'));
         }
@@ -171,7 +171,7 @@ class AnalystController extends AdminController
         if(!$analyst){
              return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$analyst->id.'/grants/create'));
         }
-        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee']);
+        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee','ratio']);
 
         $analyst->grants()->where('id',$id)->update($request_data);
         $grant = $analyst->grants()->find($id);
@@ -209,6 +209,7 @@ class AnalystController extends AdminController
     public function getAmounts(Request $request, $analyst_id)
     {
         $month = date('Y-m').'-01';
+        $ratio = $request->input('ratio');
         $where= [
             'status' => 1,
             'price.<>'=>0
@@ -246,7 +247,7 @@ class AnalystController extends AdminController
                     $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee) * $ratio;
                     $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     $sumOfOrderPrice += $order_product->order_price;
                     $sumOfHandleFee += $order_product->handle_fee;
@@ -278,6 +279,7 @@ class AnalystController extends AdminController
     public function details(Request $request,$analyst_id)
     {
         $month = date('Y-m').'-01';
+        $ratio = $request->input('ratio');
         $where= [
             'status' => 1,
             'price.<>'=>0
@@ -312,7 +314,7 @@ class AnalystController extends AdminController
                     $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*$ratio;
                     $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     array_push($order_products, $order_product);
                 }

@@ -11,7 +11,7 @@ class Analyst extends Authenticatable
 	use SoftDeletes;
     protected $table = 'analysts';
     protected $fillable = [
-        'email', 'password','name','no'
+        'email', 'password','name','no','ratio'
     ];
     protected $hidden = [
         'password', 'remember_token',

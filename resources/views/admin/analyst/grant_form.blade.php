@@ -61,6 +61,15 @@
             </div>
         </div>
         <div class="form-group row">
+            <label class="form-control-label col-sm-2" for="ratio">{{trans($module_name.'.admin.ratio')}} <span class="text-danger">*</span></label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="ratio" name="ratio" placeholder="{{trans($module_name.'.admin.ratio')}}" value="{{$data ? $data->ratio:$analyst->ratio}}">
+            </div>
+            <div class="col-sm-2 text-danger msg">
+                        
+            </div>
+        </div>
+        <div class="form-group row">
             <label class="form-control-label col-sm-2" for="year_month">{{trans($module_name.'.admin.year_month')}} <span class="text-danger">*</span></label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" id="year_month" name="year_month" placeholder="{{trans($module_name.'.admin.year_month')}}" value="{{@$data->year_month}}" data-provide="datepicker" data-date-language="zh-TW" data-date-format="yyyy-mm" data-date-orientation="bottom" data-date-start-view="months" data-date-min-view-mode="months">
@@ -196,18 +205,16 @@ $(function(){
         return false;
       }
     });
-   $('#year_month').on('change',function(e) {
+    $('#year_month').on('change',function(e) {
         $('#detail_page span').html($(this).val());
-        $.get(url('admin/'+module_name+'/'+analyst_id+'/grants/amounts'),{year_month:$(this).val()},function(response){
-            $('#price').val(response.price);
-            $('#handle_fee').val(response.handle_fee);
-            $('#platform_fee').val(response.platform_fee);
-            var net_commission = response.price-response.handle_fee-response.platform_fee;
-            $('#income_tax').val(net_commission>=20000?Math.floor(net_commission/10):0);
-            $('#second_generation_nhi').val(net_commission>=20000? Math.floor(net_commission*0.0191):0);
-            $('#interbank_remittance_fee').val(30);
-            updateAmount();
-        });
+        if($('#ratio').val()!=''){
+            getAmount();
+        }
+    });
+    $('#ratio').on('change',function(e) {
+        if($('#year_month').val()!=''){
+            getAmount();
+        }
     });
    $('#extra_amount_add').click(function(event){
         event.preventDefault();
@@ -231,8 +238,24 @@ $(function(){
     });
    $('#detail_page').click(function(event){
         event.preventDefault();
-        window.open(url('admin/'+module_name+'/'+analyst_id+'/grants/details?year_month='+$('#year_month').val()));
+        var query = '?year_month='+$('#year_month').val();
+        if($('#ratio').val()!=''){
+           query += '&ratio='+$('#ratio').val();
+        }
+        window.open(url('admin/'+module_name+'/'+analyst_id+'/grants/details'+query));
    });
+   function getAmount(){
+        $.get(url('admin/'+module_name+'/'+analyst_id+'/grants/amounts'),{year_month:$('#year_month').val(),ratio:$('#ratio').val()},function(response){
+            $('#price').val(response.price);
+            $('#handle_fee').val(response.handle_fee);
+            $('#platform_fee').val(response.platform_fee);
+            var net_commission = response.price-response.handle_fee-response.platform_fee;
+            $('#income_tax').val(net_commission>=20000?Math.floor(net_commission/10):0);
+            $('#second_generation_nhi').val(net_commission>=20000? Math.floor(net_commission*0.0191):0);
+            $('#interbank_remittance_fee').val(30);
+            updateAmount();
+        });
+   }
    function updateAmount(){
         var net_commission = parseInt($('#price').val(),10)-parseInt($('#handle_fee').val(),10)-parseInt($('#platform_fee').val(),10);
         $('#net_commission').html(net_commission);

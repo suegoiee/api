@@ -44,6 +44,15 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="ratio">{{trans($module_name.'.admin.ratio')}} <span class="text-danger">*</span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="ratio" name="ratio" placeholder="{{trans($module_name.'.admin.ratio')}}" value="{{@$data->ratio}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
     <div class="col-sm-1"></div>
     <label class="text col-sm-8" for="products">{{trans($module_name.'.admin.products')}}</label>
 </div>

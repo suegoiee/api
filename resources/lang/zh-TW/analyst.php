@@ -72,6 +72,7 @@
 			'detail_net_sales_payment'=>'本月銷售給付淨額',
 			'detail_transfer_amount'=>'本月應轉帳金額',
 			'detail_exrta_amount'=>'其他款項',
+			'ratio'=>'銷售額配比',
 			
 			'detail_income_tax_q'=>'所得逾2萬元時，我們會代繳10%佣金所得，明年再傳扣繳憑單給您)',
 			'detail_second_generation_nhi_q'=>'逾兩萬元1.91%',
