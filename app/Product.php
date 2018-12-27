@@ -31,7 +31,7 @@ class Product extends UanalyzeModel
     }
 
     public function collections(){
-    	return $this->belongsToMany('App\Product','product_collections','collection_id','product_id')->select(['id','name','model','type','product_collections.sort'])->withTimestamps()->withPivot('sort');
+    	return $this->belongsToMany('App\Product','product_collections','collection_id','product_id')->select(['id','name','column','model','type','product_collections.sort'])->withTimestamps()->withPivot('sort');
     }
 
     public function tags()
