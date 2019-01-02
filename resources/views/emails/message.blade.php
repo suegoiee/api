@@ -13,7 +13,7 @@
 	<a href="{{env('APP_URL','https://api.uanalyze.com.tw')}}admin/messages/{{$id}}" style="text-decoration: none;color: #FFF;">
 @endsection
 @section('btn_text')
-	前往優分析留言後台
+	前往留言後台
 @endsection
 @section('btn_end')
 	</a>

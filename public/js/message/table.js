@@ -5,3 +5,7 @@ function actionFormatter(value,row,index){
 	actions+='</div>';
 	return actions;
 }
+
+function statusFormatter(value,row,index){
+	return value==1 ? '已解決':'未解決';
+}

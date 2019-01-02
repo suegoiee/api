@@ -14,8 +14,8 @@ return [
         'category' => '類別',
         'content' => '訊息',
         'status' => '狀態',
-        'status_0' => '未讀',
-        'status_1' => '已讀',
+        'status_0' => '未解決',
+        'status_1' => '已解決',
         'created_at' => '留言時間',
     ],
 ];

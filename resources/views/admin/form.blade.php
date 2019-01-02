@@ -33,10 +33,10 @@
             </div>
         @else
             <div class="actions form-group text-center" >
-            <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
-            <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
-            <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
-        </div>
+                <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
+                <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
+                <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
+            </div>
         @endif
     </form>
 @endsection

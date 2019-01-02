@@ -57,11 +57,6 @@ class MessageController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = $this->messageValidator($request->all());
-        if($validator->fails()){
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
-
         $request_data = $request->only(['name','email','category','content','status']);
         $data = array_filter($request_data, function($item){return $item!=null;});
 
