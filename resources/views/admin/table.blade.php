@@ -10,14 +10,14 @@
     </div>
     @endif
 </div>
-<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="50" data-pagination-pre-text="<span class='oi oi-chevron-left'></span>" data-pagination-next-text="<span class='oi oi-chevron-right'></span>" data-pagination-h-align="left" data-pagination-detail-h-align="right" data-pagination-v-align="both">
+<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="100" data-pagination-pre-text="<span class='oi oi-chevron-left'></span>" data-pagination-next-text="<span class='oi oi-chevron-right'></span>" data-pagination-h-align="left" data-pagination-detail-h-align="right" data-pagination-v-align="both">
     <thead class="thead-inverse text-center">
         <tr>
             @if(!isset($table_action) || $table_action)
             <th data-align="center" data-checkbox="true">{{trans('table.action_label')}}</th>
             @endif
             @foreach($table_head as $th)
-                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="'.$th.'Formatter"':'' !!} data-sortable="true"
+                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="'.$th.'Formatter"':'' !!} data-sortable="true" 
                 >
                 {{trans($module_name.'.admin.'.$th)}}
                 </th>

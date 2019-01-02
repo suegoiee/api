@@ -12,3 +12,7 @@ function statusFormatter(value,row,index){
 function user_nick_nameFormatter(value,row,index){
 	return value;
 }
+
+function user_emailFormatter(value,row,index){
+	return value;
+}

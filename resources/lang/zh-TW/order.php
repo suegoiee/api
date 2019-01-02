@@ -15,6 +15,7 @@ return [
         'no' => '訂單編號',
     	'price' => '金額',
     	'user_nickname' => '訂購者',
+        'user_email' => '訂購者帳號',
     	'memo' => '備註',
     	'status' => '付款狀態',
     	'status_0'=>'未付款',

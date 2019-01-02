@@ -9,3 +9,6 @@ function actionFormatter(value,row,index){
 	actions+='</div>';
 	return actions;
 }
+function mail_verified_atFormatter(value,row,index){
+	return row.is_socialite == 1 ? 'Facebook': ( value ? '已驗證':'尚未驗證');
+}

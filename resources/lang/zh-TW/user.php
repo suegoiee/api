@@ -26,5 +26,6 @@ return [
     	'created_at' => '註冊時間',
     	'updated_at' => '最後登入時間',
     	'products' => '購買產品',
+        'mail_verified_at'=>'驗證',
     ],
 ];

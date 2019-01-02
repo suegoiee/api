@@ -9,7 +9,7 @@ class Order extends UanalyzeModel
 {
     use SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $appends = ['user_nickname', 'no'];
+    protected $appends = ['user_nickname', 'no','user_email'];
     protected $fillable = [
         'user_id','status','price','memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title','paymentType', 'LoveCode', 'RelateNumber'
     ];
@@ -38,6 +38,10 @@ class Order extends UanalyzeModel
         $nickname = $profile ? $profile->nickname : '-';
 
         return $nickname;
+    }
+    public function getUserEmailAttribute(){
+        $user = $this->user;
+        return $user ? $user->email:'-';
     }
 
     public function getNoAttribute(){
