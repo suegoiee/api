@@ -22,11 +22,9 @@
 			@endif
 			</div>
 			@yield('btn_start')
-			@if(!isset($type))
 			<div style="width:50%; margin:40px auto 0 auto;background-color: #f29600;color: #fff;font-size: 18px;text-align: center;cursor: pointer;padding:10px">
 				@yield('btn_text')
 			</div>
-			@endif
 			@yield('btn_end')
 		</div>
 	</div>

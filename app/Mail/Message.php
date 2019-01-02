@@ -31,6 +31,7 @@ class Message extends Mailable implements ShouldQueue
     {
         $data = [
             'type'=>'message',
+            'id'=>$this->message->id,
             'header_pic'=> 'message_header.jpg',
             'category'=> $this->message->category,
             'name' => $this->message->name,

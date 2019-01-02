@@ -38,7 +38,7 @@ class MessageController extends Controller
         $request_data['category'] =  $request_data['category'] ? $request_data['category'] :'others';
         $request_data['content'] =  $request_data['content'] ? $request_data['content'] :'';
         $message = $this->messageRepository->create($request_data);
-        Mail::to('shouwda@uanalyze.com.tw')->queue(new Message($message));
+        Mail::to('info@uanalyze.com.tw')->queue(new Message($message));
 
         return $this->successResponse($message?$message->makeHidden(['updated_at']):[]);
     }
