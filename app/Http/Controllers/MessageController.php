@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Repositories\MessageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Message;
 
 class MessageController extends Controller
 {	
@@ -36,6 +38,7 @@ class MessageController extends Controller
         $request_data['category'] =  $request_data['category'] ? $request_data['category'] :'others';
         $request_data['content'] =  $request_data['content'] ? $request_data['content'] :'';
         $message = $this->messageRepository->create($request_data);
+        Mail::to('shouwda@uanalyze.com.tw')->queue(new Message($message));
 
         return $this->successResponse($message?$message->makeHidden(['updated_at']):[]);
     }

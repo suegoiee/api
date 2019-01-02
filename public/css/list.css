@@ -27,6 +27,9 @@
 .breadcrumb li{
 	margin-left:5px;
 }
+.table{
+	font-size:14px;
+}
 th{
 	max-width: 120px;
 }

@@ -1,0 +1,11 @@
+@extends('emails.layout')
+@section('title')
+	留言訊息
+@endsection
+@section('content')
+	<div>類別：{{$category}}</div>
+	<div>留言者：{{$name}}</div>
+	<div>留言者信箱：{{$email}}</div>
+	<div>留言時間：{{$created_at}}</div>
+	<div>內容：{!!$content!!}</div>
+@endsection
