@@ -70,7 +70,7 @@ class OrderController extends AnalystController
             'tabs'=>[],
             'query_string' => $query_string,
             'table_data' => $order_products,
-            'table_head' =>['product_name', 'product_id', 'product_price','no','user_nickname','order_price','status','created_at','paymentType','handle_fee','platform_fee'],
+            'table_head' =>['product_name', 'product_id', 'product_price','no','user_nickname','user_email','order_price','status','created_at','paymentType','handle_fee','platform_fee'],
             'table_formatter' =>['status','paymentType','platform_fee'],
             'table_action'=>false,
         ];

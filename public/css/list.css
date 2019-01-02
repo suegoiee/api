@@ -28,7 +28,7 @@
 	margin-left:5px;
 }
 th{
-	width: 80px;
+	max-width: 120px;
 }
 td{
 	word-break: break-all;
