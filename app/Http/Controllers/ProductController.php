@@ -85,10 +85,14 @@ class ProductController extends Controller
     public function onShelf(Request $request, $id)
     {
         
-        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs','plans'=>function($query){$query->where('active',1);}])->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration']);
+        $product = $this->productRepository->getWithByStatus($id, ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs','plans'=>function($query){$query->where('active',1);}]);
         if(!$product){
-            return $this->failedResponse(['message'=>[trans('product.product_is_not_exists')]]);
+            $product = $this->productRepository->getBy(['pathname'=>$id,'status'=>1], ['tags','collections'=>function($query){$query->orderBy('product_collections.sort');},'faqs','plans'=>function($query){$query->where('active',1);}]);
+            if(!$product){
+                return $this->failedResponse(['message'=>[trans('product.product_is_not_exists')]]);
+            }
         }
+        $product->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration']);
         $product->plans->makeHidden('id');
         return $this->successResponse($product?$product:[]);
     }

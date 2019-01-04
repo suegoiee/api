@@ -124,8 +124,7 @@ Route::middleware(['web'])->group(function(){
 	]]);
 
 	Route::get('/products','ProductController@onShelves')->name('products.onShelves');
-	Route::get('/products/{product}','ProductController@onShelf')->name('products.onShelf')->where('product', '[0-9]+');
-
+	Route::get('/products/{product}','ProductController@onShelf')->name('products.onShelf')->where('product', '[a-zA-Z0-9_-]+');
 	Route::get('/products/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
 
 	Route::get('/stocks','StockController@lists');
