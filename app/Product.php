@@ -12,9 +12,9 @@ class Product extends UanalyzeModel
 
     
     protected $fillable = [
-        'name','model','column','info_short','info_more','type','price','expiration','status','faq','pathname'
+        'name','model','column','info_short','info_more','type','price','expiration','status','faq','pathname','seo'
     ];
-    protected $appends = [ 'avatar_small', 'avatar_detail' ];
+    protected $appends = [ 'avatar_small', 'avatar_detail'];
 
     protected $hidden = [ 'pivot' ];
     //protected $visible = ['id', 'name', 'model', 'info_short', 'info_more', 'type', 'price', 'expiration', 'faq'];
@@ -51,6 +51,10 @@ class Product extends UanalyzeModel
     public function getAvatarDetailAttribute()
     {
         return $this->avatars()->where('type','detail')->get();
+    }
+    public function getSeoAttribute($seo)
+    {
+        return ($seo!=null ? $seo : '');
     }
 
     public function laboratories()

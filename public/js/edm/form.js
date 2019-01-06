@@ -11,6 +11,7 @@ $(function(){
                         '<div class="col_image"><input type="file" class="form-control" name="images[new_'+image_index+'][image]" value=""></div>'+
                         '<div class="col_title"><input type="text" class="form-control" name="images[new_'+image_index+'][title]" value=""></div>'+
                         '<div class="col_link"><input type="text" class="form-control" name="images[new_'+image_index+'][link]" value=""></div>'+
+                        '<div class="col_seo"><input type="text" class="form-control" name="images[new_'+image_index+'][seo]" value=""></div>'+
                         '<div class="col_actions"><button class="btn btn-danger remove_btn" type="button"><span class="oi oi-trash"></span></button></div>'+
                     '</li>';
         image_index++;

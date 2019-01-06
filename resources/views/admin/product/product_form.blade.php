@@ -129,6 +129,15 @@
                 
     </div>
 </div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="seo">{{trans($module_name.'.admin.seo')}}</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="seo" name="seo" placeholder="{{trans($module_name.'.admin.seo')}}" value="{{@$data->seo}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <!--
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="faq">{{trans($module_name.'.admin.faq')}}</label>

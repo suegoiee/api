@@ -54,6 +54,7 @@ return [
         'faq'=>'FAQ',
         'faq_q'=>'Q',
         'faq_a'=>'A',
+        'seo'=>'SEO',
         'assigned_products'=>'選擇欲贈送的產品',
         'assigned_users'=>'選擇贈與的使用者',
         'send_email'=>'是否寄信',

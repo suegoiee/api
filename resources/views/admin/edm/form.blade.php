@@ -29,6 +29,7 @@
         <div class="col_image">{{trans($module_name.'.admin.image')}}</div>
         <div class="col_title">{{trans($module_name.'.admin.col_title')}}</div>
         <div class="col_link">{{trans($module_name.'.admin.link')}}</div>
+        <div class="col_seo">{{trans($module_name.'.admin.seo')}}</div>
         <div class="col_actions">{{trans($module_name.'.admin.actions')}}</div>
     </li>
     <ul id="sortable" class="list-group mb-5">
@@ -40,6 +41,7 @@
             <div class="col_image"><input type="file" class="form-control" name="images[new_0][image]" value=""></div>
             <div class="col_title"><input type="text" class="form-control" name="images[new_0][title]" value=""></div>
             <div class="col_link"><input type="text" class="form-control" name="images[new_0][link]" value=""></div>
+            <div class="col_seo"><input type="text" class="form-control" name="images[new_0][seo]" value=""></div>
             <div class="col_actions"><button class="btn btn-danger remove_btn" type="button"><span class="oi oi-trash"></span></button></div>
         </li>   
         @if($data)
@@ -56,6 +58,7 @@
                     </div>
                     <div class="col_title"><input type="text" class="form-control" name="images[{{$key}}][title]" value="{{$image->title}}"></div>
                     <div class="col_link"><input type="text" class="form-control" name="images[{{$key}}][link]" value="{{$image->link}}"></div>
+                    <div class="col_seo"><input type="text" class="form-control" name="images[{{$key}}][seo]" value="{{$image->seo}}"></div>
                     <div class="col_actions"><button class="btn btn-danger remove_btn" type="button"><span class="oi oi-trash"></span></button></div>
                 </li>   
             @endforeach

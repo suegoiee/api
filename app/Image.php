@@ -6,7 +6,7 @@ use App\UanalyzeModel;
 class Image extends UanalyzeModel
 {
     protected $fillable = [
-        'path','sort','link','title'
+        'path','sort','link','title','seo'
     ];
     protected $appends=[
     	'url'
@@ -20,5 +20,9 @@ class Image extends UanalyzeModel
     }
     public function getUrlAttribute(){
     	return url('storage/'.$this->path);
+    }
+    public function getSeoAttribute($seo)
+    {
+        return ($seo!=null ? $seo : '');
     }
 }

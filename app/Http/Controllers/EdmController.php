@@ -50,11 +50,17 @@ class EdmController extends Controller
         $input_images = $request->only('images');
         $input_images = $input_images['images'];
         foreach ($input_images as $key => $input_image) {
+            if($input_image['image']){
+                $path = $this->createImage($input_image['image'], $edm->id, 'edms');
+            }else{
+                $path = '';
+            }
             $edm->images()->create([ 
                 'title' =>$input_image['title'],
-                'path' => $this->createImage($input_image['image'], $edm->id, 'edms'),
+                'path' => $path,
                 'link' =>$input_image['link'],
                 'sort' =>$input_image['sort'],
+                'seo' =>$input_image['seo'],
             ]);
         }
         return $this->successResponse($edm);
@@ -97,9 +103,12 @@ class EdmController extends Controller
                 'title'=>$image['title'],
                 'link'=>$image['link'],
                 'sort'=>$image['sort'],
+                'seo'=>$image['seo'],
             ];
             if($image['image']){
                 $image_data['path'] = $this->createImage($image['image'], $edm->id, 'edms');
+            }else{
+                $image_data['path'] = '';
             }
             if($image_id!='0'){
                 $image_model = $edm->images()->create($image_data);

@@ -21,6 +21,7 @@ return [
         'status_0'=>'未發佈',
         'status_1'=>'發佈',
         'sort'=>'排序',
+        'seo'=>'SEO',
         'updated_at'=>'更新日期',
     ],
 ];

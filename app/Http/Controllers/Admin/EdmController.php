@@ -54,6 +54,7 @@ class EdmController extends AdminController
                 'path' => isset($input_image['image'])? $this->createImage($input_image['image'], $edm->id, 'edms') : '',
                 'link' => isset($input_image['link'])? $input_image['link']:'',
                 'sort' =>$input_image['sort'],
+                'seo' =>isset($input_image['seo'])? $input_image['seo']:'',
             ]);
         }
         return $this->adminResponse($request,['status'=>'success', 'data'=>$edm? $edm : []]);
@@ -85,9 +86,12 @@ class EdmController extends AdminController
                 'title'=>$image['title'],
                 'link'=>$image['link'],
                 'sort'=>$image['sort'],
+                'seo' =>isset($image['seo'])? $image['seo']:'',
             ];
             if(isset($image['image'])){
                 $image_data['path'] = $this->createImage($image['image'], $edm->id, 'edms');
+            }else{
+                $image_data['path'] = '';
             }
             
             if($image_id=='0'){

@@ -48,18 +48,21 @@
 	line-height: 43px;
 }
 .list-group-item .col_title{
-	width: 30%;
+	width: 25%;
 }
 .list-group-item .col_image {
-	width: 25%;
+	width: 20%;
 }
 .list-group-item .col_image img{
 	vertical-align: inherit;
 	max-height: 100%
 }
 .list-group-item .col_link{
-	width: 25%;
+	width: 20%;
+}
+.list-group-item .col_seo{
+	width: 20%;
 }
 .list-group-item .col_actions{
-	width: 10%;
+	width: 5%;
 }
