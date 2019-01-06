@@ -189,6 +189,58 @@ class UserProductController extends Controller
         return $this->successResponse($request_data?$request_data:[]);
     }
 
+    public function cancel(Request $request)
+    {
+        $user = User::find($request->input('user_id'));
+        $_products = $request->input('products',[]);
+        $products = [];
+        $result = [];
+        foreach ($_products as $key => $product) {
+            $quantity = isset($product['quantity'])? (int)$product['quantity'] : 1;
+            $product_data = $this->productRepository->get($product["id"]);
+
+            $old_product = $user->products()->where('id',$product["id"])->first();
+            $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
+            $product_plan = $product_data->plans()->where('expiration', $quantity)->first();
+            if(!$product_plan){
+                continue;
+            }
+            $expiration = $product_plan->expiration;
+            $deadline = $this->getExpiredDateBack($expiration, $old_deadline);
+            $installed = $old_product ? $old_product->pivot->installed : 0;
+            $collections_ids = [];
+            $collection_products = [];
+            $collections =[];
+            if($product_data->type=='collection'){
+                if($installed==0){
+                    if($user->products()->where('id',$product_data->id)->count()==0){
+                        $customized = 0;
+                        if($customized ==1){
+                            foreach ($product_data->collections as $key => $collection_product) {
+                                $old_collection_product = $user->products()->where('id',$collection_product->id)->first();
+                                $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
+                                $collection_deadline = $this->getExpiredDateBack($expiration, $old_collection_deadline);
+                                $collection_installed = 1;
+                                $collection_sort = $collection_product->pivot->sort;
+                                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                                $collection_products[$collection_product->id] = ['deadline'=>$collection_deadline];
+                            }
+                            $laboratory->products()->syncWithoutDetaching($collections_ids);
+                        }
+                    }
+                    $installed = 1;
+                }
+                $collections = $product_data->collections;
+            }
+            $products[$product_data->id] = ['deadline'=>$deadline];
+            
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline,'collections'=>$collections,'msg'=>$expiration]);
+        }
+        $user->products()->syncWithoutDetaching($products);
+
+        return $this->successResponse($result);
+    }
+
     public function sorted(Request $request)
     {
         $validator = $this->productValidator($request->all());
@@ -235,6 +287,22 @@ class UserProductController extends Controller
         $date->minute = 0;
         $date->second = 0;
         return $date->addMonths($months);
+    }
+    private function getExpiredDateBack($months, $expired = 0){
+        if($months==0){
+            return null;
+        }
+        $now = Carbon::now('Asia/Taipei');
+        if($expired){
+            $expired_date = Carbon::parse($expired);
+            $date = $expired_date;
+        }else{
+            $date = $now;
+        }
+        $date->hour = 0;
+        $date->minute = 0;
+        $date->second = 0;
+        return $date->subMonths($months);
     }
     private function create_avatar($laboratory, $avatar){
         if($avatar){

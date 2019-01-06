@@ -214,6 +214,32 @@ class OrderController extends Controller
         }
         return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
     }
+    public function cancel(Request $request, $id)
+    {   
+        $order = $this->orderRepository->get($id);
+        if(!$order){
+            return $this->notFoundResponse();
+        }
+        if($order->status!=1){
+            return $this->failedResponse(['message'=>[trans('order.cancel_error')]]);
+        }
+        $user = $order->user;
+        if( $order->status==1){
+            $order_products = $order->products;
+            $product_data = [];
+            foreach ($order_products as $key => $product) {
+                if($product->pivot->unit_price>0){
+                    array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
+                }
+            }
+            if(count($product_data)>0){
+                $this->removeProducts($request, $user->id, $product_data);
+                $order = $this->orderRepository->update($id, ['status'=>5]);
+            }
+        }
+
+        return $this->successResponse($order?$order:[]);
+    }
     protected function orderValidator(array $data)
     {
         return Validator::make($data, [
@@ -249,6 +275,22 @@ class OrderController extends Controller
         $tokenRequest = $request->create(
             url('/user/products'),
             'post'
+        );
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);
+        $instance = Route::dispatch($tokenRequest);
+
+        return json_decode($instance->getContent(), true);
+    }
+    private function removeProducts($request, $user_id, $products){
+        $token = $this->clientCredentialsGrantToken($request);
+        $request->request->add([
+            'products' => $products,
+            'user_id' => $user_id,
+        ]);
+        $tokenRequest = $request->create(
+            url('/user/products/cancel'),
+            'put'
         );
         $tokenRequest->headers->set('Accept','application/json');
         $tokenRequest->headers->set('Authorization','Bearer '.$token['access_token']);

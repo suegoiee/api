@@ -37,7 +37,7 @@ class OrderController extends AdminController
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'actions'=>[],
-            'tabs'=>['status'=>[1,0]],
+            'tabs'=>['status'=>[1,0,5],'free'=>[0]],
             'query_string' => $query_string,
             'table_data' => $orders,
             'table_head' =>['no','user_nickname','user_email','price','status','created_at'],
@@ -78,5 +78,18 @@ class OrderController extends AdminController
         $instance = Route::dispatch($tokenRequest);
         $response_data = json_decode($instance->getContent(), true);
         return $this->adminResponse($request,$response_data);
+    }
+    public function cancel(Request $request, $id)
+    {
+        $tokenRequest = $request->create(
+            url('/user/'.str_plural($this->moduleName).'/'.$id.'/cancel'),
+            'put'
+        );
+        $tokenRequest->request->add($request->all());
+        $tokenRequest->headers->set('Accept','application/json');
+        $tokenRequest->headers->set('Authorization','Bearer '.isset($this->token['access_token'])? $this->token['access_token']:'');
+        $instance = Route::dispatch($tokenRequest);
+        $response_data = json_decode($instance->getContent(), true);
+        return redirect(url('/admin/'.str_plural($this->moduleName)));
     }
 }

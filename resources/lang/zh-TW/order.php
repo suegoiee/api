@@ -23,6 +23,7 @@ return [
         'status_2'=>'付款失敗',
         'status_3'=>'已取號',
         'status_4'=>'取號失敗',
+        'status_5'=>'已退訂',
         'free_0'=>'免付費',
     	'products' => '產品',
         'created_at' => '訂購日期',

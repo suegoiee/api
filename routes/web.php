@@ -163,10 +163,12 @@ Route::middleware(['client:product'])->group(function(){
 
 Route::middleware(['client:order'])->group(function(){
 	Route::put('/user/orders/{order}','OrderController@update')->name('orders.update');
+	Route::put('/user/orders/{order}/cancel','OrderController@cancel')->name('orders.cancel');
 });
 
 Route::middleware(['client:user-product'])->group(function(){
 	Route::post('/user/products','UserProductController@store')->name('user.products.store');
+	Route::put('/user/products/cancel','UserProductController@cancel')->name('user.products.cancel');
 	Route::put('/user/products/{product}','UserProductController@update')->name('user.products.update');
 	Route::delete('/user/products/{product}','UserProductController@destroy')->name('user.products.destroy');
 });
@@ -243,7 +245,8 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::delete('/users','Admin\UserController@destroy');
 	Route::resource('/users', 'Admin\UserController');
 
-	Route::get('/orders/{product}/delete','Admin\OrderController@destroy');
+	Route::get('/orders/{order}/delete','Admin\OrderController@destroy');
+	Route::get('/orders/{order}/cancel','Admin\OrderController@cancel');
 	Route::delete('/orders','Admin\OrderController@destroy');
 	Route::resource('/orders', 'Admin\OrderController');
 
