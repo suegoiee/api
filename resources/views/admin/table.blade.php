@@ -6,6 +6,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="table-options">
             <a class="dropdown-item" href="#" id="delete_action"><span class="oi oi-trash"></span> {{trans('table.delete_label')}}</a>
+            <a class="dropdown-item" href="#" id="export_action"><span class="oi oi-document"></span> {{trans('table.export_label')}}</a>
         </div>
     </div>
     @endif

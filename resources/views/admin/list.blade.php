@@ -35,6 +35,9 @@
 @section('javascript')
 <script src="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.js')}}"></script>
 <script src="{{asset('thirdparty/bootstrap-table/locale/bootstrap-table-zh-TW.min.js')}}"></script>
+<script src="{{asset('thirdparty/Blob.js/Blob.min.js')}}"></script>
+<script src="{{asset('thirdparty/tableExport/libs/FileSaver/FileSaver.min.js')}}"></script>
+<script src="{{asset('thirdparty/tableExport/tableExport.min.js')}}"></script>
 <script>
 var module_name = "{{str_plural($module_name)}}";
 $(function(){
@@ -50,7 +53,7 @@ $(function(){
                 $.ajax({
                     method: "DELETE",
                     url: url('/admin/'+module_name),
-                    data: {id:selections}
+                    data: {id:selections}  
                 }).done(function( result ) {
                     if(result.status=='success'){                        
                         $('#table').bootstrapTable('remove', {field: 'id', values: selections});
@@ -69,6 +72,18 @@ $(function(){
             return true;
         }
         return false;
+    });
+
+    $('#export_action').on('click',function(event){
+        var ignoreColumns = [];
+        $.each($('#table').bootstrapTable('getVisibleColumns'), function(index, value) {
+            if ($.isNumeric(value.field)) {
+                ignoreColumns.push(index);
+            }
+        });
+        //$('#table').bootstrapTable('togglePagination').bootstrapTable('collapseAllRows');
+        $('#table').tableExport({type:'csv', ignoreColumn: ignoreColumns });
+        //$('#table').bootstrapTable('togglePagination').bootstrapTable('expandAllRows');
     });
 });
 </script>
