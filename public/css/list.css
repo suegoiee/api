@@ -1,3 +1,10 @@
+#content{
+	min-height: 100%;
+    overflow: hidden;
+    width: 100%;
+    background-color: #d7dce1;
+    color: #32415d;
+}
 .pull-left{
 	float: left;
 }
@@ -10,29 +17,305 @@
 .actions span:hover{
 	color:#F44336;
 }
+.breadcrumb{
+	background-color: #EEF2F5; 
+}
+
+.breadcrumb .breadcrumb-item{
+	color: #32415d;
+	font-size: 17px;
+	padding-left: 10px;
+}
+.breadcrumb #bread{
+	color: #7d8d99;
+	font-size: 15.5px;
+}
 .breadcrumb .float-right{
 	margin-left: 5px;
 }
+.breadcrumb .active::before {
+    content: ">";
+}
+
 .pagination .page-number.active{
-	background-color: #BBDEFB;
 	border-radius:2px; 
-	//border-bottom:1px solid #000 ; 
+}
+
+#table-toolbar #date{
+	width: 50px;
+	font-size: 17px;
+	color:  #32415d;
+	padding: 0;
+	margin: -3px 0 0 23px;
+}
+#table-toolbar .dates{
+	width: 140px;
+	height: 32px;
+	border-radius: 5px;
+	font-size: 16.5px;
+	margin-top: -4px;
+	background: url(../images/caret-down.svg) no-repeat right;
+	background-size: 10px 10px;
+	background-position: 114px 12px;
+	color: #32415d;
+	text-align: left;
+	padding: 0 13px;
+}
+#table-toolbar .dates:hover{
+	background-color: #f0f0f0;
+}
+#table-toolbar #dates01{
+	margin-left: 10px;
+}
+#table-toolbar .btn{
+	width: 55px !important;
+	height: 32px;
+	font-size: 16.5px;
+	line-height: 10px;
+	background-color: #33609f;
+	color: #fff;
+	padding: 0;
+	margin-top: -3px;
+}
+#table-toolbar .btn:hover{
+	background-color: #427AC2;
+}
+
+.thead-type{
+	background-color: #32415d;
+	color: #fff;
+	font-size: 16px;
+}
+.thead-type .th-inner{
+	font-weight: normal;
+}
+.thead-type .th-inner:hover{
+	background-color: #427ac2;
+}
+
+.search .form-control{
+	width: 204px;
+	height: 32px;
+	margin: 6px 33px 0 0;
+	color: #7d8d99;
+	font-size: 16.5px;
+	padding-left: 13px;
 }
 
 .topArticle{
-	color: #FFF59D;
+	color: #FFF;
 	float:right;
 	text-shadow: 1px 1px 2px  #777;
 }
 .breadcrumb li{
 	margin-left:5px;
 }
-.table{
-	font-size:14px;
+	#content .card{
+		margin-top: 20px;
+	}
+	.sidebar .text{
+		font-size: 13px;
+		margin-left: 0;
+	}
 }
-th{
-	max-width: 120px;
+
+@media (max-width: 512px){
+	.breadcrumb{
+		padding: 0;
+		margin: 0 0 10px;
+	}
+	.breadcrumb li i{
+		font-size: 16px;
+	}
+	.breadcrumb li span{
+		font-size: 16px;
+	}
+	#table-toolbar .input-group{
+		margin-bottom: 0;
+	}
+	.bs-bars{
+		height: 50px;
+	}
+	#table-toolbar .line{
+		margin-top: 3px;
+	}
+	
 }
-td{
-	word-break: break-all;
+/* I5.SE.Galasy5S 樣式 */
+@media (min-width: 320px) and (max-width: 374px){
+	/* 日期查詢 */
+	#table-toolbar #date{
+		margin: 0 1%;
+		width: 20%;
+		font-size: 0.9rem;
+	}
+	#table-toolbar .dates{
+		background-position: 98% 60%;
+		width: 50%;
+		height: 30px;
+		padding: 0 2px;
+		font-size: 0.6rem;
+		margin-top: 3px;
+		margin-left: 0px !important;
+	}
+	#table-toolbar .btn{
+		margin-left: 0 !important;
+		font-size: 0.8rem;
+		width: 30% !important;
+		margin-top: 3px;
+	}
+	.search .form-control{
+		margin: 0!important;
+	 	width: 100%;
+	 	height:5%;
+		font-size: 0.9rem;
+	 }
+	/* 選擇顯示多少數據 */
+	div .pagination-info{
+		font-size: 0.7rem!important;
+		float: right;
+		margin: 0 !important;
+	}
+	div .page-list{
+		font-size: 0.7rem !important;
+		float: right;
+		margin: 0 !important;
+	}
+	.btn-group .btn{
+     	font-size: 0.6rem;
+    	padding: 15% !important;
+     }
+     /* 分頁 */
+    .pagination{
+    	padding-left: 0!important;
+    }
+	ul .page-item{
+        font-size: 0.5rem;
+    }
+    ul .page-link{
+    	width: 31px;
+    	height: 30px;
+    	padding: 10px 2px 10px 8px;
+    }
+     ul .page-link span{
+     	padding-top: 2px;
+     }
+}
+/* I6.7.8.X 樣式 */
+@media (min-width: 375px) and (max-width: 413px) {
+	/* 日期查詢 */
+	#table-toolbar #date{
+		margin: 1% 2%;
+		width: 40%;
+		font-size: 0.9rem;
+	}
+	#table-toolbar .dates{
+		background-position: 98% 60%;
+		width: 70%;
+		height: 30px;
+		padding: 0 5px;
+		font-size: 0.7rem;
+		margin-top: 3px !important;
+	}
+	#table-toolbar #dates01{
+		margin-left: 0 !important;
+	}
+	#table-toolbar .btn{
+		font-size: 0.9rem;
+		width: 40% !important;
+		margin-top: 3px;
+	}
+	.search .form-control{
+	 	margin: 0!important;
+	 	width: 100%;
+	 	height: 30px;
+	}
+	/* 選擇顯示多少數據 */
+	div .pagination-info{
+		font-size: 0.9rem!important;
+		float: right;
+		margin: 0 !important;
+	}
+	div .page-list{
+		font-size: 0.9rem!important;
+		float: right;
+		margin: 0 !important;
+	}
+	.btn-group .btn{
+     	font-size: 0.8rem;
+    	padding: 15% 20% !important;
+     }
+	/* 分頁 */  
+	.pagination{
+		padding-left: 0px !important;
+	}
+	ul .page-item{
+        font-size: 0.8rem;
+    }
+    ul .page-link{
+    	width: 37px;
+    	height: 30px;
+    	padding: 11px 3px 11px 12px;
+    }
+     ul .page-link span{
+     	padding-top: 2px;
+     }
+}
+/* I6.7.8plus */
+
+@media (min-width: 414px) and (max-width: 511px) {
+	/* 日期查詢 */
+	#table-toolbar #date{
+		margin: 1% 2%;
+		width: 40%;
+	}
+	#table-toolbar .dates{
+		background-position: 98% 60%;
+		width: 75%;
+		height: 30px;
+		padding: 0 5px;
+		font-size: 0.9rem;
+		margin-top: 3px !important;
+		margin-left: 0!important;
+	}
+	#table-toolbar #dates01{
+		margin-left: 0 !important;
+	}
+	#table-toolbar .btn{
+		width: 40% !important;
+		margin-top: 3px;
+	}
+	.search .form-control{
+	 	margin: 0!important;
+	 	width: 100%;
+	 	height:5%;
+	 }
+	 /* 選擇顯示多少數據 */
+	div .pagination-info{
+		float: right;
+		margin: 0 !important;
+	}
+	div .page-list{
+		float: right;
+		margin: 0 !important;
+	}
+	.btn-group .btn{
+     	font-size: 0.9rem;
+    	padding: 15% 20% !important;
+     }
+     /* 分頁 */ 
+     .pagination{
+		padding-left: 0px !important;
+	}
+	ul .page-item{
+        font-size: 0.8rem;
+    }
+    ul .page-link{
+    	width: 41px;
+    	height: 30px;
+    	padding: 10px 3px 10px 14px;
+    }
+     ul .page-link span{
+     	padding-top: 2px;
+     }
 }

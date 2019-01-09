@@ -7,9 +7,39 @@
 #content .row{
 	margin-bottom: 5px;
 }
+.container #con{
+	background-color: #32415d;
+	color: #fff;
+}
+.container .info{
+    color: #20366b;
+}
+
+table .send{
+	background-color: #32415d;
+    font-size: 18px;
+    color: #fff;
+}
+table tbody tr{
+    color: #20366b;
+}
+
 .detail_table tr >td{
     text-align: right;
 }
 .detail_table tr:not(.bg-light) > th{
     padding-left: 2rem;
+}
+
+.container #title{
+    color: #AB0A27;
+}
+
+@media(max-width: 1024px){
+    #content .container{
+        margin-top: 0!important;
+    }
+    .breadcrumb span{
+        font-size: 15px !important;
+    }
 }

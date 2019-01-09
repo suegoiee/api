@@ -1,39 +1,31 @@
 <nav class="sidebar">
-    <ul class="list-unstyled main-menu">
-        <li>
-            <a href="#order_list" data-toggle="collapse" aria-expanded="false">
+    <ul class="list-unstyled list-group list-group-flush main-menu" >
+        <li id="bor" class="list-group-item list-group-item-action">
+            <a class="hov title" href="#order_list" data-toggle="collapse" aria-expanded="false">
+                <i class="far fa-list-alt pr-1"></i>
                 {{trans('analyst.menu_title')}}
             </a>
-            <ul class="collapse list-unstyled" id="order_list">
+            <ul id="order_list" class="list list-unstyled collapse">
                 <li>
-                    <a href="{{url('/analyst/orders')}}">
-                        <span class="oi oi-clipboard"></span>
-                        <span class="text">{{trans('analyst.detail_title')}}</span>
+                    <a class="hov subtitle1" href="{{url('/analyst/orders')}}">
+                        <span class="text" aria-expanded="false">{{trans('analyst.detail_title')}}</span>
+                    </a>
+                    <a class="hov subtitle2" href="{{url('/analyst/grants')}}">
+                        <span class="text" aria-expanded="false">{{trans('analyst.grant_title')}}</span>
                     </a>
                 </li>
-                <li><a href="{{url('/analyst/grants')}}">
-                        <span class="oi oi-dollar"></span>
-                        <span class="text">{{trans('analyst.grant_title')}}</span>
-                    </a></li>
             </ul>
         </li>
-        <li>
-            <a href="#promocode_list" data-toggle="collapse" aria-expanded="false">
-                {{trans('analyst.menu_promocode_title')}}
-            </a>
-            <ul class="collapse list-unstyled" id="promocode_list">
-                <li>
-                    <a href="{{url('/analyst/promocodes')}}">
-                        <span class="oi oi-bullhorn"></span>
-                        <span class="text">{{trans('analyst.detail_promocode_title')}}</span>
-                    </a>
-                </li>
-            </ul>
+        <li class="list-group-item list-group-item-action" id="bor">
+            <a class="hov title" href="{{url('/analyst/promocodes')}}" aria-expanded="false">
+                <i class="fa fa-comment-dollar pr-1"></i>
+                {{trans('analyst.detail_promocode_title')}}
+            </a>   
         </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">
     <button class="navbar-toggler" type="button" id="sidebarToggle" aria-expanded="false">
-       <span class="oi oi-menu"></span>
+       <i class="fa fa-clipboard"></i>
     </button>
 </div>

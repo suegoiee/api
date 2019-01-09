@@ -21,28 +21,46 @@ a, a:hover, a:focus {
 .wrapper >*{
     padding-top: 3.5rem !important;
 }
-#content {
-    min-height: 100%;
-    padding-bottom: 74px;
-}
+
 .breadcrumb .breadcrumb-item{
     line-height: 1.25;
     padding: .5rem 0;
     font-size: 1rem;
 }
-footer{
-	width:  100%;
-	background-color: #f5f5f5;
-    text-align:left;
-    padding-top: 50px;
-    position: relative;
-    z-index: 2;
-}
-footer .author{
-    font-size: 10px;
-}
-@media (max-width: 768px) {
-    footer{
-        text-align: center;
+
+
+@media (max-width: 512px) {
+    nav #bars{
+        color: #fff;
+    }
+    nav .navbar-toggler{
+        border: none !important;
+    }
+    nav .nav-link{
+        color: black !important;
+    }
+    .breadcrumb{
+        margin-top: 20px;
+    }
+    .pagination-detail{
+        font-size: 15px;
+    }
+    #tool_form .input-group{
+        max-height: 50px;
+        margin-bottom: 50px;
+        vertical-align: middle;
+    }
+    #content #con{
+        font-size: 24px;
+    }
+    .container #title{
+        font-size: 21px;
+    }
+    .container th{
+        white-space: nowrap;
+        text-align: left;
+    }
+    .container .info{
+        font-size: 14px;
     }
 }
