@@ -7,14 +7,15 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Uanalyze Analyst</title>
+    <title>優分析達人後台</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4/css/bootstrap.min.css')}}" >
-    <link rel="stylesheet" href="{{asset('thirdparty/open-iconic/font/css/open-iconic-bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/layout.css')}}">
-    <link rel="stylesheet" href="{{asset('css/sidebar.css')}}">
-    <link rel="stylesheet" href="{{asset('css/analyst.css')}}">
+    <link rel="stylesheet" href="{{asset('../thirdparty/bootstrap4/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('../css/layout.css')}}">
+    <link rel="stylesheet" href="{{asset('../css/sidebar.css')}}">
+    <link rel="stylesheet" href="{{asset('../css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
 	@yield('css_file')  
     <!-- Scripts -->
    
@@ -33,10 +34,12 @@
     </script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
-		<a class="navbar-brand" href="{{ url('/analyst') }}">Uanalyze Analyst</a>
+	<nav class="navbar navbar-expand-md navbar-light fixed-top">
+		<a class="navbar-brand" href="{{ url('/analyst') }}">
+			<img src="{{asset('images/LOGO.svg')}}">
+		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
+			<i class="fas fa-bars" id="bars"></i>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarCollapse">
 			<ul class="navbar-nav mr-auto">
@@ -46,12 +49,16 @@
                 @if (Auth::guard('analyst')->check())
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                           <span class="oi oi-person"></span> {{Auth::guard('analyst')->user()->name }}<span class="caret"></span>
+                           <i class="fa fa-user"></i>  
+                           	{{Auth::guard('analyst')->user()->name }}
+                           	<span class="caret"></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <div class="dropdown-menu bg-dark dropdown-menu-right" role="menu">
                         	<a class="dropdown-item" href="#" onclick="event.preventDefault();
                                                          document.getElementById('logout-form').submit();">
-                                <span class="glyphicon glyphicon-off"></span> {{trans('auth.logout')}}
+                                <span class="glyphicon glyphicon-off"></span> 
+                                	{{trans('auth.logout')}}   
+                                <i class="fa fa-sign-out-alt"></i>
                             </a>
                             <form id="logout-form" action="{{ url('/analyst/logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}
@@ -73,14 +80,9 @@
 			@include('analyst.layouts.sidebar')
 		@endif
         <div id="content">
-            <div class="px-4 pt-4 h-100">
+            <div class="px-4 py-4">
                 @yield('content')
             </div>
-            <footer class="footer">
-                <div class="container-fluid ">
-                    <span class="text-muted author">Version 0.1.0 . Copyright © 2017. All rights reserved.</span>
-                </div>
-            </footer>
         </div>
 	</div>
     <!-- Scripts -->

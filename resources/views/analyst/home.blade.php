@@ -1,8 +1,9 @@
 @extends('analyst.layouts.app')
 @section('css_file')
-    <link rel="stylesheet" href="{{asset('css/home.css')}}">
-    <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
+    <link rel="stylesheet" href="{{asset('../css/home.css')}}">
+    <link rel="stylesheet" href="{{asset('../css/dashboard.css')}}">
 @endsection
+
 @section('content')
     @include('analyst.dashboard.counter')
     @include('analyst.dashboard.panel')
