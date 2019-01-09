@@ -49,10 +49,7 @@
             {{ csrf_field() }}
             <div class="row" style="padding-top: 1rem">
                 <div class="col-md-12 text-center">
-                    <button type="submit" class="btn col-4">
-                        {{trans('analyst.auth.login')}} 
-                        <i class="fa fa-sign-in-alt"></i>
-                    </button>
+                    <button type="submit" class="btn btn-info col-4"><i class="fa fa-sign-in"></i> {{trans('analyst.auth.login')}}</button>
                 </div>
             </div>
         </form>

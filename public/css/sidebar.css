@@ -1,85 +1,55 @@
-.navbar{
-    background-color: #32415d;
-    height: 56px;
-}
-.navbar .navbar-brand{
-    margin: 0;
-    padding-left: 6px;
-    line-height: 1.8rem;
-}
-
-.navbar .nav .nav-item .nav-link{
+.sidebar {
+    min-width: 200px;
+    max-width: 200px;
+    background: #424242;
     color: #fff;
-}
-.navbar .nav .nav-item a{
-    text-align: center;
-}
-.navbar .nav .dropdown-menu{
-    min-width: 80px; 
-}
-.navbar .nav .dropdown-menu .dropdown-item{
-    color: #fff;
-}
-.navbar .nav .dropdown-menu .dropdown-item:hover{
-    color: black;
-}
-.sidebar{
-    background-color: #fff;
-    min-width: 250px;
-    max-width: 250px;
     position: relative;
     z-index:1;
-    transition: margin-left 0.3s;
+    transition: margin-left 0.3s
 }
-.sidebar .active{
-    min-width: 250px;
-    max-width: 250px
+
+.sidebar.active {
+    min-width: 200px;
+    max-width: 200px;
+    text-align: center;
 }
-.sidebar #bor{
-    border-bottom: 1px solid #dfdfdf;
-}
-.sidebar i{
-    margin-left: 25px;
-}
-.sidebar .title{
-    padding: 22px 0;
-}
-.sidebar .text{
-    margin-left: 50px;
-}
-.sidebar ul li{
-    padding: 0;
-}
-.sidebar ul li:hover{
-    background-color: #fff;
-}
-.sidebar ul li a{
-    font-size: 17px;
+
+.sidebar ul li a {
+    padding:10px;
+    font-size: 1.1em;
     display: block;
-    color: #32415d;
+    text-align: left;
+
 }
-.sidebar #order_list{
-    margin: 9px 0;
-}
-.sidebar ul li .subtitle1{
-    padding: 13px 0 11px 0;
-}
-.sidebar ul li .subtitle2{
-    padding: 11px 0 13px 0;
-}
-.sidebar ul li .hov:hover {
-    background-color: #f0f0f0;
-    color: #000;
+.sidebar ul li a:hover {
+    color: #757575;
+    background: #fff;
 }
 
-.sidebar ul li a.active > a, .sidebar a[aria-expanded="true"] {
-    color: #1e68cd;
-    background-color: #fff;
-    border-bottom: 1px solid #dfdfdf;
+.sidebar.active ul li a {
+    padding: 20px 10px;
+    text-align: left;
+    font-size: 1.1em;
+}
+.sidebar ul ul li a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #616161;
 }
 
+.sidebar.active ul ul li a {
+    padding: 20px 10px !important;
+    padding-left: 30px !important;
+    text-align: left;
+    font-size: 1.1em;
+}
 
-.sidebar .active a::before{
+.sidebar ul li.active > a, .sidebar a[aria-expanded="true"] {
+    color: #fff;
+    background: #212121;
+}
+
+.sidebar.active a::before{
     top: auto;
     bottom: 5px;
     right: 50%;
@@ -88,6 +58,10 @@
     transform: translateX(50%);
 }
 
+.sidebar ul.main-menu {
+    padding: 10px 0;
+    //border-bottom: 1px solid #616161;
+}
 .sidebar-toggler{
     margin:0;
     z-index: 1;
@@ -106,6 +80,7 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     cursor: pointer;
+
     transition: margin-left 0.3s;
 }
 
@@ -117,21 +92,33 @@
         text-align: center;
         margin-left: -80px !important ;
     }
+
     .sidebar.active {
         min-width: 80px;
         max-width: 80px;
         margin-left: 0 !important;
     }
-    #content .card{
-        margin-top: 20px;
+
+    .sidebar ul li a {
+        padding: 10px;
     }
-    .sidebar .text{
-        font-size: 13px;
-        margin-left: 0;
+    .sidebar.active ul li a {
+        padding: 10px;
+        font-size: 1.2em;
+        text-align: center;
     }
-    .sidebar ul li .pr-1{
-        font-size: 16.5px;
-        margin: 0 0 0 5px; 
+    .sidebar ul li a span.text {
+        display: none;
+    }
+    
+
+    .sidebar ul ul li a {
+        padding: 10px !important;
+    }
+    .sidebar.active ul ul li a {
+        padding: 10px !important;
+        text-align: center;
+        font-size: 0.85em;
     }
     .sidebar-toggler{
         display: block;
@@ -140,21 +127,4 @@
     #sidebarToggle[aria-expanded="true"]{
         margin-left:80px;
     }
-}
-@media (max-width: 512px){
-    .hov.active{
-        color: #1e68cd;
-        background-color: #fff;
-    }
-    .sidebar .text{
-        font-size: 12px;
-        margin: 0;
-        color: #32415d;
-    }
-    .sidebar .subtitle1{
-        padding: 5px 0 5px !important;
-    }
-    .sidebar .subtitle2{
-        padding: 5px 0 !important;
-    } 
 }

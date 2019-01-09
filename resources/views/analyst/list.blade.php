@@ -1,37 +1,24 @@
 @extends('analyst.layouts.app')
 @section('css_file')
-    <link rel="stylesheet" href="{{asset('../css/list.css')}}">
-    <link rel="stylesheet" href="{{asset('../thirdparty/bootstrap-table/bootstrap-table.min.css')}}">
-    <link rel="stylesheet" href="{{asset('../thirdparty/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/list.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}">
 @endsection
 @section('content')
-<div class="card">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item" id="bread">
-            <span class="">{{trans($module_name.'.analyst.menu_title')}}</span>
-        </li>
-        <li class="breadcrumb-item active">
-            <span class="">{{trans($module_name.'.analyst.'.$subtitle.'_title')}}</span>
-        </li>
+        <li class="breadcrumb-item"><span class="">{{trans($module_name.'.analyst.menu_title')}}</span></li>
+        <li class="breadcrumb-item active"><span class="">{{trans($module_name.'.analyst.'.$subtitle.'_title')}}</span></li>
         @if(@in_array('new',$actions))
-            <li class="float-right">
-                <a href="{{url('/analyst/'.str_plural($module_name).'/create')}}" class="btn btn-info">{{trans($module_name.'.analyst.new_label')}}</a>
-            </li>
+            <li class="float-right"><a href="{{url('/analyst/'.str_plural($module_name).'/create')}}" class="btn btn-info" >{{trans($module_name.'.analyst.new_label')}}</a></li>
         @endif
         @if(@in_array('import',$actions))
-            <li class="float-right">
-                <a href="{{url('/analyst/'.str_plural($module_name).'/import')}}" id="import" class="btn btn-info" >{{trans($module_name.'.analyst.import_label')}}</a>
-            </li>
+            <li class="float-right"><a href="{{url('/analyst/'.str_plural($module_name).'/import')}}" id="import" class="btn btn-info" >{{trans($module_name.'.analyst.import_label')}}</a></li>
         @endif
         @if(@in_array('assigned',$actions))
-            <li class="float-right">
-                <a href="{{url('/analyst/'.str_plural($module_name).'/assigned')}}" id="assigned" class="btn btn-primary" >{{trans($module_name.'.analyst.assigned_label')}}</a>
-            </li>
+            <li class="float-right"><a href="{{url('/analyst/'.str_plural($module_name).'/assigned')}}" id="assigned" class="btn btn-primary" >{{trans($module_name.'.analyst.assigned_label')}}</a></li>
         @endif
         @if(@in_array('sorted',$actions))
-            <li class="float-right">
-                <a href="{{url('/analyst/'.str_plural($module_name).'/sorted')}}" id="sorted" class="btn btn-success" >{{trans($module_name.'.analyst.sorted_label')}}</a>
-            </li>
+            <li class="float-right"><a href="{{url('/analyst/'.str_plural($module_name).'/sorted')}}" id="sorted" class="btn btn-success" >{{trans($module_name.'.analyst.sorted_label')}}</a></li>
         @endif
     </ol>
     @include('analyst.list_error')
@@ -39,17 +26,14 @@
         <ul class="nav nav-tabs" role="tablist">
             @foreach($tabs as $key => $tab)
                 @foreach($tab as $value)
-                    <li class="nav-item" role="presentation" >
-                        <a class="nav-link {!! isset($query_string[$key]) && $query_string[$key] == $value? 'active':'' !!}"  href="{{url('/analyst/'.str_plural($module_name).'?'.$key.'='.$value)}}" >{{trans($module_name.'.analyst.'.$key.'_'.$value)}}
-                        </a>
-                    </li>
+                    <li class="nav-item" role="presentation" ><a class="nav-link {!! isset($query_string[$key]) && $query_string[$key] == $value? 'active':'' !!}"  href="{{url('/analyst/'.str_plural($module_name).'?'.$key.'='.$value)}}"  >{{trans($module_name.'.analyst.'.$key.'_'.$value)}}</a></li>
                 @endforeach
             @endforeach
         </ul>
     @endif
     @include('analyst.table')
 @endsection
-</div>
+
 @section('javascript')
 <script src="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.js')}}"></script>
 <script src="{{asset('thirdparty/bootstrap-table/locale/bootstrap-table-zh-TW.min.js')}}"></script>
