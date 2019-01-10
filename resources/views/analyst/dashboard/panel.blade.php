@@ -1,7 +1,12 @@
 <div class="row">
-	<div class="panel">
-		<h3 class="">{{trans('analyst.dashboard.account_title')}}</h3>
-		<div class="pull-left price_label">{{trans('analyst.dashboard.sales_amount_title')}}</div>
-		<div class="pull-right"><span class="price">{{ number_format($sales_amounts)}}</span> <span class="doller">{{trans('analyst.dashboard.doller')}}</span></div>
+	<div class="card text-center" id="card-2">
+		<h3 class="card-header">{{trans('analyst.dashboard.account_title')}}</h3>
+		
+		<div class="card-body">
+			<span class="number">{{ number_format($sales_amounts)}}</span> 
+			<span class="doller">{{trans('analyst.dashboard.doller')}}</span>
+			<div class=" price_label">({{trans('analyst.dashboard.sales_amount_title')}})</div>
+		</div>
+		
 	</div>
 </div>
