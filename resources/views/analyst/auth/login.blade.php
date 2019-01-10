@@ -1,6 +1,6 @@
 @extends('analyst.layouts.app')
 @section('css_file')
-    <link rel="stylesheet" href="{{asset('css/home.css')}}">
+    <link rel="stylesheet" href="{{asset('css/analyst/home.css')}}">
 @endsection
 @section('content')
     <form class="form-horizontal" role="form" method="POST" action="{{url('/analyst/login')}}">

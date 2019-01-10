@@ -1,0 +1,66 @@
+body, html{  
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100%;
+    font-family: "Microsoft JhengHei","Heiti TC","WenQuanYi Zen Hei",Arial,sans-serif;
+    width: 100%;
+}
+
+a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.wrapper{
+	display: flex;
+    align-items: stretch;
+    //height: 100%;
+    min-height: 100%;
+}
+.wrapper >*{
+    padding-top: 3.5rem !important;
+}
+
+.breadcrumb .breadcrumb-item{
+    line-height: 1.25;
+    padding: .5rem 0;
+    font-size: 1rem;
+}
+
+
+@media (max-width: 512px) {
+    nav #bars{
+        color: #fff;
+    }
+    nav .navbar-toggler{
+        border: none !important;
+    }
+    nav .nav-link{
+        color: black !important;
+    }
+    .breadcrumb{
+        margin-top: 20px;
+    }
+    .pagination-detail{
+        font-size: 15px;
+    }
+    #tool_form .input-group{
+        max-height: 50px;
+        margin-bottom: 50px;
+        vertical-align: middle;
+    }
+    #content #con{
+        font-size: 24px;
+    }
+    .container #title{
+        font-size: 21px;
+    }
+    .container th{
+        white-space: nowrap;
+        text-align: left;
+    }
+    .container .info{
+        font-size: 14px;
+    }
+}

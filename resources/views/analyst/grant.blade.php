@@ -1,7 +1,7 @@
 @extends('analyst.layouts.app')
 @section('css_file')
-    <link rel="stylesheet" href="{{asset('css/list.css')}}">
-    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/analyst/list.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-table/analyst/bootstrap-table.min.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/grant.css')}}">
 @endsection
