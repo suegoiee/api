@@ -4,45 +4,15 @@
 #content .form-horizontal{
 	width: 900px;
 	height: 600px;
-}
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+} 
 #content .form-horizontal .btn{
 	background-color: #32415d;
 	color: #fff;
 }
-/* I5.SE.Galasy5S 樣式 */
-@media (min-width: 320px) and (max-width: 374px){
-	#content .row{
-		margin-left: 8% !important;
-	}
-}
-/* I6.7.8.X 樣式 */
-@media (min-width: 375px) and (max-width: 413px){
-	#content .row{
-		margin-left: 12% !important;
-	}
-}
-@media (min-width: 414px) and (max-width: 511px){
-	#content .row{
-		margin-left: 15% !important;
-	}
-}
 
-@media (max-width: 512px) {
-	#content .card{
-		margin-top: 15px;
-	    width: 265px !important;
-	    height: 80%;
-	}
-}
-@media(max-width: 768px){
-	#content .card-body{
-		font-size: 60px !important;
-	}
-}
-@media(min-width: 1200px){
-	#content .form-horizontal{
-		position: absolute;
-		left: 30%;
-		top: 20%;
-	}
-}
+
+
