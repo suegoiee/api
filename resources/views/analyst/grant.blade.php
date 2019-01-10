@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{asset('css/analyst/list.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-table/analyst/bootstrap-table.min.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/grant.css')}}">
+    <link rel="stylesheet" href="{{asset('css/analyst/grant.css')}}">
 @endsection
 @section('content')
 <div class="card">
