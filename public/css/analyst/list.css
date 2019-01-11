@@ -28,7 +28,7 @@
 	margin: -3px 0 0 23px;
 }
 #table-toolbar .dates{
-	width: 15%;
+	width: 10%;
 	height: 32px;
 	border-radius: 5px;
 	font-size: 16.5px;
@@ -38,7 +38,7 @@
 	background-position: 95% 55%;
 	color: #32415d;
 	text-align: left;
-	padding-left: 2%;
+	padding: 0 0 0 5%;
 }
 #table-toolbar .line{
 	margin-top: -5px;
@@ -142,6 +142,9 @@
 		margin-left: 0 !important;
 		font-size: 0.8rem;
 	}
+	.search{
+		margin-top: 0px !important;
+	}
 	/* 底部顯示多少數據 */
 	.pagination-info{
 		float: right;
@@ -167,7 +170,10 @@
 	}
 	.page-item{
 		width: 11%;
-		font-size: 0.7rem;
+		font-size: 0.4rem;
+	}
+	.page-link{
+		padding: 8px 0 8px 35% !important;
 	}
 	
 }

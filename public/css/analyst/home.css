@@ -2,9 +2,8 @@
   color:#FFF;
 }
 #content .form-horizontal{
-	width: 900px;
-	height: 600px;
-	position: absolute;
+	width: 80%;
+	min-height: 100%;
 	margin: auto;
 	left: 0;
 	right: 0;
@@ -13,6 +12,5 @@
 	background-color: #32415d;
 	color: #fff;
 }
-
 
 

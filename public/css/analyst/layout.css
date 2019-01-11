@@ -6,7 +6,13 @@ body, html{
     font-family: "Microsoft JhengHei","Heiti TC","WenQuanYi Zen Hei",Arial,sans-serif;
     width: 100%;
 }
-
+#content{
+    min-height: 100%;
+    overflow: hidden;
+    width: 100%;
+    background-color: #d7dce1;
+    color: #32415d;
+}
 a, a:hover, a:focus {
     color: inherit;
     text-decoration: none;
@@ -28,6 +34,9 @@ a, a:hover, a:focus {
     font-size: 1rem;
 }
 
+.pagination-info{
+    margin-right: 30px !important;
+}
 
 @media (max-width: 512px) {
     nav #bars{
