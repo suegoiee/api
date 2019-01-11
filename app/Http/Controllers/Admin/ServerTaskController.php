@@ -140,16 +140,24 @@ class ServerTaskController extends AdminController
                 $collection_sort = $collection_product->pivot->sort;
                 $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
                 }
-        for ($i=0; $i <50 ; $i++) {
+        for ($i=0; $i <10 ; $i++) {
             $email = '88801130'.($i+1).'@guest.com';
             $user = User::where('email',$email)->first();
             if(!$user){
                 $user = User::create([
                     'email'=>'88801130'.($i+1).'@guest.com',
-                    'nickname' => 'Guest',
                     'password' => Hash::make('888888'),
                     'mail_verified_at' => date('Y-m-d H:i:s'),
                 ]);
+            }else{
+                $user->update([
+                    'email'=>'8880113'.str_pad(($i+1),2,"0",STR_PAD_LEFT).'@guest.com',
+                    'mail_verified_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+            $profile = $user->profile;
+            if(!$profile){
+                $user->profile()->create(['nickname'=>'Guest']);
             }
             $user->products()->sync([$product->id => ['deadline'=>'2019-01-13 17:00:00','installed'=>1]]);
             $laboratory = $user->laboratories()->where('collection_product_id',$product->id)->first();
