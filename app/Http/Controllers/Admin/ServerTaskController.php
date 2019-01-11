@@ -10,6 +10,7 @@ use App\Repositories\PromocodeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use Illuminate\Http\File;
 use Storage;
 use App\Traits\ImageStorage;
 use Illuminate\Support\Facades\Hash;
