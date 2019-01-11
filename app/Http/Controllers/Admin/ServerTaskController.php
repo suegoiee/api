@@ -9,9 +9,14 @@ use App\Repositories\StockRepository;
 use App\Repositories\PromocodeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\User;
+use Storage;
+use App\Traits\ImageStorage;
+use Illuminate\Support\Facades\Hash;
 
 class ServerTaskController extends AdminController
 {	
+    use ImageStorage;
     public function __construct()
     {
 
@@ -125,5 +130,44 @@ class ServerTaskController extends AdminController
                $promocode->products()->sync(69);
             }
         }
+    }
+    public function seedUsers(ProductRepository $productRepository)
+    {
+        $product = $productRepository->get(69);
+        $collections_ids = [];
+        foreach ($product->collections as $key => $collection_product) {
+                $collection_sort = $collection_product->pivot->sort;
+                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                }
+        for ($i=0; $i <5 ; $i++) {
+            $email = '88801130'.($i+1).'@guest.com';
+            $user = User::where('email',$email)->first();
+            if(!$user){
+                $user = User::create([
+                    'email'=>'88801130'.($i+1).'@guest.com',
+                    'nickname' => 'Guest',
+                    'password' => Hash::make('888888'),
+                ]);
+            }
+            $user->products()->sync([$product->id => ['deadline'=>'2019-01-13 17:00:00','installed'=>1]]);
+            $laboratory = $user->laboratories()->where('collection_product_id',$product->id)->first();
+            if($laboratory){
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0, 'collection_product_id' => $product->id]);
+                $this->create_avatar($laboratory, $product->avatar_small);
+            }
+            $laboratory->products()->sync($collections_ids);
+            echo $email.' '.json_encode($laboratory).' '.'<br>';
+        }
+    }
+    private function create_avatar($laboratory, $avatar){
+        if($avatar){
+            if(Storage::disk('public')->exists($avatar->path)){
+                $contents = new File(storage_path('app/public/'.$avatar->path));
+                $path = $this->createAvatar($contents, $laboratory->id, 'laboratories');
+                $data = ['path' => $path,'type'=>'normal'];
+                return $laboratory->avatars()->create($data);
+            }
+        }
+        return false;
     }
 }
