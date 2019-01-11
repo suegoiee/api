@@ -6,12 +6,12 @@
     <form class="form-horizontal" role="form" method="POST" action="{{url('/admin/login')}}">
         <div class="row">
             <div class="col-md-3"></div>
-                <div class="col-md-6">
+            <div class="col-md-6">
                     <h2>{{trans('auth.login_title')}}</h2>
                     <hr>
-                </div>
             </div>
-            <div class="row">
+        </div>
+        <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <div class="form-group has-danger">
@@ -27,8 +27,8 @@
                         </span>
                     </div>
                 </div>
-            </div>
-            <div class="row">
+        </div>
+        <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -45,14 +45,14 @@
                         </span>
                     </div>
                 </div>
-            </div>
-            {{ csrf_field() }}
-            <div class="row" style="padding-top: 1rem">
+        </div>
+        {{ csrf_field() }}
+        <div class="row" style="padding-top: 1rem">
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-info col-4"><i class="fa fa-sign-in"></i> {{trans('auth.login')}}</button>
                 </div>
-            </div>
-        </form>
+        </div>
+    </form>
 
 @endsection
 
