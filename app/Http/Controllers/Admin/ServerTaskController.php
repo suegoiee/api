@@ -140,7 +140,7 @@ class ServerTaskController extends AdminController
                 $collection_sort = $collection_product->pivot->sort;
                 $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
                 }
-        for ($i=0; $i <10 ; $i++) {
+        for ($i=11; $i <50 ; $i++) {
             $email = '88801130'.($i+1).'@guest.com';
             $user = User::where('email',$email)->first();
             if(!$user){
