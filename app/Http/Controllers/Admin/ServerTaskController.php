@@ -131,7 +131,7 @@ class ServerTaskController extends AdminController
             }
         }
     }
-    public function seedUsers(ProductRepository $productRepository)
+    public function seedUsers(Request $requset, ProductRepository $productRepository)
     {
         $product = $productRepository->get(69);
         $collections_ids = [];
@@ -147,11 +147,12 @@ class ServerTaskController extends AdminController
                     'email'=>'88801130'.($i+1).'@guest.com',
                     'nickname' => 'Guest',
                     'password' => Hash::make('888888'),
+                    'mail_verified_at' => date('Y-m-d H:i:s'),
                 ]);
             }
             $user->products()->sync([$product->id => ['deadline'=>'2019-01-13 17:00:00','installed'=>1]]);
             $laboratory = $user->laboratories()->where('collection_product_id',$product->id)->first();
-            if($laboratory){
+            if(!$laboratory){
                 $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0, 'collection_product_id' => $product->id]);
                 $this->create_avatar($laboratory, $product->avatar_small);
             }
