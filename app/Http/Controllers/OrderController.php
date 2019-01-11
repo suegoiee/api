@@ -423,7 +423,7 @@ class OrderController extends Controller
         $user = $request->user();
         $products = $request->input('products',[]);
         foreach ($products as $key => $product_id) {
-            $product = $this->productRepository->get($product_id);
+            $product = $this->productRepository->get($product_id['id']);
             if(!$product){
                  return $this->failedResponse(['message'=>['The selected products is invalid.']]);
             }
@@ -470,7 +470,8 @@ class OrderController extends Controller
     }
     function getOrderTrail($user, $products, $promocode_codes)
     {
-        $product_ids = collect($products)->map(function($item, $key){return $item['id'];})->toArray();
+        $products_data = collect($products);
+        $product_ids = $products_data->map(function($item, $key){return $item['id'];})->toArray();
         $product_offers = [];
         $product_promocodes = [];
         $order_promocodes = [];
@@ -493,6 +494,8 @@ class OrderController extends Controller
                     $result['promocodes'][$promocode_code]=[ 'msg' => 'Expired','error'=>3];
                 }else if( $promocode->specific==1 && $promocode->products()->whereIn('id',$product_ids)->count()==0){
                     $result['promocodes'][$promocode_code]=[ 'msg' => 'Not match','error'=>4];
+                }else if( $promocode->specific==1 && $promocode->retrict_type == 1 && $products_data->where('quantity',$promocode->retrict_condition)->count()==0){
+                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Retrict condition not match','error'=>6];
                 }else if(array_key_exists($promocode_code,$result['promocodes'])){
                     continue;
                 }else{

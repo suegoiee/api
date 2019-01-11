@@ -25,7 +25,11 @@ return [
         'specific'=>'套用指定產品',
         'products'=>'產品',
 
-        'promocodefile'=>'優惠卷CSV'
+        'promocodefile'=>'優惠卷CSV',
+        'retrict_type'=>'使用限制',
+        'retrict_type_0'=>'無限制',
+        'retrict_type_1'=>'限制月數',
+        'retrict_condition'=>'滿足條件',
     ],
     'analyst'=>[
         'id' => '編號',

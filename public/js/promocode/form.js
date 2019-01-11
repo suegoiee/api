@@ -12,8 +12,17 @@ $(function(){
     $("#specific").change(function(event){
         if( $(this).prop('checked')){
             $("#products_select").removeClass('hide');
+            $("#retrict").removeClass('hide');
         }else{
             $("#products_select").addClass('hide');
+            $("#retrict").addClass('hide');
+        }
+    });
+    $("#retrict_type").change(function(event){
+        if( $(this).val()=='1'){
+            $("#retrict_condition_box").removeClass('hide');
+        }else{
+            $("#retrict_condition_box").addClass('hide');
         }
     });
     $("#deadline").datetimepicker({

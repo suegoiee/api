@@ -51,7 +51,7 @@ class PromocodeController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type']);
+        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type','retrict_type','retrict_condition']);
         $request_data['specific'] = $request->input('specific',0);
         if($request_data['type']=='0'){
             $request_data['user_id']=0;
@@ -114,7 +114,8 @@ class PromocodeController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type']);
+        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type','retrict_type','retrict_condition']);
+        $request_data['retrict_condition'] =  $request_data['retrict_type'] == 0 ? 0 : $request_data['retrict_condition'] ;
         $request_data['specific'] = $request->input('specific',0);
         if($request_data['type']=='0'){
             $request_data['user_id']=0;

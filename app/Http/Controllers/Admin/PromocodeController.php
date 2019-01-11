@@ -6,6 +6,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Route;
+use Session;
 class PromocodeController extends AdminController
 {	
     protected $userRepository;
@@ -83,9 +84,11 @@ class PromocodeController extends AdminController
 
     public function import(Request $request)
     {
+        $now = date('Y-m-d H:i:s');
         $filepath = $request->file('promocodefile')->getRealPath();
         $file = fopen($filepath,"r");
-        $result = ['success'=>0, 'errors'=>[]];
+        $result = ['success'=>0, 'errors'=>[],'infos'=>[]];
+        $rows = 0;
         if($file){
             $insertArray = [];
             $promocodes = [];
@@ -102,13 +105,17 @@ class PromocodeController extends AdminController
                     'deadline'=>$line[3]!=''?$line[3]:null,
                     'type'=>$line[4],
                     'user_id'=>$line[5]!='' ? $line[5]:0,
-                    'specific'=>$line[6]
+                    'specific'=>$line[6],
+                    'retrict_type'=>$line[7],
+                    'retrict_condition'=>$line[8],
+                    'created_at'=>$now,
+                    'updated_at'=>$now,
                 ];
                 $promocodes[$line[1]]=$lineData;
                 $promocodes[$line[1]]['products']=[];
 
                 foreach ($line as $key => $col) {
-                    if($key<=6){
+                    if($key<=8){
                         continue;
                     }
                     if($col != '' && $this->productRepository->get($col)){
@@ -130,7 +137,10 @@ class PromocodeController extends AdminController
         }else{
             $result['errors']=[trans('import.file_error')];
         }
-        return redirect()->back()->with($result);
+        if(count($result['errors'])>0){
+            Session::flash('infos', $result);
+        }
+        return redirect()->back();
         //$content = file_get_contents($request->file('promocodefile')->getRealPath());
     }
 }

@@ -88,3 +88,27 @@
                 
     </div>
 </div>
+<div id ="retrict" class="{{ (!isset($data) || $data->specific==0)? 'hide':''}}">
+<hr>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="retrict_type">{{trans($module_name.'.admin.retrict_type')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <select class="form-control" id="retrict_type" name="retrict_type" data-placeholder="{{trans('form.do_select')}}">
+            <option value="0" {{$data && $data->retrict_type == 0 ? 'selected':''}}>{{trans($module_name.'.admin.retrict_type_0')}}</option>
+            <option value="1" {{$data && $data->retrict_type == 1 ? 'selected':''}}>{{trans($module_name.'.admin.retrict_type_1')}}</option>
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row {{ (!isset($data) || $data->retrict_type!=1)? 'hide':''}}" id="retrict_condition_box">
+    <label class="form-control-label col-sm-2" for="retrict_condition">{{trans($module_name.'.admin.retrict_condition')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="retrict_condition" name="retrict_condition" placeholder="{{trans($module_name.'.admin.retrict_condition')}}" value="{{@$data->retrict_condition}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+</div>
