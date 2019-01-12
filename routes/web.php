@@ -314,3 +314,4 @@ Route::get('/server/addProductPlans', 'Admin\ServerTaskController@addProductPlan
 Route::get('/server/addProductToPromocode', 'Admin\ServerTaskController@addProductToPromocode');
 
 Route::get('/server/verifiedFBUser', 'Admin\ServerTaskController@verifiedFBUser');
+Route::get('/server/seedUsers', 'Admin\ServerTaskController@seedUsers');
