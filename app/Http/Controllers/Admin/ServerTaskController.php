@@ -140,18 +140,14 @@ class ServerTaskController extends AdminController
                 $collection_sort = $collection_product->pivot->sort;
                 $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
                 }
-        for ($i=11; $i <50 ; $i++) {
-            $email = '88801130'.($i+1).'@guest.com';
+
+        for ($i=0; $i <50 ; $i++) {
+            $email = '8880113'.str_pad(($i+1),2,"0",STR_PAD_LEFT).'@guest.com';
             $user = User::where('email',$email)->first();
             if(!$user){
                 $user = User::create([
-                    'email'=>'88801130'.($i+1).'@guest.com',
-                    'password' => Hash::make('888888'),
-                    'mail_verified_at' => date('Y-m-d H:i:s'),
-                ]);
-            }else{
-                $user->update([
                     'email'=>'8880113'.str_pad(($i+1),2,"0",STR_PAD_LEFT).'@guest.com',
+                    'password' => Hash::make('888888'),
                     'mail_verified_at' => date('Y-m-d H:i:s'),
                 ]);
             }
@@ -169,6 +165,24 @@ class ServerTaskController extends AdminController
             echo $email.' '.json_encode($laboratory).' '.'<br>';
         }
     }
+    public function destroySeedUsers(Request $requset)
+    {
+        for ($i=0; $i <50 ; $i++) {
+            $email = '8880113'.str_pad(($i+1),2,"0",STR_PAD_LEFT).'@guest.com';
+            $user = User::where('email',$email)->first();
+            if($user){
+                $user->profile()->delete();
+                $laboratories = $user->laboratories;
+                foreach ($laboratories as $key => $laboratory) {
+                    $this->delete_avatar($laboratory);
+                }
+                $user->laboratories()->forceDelete();
+                $user->products()->forceDelete();
+                $user->forceDelete();
+                echo $email.' '.'<br>';
+            }
+        }
+    }
     private function create_avatar($laboratory, $avatar){
         if($avatar){
             if(Storage::disk('public')->exists($avatar->path)){
@@ -177,6 +191,16 @@ class ServerTaskController extends AdminController
                 $data = ['path' => $path,'type'=>'normal'];
                 return $laboratory->avatars()->create($data);
             }
+        }
+        return false;
+    }
+    private function delete_avatar($laboratory){
+        if($laboratory->avatar){
+            if(Storage::disk('public')->exists($laboratory->avatar->path)){
+                $this->destroyAvatar($laboratory->avatar->path);
+            }
+            $laboratory->avatars()->delete();
+            return true;
         }
         return false;
     }
