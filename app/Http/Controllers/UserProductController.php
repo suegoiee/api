@@ -133,6 +133,7 @@ class UserProductController extends Controller
     {
         $user = $request->user();
         $product = $user->products()->find($id);
+        $laboratory_id = $request->input('laboratory');
         if(!$product){
             return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
@@ -149,6 +150,9 @@ class UserProductController extends Controller
                 }
                 $laboratory->products()->syncWithoutDetaching($collection_product_ids);
             }
+        }else if($product->type=='single'){
+            $laboratory = $user->laboratories()->find($laboratory_id);
+            $laboratory->products()->syncWithoutDetaching($id);
         }
         $user->products()->updateExistingPivot($product->id,['installed'=>1]);
 

@@ -14,7 +14,7 @@ class Laboratory extends UanalyzeModel
 
     protected $hidden=['user_id','created_at', 'updated_at', 'deleted_at'];
 
-	protected $appends = [ 'avatar', 'master', 'pathname' ];
+	protected $appends = [ 'avatar' , 'master', 'pathname' ];
 	
 	public function avatars()
     {
@@ -31,16 +31,14 @@ class Laboratory extends UanalyzeModel
 		return $this->belongsToMany('App\Product')->with(['users'])->orderBy('pivot_sort', 'ASC')->withPivot('sort')->withTimestamps();
 	}
     public function collection_products(){
-        $user_id = $this->user_id;
-        return $this->belongsTo('App\Product','collection_product_id','id')->with(['users']);
+        return $this->belongsTo('App\Product','collection_product_id','id');
     }
     public function getMasterAttribute()
     {
-        $collection = $this->collection_products()->first();
+        $collection = $this->collection_products()->with('faqs')->first();
         if(!$collection){
             return null;
         }
-        $collection->faqs=$collection->faqs()->get();
         return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
     }
     public function getPathnameAttribute()
