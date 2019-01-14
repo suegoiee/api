@@ -22,15 +22,12 @@
             商拓財經有限公司
         </h3>
         <div class="row ml-auto info">
-            <i class="fa fa-map-marker"></i>
             &nbsp;台北市信義區基隆路一段163號2樓
         </div>
         <div class="row ml-auto info">
-            <i class="fa fa-phone"></i>
             &nbsp;電話：02-2747-3447
         </div>
         <div class="row ml-auto info">
-            <i class="fa fa-envelope"></i>
             &nbsp;電子郵件：
             <a href="mailto:service@uanalyze.com.tw">service@uanalyze.com.tw</a>
         </div>
