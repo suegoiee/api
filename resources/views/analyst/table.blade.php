@@ -29,7 +29,7 @@
     @endif
     </form>
 </div>
-<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="25" data-pagination-pre-text="<span class='fa fa-angle-double-left'></span>" data-pagination-next-text="<span class='fa fa-angle-double-right'></span>" data-pagination-h-align="left" data-pagination-detail-h-align="right">
+<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="100" data-page-list="[25,50,100]" data-pagination-pre-text="<span class='fa fa-angle-double-left'></span>" data-pagination-next-text="<span class='fa fa-angle-double-right'></span>" data-pagination-h-align="left"  data-pagination-detail-h-align="right">
     <thead class="text-center thead-type">
         <tr>
             @foreach($table_head as $th)

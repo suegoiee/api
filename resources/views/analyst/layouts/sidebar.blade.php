@@ -1,11 +1,11 @@
 <nav class="sidebar">
     <ul class="list-unstyled list-group list-group-flush main-menu" >
         <li id="bor" class="list-group-item list-group-item-action">
-            <a class="hov title" href="#order_list" data-toggle="collapse" aria-expanded="false">
+            <a class="hov title" href="#order_list" aria-expanded="false">
                 <i class="far fa-list-alt pr-1"></i>
                 {{trans('analyst.menu_title')}}
             </a>
-            <ul id="order_list" class="list list-unstyled collapse">
+            <ul id="order_list" class="list list-unstyled">
                 <li>
                     <a class="hov subtitle1" href="{{url('/analyst/orders')}}">
                         <span class="text" aria-expanded="false">{{trans('analyst.detail_title')}}</span>
