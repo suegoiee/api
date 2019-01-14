@@ -13,6 +13,9 @@
 }
 .container .info{
     color: #20366b;
+    font-size: 16.5;
+    line-height: 1.5rem;
+    padding-left: 28px;
 }
 
 table .send{
