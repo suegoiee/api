@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <form class="form-horizontal" role="form" method="POST" action="{{url('/analyst/login')}}">
-        <div class="row">
-            <div class="col-md-3"></div>
+            <div class="row">
+                <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <h2 class="text-center">{{trans('analyst.auth.login_title')}}</h2>
                     <hr>

@@ -34,12 +34,24 @@ a, a:hover, a:focus {
     font-size: 1rem;
 }
 
+.navbar-brand #title{
+    font-style: normal;
+    display: inline-block;
+    color: #fff;
+    font-size: 1.2rem;
+    vertical-align: bottom;
+}
+
 .pagination-info{
     margin-right: 30px !important;
 }
 
 .container .row i{
     line-height: 1.5rem;
+}
+
+.form-control{
+    line-height: 40px !important;
 }
 
 @media (max-width: 512px) {
