@@ -40,6 +40,10 @@ a, a:hover, a:focus {
     font-size: 16.5px;
     color: #32415d;
 }
+.breadcrumb-item+.breadcrumb-item::before {
+    content: ">" !important;
+    color: #32415d !important;
+}
 .pagination-info{
     margin-right: 30px !important;
 }

@@ -1,10 +1,7 @@
 <nav class="sidebar">
     <ul class="list-unstyled list-group list-group-flush main-menu">
         <li id="bor" class="list-group-item list-group-item-action">
-
-
-            <a class="hov title {{in_array($subtitle,['detail','grant']) ? 'actice':''}}" href="#order_list" aria-expanded="false">
-
+            <a class="hov title {{in_array($subtitle,['detail','grant']) ? 'active':''}}" href="{{url('/analyst/orders')}}" aria-expanded="false" id="bor">
                 <i class="far fa-list-alt pr-1"></i>
                 {{trans('analyst.menu_title')}}
             </a>
