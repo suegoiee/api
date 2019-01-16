@@ -8,10 +8,10 @@
 <div class="card">
     <ol class="breadcrumb">
         <li class="breadcrumb-item" id="bread">
-            <span class="title">{{trans($module_name.'.analyst.menu_title')}}</span>
+            <span>{{trans($module_name.'.analyst.menu_title')}}</span>
         </li>
         <li class="breadcrumb-item active">
-            <span class="subtitle">{{trans($module_name.'.analyst.'.$subtitle.'_title')}}</span>
+            <span>{{trans($module_name.'.analyst.'.$subtitle.'_title')}}</span>
         </li>
         @if(@in_array('new',$actions))
             <li class="float-right">

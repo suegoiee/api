@@ -32,11 +32,11 @@ a, a:hover, a:focus {
     line-height: 1.25;
     padding: .5rem 0;
 }
-.breadcrumb .breadcrumb-item .title{
+.breadcrumb #bread{
     font-size: 15.5px;
     color: #7d8d99;
 }
-.breadcrumb .breadcrumb-item .subtitle{
+.breadcrumb .active{
     font-size: 16.5px;
     color: #32415d;
 }

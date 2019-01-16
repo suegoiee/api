@@ -17,9 +17,7 @@
             </ul>
         </li>
         <li class="list-group-item list-group-item-action" id="bor">
-
             <a class="hov title {{$subtitle=='promocode'? 'active':''}}" href="{{url('/analyst/promocodes')}}" aria-expanded="false">
-
                 <i class="fa fa-comment-dollar pr-1"></i>
                 {{trans('analyst.detail_promocode_title')}}
             </a>   

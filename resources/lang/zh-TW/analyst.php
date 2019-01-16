@@ -81,7 +81,7 @@
 		'date'=>'日期',
 		'date_q'=>'遇假日順延一日',
 		'detail_title'=>'產品銷售明細',
-		'detail_promocode_title'=>'優惠券使用',
+		'detail_promocode_title'=>'優惠券',
 		'grant_title'=>'銷售撥款列表',
 		'grant_detail_title'=>'撥款明細',
 		'grant_detail_table'=>'銷售撥款明細表',
