@@ -76,25 +76,6 @@ class OrderController extends AnalystController
         ];
         return view('analyst.list',$data);
     }
-
-    public function create()
-    {
-        $data = [
-            'module_name'=> $this->moduleName,
-            'data'=>null,
-        ];
-        return view('admin.form',$data);
-    }
-
-    public function edit($id)
-    {
-
-        $data = [
-            'module_name'=> $this->moduleName,
-            'data' => $this->moduleRepository->getWith($id,['products']),
-        ];
-        return view('admin.form',$data);
-    }
     private function getHandleFee($paymentType, $price, $date){
         switch ($paymentType) {
             case '':return 0;

@@ -46,6 +46,7 @@ class HomeController extends Controller
             }
         }
     	$data=[
+            'subtitle'=>'home',
     		'product_num'=>$products->count(),
     		'client_num'=>count($clients),
     		'order_num'=>$orders->count(),
