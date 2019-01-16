@@ -31,7 +31,7 @@ class PromocodeController extends AnalystController
 
         $data = [
             'module_name'=> $this->moduleName,
-            'subtitle'=> 'index',
+            'subtitle'=> 'promocode',
             'actions'=>[],
             'tools'=>[],
             'tabs'=>[],
