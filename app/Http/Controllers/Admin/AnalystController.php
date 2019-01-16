@@ -140,6 +140,9 @@ class AnalystController extends AdminController
         $grant = $analyst->grants()->create($request_data);
         $extra_amounts = $request->input('grant_amounts', []);
         foreach ($extra_amounts as $key => $extra_amount) {
+            if(!isset($extra_amount['name']) || $extra_amount['name']==''){
+                continue;
+            }
             $grant->details()->create(['name'=> $extra_amount['name'],'amount'=>$extra_amount['amount']]);
         }
         return $request->input('action')=="save_exit" ? redirect(url('/admin/'.str_plural($this->moduleName).'/'.$analyst_id.'/grants')) : redirect(url('/admin/'.str_plural($this->moduleName).'/'.$analyst->id.'/grants/'.$grant->id.'/edit'));

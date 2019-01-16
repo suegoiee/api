@@ -4,8 +4,9 @@
 }
 .navbar .navbar-brand{
     margin: 0;
-    padding-left: 6px;
     line-height: 1.8rem;
+    width: 180px;
+    height: 45px;
 }
 
 .navbar .nav .nav-item .nav-link{
@@ -31,21 +32,23 @@
     z-index:1;
     transition: margin-left 0.3s;
 }
+/* active時字體顏色更改 */
 .sidebar .active{
-    min-width: 250px;
-    max-width: 250px
+    max-width: 250px;
+    color: #1e68cd;
 }
 .sidebar #bor{
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf !important;
 }
 .sidebar i{
     margin-left: 25px;
 }
 .sidebar .title{
-    padding: 22px 0;
+    padding: 22px 0 22px 30px;
 }
+
 .sidebar .text{
-    margin-left: 50px;
+    margin-left: 80px;
 }
 .sidebar ul li{
     padding: 0;
@@ -58,6 +61,11 @@
     display: block;
     color: #32415d;
 }
+.sidebar ul li .hov:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
 .sidebar #order_list{
     margin: 9px 0;
 }
@@ -67,18 +75,10 @@
 .sidebar ul li .subtitle2{
     padding: 11px 0 13px 0;
 }
-.sidebar ul li .hov:hover {
-    background-color: #f0f0f0;
-    color: #000;
-}
-
 .sidebar ul li a.active > a, .sidebar a[aria-expanded="true"] {
-    color: #1e68cd;
     background-color: #fff;
     border-bottom: 1px solid #dfdfdf;
 }
-
-
 .sidebar .active a::before{
     top: auto;
     bottom: 5px;
@@ -109,7 +109,6 @@
     transition: margin-left 0.3s;
 }
 
-
 @media (max-width: 768px) {
     .sidebar {
         min-width: 80px;
@@ -132,6 +131,9 @@
     .sidebar ul li .pr-1{
         font-size: 16.5px;
         margin: 0 0 0 5px; 
+    }
+    .sidebar .hov{
+        padding-left: 0 !important;
     }
     .sidebar-toggler{
         display: block;

@@ -35,6 +35,7 @@ return [
         'id' => '編號',
         'menu_title'=>'優惠券列表',
         'index_title'=>'優惠券明細',
+        'promocode_title'=>'優惠券明細',
         'name' => '名稱',
         'code' => '優惠碼',
         'user_name' => '擁有者',

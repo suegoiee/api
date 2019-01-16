@@ -31,9 +31,19 @@ a, a:hover, a:focus {
 .breadcrumb .breadcrumb-item{
     line-height: 1.25;
     padding: .5rem 0;
-    font-size: 1rem;
 }
-
+.breadcrumb #bread{
+    font-size: 15.5px;
+    color: #7d8d99;
+}
+.breadcrumb .active{
+    font-size: 16.5px;
+    color: #32415d;
+}
+.breadcrumb-item+.breadcrumb-item::before {
+    content: ">" !important;
+    color: #32415d !important;
+}
 .pagination-info{
     margin-right: 30px !important;
 }
@@ -43,6 +53,10 @@ a, a:hover, a:focus {
 }
 .form-control{
     line-height: 32px;
+}
+
+.form-control{
+    line-height: 40px !important;
 }
 
 @media (max-width: 512px) {
