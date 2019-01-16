@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Traits\OauthToken;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\PersonalAccessClient;
+use Maatwebsite\Excel\Facades\Excel;
 class AdminController extends Controller
 {	
     use OauthToken;
@@ -75,5 +76,15 @@ class AdminController extends Controller
             $this->moduleRepository->delete($value);
         }
         return $id ? redirect(url('/admin/'.str_plural($this->moduleName))):$this->successResponse(['id'=>$ids]);
+    }
+
+    public function tableExport($data)
+    {
+        $filename = time();
+        Excel::create($filename, function($excel) use ($data) {
+            $excel->sheet('Sheetname', function($sheet) use ($data) {
+                $sheet->fromArray($data);
+            });
+        })->download('xls');
     }
 }

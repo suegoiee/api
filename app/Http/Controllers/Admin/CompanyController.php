@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 use App\Repositories\StockRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Lang;
+
 class CompanyController extends AdminController
 {	
     protected $stockRepository;
@@ -86,5 +88,37 @@ class CompanyController extends AdminController
             $response_stock['data']['id'] = $response_stock['data']['no'];
         }
         return $this->adminResponse($request,$response_stock );
+    }
+
+    public function export(Request $request)
+    {
+        $where['no.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith(['events'], $where, ['updated_at'=>'DESC','stock_code'=>'ASC'])->toArray();
+        $sheet = [];
+        $company = ['代號' => null, '公司名稱' => null, '產業代碼' => null, '產業名稱' => null, '類型' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "stock_code":
+                        $company['代號'] = $value;
+                        break;
+                    case "stock_name":
+                        $company['公司名稱'] = $value;
+                        break;
+                    case "stock_industries":
+                        $company['產業代碼'] = Lang::get('company.admin.stock_industries_'.$value); 
+                        break;
+                    case "industries":
+                        $company['產業名稱'] = $value;
+                        break;
+                    case "type":
+                        $company['類型'] = $value;
+                        break;
+                }
+            }
+            array_push($sheet, $company);
+            $company = array_fill_keys(array_keys($company), null);
+        }
+        $this->tableExport($sheet);
     }
 }

@@ -45,7 +45,14 @@ $(function(){
     $('#table').bootstrapTable('load',data);
 
     $('#delete_action').on('click',function(event){
-        selections = $('#table').bootstrapTable('getSelections').map(function(item,index){return item.id});
+        var primaryKey = 'id';
+        selections = $('#table').bootstrapTable('getSelections').map(function(item,index){ 
+            if (typeof item.id == 'undefined') {
+                primaryKey = 'no';
+                return item.no;
+            }
+            return item.id;
+        });
         if(selections.length==0){
             alert('{{trans("table.no_selected")}}')
         }else{
@@ -56,7 +63,7 @@ $(function(){
                     data: {id:selections}  
                 }).done(function( result ) {
                     if(result.status=='success'){                        
-                        $('#table').bootstrapTable('remove', {field: 'id', values: selections});
+                        $('#table').bootstrapTable('remove', {field: primaryKey, values: selections});
                     }
                 });
             }
@@ -75,15 +82,20 @@ $(function(){
     });
 
     $('#export_action').on('click',function(event){
-        var ignoreColumns = [];
-        $.each($('#table').bootstrapTable('getVisibleColumns'), function(index, value) {
-            if ($.isNumeric(value.field)) {
-                ignoreColumns.push(index);
-            }
+        
+        selections = $('#table').bootstrapTable('getSelections').map(function(item,index){
+            return item.id || item.no;
         });
-        //$('#table').bootstrapTable('togglePagination').bootstrapTable('collapseAllRows');
-        $('#table').tableExport({type:'csv', ignoreColumn: ignoreColumns });
-        //$('#table').bootstrapTable('togglePagination').bootstrapTable('expandAllRows');
+        if(selections.length==0){
+            alert('{{trans("table.no_selected")}}');
+            return;
+        }
+        var form = $('<form></form>').attr('action', url('/admin/'+module_name+'/export')).attr('method', 'post');
+        form.append($("<input></input>").attr('type', 'hidden').attr('name', '_token').attr('value', '{{ csrf_token() }}' ));
+        $.each(selections, function(index, value) {
+            form.append($("<input></input>").attr('type', 'text').attr('name', 'ids[]').attr('value',  value));
+        });
+        form.appendTo('body').submit().remove();
     });
 });
 </script>

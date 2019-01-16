@@ -6,6 +6,7 @@ function statusFormatter(value,row,index){
 	return value;
 }
 function plansFormatter(value, row, index){
+	console.log(value);
 	var html = '';
 	for (var i = 0; i < value.length; i++) {
 		if(value[i].active==0){

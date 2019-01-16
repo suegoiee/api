@@ -54,4 +54,36 @@ class MessageController extends AdminController
         return view('admin.detail',$data);
     }
 
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith([],$where,['created_at'=>'DESC'])->toArray();
+        $sheet = [];
+        $message = ['編號' => null, '姓名' => null, 'E-mail' => null, '類別' => null, '留言時間' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "id":
+                        $message['編號'] = $value;
+                        break;
+                    case "name":
+                        $message['姓名'] = $value;
+                        break;
+                    case "email":
+                        $message['E-mail'] = $value;
+                        break;
+                    case "category":
+                        $message['類別'] = $value;
+                        break;
+                    case "created_at":
+                        $message['留言時間'] = $value;
+                        break;
+                }
+            }
+            array_push($sheet, $message);
+            $message = array_fill_keys(array_keys($message), null);
+        }
+        $this->tableExport($sheet);
+    }
+
 }
