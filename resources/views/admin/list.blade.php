@@ -5,7 +5,10 @@
 @endsection
 @section('content')
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active"><span class="">{{trans($module_name.'.admin.menu_title')}}</span></li>
+        <li class="breadcrumb-item active">
+            <span>{{trans($module_name.'.admin.menu_title')}}
+            </span>
+        </li>
         @if(@in_array('new',$actions))
             <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/create')}}" class="btn btn-info" >{{trans($module_name.'.admin.new_label')}}</a></li>
         @endif

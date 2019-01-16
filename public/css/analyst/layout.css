@@ -31,17 +31,15 @@ a, a:hover, a:focus {
 .breadcrumb .breadcrumb-item{
     line-height: 1.25;
     padding: .5rem 0;
-    font-size: 1rem;
 }
-
-.navbar-brand #title{
-    font-style: normal;
-    display: inline-block;
-    color: #fff;
-    font-size: 1.2rem;
-    vertical-align: bottom;
+.breadcrumb .breadcrumb-item .title{
+    font-size: 15.5px;
+    color: #7d8d99;
 }
-
+.breadcrumb .breadcrumb-item .subtitle{
+    font-size: 16.5px;
+    color: #32415d;
+}
 .pagination-info{
     margin-right: 30px !important;
 }

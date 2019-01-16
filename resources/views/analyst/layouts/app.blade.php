@@ -37,7 +37,6 @@
 	<nav class="navbar navbar-expand-md navbar-light fixed-top">
 		<a class="navbar-brand" href="{{ url('/analyst') }}">
 			<img src="{{asset('images/logo_light_horizontal.svg')}}">
-            <i id="title">分析師</i>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<i class="fas fa-bars" id="bars"></i>
