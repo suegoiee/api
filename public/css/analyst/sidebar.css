@@ -8,7 +8,6 @@
     width: 180px;
     height: 45px;
 }
-
 .navbar .nav .nav-item .nav-link{
     color: #fff;
 }
@@ -134,6 +133,7 @@
     }
     .sidebar .hov{
         padding-left: 0 !important;
+        font-size: 0.8rem;
     }
     .sidebar-toggler{
         display: block;
