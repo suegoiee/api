@@ -8,8 +8,8 @@ body, html{
 }
 #content{
     min-height: 100%;
-    overflow: hidden;
     width: 100%;
+    overflow: hidden;
     background-color: #d7dce1;
     color: #32415d;
 }
@@ -48,6 +48,13 @@ a, a:hover, a:focus {
 }
 .pagination-info{
     margin-right: 30px !important;
+}
+
+.fixed-table-body{
+    height: auto !important;
+}
+#content::-webkit-scrollbar {
+    display: none;
 }
 
 .container .row i{
