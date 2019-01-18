@@ -4,6 +4,7 @@ use App\Repositories\TagRepository;
 use App\Repositories\ArticleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Lang;
 
 class ArticleController extends AdminController
 {	
@@ -84,5 +85,34 @@ class ArticleController extends AdminController
         $response_article = json_decode((string) $response->getBody(), true);
         
         return $this->adminResponse($request,$response_article);
+    }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith(['tags'], $where, ['top'=>'DESC','status'=>'DESC','posted_at'=>'DESC'])->toArray();
+        $sheet = [];
+        $article = ['代號' => null, '標題' => null, '狀態' => null, '發布時間' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "id":
+                        $article['代號'] = $value;
+                        break;
+                    case "title":
+                        $article['標題'] = $value;
+                        break;
+                    case "status":
+                        $article['狀態'] = Lang::get('article.admin.status_'.$value); 
+                        break;
+                    case "created_at":
+                        $article['發布時間'] = $value;
+                        break;
+                }
+            }
+            array_push($sheet, $article);
+            $article = array_fill_keys(array_keys($article), null);
+        }
+        $this->tableExport($sheet);
     }
 }

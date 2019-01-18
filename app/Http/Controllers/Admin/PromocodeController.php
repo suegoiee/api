@@ -143,4 +143,39 @@ class PromocodeController extends AdminController
         return redirect()->back();
         //$content = file_get_contents($request->file('promocodefile')->getRealPath());
     }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith(['user','user.profile','used'], $where,['updated_at'=>'DESC'])->toArray();
+        $sheet = [];
+        $promocode = ['名稱' => null, '優惠碼' => null, '折扣碼' => null, '擁有者' => null, '使用期限' => null, '已使用' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "name":
+                        $promocode['名稱'] = $value;
+                        break;
+                    case "code":
+                        $promocode['優惠碼'] = $value;
+                        break;
+                    case "offer":
+                        $promocode['折扣碼'] = $value;
+                        break;
+                    case "user_name":
+                        $promocode['擁有者'] = (empty($value)) ? '未分配' : $value;
+                        break;
+                    case "deadline":
+                        $promocode['使用期限'] = (empty($value)) ? '無期限' : $value;
+                        break;
+                    case "used_at":
+                        $promocode['已使用'] = (empty($value)) ? '0' : '1';
+                        break;
+                }
+            }
+            array_push($sheet, $promocode);
+            $promocode = array_fill_keys(array_keys($promocode), null);
+        }
+        $this->tableExport($sheet);
+    }
 }

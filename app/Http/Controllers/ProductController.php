@@ -60,9 +60,12 @@ class ProductController extends Controller
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $product = $this->productRepository->getBy(['pathname'=>$request->input('pathname')]);
-        if($product){
-            return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
+        $pathname = $request->input('pathname');
+        if($pathname!=''){
+            $product = $this->productRepository->getBy(['pathname'=>$request->input('pathname')]);
+            if($product){
+                return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
+            }
         }
         $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo']);
         $request_data['expiration'] = isset($request_data['expiration'])? $request_data['expiration']:0;
@@ -148,9 +151,12 @@ class ProductController extends Controller
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $product = $this->productRepository->getBy(['pathname'=>$request->input('pathname')]);
-        if($product && $product->id != $id ){
-            return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
+        $pathname = $request->input('pathname');
+        if($pathname!=''){
+            $product = $this->productRepository->getBy(['pathname'=>$request->input('pathname')]);
+            if($product && $product->id != $id ){
+                return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
+            }
         }
         $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo']);
         $request_data['model'] = $request_data['model'] ? $request_data['model']:'';

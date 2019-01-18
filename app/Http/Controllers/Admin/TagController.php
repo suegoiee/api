@@ -58,4 +58,27 @@ class TagController extends AdminController
         ];
         return view('admin.form',$data);
     }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith([], $where)->toArray();
+        $sheet = [];
+        $tag = ['編號' => null, '名稱' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "id":
+                        $tag['編號'] = $value;
+                        break;
+                    case "name":
+                        $tag['名稱'] = $value;
+                        break;
+                }
+            }
+            array_push($sheet, $tag);
+            $tag = array_fill_keys(array_keys($tag), null);
+        }
+        $this->tableExport($sheet);
+    }
 }

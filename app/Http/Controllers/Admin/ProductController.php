@@ -7,6 +7,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Lang;
 
 class ProductController extends AdminController
 {	
@@ -248,4 +249,44 @@ class ProductController extends AdminController
         $instance = Route::dispatch($tokenRequest);
         return json_decode($instance->getContent(), true);
     }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith(['tags','collections','plans'=>function($query){
+            $query->where('active',1);
+        }],$where,['status'=>'DESC','updated_at'=>'DESC'])->toArray();
+        $sheet = [];
+        $product = ['編號' => null, '名稱' => null, '類型' => null, '對應API' => null, '購買方案' => null, '狀態' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "id":
+                        $product['編號'] = $value;
+                        break;
+                    case "name":
+                        $product['名稱'] = $value;
+                        break;
+                    case "type":
+                        $product['類型'] = $value;
+                        break;
+                    case "model":
+                        $product['對應API'] = $value;
+                        break;
+                    case "plans":
+                        if (!empty($row['plans'])) 
+                            $product['購買方案'] = Lang::get('product.admin.expiration_'. $row['plans'][0]['expiration']) . $row['plans'][0]['price'] . Lang::get('product.admin.unit');
+                        break;
+                    case "status":
+                        $product['狀態'] = Lang::get('product.admin.status_'.$value);
+                        break;
+            
+                }
+            }
+            array_push($sheet, $product);
+            $product = array_fill_keys(array_keys($product), null);
+        }
+        $this->tableExport($sheet);
+    }
+
 }

@@ -53,7 +53,8 @@ class NotificationMessageController extends AdminController
         ];
         return view('admin.form',$data);
     }
-     public function edit($id)
+    
+    public function edit($id)
     {
         $notificationMessage = $this->moduleRepository->get($id);
         $notificationMessage->user_ids = $notificationMessage->user_ids ? json_decode($notificationMessage->user_ids) : [];
@@ -66,5 +67,32 @@ class NotificationMessageController extends AdminController
         ];
 
         return view('admin.form',$data);
+    }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith([], $where, ["updated_at"=>'DESC'])->toArray();
+        $sheet = [];
+        $message = ['編號' => null, '標題' => null, '通知時間' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "id":
+                        $message['編號'] = $value;
+                        break;
+                    case "title":
+                        $message['標題'] = $value;
+                        break;
+                    case "created_at":
+                        $message['通知時間'] = $value;
+                        break;
+
+                }
+            }
+            array_push($sheet, $message);
+            $message = array_fill_keys(array_keys($message), null);
+        }
+        $this->tableExport($sheet);
     }
 }

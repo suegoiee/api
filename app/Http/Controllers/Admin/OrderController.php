@@ -4,6 +4,9 @@ use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Lang;
+
 class OrderController extends AdminController
 {	
     public function __construct(Request $request, OrderRepository $orderRepository)
@@ -91,5 +94,51 @@ class OrderController extends AdminController
         $instance = Route::dispatch($tokenRequest);
         $response_data = json_decode($instance->getContent(), true);
         return redirect(url('/admin/'.str_plural($this->moduleName)));
+    }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith(['user', 'products'], $where, ['created_at'=>'DESC'])->toArray();
+        $sheet = [];
+        $order = ['訂單編號' => null, '訂購者' => null, '金額' => null, '付款狀態' => null, '訂購時間' => null, '購買人姓名' => null, '購買人電話' => null, '購買人地址' => null, '更改地址' => null, 'Email' => null];
+        //$productColsHeader = ['產品' => null, '編號' => null, '名稱' => null, '類型' => null, '價格' => null];
+        foreach ($data as $row) {
+            $products = [];
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "no":
+                        $order['訂單編號'] = $value;
+                        break;
+                    case "user_nickname":
+                        $order['訂購者'] = $value;
+                        break;
+                    case "price":
+                        $order['金額'] = $value;
+                        break;
+                    case "status":
+                        $order['付款狀態'] = Lang::get('order.admin.status_'.$value);
+                        break;
+                    case "created_at":
+                        $order['訂購時間'] = $value;
+                        break;
+                    case "invoice_name":
+                        $order['購買人姓名'] = $value;
+                        break;
+                    case "invoice_phone":
+                        $order['購買人電話'] = $value;
+                        break;
+                    case "invoice_address":
+                        $order['購買人地址'] = $value;
+                        break;
+                    case "user_email":
+                        $order['Email'] = $value;
+                        break;
+                }
+            }
+            array_push($sheet, $order);
+            $order = array_fill_keys(array_keys($order), null);
+        }
+        $this->tableExport($sheet);
     }
 }
