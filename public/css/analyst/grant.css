@@ -15,7 +15,7 @@
     color: #20366b;
     font-size: 16.5;
     line-height: 1.5rem;
-    padding-left: 28px;
+    padding-left: 27px;
 }
 
 table .send{
@@ -36,4 +36,10 @@ table tbody tr{
 
 .container #title{
     color: #AB0A27;
+}
+
+@media (max-width: 512px) {
+    .container .info{
+        padding-left: 23px;
+    }
 }
