@@ -8,8 +8,8 @@ body, html{
 }
 #content{
     min-height: 100%;
-    overflow: hidden;
     width: 100%;
+    overflow: hidden;
     background-color: #d7dce1;
     color: #32415d;
 }
@@ -40,12 +40,21 @@ a, a:hover, a:focus {
     font-size: 16.5px;
     color: #32415d;
 }
-.breadcrumb-item+.breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before{
     content: ">" !important;
     color: #32415d !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
 }
 .pagination-info{
     margin-right: 30px !important;
+}
+
+.fixed-table-body{
+    height: auto !important;
+}
+#content::-webkit-scrollbar {
+    display: none;
 }
 
 .container .row i{

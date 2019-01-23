@@ -78,7 +78,7 @@
 .search .form-control{
 	width: 204px;
 	height: 32px;
-	margin: 6px 33px 0 0;
+	margin: 10px 33px 0 0;
 	color: #7d8d99;
 	font-size: 16.5px;
 	padding-left: 13px;
@@ -174,6 +174,8 @@
 	.page-link{
 		padding: 8px 0 8px 35% !important;
 	}
-	
+	.fixed-table-pagination .dropup .dropdown-menu{
+		min-width: 7rem !important;
+	}
 }
 

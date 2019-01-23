@@ -5,6 +5,7 @@ use App\Traits\ImageStorage;
 use App\Repositories\EdmRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Lang;
 
 class EdmController extends AdminController
 {	
@@ -115,5 +116,32 @@ class EdmController extends AdminController
            $this->moduleRepository->update($edm_id, ['sort'=>$key]);
         }
         return redirect('admin/edms');
+    }
+
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith([], $where, ['status'=>'DESC','sort'=>'ASC','updated_at'=>'DESC'])->toArray();
+        //var_dump($data);exit;
+        $sheet = [];
+        $edm = ['名稱' => null, '狀態' => null, '更新日期' => null];
+        foreach ($data as $row) {
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "name":
+                        $edm['名稱'] = $value;
+                        break;
+                    case "status":
+                        $edm['狀態'] = Lang::get('edm.admin.status_'.$value);
+                        break;
+                    case "updated_at":
+                        $edm['更新日期'] = $value;
+                        break;
+                }
+            }
+            array_push($sheet, $edm);
+            $edm = array_fill_keys(array_keys($edm), null);
+        }
+        $this->tableExport($sheet);
     }
 }
