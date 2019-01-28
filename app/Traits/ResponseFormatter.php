@@ -95,6 +95,7 @@ trait ResponseFormatter
                 case 'The product is uninstalled':                          return 'E400145';
                 case 'No product is match':                                 return 'E400146';
                 case 'The product is not exists':                           return 'E400147';
+                case 'The phone has already been taken.':                   return 'E400148';
             }
         }
     }
