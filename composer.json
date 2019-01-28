@@ -30,7 +30,8 @@
             "Shouwda\\Allpay\\": "packages/Shouwda/allpay/src/",
             "Shouwda\\Ecpay\\": "packages/Shouwda/ecpay/src/",
             "Shouwda\\EcpayInvoice\\": "packages/Shouwda/ecpayInvoice/src/",
-            "Shouwda\\Facebook\\": "packages/Shouwda/facebook/src/"
+            "Shouwda\\Facebook\\": "packages/Shouwda/facebook/src/",
+            "Uanalyze\\Mitake\\": "packages/uanalyze/mitake/src/"
         }
     },
     "autoload-dev": {

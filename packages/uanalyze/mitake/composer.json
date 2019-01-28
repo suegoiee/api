@@ -1,0 +1,21 @@
+{
+    "name": "uanalyze/mitake",
+    "description": "Send SMS Service",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luke",
+            "email": "lukewu@uanalyze.com.tw"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle" : "~6.0"
+    },
+    "autoload": {
+        "psr-4" : {
+            "uanalyze\\mitake\\": "src"
+        }
+    }
+}

@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function(){
 });
 Route::middleware(['auth:api'])->group(function(){
 	Route::post('/auth/email','Auth\VerifiedUserController@sendVerifyEmail');
+	Route::post('/auth/phone','Auth\VerifiedUserController@sendVerificationCode');
 	Route::get('/auth/login','Auth\TokenController@isLogin');
 });
 Route::middleware(['auth:api','verifyUser'])->group(function(){

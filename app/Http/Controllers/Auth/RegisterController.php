@@ -42,6 +42,7 @@ class RegisterController extends Controller
         return User::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'phone' => $data['phone'],
         ]);
     }
 
@@ -58,6 +59,9 @@ class RegisterController extends Controller
     }
 
     protected function createProfile(Request $request,$user){
+        /**
+         * Todo: phone 欄位可能因應Mobile認證關係，須移除 (轉移至ua_pro.users存放)
+         */
         $store_data = $request->only(['nickname','name','sex','address','birthday','phone','company_id','invoice_title']);
         $profile = $user->profile()->create($store_data);
         return $profile;
@@ -69,6 +73,7 @@ class RegisterController extends Controller
             //'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'phone' => 'digits:10',
         ]);
     }
 
