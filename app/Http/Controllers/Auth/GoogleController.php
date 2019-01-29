@@ -11,25 +11,12 @@ use App\Http\Controllers\Controller;
 use App\Events\UserRegistered;
 use Illuminate\Support\Facades\Validator;
 
-class FacebookController extends Controller
+class GoogleController extends Controller
 {
 	use OauthToken;
     public function __construct()
     {
     }
-    public function email_exist(Request $request)
-    {
-        $emailvalidator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255']);
-        if($emailvalidator->fails()){
-            return $this->validateErrorResponse($emailvalidator->errors()->all()); 
-        }
-        $user = User::where('email',$request->input('email'))->first();
-        if($user){
-            return $this->successResponse(['message'=>['The E-mail is exists.'], 'email_exists'=>1]);
-        }
-        return $this->successResponse(['message'=>['The E-mail is not exists.'], 'email_exists'=>0]);
-    }   
     public function login(Request $request)
     {
 
@@ -37,7 +24,7 @@ class FacebookController extends Controller
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        $user = User::where('is_socialite',1)->where('email',$request->input('email'))->first();
+        $user = User::where('is_socialite',2)->where('email',$request->input('email'))->first();
         if( $user ){
         	if(Hash::check($request->input('password'), $user->getAuthPassword())){
         		
@@ -46,7 +33,7 @@ class FacebookController extends Controller
         		return $this->validateErrorResponse([trans('auth.facebook_error')]);
         	}
         }else{
-            $n_user = User::where('is_socialite',[0,2])->where('email',$request->input('email'))->first();
+            $n_user = User::whereIn('is_socialite',[0,1])->where('email',$request->input('email'))->first();
             if($n_user ){
                 return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
             }
@@ -54,24 +41,13 @@ class FacebookController extends Controller
         	return $this->registered($request,$user);
         }
     }
-    public function register(Request $request)
-    {
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
-
-        event(new Registered($user = $this->create($request->all())));
-        
-        return $this->registered($request,$user);
-    }
 
     protected function create(array $data)
     {
         return User::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'is_socialite' => 1,
+            'is_socialite' => 2,
             'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);
     }

@@ -51,6 +51,8 @@ Route::post('/ecpay/result','EcpayController@result');
 Route::get('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/auth/facebook', 'Auth\FacebookController@login');
 
+Route::post('/auth/google', 'Auth\GoogleController@login');
+
 Route::post('/stocks/products', 'StockModelController@getModelProducts');
 Route::middleware(['auth'])->group(function(){
 
