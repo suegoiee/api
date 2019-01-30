@@ -48,6 +48,7 @@ class GoogleController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'is_socialite' => 2,
+            'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);
     }
