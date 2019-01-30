@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Uanalyze\Mitake\Facades\Mitake;
 
 class VerifiedUserController extends Controller
 {
@@ -25,14 +26,27 @@ class VerifiedUserController extends Controller
     }
     public function verified(Request $request)
     {
+        /**
+         * Todo: Table user.mail_verified_at 命名變更為 verified_at
+         *       Table verify_user.email 命名變更 （配合未來Mobile裝置驗證)
+         */
+        if(Verify_user::where('email',$request->input('phone'))->where('token', $request->input('token'))->count()>0){
+            User::where('phone', $request->input('phone'))->update(['mail_verified_at'=>date('Y-m-d H:i:s')]);
+
+            return $this->successResponse(['message'=>['The phone number has been verified']]);
+        }
+   
         if(Verify_user::where('email',$request->input('email'))->where('token', $request->input('token'))->count()>0){
             User::where('email', $request->input('email'))->update(['mail_verified_at'=>date('Y-m-d H:i:s')]);
         }
+       
         return redirect(env('APP_FRONT_URL'));
     }
     public function sendVerifyEmail(Request $request)
     {
-        
+        /**
+         * Todo: Table user.mail_verified_at 命名變更為 verified_at
+         */
         $user = $request->user();
         if($user->mail_verified_at){
             return $this->successResponse(['message'=>['The email was verified']]);
@@ -42,6 +56,21 @@ class VerifiedUserController extends Controller
         //$response = Mail::to($user->email)->send(new VerifyMail($user, $verify->token));
 
         return $this->sendVerifyResponse();
+    }
+    public function sendVerificationCode(Request $request)
+    {
+        /**
+         * Todo: Table user.mail_verified_at 命名變更為 verified_at
+         */
+        $user = $request->user();
+        if ($user->mail_verified_at) {
+            return $this->successResponse(['message'=>['The phone number was verified']]);
+        }
+        $verificationCode = str_pad(rand(0, 9999), 4, "0", STR_PAD_LEFT);
+        $verify = Verify_user::create(['email'=>$user->phone,'token'=> $verificationCode]);
+        Mitake::send($user->phone, '【優分析】您的驗證碼為:'.$verificationCode);
+
+        return $this->successResponse(['message'=>['The verification code has been send'], 'sent'=>1]);
     }
     protected function sendVerifyResponse()
     {	

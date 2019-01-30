@@ -186,6 +186,9 @@ return [
         //Shouwda\EcpayInvoice\EcpayInvoiceServiceProvider::class,
         Shouwda\Facebook\FacebookServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        Uanalyze\Mitake\MitakeServiceProvider::class,
+
     ],
 
     /*
@@ -239,6 +242,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Mitake' => Uanalyze\Mitake\Facades\Mitake::class,
 
     ],
 
