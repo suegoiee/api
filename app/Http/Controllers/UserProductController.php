@@ -70,33 +70,31 @@ class UserProductController extends Controller
             $collections =[];
             if($product_data->type=='collection'){
                 if($installed==0){
-                    if($user->products()->where('id',$product_data->id)->count()==0){
-                        $customized = 0;
-                        $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized, 'collection_product_id' => $product_data->id]);
-                        $this->create_avatar($laboratory, $product_data->avatar_small);
-                        if($customized ==1){
-                            foreach ($product_data->collections as $key => $collection_product) {
-                                $old_collection_product = $user->products()->where('id',$collection_product->id)->first();
-                                $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
-                                $collection_deadline = $this->getExpiredDate($expiration, $old_collection_deadline);
-                                $collection_installed = 1;
+                    $customized = 0;
+                    $laboratory = $user->laboratories()->create(['title'=>$product_data->name, 'customized'=>$customized, 'collection_product_id' => $product_data->id]);
+                    $this->create_avatar($laboratory, $product_data->avatar_small);
+                    if($customized ==1){
+                        foreach ($product_data->collections as $key => $collection_product) {
+                            $old_collection_product = $user->products()->where('id',$collection_product->id)->first();
+                            $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
+                            $collection_deadline = $this->getExpiredDate($expiration, $old_collection_deadline);
+                            $collection_installed = 1;
 
-                                $collection_sort = $collection_product->pivot->sort;
+                            $collection_sort = $collection_product->pivot->sort;
 
-                                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                            $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
 
-                                $collection_products[$collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
-                            }
-                            $laboratory->products()->syncWithoutDetaching($collections_ids);
-                        }else{
-                            foreach ($product_data->collections as $key => $collection_product) {
-                                $collection_sort = $collection_product->pivot->sort;
-
-                                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
-                                //array_push($collections_ids, $collection_product->id);
-                            }
-                            $laboratory->products()->sync($collections_ids);
+                            $collection_products[$collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
                         }
+                            $laboratory->products()->syncWithoutDetaching($collections_ids);
+                    }else{
+                        foreach ($product_data->collections as $key => $collection_product) {
+                            $collection_sort = $collection_product->pivot->sort;
+
+                            $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                                //array_push($collections_ids, $collection_product->id);
+                        }
+                        $laboratory->products()->sync($collections_ids);
                     }
                     $installed = 1;
                 }
@@ -140,15 +138,32 @@ class UserProductController extends Controller
         if($product->type=='collection'){
             if($product->pivot->installed==0){
                 $customized = 0;
-                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized, 'collection_product_id' => $product->id ]);
-                $this->create_avatar($laboratory, $product->avatar_small);
                 $collection_product_ids = [];
-                foreach ($product->collections as $key => $collection_product) {
-                    $collection_sort = $collection_product->pivot->sort;
-                    $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
-                    //array_push($collection_product_ids, $collection_product->id);
-                }
-                $laboratory->products()->syncWithoutDetaching($collection_product_ids);
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>$customized, 'collection_product_id' => $product->id]);
+                $this->create_avatar($laboratory, $product->avatar_small);
+                if($customized ==1){
+                    foreach ($product->collections as $key => $collection_product) {
+                        $old_collection_product = $user->products()->where('id',$collection_product->id)->first();
+                        $old_collection_deadline = $old_collection_product ? $old_collection_product->pivot->deadline : 0;
+                        $collection_deadline = $this->getExpiredDate($expiration, $old_collection_deadline);
+                        $collection_installed = 1;
+
+                        $collection_sort = $collection_product->pivot->sort;
+
+                        $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+
+                            $collection_products[$collection_product->id] = ['deadline'=>$collection_deadline,'installed'=>$collection_installed];
+                        }
+                            $laboratory->products()->syncWithoutDetaching($collections_ids);
+                    }else{
+                        foreach ($product->collections as $key => $collection_product) {
+                            $collection_sort = $collection_product->pivot->sort;
+
+                            $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];
+                                //array_push($collections_ids, $collection_product->id);
+                        }
+                        $laboratory->products()->sync($collections_ids);
+                    }
             }
         }else if($product->type=='single'){
             $laboratory = $user->laboratories()->find($laboratory_id);
