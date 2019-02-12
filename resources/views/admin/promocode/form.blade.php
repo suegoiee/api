@@ -88,6 +88,24 @@
                 
     </div>
 </div>
+<div class="form-group row {{ (!isset($data) || $data->type==0)? '':'hide'}}">
+    <label class="form-control-label col-sm-2" for="times_limit">{{trans($module_name.'.admin.times_limit')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="times_limit" name="times_limit" placeholder="{{trans($module_name.'.admin.times_limit_0')}}" value="{{@$data->times_limit}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="disabled">{{trans($module_name.'.admin.disabled')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="checkbox" class="" id="disabled" name="disabled" value="1" {{ $data && $data->disabled!=null ? 'checked':'' }} >
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <div id ="retrict" class="{{ (!isset($data) || $data->specific==0)? 'hide':''}}">
 <hr>
 <div class="form-group row">

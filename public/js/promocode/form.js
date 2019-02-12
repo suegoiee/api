@@ -4,9 +4,11 @@ $(function(){
     $("#type").change(function(event){
         if( $(this).val()==0){
             $("#user_id").parent().parent().addClass('hide');
+            $('#times_limit').parent().parent().removeClass('hide');
         }else{
             $("#user_id").parent().parent().removeClass('hide');
             $("#user_id_chosen").css('width','100%');
+            $('#times_limit').parent().parent().addClass('hide');
         }
     });
     $("#specific").change(function(event){

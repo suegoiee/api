@@ -32,7 +32,13 @@ class PromocodeController extends AdminController
             $query_string['type'] = $request->input('type',0);
         }
         $promocodes = $this->moduleRepository->getsWith(['user','user.profile','used'], $where,['updated_at'=>'DESC']);
-
+        if($where['type']==0){
+            $table_head = ['name','code','offer','deadline', 'used_at'];
+            $table_formatter = ['status', 'deadline', 'used_at'];
+        }else{
+            $table_head = ['name','code','offer','user_name','deadline', 'used_at'];
+            $table_formatter = ['status', 'user_name', 'deadline', 'used_at'];
+        }
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -40,8 +46,8 @@ class PromocodeController extends AdminController
             'tabs'=>['type'=>[0,1]],
             'query_string' => $query_string,
             'table_data' => $promocodes,
-            'table_head' =>['name','code','offer','user_name','deadline', 'used_at'],
-            'table_formatter' =>['status', 'user_name', 'deadline', 'used_at'],
+            'table_head' =>$table_head,
+            'table_formatter' =>$table_formatter,
         ];
         return view('admin.list',$data);
     }

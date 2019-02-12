@@ -33,7 +33,7 @@ class PromocodeController extends Controller
             $query->select(['id','name','info_short','price']);
         }],['type'=>0],['updated_at'=>'DESC']);*/
 
-        $promocodes = $promocodes/*->merge($promocode_unassigned)*/->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id','send','type','specific']);
+        $promocodes = $promocodes/*->merge($promocode_unassigned)*/->makeHidden(['user','user_name','created_at','updated_at','order_id','user_id','send','type','specific','times_limit','disabled']);
         foreach ($promocodes as $key => $promocode) {
             $promocode->used = $promocode->used_at ? 1 : 0;
         }
@@ -51,8 +51,11 @@ class PromocodeController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type','retrict_type','retrict_condition']);
+        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type','retrict_type','retrict_condition','times_limit','disabled']);
         $request_data['specific'] = $request->input('specific',0);
+        $request_data['retrict_condition'] =  $request_data['retrict_type'] == 0 ? 0 : (isset($request_data['retrict_condition']) ? $request_data['retrict_condition'] : 0);
+        $request_data['times_limit'] = $request_data['times_limit'] ? $request_data['times_limit']:0;
+        $request_data['disabled'] = $request->input('disabled',0);
         if($request_data['type']=='0'){
             $request_data['user_id']=0;
             $request_data['send']=0;
@@ -114,9 +117,11 @@ class PromocodeController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type','retrict_type','retrict_condition']);
-        $request_data['retrict_condition'] =  $request_data['retrict_type'] == 0 ? 0 : $request_data['retrict_condition'] ;
+        $request_data = $request->only(['name', 'code', 'offer', 'deadline', 'user_id', 'used_at', 'type','retrict_type','retrict_condition','times_limit','disabled']);
+        $request_data['retrict_condition'] =  $request_data['retrict_type'] == 0 ? 0 : (isset($request_data['retrict_condition']) ? $request_data['retrict_condition'] : 0);
         $request_data['specific'] = $request->input('specific',0);
+        $request_data['times_limit'] = $request_data['times_limit'] ? $request_data['times_limit']:0;
+        $request_data['disabled'] = $request->input('disabled',0);
         if($request_data['type']=='0'){
             $request_data['user_id']=0;
             $request_data['send']=0;

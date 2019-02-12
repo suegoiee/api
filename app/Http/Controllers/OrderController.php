@@ -486,9 +486,12 @@ class OrderController extends Controller
                 if(!$promocode){
                     $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$promocode_code]);
                 }
-
-                if($promocode->used_at!=null || $promocode->used()->where('user_id',$user->id)->count()!=0){
-                //if($promocode->used_at!=null || $promocode->used()->count()!=0){
+                $user_promocode_used = $promocode->used()->where('user_id',$user->id)->count();
+                $promocode_use_time = $promocode->used()->count();
+                if($promocode->disabled == 1){
+                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>6];
+                }else if($promocode->used_at != null || $user_promocode_used != 0 ||
+                            ( $promocode->times_limit != 0 && $promocode_use_time >= $promocode->times_limit )){
                     $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>2];
                 }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
                     $result['promocodes'][$promocode_code]=[ 'msg' => 'Expired','error'=>3];
