@@ -98,10 +98,10 @@ class PromocodeController extends AdminController
         if($file){
             $insertArray = [];
             $promocodes = [];
-            $ignoreLine = true;
+            $ignoreLine = 2;
             while (($line = fgetcsv($file)) !== FALSE) {
-                if($ignoreLine){
-                    $ignoreLine = false;
+                if($ignoreLine>0){
+                    $ignoreLine--;
                     continue;
                 }
                 $lineData=[
@@ -114,6 +114,8 @@ class PromocodeController extends AdminController
                     'specific'=>$line[6],
                     'retrict_type'=>$line[7],
                     'retrict_condition'=>$line[8],
+                    'times_limit'=>$line[9],
+                    'disabled'=>$line[10],
                     'created_at'=>$now,
                     'updated_at'=>$now,
                 ];
@@ -121,7 +123,7 @@ class PromocodeController extends AdminController
                 $promocodes[$line[1]]['products']=[];
 
                 foreach ($line as $key => $col) {
-                    if($key<=8){
+                    if($key<=10){
                         continue;
                     }
                     if($col != '' && $this->productRepository->get($col)){
