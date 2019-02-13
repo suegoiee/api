@@ -15,7 +15,7 @@ class AddDisabledAndTimesLimitTable extends Migration
     {
         Schema::table('promocodes', function (Blueprint $table) {
             $table->integer('disabled')->default(0);
-            $table->integer('times_limit')->default(0);
+            $table->integer('times_limit')->default(1);
         });
     }
 
