@@ -51,7 +51,6 @@ class AdminController extends Controller
         $instance = Route::dispatch($tokenRequest);
 
         $response_data = json_decode($instance->getContent(), true);
-
         return $this->adminResponse($request,$response_data);
     }
 

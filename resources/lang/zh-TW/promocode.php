@@ -24,7 +24,9 @@ return [
         'type_1'=>'指名優惠券',
         'specific'=>'套用指定產品',
         'products'=>'產品',
-
+        'times_limit'=>'次數限制',
+        'times_limit_0'=>'0為無限制',
+        'disabled'=>'停用',
         'promocodefile'=>'優惠卷CSV',
         'retrict_type'=>'使用限制',
         'retrict_type_0'=>'無限制',

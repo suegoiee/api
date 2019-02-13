@@ -7,7 +7,7 @@ use App\UanalyzeModel;
 class Promocode extends UanalyzeModel
 {
     protected $fillable = [
-        'user_id','name','code','offer','deadline','used_at','send','type','retrict_type','retrict_condition'
+        'user_id','name','code','offer','deadline','used_at','send','type','retrict_type','retrict_condition','times_limit','disabled'
     ];
     protected $appends=['user_name'];
     public function user(){
