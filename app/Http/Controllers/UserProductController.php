@@ -167,7 +167,9 @@ class UserProductController extends Controller
             }
         }else if($product->type=='single'){
             $laboratory = $user->laboratories()->find($laboratory_id);
-            $laboratory->products()->syncWithoutDetaching($id);
+            if($laboratory){
+                $laboratory->products()->syncWithoutDetaching($id);
+            }
         }
         $user->products()->updateExistingPivot($product->id,['installed'=>1]);
 

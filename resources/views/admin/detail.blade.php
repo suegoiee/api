@@ -11,6 +11,9 @@
             {{$data ? $title_field:''}}
         </span>
     </li>
+    @if(@in_array('edit',$actions))
+        <li class="float-right"><a href="{{url('/admin/'.str_plural($module_name).'/'.$data->id.'/edit')}}" class="btn btn-info" >{{trans($module_name.'.admin.edit_label')}}</a></li>
+    @endif
 </ol>
 @include('admin.'.$module_name.'.detail')
 @endsection

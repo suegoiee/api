@@ -212,9 +212,14 @@ Route::middleware(['client:edm'])->group(function(){
 	Route::delete('/edms/{edm}','EdmController@destroy')->name('edms.destroy');
 });
 
+Route::middleware(['client:user'])->group(function(){
+	Route::put('/users/{user}','UserController@update')->name('users.update');
+});
+
 //Admin
 //Route::get('/ip', function(){return Request::ip();});
 Route::get('/', 'HomeController@home');
+Route::post('/api/notifications','NotificationMessageController@send')->name('notificationMessages.send');
 
 Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
 	Route::get('/login', 'Admin\Auth\LoginController@loginForm')->name('admin.login');
@@ -244,11 +249,12 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::resource('/tags', 'Admin\TagController');
 
 	Route::post('/companies/export','Admin\CompanyController@export');
-	Route::get('/companies/{tag}/delete','Admin\CompanyController@destroy');
+	Route::get('/companies/{company}/delete','Admin\CompanyController@destroy');
 	Route::delete('/companies','Admin\CompanyController@destroy');
 	Route::resource('/companies', 'Admin\CompanyController');
 
-	Route::get('/users/{tag}/delete','Admin\UserController@destroy');
+	Route::get('/users/{user}/delete','Admin\UserController@destroy');
+	Route::get('/users/{user}/edit','Admin\UserController@edit');
 	Route::delete('/users','Admin\UserController@destroy');
 	Route::resource('/users', 'Admin\UserController');
 

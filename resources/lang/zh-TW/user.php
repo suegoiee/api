@@ -6,6 +6,7 @@ return [
     	'menu_title'=>$module_name.'管理',
     	'show_title'=>'使用者資料',
         'edit_title'=>'編輯使用者資料',
+        'edit_label'=>'編輯',
     	'user_tab'=>'使用者資料',
     	'product_tab'=>'購買產品',
     	'order_tab'=>'訂單',

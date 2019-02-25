@@ -19,6 +19,7 @@ class UserController extends AdminController
     {
         $users = $this->moduleRepository->getsWith();
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'table_data' => $users,
             'table_head' =>['id','email','mail_verified_at','updated_at','created_at'],
@@ -39,6 +40,7 @@ class UserController extends AdminController
     public function edit($id)
     {
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'data' => $this->moduleRepository->get($id),
         ];
@@ -48,6 +50,7 @@ class UserController extends AdminController
     {
         $user = $this->moduleRepository->get($id);
         $data = [
+            'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'title_field'=> $user->profile->nick_name,
             'data' => $user,

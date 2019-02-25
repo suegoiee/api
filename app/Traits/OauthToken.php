@@ -13,7 +13,7 @@ trait OauthToken
             'grant_type' => 'client_credentials',
             'client_id' => $client->id,
             'client_secret' => $client->secret,
-            'scope' => 'user-product product order tag message company article promocode notificationMessage edm',
+            'scope' => 'user-product product order tag message company article promocode notificationMessage edm user',
         ]);
         $tokenRequest = $request->create(
             url('/oauth/token'),
