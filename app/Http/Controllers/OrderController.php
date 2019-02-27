@@ -366,7 +366,7 @@ class OrderController extends Controller
             $extendData['CustomerAddr'] = '';//$order->invoice_address);
             $extendData['CustomerPhone'] = $order->invoice_phone;
             $extendData['CustomerEmail'] = $order->user->email;
-            if($order->company_id && count($order->company_id) <= 8){
+            if($order->company_id && strlen($order->company_id) <= 8){
                 $extendData['CustomerIdentifier'] = $order->company_id;
             }
             $extendData['TaxType'] = 1;
