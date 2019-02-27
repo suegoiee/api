@@ -13,7 +13,7 @@ trait OauthToken
             'grant_type' => 'client_credentials',
             'client_id' => $client->id,
             'client_secret' => $client->secret,
-            'scope' => 'user-product product order tag message company article promocode notificationMessage edm user',
+            'scope' => 'user-product product order tag message company article promocode notificationMessage edm',
         ]);
         $tokenRequest = $request->create(
             url('/oauth/token'),
@@ -55,8 +55,9 @@ trait OauthToken
             'post'
         );
         $instance = Route::dispatch($tokenRequest);
-
-        return json_decode($instance->getContent(), true);
+        $reponseData = json_decode($instance->getContent(), true);
+        $reponseData['expires_in'] = date('Y-m-d H:i:s',time()+$reponseData['expires_in']);
+        return $reponseData;
     }
 
     protected function refreshGrantToken($request){
@@ -90,8 +91,9 @@ trait OauthToken
             'post'
         );
         $instance = Route::dispatch($tokenRequest);
-
-        return json_decode($instance->getContent(), true);
+        $reponseData = json_decode($instance->getContent(), true);
+        $reponseData['expires_in'] = date('Y-m-d H:i:s',time()+$reponseData['expires_in']);
+        return $reponseData;
     }
     
     private function getPasswordGrantClient(){
