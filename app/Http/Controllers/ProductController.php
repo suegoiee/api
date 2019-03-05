@@ -67,7 +67,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo','date_range']);
         $request_data['expiration'] = isset($request_data['expiration'])? $request_data['expiration']:0;
         $request_data['price'] = isset($request_data['price'])? $request_data['price']:0;
         $product = $this->productRepository->create($request_data);
@@ -158,12 +158,13 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo','date_range']);
         $request_data['model'] = $request_data['model'] ? $request_data['model']:'';
         $request_data['column'] = $request_data['column'] ? $request_data['column']:'';
         $request_data['info_more'] = $request_data['info_more'] ? $request_data['info_more']:'';
         $request_data['pathname'] = $request_data['pathname'] ? $request_data['pathname']:'';
         $request_data['seo'] = $request_data['seo'] ? $request_data['seo']:'';
+        $request_data['date_range'] = $request_data['date_range'] ? $request_data['date_range'] : '';
         $data = array_filter($request_data, function($item){return $item!==null;});
         
         $product = $this->productRepository->update($id,$data);

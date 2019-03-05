@@ -17,15 +17,17 @@ class UserRegistered
 
     public $user;
     public $token;
+    public $password;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user, $token)
+    public function __construct(User $user, $token, $password)
     {
         $this->user = $user;
         $this->token = $token;
+        $this->password = $password;
     }
 
     /**

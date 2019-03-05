@@ -48,12 +48,12 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
+        $this->createProfile($request,$user);
         $adminToken = $this->clientCredentialsGrantToken($request);
-        event(new UserRegistered($user, $adminToken));
+        event(new UserRegistered($user, $adminToken, $request->input('password')));
         $token = $this->passwordGrantToken($request);
         //$token['user'] = $user;
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
-        $this->createProfile($request,$user);
         //$token['profile'] = $this->createProfile($request,$user);
         return $this->successResponse($token);
     }

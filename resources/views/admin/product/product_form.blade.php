@@ -138,6 +138,15 @@
                 
     </div>
 </div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="date_range">{{trans($module_name.'.admin.date_range')}}</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="date_range" name="date_range" placeholder="{{trans($module_name.'.admin.date_range')}}" value="{{@$data->date_range}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <!--
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="faq">{{trans($module_name.'.admin.faq')}}</label>
