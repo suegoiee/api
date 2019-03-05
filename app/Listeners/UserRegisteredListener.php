@@ -49,13 +49,13 @@ class UserRegisteredListener
             'password'=> $password,
             'type' => 1,
             'remember_token' => 'Y8LWuIcjee'
-        ];
+        ];/*
         $response = $http->request('post',env('UA_FORUM_REGISTER_API_URL'),[
                 'headers'=>[
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ',
                 ],
                 'form_params' => $data
-            ]);
+            ]);*/
     }
 }
