@@ -31,7 +31,7 @@ class LaboratoryController extends Controller
                 $collect_product = $user->products()->find($laboratory->collection_product_id);
                 if($collect_product){
                     $deadline = $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
-                    $laboratory->available = ($deadline != 0 && time() <= strtotime($deadline)) ? 1 : 0;
+                    $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
                 }
             }
         }
@@ -94,7 +94,7 @@ class LaboratoryController extends Controller
             $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
             if($collect_product){
                 $laboratory->deadline = $deadline ? $deadline : 0;
-                $laboratory->available = ($deadline != 0 && time() <= strtotime($deadline)) ? 1 : 0;
+                $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
             }
         }
         foreach ($laboratory->products as $product) {
@@ -102,11 +102,11 @@ class LaboratoryController extends Controller
             if(!$laboratory->customized){
                 $product->installed = 1;
                 $product->deadline = $deadline ? $deadline : 0;
-                $product->available = ($deadline != 0 && time() <= strtotime($deadline)) ? 1 : 0;
+                $product->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
             }else{
                 $product->installed = $product_user ? $product_user->pivot->installed : 0;
                 $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
-                $product->available = ($product->deadline != 0 && time() <= strtotime($product->deadline)) ? 1 : 0;
+                $product->available = $product->deadline == 0 ? 1 :((time() <= strtotime($product->deadline)) ? 1 : 0);
             }
             $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){
