@@ -71,7 +71,7 @@ class UserController extends Controller
         foreach ($products as $key => $product) {
             $user->products()->updateExistingPivot($product['id'], [ 'deadline' => $product['deadline'] == '0' ? null : $product['deadline'] ]);
         }
-        return $this->successResponse($profile?$profile:[]);
+        return $this->successResponse($user?$user:[]);
     }
 
     public function destroy($id)
