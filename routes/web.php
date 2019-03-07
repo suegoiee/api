@@ -141,6 +141,8 @@ Route::middleware(['web'])->group(function(){
 
 	Route::get('/edms','EdmController@onPublishList');
 	Route::get('/edms/{edm}','EdmController@onPublish');
+
+	Route::get('fetch/A0003KLineModel/{stock_code}','DataController@A0003KLineModel');
 });
 
 

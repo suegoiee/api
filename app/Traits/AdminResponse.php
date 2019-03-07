@@ -3,7 +3,7 @@ namespace App\Traits;
 trait AdminResponse
 {
     protected function adminResponse($request, $response_data){
-    	if($response_data['status']=='error'){
+        if($response_data['status']=='error'){
     		return redirect()->back()->with('errors',$response_data['error']['message']);
         }
         return $request->input('action')=="save_exit" ? $this->saveExitResponse($response_data): $this->saveResponse($response_data);
