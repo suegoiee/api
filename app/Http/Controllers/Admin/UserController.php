@@ -57,4 +57,34 @@ class UserController extends AdminController
         ];
         return view('admin.detail',$data);
     }
+    public function export(Request $request)
+    {
+        $where['id.in'] = $request->ids;
+        $data = $this->moduleRepository->getsWith(['profile'], $where)->toArray();
+        $sheet = [];
+        $user = ['編號' => null, '暱稱' => null, 'Email' => null, '驗證' => null];
+        foreach ($data as $row) {
+            $products = [];
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case "id":
+                        $user['編號'] = $value;
+                        break;
+                    case "profile":
+                        $user['暱稱'] = $value ? $value['nickname'] : '';
+                        break;
+                    case "email":
+                        $user['Email'] = $value;
+                        break;
+                    case "mail_verified_at":
+                        $user['驗證'] = $value;
+                        break;
+                    default:break;
+                }
+            }
+            array_push($sheet, $user);
+            $user = array_fill_keys(array_keys($user), null);
+        }
+        $this->tableExport($sheet);
+    }
 }

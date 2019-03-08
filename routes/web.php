@@ -255,10 +255,12 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::delete('/companies','Admin\CompanyController@destroy');
 	Route::resource('/companies', 'Admin\CompanyController');
 
+
 	Route::get('/users/{user}/delete','Admin\UserController@destroy');
 	Route::get('/users/{user}/edit','Admin\UserController@edit');
 	Route::delete('/users','Admin\UserController@destroy');
 	Route::resource('/users', 'Admin\UserController');
+	Route::post('/users/export','Admin\UserController@export');
 
 	Route::post('/orders/export','Admin\OrderController@export');
 	Route::get('/orders/{order}/delete','Admin\OrderController@destroy');
