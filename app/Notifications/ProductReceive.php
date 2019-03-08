@@ -87,7 +87,7 @@ class ProductReceive extends Notification implements ShouldQueue
         return [
             'title'=>'收到贈禮',
             'content'=>$content,
-            'products'=>$products
+            //'products'=>$products
         ];
     }
 }

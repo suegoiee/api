@@ -76,7 +76,7 @@ class PromocodeReceive extends Notification implements ShouldQueue
         return [
             'title'=>'恭喜您獲得優惠券',
             'content'=>$content,
-            'promocodes'=>$promocodes
+            //'promocodes'=>$promocodes
         ];
     }
 }
