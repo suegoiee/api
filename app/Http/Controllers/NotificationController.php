@@ -31,6 +31,12 @@ class NotificationController extends Controller
                 $data['content'] = $data['content']['content'];
                 $data['title'] = isset($data['content']['title']) ? $data['content']['title']:'';
             }
+            if(isset($data['products'])){
+                unset($data['products']);
+            }
+            if(isset($data['promocodes'])){
+                unset($data['promocodes']);
+            }
             array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$data, 'status'=>$status]);
         }
         return $this->successResponse($notifications);
