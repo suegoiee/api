@@ -28,6 +28,7 @@ return [
         'stock_industries_4'=>'FH',
         'stock_industries_5'=>'INS',
         'stock_industries_6'=>'MIM',
+        'stock_industries_7'=>'ETF',
         'industries' => '產業名稱',
         'info' => '公司簡介',
         'area' => '銷售區域別',

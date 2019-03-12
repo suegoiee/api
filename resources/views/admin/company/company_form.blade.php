@@ -27,6 +27,7 @@
             <option value="4"{{$data && $data->stock_industries==4 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_4')}}</option>
             <option value="5"{{$data && $data->stock_industries==5 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_5')}}</option>
             <option value="6"{{$data && $data->stock_industries==6 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_6')}}</option>
+            <option value="7"{{$data && $data->stock_industries==7 ? "selected":""}}>{{trans($module_name.'.admin.stock_industries_7')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">
