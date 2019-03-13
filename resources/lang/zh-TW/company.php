@@ -20,6 +20,7 @@ return [
     	'name'=>'名稱',
         'stock_code'=>'代號',
         'stock_name'=>'公司名稱',
+        'industries_noneset'=>'尚未設定',
         'stock_industries'=>'產業代碼',
         'stock_industries_0'=>'無',
         'stock_industries_1'=>'CI',

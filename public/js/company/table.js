@@ -7,6 +7,7 @@ function stock_industriesFormatter(value,row,index){
 		case '4':return 'FB';
 		case '5':return 'INS';
 		case '6':return 'MIM';
+		case '7':return 'ETF';
 	}
 	return '無';
 }

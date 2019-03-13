@@ -177,12 +177,13 @@ class ServerTaskController extends AdminController
                     $this->delete_avatar($laboratory);
                 }
                 $user->laboratories()->forceDelete();
-                $user->products()->forceDelete();
+                $user->products()->detach();
                 $user->forceDelete();
                 echo $email.' '.'<br>';
             }
         }
     }
+
     private function create_avatar($laboratory, $avatar){
         if($avatar){
             if(Storage::disk('public')->exists($avatar->path)){

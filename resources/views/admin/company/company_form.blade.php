@@ -39,7 +39,7 @@
     <div class="col-sm-8">
         <select class="form-control" id="industries" name="industries" >
             @foreach( $industries as $key => $industry )
-                <option value="{{$industry->industries}}" {{ $data && $data->industries==$industry->industries ? 'selected':'' }} >{{$industry->industries}}</option>
+                <option value="{{$industry->industries}}" {{ $data && $data->industries==$industry->industries ? 'selected':'' }} >{{$industry->industries == '' ? trans('form.do_select') : $industry->industries}}</option>
             @endforeach
         </select>
     </div>

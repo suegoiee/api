@@ -4,7 +4,7 @@ namespace App;
 
 use App\UanalyzeModel;
 
-class StockIndustry extends UanalyzeModel
+class ForumUser extends UanalyzeModel
 {
     protected $connection = 'mysql_3';
 	protected $table = 'users';

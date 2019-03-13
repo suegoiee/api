@@ -47,6 +47,7 @@ class StockController extends Controller
 
         $request_data = $request->only(['stock_code','stock_name','stock_industries','industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type']);
 
+        $request_data['industries'] = isset($request_data['industries']) ? $request_data['industries'] :'無';
         $stock = $this->stockRepository->create($request_data);
         $stockIndustry = $this->stockIndustryRepository->getBy(['stock_code'=>$request_data['stock_code']]);
         if($stockIndustry){
@@ -110,8 +111,8 @@ class StockController extends Controller
         }
 
         $request_data = $request->only(['stock_code','stock_name','stock_industries','industries','info','area','product','local_related_1','local_related_2','local_related_3','local_related_4','local_related_5','foreign_related','type']);
-
-        $data = array_filter($request_data, function($item){return $item!=null;});
+        $request_data['industries'] = isset($request_data['industries']) ? $request_data['industries'] :'無';
+        $data = $request_data;//array_filter($request_data, function($item){return $item!=null;});
 
         $stock = $this->stockRepository->update($id,$data);
         $stockIndustry = $this->stockIndustryRepository->getBy(['stock_code'=>$request_data['stock_code']]);
@@ -186,10 +187,10 @@ class StockController extends Controller
     protected function stockValidator(array $data,$id=0)
     {
         return Validator::make($data, [
-            'stock_code'=>'required|max:4|unique:company_info,stock_code,'.$id.',no',
+            'stock_code'=>'required|max:10|unique:company_info,stock_code,'.$id.',no',
             'stock_name' => 'required|max:255',
             //'stock_industries' => 'required|max:255',
-            'industries' => 'required|max:255',
+            'industries' => 'max:255',
             //'info' => 'required',
             //'area',
             //'product',
