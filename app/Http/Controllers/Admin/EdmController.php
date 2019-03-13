@@ -91,8 +91,6 @@ class EdmController extends AdminController
             ];
             if(isset($image['image'])){
                 $image_data['path'] = $this->createImage($image['image'], $edm->id, 'edms');
-            }else{
-                $image_data['path'] = '';
             }
             
             if($image_id=='0'){
