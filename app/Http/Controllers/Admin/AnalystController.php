@@ -221,8 +221,8 @@ class AnalystController extends AdminController
         if($request->has('year_month')){
             $where['created_at.>=']=$request->input('year_month').'-01';
             $query_string['start_date'] =$request->input('year_month').'-01';
-            $where['created_at.<']=date('Y-m-d',strtotime($request->input('year_month').'-01 next month -1 day'));
-            $query_string['end_date'] = date('Y-m-d',strtotime($request->input('year_month').'-01 next month -1 day'));
+            $where['created_at.<']=date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
+            $query_string['end_date'] = date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
         }
         $user = $this->moduleRepository->get($analyst_id);
         $products_ids = $user->products->map(function($item, $key){return $item->id;})->toArray();
@@ -291,8 +291,8 @@ class AnalystController extends AdminController
         if($request->has('year_month')){
             $where['created_at.>=']=$request->input('year_month').'-01';
             $query_string['start_date'] =$request->input('year_month').'-01';
-            $where['created_at.<']=date('Y-m-d',strtotime($request->input('year_month').'-01 next month -1 day'));
-            $query_string['end_date'] = date('Y-m-d',strtotime($request->input('year_month').'-01 next month -1 day'));
+            $where['created_at.<']=date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
+            $query_string['end_date'] = date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
         }
         $analyst = $this->moduleRepository->get($analyst_id);
         $products_ids = $analyst->products->map(function($item, $key){return $item->id;})->toArray();

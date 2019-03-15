@@ -27,7 +27,7 @@ class OrderController extends AnalystController
             $query_string['start_date'] = $request->input('start_date');
         }
         if($request->has('end_date')){
-            $where['created_at.<=']=$request->input('end_date');
+            $where['created_at.<'] = date('Y-m-d', strtotime($request->input('end_date').' +1 day'));
             $query_string['end_date'] = $request->input('end_date');
         }
         $user = $request->user();
