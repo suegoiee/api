@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class VerifyMailSend extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    public $queue = 'high';
     protected $user;
     protected $token;
     /**
