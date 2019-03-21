@@ -216,6 +216,25 @@ class ProductController extends Controller
 
     }
 
+    public function tags(Request $request)
+    {
+        $where = [];
+        $with = [
+                'tags'=>function($query){$query->select('name');}
+            ];
+        $products = $this->productRepository->getsWithByStatus($with,$where);
+        $tags=[];
+        foreach ($products as $key => $product) {
+            foreach ($product->tags as $key2 => $tag) {
+                if(!in_array($tag->name, $tags)){
+                    $tags[] = $tag->name;
+                }
+            }
+        }
+        
+        return $this->successResponse(array_values($tags));
+    }
+
     protected function productValidator(array $data)
     {
         return Validator::make($data, [
