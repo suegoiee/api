@@ -32,6 +32,9 @@
         },
         formatColumns: function () {
             return '列';
+        },
+        formatAllRows: function () {
+            return 'All';
         }
     };
 

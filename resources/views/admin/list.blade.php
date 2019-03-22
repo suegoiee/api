@@ -37,7 +37,7 @@
 
 @section('javascript')
 <script src="{{asset('thirdparty/bootstrap-table/bootstrap-table.min.js')}}"></script>
-<script src="{{asset('thirdparty/bootstrap-table/locale/bootstrap-table-zh-TW.min.js')}}"></script>
+<script src="{{asset('thirdparty/bootstrap-table/locale/bootstrap-table-zh-TW.js')}}"></script>
 <script src="{{asset('thirdparty/Blob.js/Blob.min.js')}}"></script>
 <script src="{{asset('thirdparty/tableExport/libs/FileSaver/FileSaver.min.js')}}"></script>
 <script src="{{asset('thirdparty/tableExport/tableExport.min.js')}}"></script>
