@@ -59,7 +59,7 @@ class ProfileController extends Controller
 
         $user->profile()->update($data);
         $profile = $user->profile;
-
+        $profile->email =  $user->email;
         return $this->successResponse($profile?$profile:[]);
     }
 
