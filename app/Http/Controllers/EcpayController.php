@@ -111,9 +111,9 @@ class EcpayController extends Controller
     public function result(Request $request)
     {
         $this->log(json_encode($request->all()));
+        return redirect(env('ECPAY_BACK_URL',url('/')));
         $feedback_data = $this->ecpay->checkOutFeedback();
-
-        $feedback_data['data']= json_encode($feedback_data);
+        $feedback_data['data']= json_encode($request->all());
         $ecpay = $this->ecpayRepository->getBy(['MerchantTradeNo'=>$feedback_data['MerchantTradeNo']]);
         if($ecpay){
             $ecpay->feedbacks()->create($feedback_data);
