@@ -111,6 +111,10 @@ class EcpayController extends Controller
     public function result(Request $request)
     {
         $this->log(json_encode($request->all()));
+        $RtnCode = $request->input('RtnCode',0);
+        if($RtnCode==1){
+            return redirect(env('ECPAY_BACK_URL',url('/')).'?order_status=1');
+        }
         return redirect(env('ECPAY_BACK_URL',url('/')));
         $feedback_data = $this->ecpay->checkOutFeedback();
         $feedback_data['data']= json_encode($request->all());
