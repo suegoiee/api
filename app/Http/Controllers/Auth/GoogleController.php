@@ -27,7 +27,7 @@ class GoogleController extends Controller
         $user = User::where('is_socialite',2)->where('email',$request->input('email'))->first();
         if( $user ){
         	if(Hash::check($request->input('password'), $user->getAuthPassword())){
-        		
+        		$user->touch();
         		return $this->logined($request,$user);
         	}else{
         		return $this->validateErrorResponse([trans('auth.facebook_error')]);
