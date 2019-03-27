@@ -28,7 +28,7 @@ class Order extends UanalyzeModel
     }
 
     public function products(){
-        return $this->belongsToMany('App\Product')->select(['id','name','type','price','expiration','order_product.quantity'])->withPivot('unit_price','quantity');
+        return $this->belongsToMany('App\Product')->select(['id','name','type','order_product.quantity as quantity','order_product.unit_price as price'])->withPivot('unit_price','quantity');
     }
 
     public function getUserNicknameAttribute(){
