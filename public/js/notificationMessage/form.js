@@ -18,6 +18,18 @@ $(function(){
         }
     });
     $('#all_user').change();
+
+    $('#type').change(function(e){
+        var type = $(this).val();
+        if(type == 'MassiveAnnouncement'){
+            $('#send_email_input').addClass('hide');
+            $('#send_notice_input').addClass('hide');
+        }else{
+            $('#send_email_input').removeClass('hide');
+            $('#send_notice_input').removeClass('hide');
+        }
+
+    });
     /*
     $('#user_ids').multiSelect({
         selectableHeader: "<div class='text-center'>可選使用者</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
