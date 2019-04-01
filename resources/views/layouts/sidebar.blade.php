@@ -77,6 +77,12 @@
                 <span class="text">{{trans('analyst.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/referrers')}}">
+                <span class="oi oi-badge"></span>
+                <span class="text">{{trans('referrer.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">

@@ -116,6 +116,8 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
+
+	Route::put('/referrers/check','ReferrerController@check');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -315,6 +317,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/analysts/{analyst}/grants/details', 'Admin\AnalystController@details');
 
 	Route::get('/analysts/{analyst}/grants/amounts', 'Admin\AnalystController@getAmounts');
+
+	Route::get('/referrers/{referrer}/delete','Admin\ReferrerController@destroy');
+	Route::delete('/referrers','Admin\ReferrerController@destroy');
+	Route::resource('/referrers', 'Admin\ReferrerController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
@@ -331,6 +337,8 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
 });
+
+//Server task
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');
