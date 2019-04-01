@@ -584,7 +584,4 @@ class OrderController extends Controller
         $result['total_price'] = $result['total_price'] <= $order_offer ? 0 : $result['total_price'] - $order_offer;
         return $result;
     }
-    function getMobileProductInput($request){
-
-    }
 }
