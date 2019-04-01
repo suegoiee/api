@@ -65,7 +65,7 @@ class NotificationMessageController extends Controller
             }
             $n = 0;
             $div  =  500;
-            while($n < count($a)){
+            while($n < count($bcc)){
                 Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $n+$div))->queue(new Announcement($notificationMessage));
                 $n+=$div;
             }
@@ -126,7 +126,7 @@ class NotificationMessageController extends Controller
             }
             $n = 0;
             $div  =  500;
-            while($n < count($a)){
+            while($n < count($bcc)){
                 Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $n+$div))->queue(new Announcement($notificationMessage));
                 $n+=$div;
             }
