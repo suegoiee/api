@@ -435,6 +435,7 @@ class OrderController extends Controller
             return $this->failedResponse(['message'=>['plans error']]);
         }
         $result['check_order'] = $check_order;
+        $result['input']= $request->all();
         return $this->successResponse($result);
     }
     function delOrderByUsePromocode($user, $promocode_codes){
