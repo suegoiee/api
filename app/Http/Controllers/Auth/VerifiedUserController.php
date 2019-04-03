@@ -42,6 +42,12 @@ class VerifiedUserController extends Controller
        
         return redirect(env('APP_FRONT_URL'));
     }
+    public function confirmByForum(Request $request)
+    {
+        User::where('email', $request->input('email'))->update(['mail_verified_at'=>date('Y-m-d H:i:s')]);
+       
+        return $this->sendWasVerifiedResponse();
+    }
     public function sendVerifyEmail(Request $request)
     {
         /**

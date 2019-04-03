@@ -13,7 +13,8 @@
 //API
 
 Route::post('/register', 'Auth\RegisterController@register');
-Route::post('/registerbyforum', 'Auth\RegisterController@registerbyforum');
+Route::post('/registerbyforum', 'Auth\RegisterController@registerByForum');
+Route::post('/auth/confirmbyforum','Auth\VerifiedUserController@confirmByForum');
 
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');

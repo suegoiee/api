@@ -36,7 +36,7 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($request->all())));
         return $this->registered($request, $user);
     }
-    public function registerbyforum(Request $request)
+    public function registerByForum(Request $request)
     {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
@@ -64,7 +64,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
-            'mail_verified_at'=> date('Y-m-d H:i:s'),
+            //'mail_verified_at'=> date('Y-m-d H:i:s'),
         ]);
     }
 
