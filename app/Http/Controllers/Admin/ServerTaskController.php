@@ -210,8 +210,8 @@ class ServerTaskController extends AdminController
     {
         $users  = User::get();
         foreach ($users as $key => $user) {
-            echo ($user->profile ? $user->profile->nickname : $user->email).'<br>';
-            if(!(ForumUser::where('email', $user->email)->first())){
+            if(ForumUser::where('email', $user->email)->count()==0){
+                echo ($user->profile ? $user->profile->nickname : $user->email).'<br>';
                 ForumUser::create([
                     'name' => $user->profile ? $user->profile->nickname : $user->email,
                     'email' => $user->email,
