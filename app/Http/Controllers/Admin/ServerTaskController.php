@@ -211,18 +211,20 @@ class ServerTaskController extends AdminController
         $users  = User::get();
         foreach ($users as $key => $user) {
             echo ($user->profile ? $user->profile->nickname : $user->email).'<br>';
-            ForumUser::create([
-                'name' => $user->profile ? $user->profile->nickname : $user->email,
-                'email' => $user->email,
-                'username' => $user->profile ? $user->profile->nickname : $user->email,
-                'github_id' => '',
-                'github_username' => '',
-                'confirmation_code' => null,
-                //'password'=>$hasher->make($this->password),
-                'password'=> $user->getAuthPassword(),
-                'type' => 1,
-                'remember_token' => '',
-            ]);
+            if(!(ForumUser::where('email', $user->email)->first())){
+                ForumUser::create([
+                    'name' => $user->profile ? $user->profile->nickname : $user->email,
+                    'email' => $user->email,
+                    'username' => $user->profile ? $user->profile->nickname : $user->email,
+                    'github_id' => '',
+                    'github_username' => '',
+                    'confirmation_code' => null,
+                    //'password'=>$hasher->make($this->password),
+                    'password'=> $user->getAuthPassword(),
+                    'type' => 1,
+                    'remember_token' => '',
+                ]);
+            }
         }
     }
 }
