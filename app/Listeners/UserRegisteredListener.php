@@ -28,6 +28,7 @@ class UserRegisteredListener
         $user = $event->user; 
         $password = $event->password;
         $token = $event->token;
+        $byForum = $event->byForum;
         $http = new \GuzzleHttp\Client;
         $response = $http->request('post',url('/user/products'),[
                 'headers'=>[
@@ -39,23 +40,25 @@ class UserRegisteredListener
                     'user_id' => $user['id'],
                 ],
             ]);
-        $data = [
-            'name' => $user->profile->nickname,
-            'email' => $user->email,
-            'username' => $user->profile->nickname,
-            'github_id' => 0,
-            'github_username' => 'ua',
-            'confirmation_code' => null,
-            'password'=> $password,
-            'type' => 1,
-            'remember_token' => 'Y8LWuIcjee'
-        ];/*
-        $response = $http->request('post',env('UA_FORUM_REGISTER_API_URL'),[
+        if(!$byForum && env('UA_FORUM_REGISTER_API_URL','')!=''){
+            $data = [
+                'name' => $user->profile->nickname,
+                'email' => $user->email,
+                'username' => $user->profile->nickname,
+                'github_id' => 0,
+                'github_username' => 'ua',
+                'confirmation_code' => null,
+                'password'=> $password,
+                'type' => 1,
+                'remember_token' => 'Y8LWuIcjee'
+            ];
+            $response = $http->request('post',env('UA_FORUM_REGISTER_API_URL'),[
                 'headers'=>[
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ',
                 ],
                 'form_params' => $data
-            ]);*/
+            ]);
+        }
     }
 }

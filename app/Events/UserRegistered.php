@@ -18,16 +18,19 @@ class UserRegistered
     public $user;
     public $token;
     public $password;
+    public $byForum;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user, $token, $password)
+    public function __construct(User $user, $token, $password, $byForum)
     {
         $this->user = $user;
         $this->token = $token;
         $this->password = $password;
+        $this->byForum  = $byForum;
+
     }
 
     /**
