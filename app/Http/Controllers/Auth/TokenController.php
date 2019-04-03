@@ -57,11 +57,13 @@ class TokenController extends Controller
     }
     public function refreshAccessToken(Request $request)
     {
+        $user = $request->user();
         $validator = $this->refreshValidator($request->all());
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
         $response = $this->refreshGrantToken($request);
+        $response['verified']= $user && $user->mail_verified_at ? 1 : 0;
         if(isset($response['error'])){
             return $this->failedResponse(['message'=>[trans('auth.refresh_token_invalid')]]);
         }
