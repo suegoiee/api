@@ -10,6 +10,7 @@ use App\Repositories\PromocodeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use App\ForumUser;
 use Illuminate\Http\File;
 use Storage;
 use App\Traits\ImageStorage;
@@ -204,5 +205,24 @@ class ServerTaskController extends AdminController
             return true;
         }
         return false;
+    }
+    public function importUsersToForum()
+    {
+        $users  = User::get();
+        foreach ($users as $key => $user) {
+            echo ($user->profile ? $user->profile->nickname : $user->email).'<br>';
+            ForumUser::create([
+                'name' => $user->profile ? $user->profile->nickname : $user->email,
+                'email' => $user->email,
+                'username' => $user->profile ? $user->profile->nickname : $user->email,
+                'github_id' => '',
+                'github_username' => '',
+                'confirmation_code' => null,
+                //'password'=>$hasher->make($this->password),
+                'password'=> $user->getAuthPassword(),
+                'type' => 1,
+                'remember_token' => '',
+            ]);
+        }
     }
 }
