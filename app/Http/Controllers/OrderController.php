@@ -43,8 +43,6 @@ class OrderController extends Controller
         $user = $request->user();
         $products = $request->input('products',[]);
         if(count($products)==0){
-            return $this->failedResponse(['message'=>['No product to check order']]);
-        }else{
             $products = $request->input('product_id', false);
             if($products){
                 $quantity = $request->input('quantity_id', false);
@@ -53,9 +51,10 @@ class OrderController extends Controller
                 }
                 $products = [['id'=>$products, 'quantity'=>$quantity]];
             }else{
-                return $this->failedResponse(['message'=>['The product is required']]);
+                return $this->failedResponse(['message'=>['No product to check order']]);
             }
         }
+
         $validator = $this->orderValidator($request->all());
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
