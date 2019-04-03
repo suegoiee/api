@@ -44,6 +44,17 @@ class OrderController extends Controller
         $products = $request->input('products',[]);
         if(count($products)==0){
             return $this->failedResponse(['message'=>['No product to check order']]);
+        }else{
+            $products = $request->input('product_id', false);
+            if($products){
+                $quantity = $request->input('quantity_id', false);
+                if($quantity === false ){
+                    return $this->failedResponse(['message'=>['The quantity is required']]);
+                }
+                $products = [['id'=>$products, 'quantity'=>$quantity]];
+            }else{
+                return $this->failedResponse(['message'=>['The product is required']]);
+            }
         }
         $validator = $this->orderValidator($request->all());
         if($validator->fails()){
@@ -422,10 +433,29 @@ class OrderController extends Controller
     {
         $user = $request->user();
         $products = $request->input('products',[]);
-        foreach ($products as $key => $product_id) {
-            $product = $this->productRepository->get($product_id['id']);
-            if(!$product){
-                 return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+        if(count($products)>0){
+            foreach ($products as $key => $product_id) {
+                $product = $this->productRepository->get($product_id['id']);
+                if(!$product){
+                     return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+                }
+            }  
+        }else{
+            $products = $request->input('product_id', false);
+            if($products){
+                $quantity = $request->input('quantity_id', false);
+                if($quantity === false ){
+                    return $this->failedResponse(['message'=>['The quantity is required']]);
+                }
+                $products = [['id'=>$products, 'quantity'=>$quantity]];
+                foreach ($products as $key => $product_id) {
+                    $product = $this->productRepository->get($product_id['id']);
+                    if(!$product){
+                        return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+                    }
+                }
+            }else{
+                return $this->failedResponse(['message'=>['The product is required']]);
             }
         }
         $promocode_codes = $request->input('promocodes',[]);

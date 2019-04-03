@@ -12,7 +12,7 @@
 			<hr style="border-bottom: 1px solid #C8C8C8;border-top: 0; width:95%;margin-top: 0;" />
 			<div style="padding:0 30px;color:#000;font-size: 14px;">
 			@if(!isset($type))
-				<p>{{$nickname}} 您好： </p>
+				<p>{{ $nickname != '' ? $nickname.'您好：': ''  }}</p>
 			@endif
 				<div style="min-height: 200px">
 					@yield('content')

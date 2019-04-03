@@ -22,6 +22,7 @@
             <!--<option value="ProductReceive"  {{ $data && $data->type=='ProductReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_ProductReceive')}}</option>-->
             <!--<option value="PromocodeReceive"  {{ $data && $data->type=='PromocodeReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_PromocodeReceive')}}</option>-->
             <option value="Others"  {{ $data && $data->type=='Others' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Others')}}</option>
+            <option value="MassiveAnnouncement"  {{ $data && $data->type=='MassiveAnnouncement' ? 'selected':'' }} >{{trans($module_name.'.admin.type_MassiveAnnouncement')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">
@@ -46,7 +47,7 @@
                 
     </div>
 </div>
-<div class="form-group row">
+<div id="send_email_input" class="form-group row {{ $data && $data->type=='MassiveAnnouncement' ? 'hide':'' }}">
     <label class="form-control-label col-sm-2" for="send_email">{{trans($module_name.'.admin.send_email')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
         <input type="checkbox" class="" id="send_email" name="send_email" value="1" {{ $data && $data->send_email==1 ? 'checked':'' }} >
@@ -55,7 +56,7 @@
                 
     </div>
 </div>
-<div class="form-group row">
+<div id="send_notice_input" class="form-group row {{ $data && $data->type=='MassiveAnnouncement' ? 'hide':'' }}">
     <label class="form-control-label col-sm-2" for="send_notice">{{trans($module_name.'.admin.send_notice')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
         <input type="checkbox" class="" id="send_notice" name="send_notice" value="1" {{ $data && $data->send_notice==1 ? 'checked':'' }} >

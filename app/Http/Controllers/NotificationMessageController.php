@@ -6,6 +6,8 @@ use App\Repositories\NotificationMessageRepository;
 use App\Notifications\Others;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\Announcement;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationMessageController extends Controller
 {	
@@ -40,6 +42,7 @@ class NotificationMessageController extends Controller
         $request_data['send_notice'] = $request->input('send_notice', 0);
         $all_user = $request->input('all_user', 0);
         $classType = 'App\\Notifications\\'.$request->input('type', 'Others');
+        $notificationType = $request->input('type', 'Others');
         if(!$all_user){
             $user_ids = $request->input('user_ids',[]);
             if(count($user_ids)>0){
@@ -55,10 +58,22 @@ class NotificationMessageController extends Controller
         $users = count($user_ids) > 0 ? 
                     $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
                     $this->userRepository->gets() ;
-        foreach ($users as $key => $user) {
-            $user->notify(new $classType($user, $notificationMessage));
+        if($notificationType=='MassiveAnnouncement'){
+            $bcc = [];
+            foreach ($users as $key => $user) {
+                array_push($bcc, $user->email);
+            }
+            $n = 0;
+            $div  =  500;
+            while($n < count($bcc)){
+                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $n+$div))->queue(new Announcement($notificationMessage));
+                $n+=$div;
+            }
+        }else{
+            foreach ($users as $key => $user) { 
+                $user->notify(new $classType($user, $notificationMessage));
+            }
         }
-
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
     }
 
@@ -86,6 +101,7 @@ class NotificationMessageController extends Controller
         $request_data['send_notice'] = $request->input('send_notice', 0);
         $all_user = $request->input('all_user', 0);
         $classType = 'App\\Notifications\\'.$request->input('type', 'Others');
+        $notificationType = $request->input('type', 'Others');
         if(!$all_user){
             $user_ids = $request->input('user_ids',[]);
             if(count($user_ids)>0){
@@ -103,8 +119,21 @@ class NotificationMessageController extends Controller
         $users = count($user_ids) > 0 ? 
                     $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
                     $this->userRepository->gets() ;
-        foreach ($users as $key => $user) {
-            $user->notify(new $classType($user, $notificationMessage));
+        if($notificationType=='MassiveAnnouncement'){
+            $bcc = [];
+            foreach ($users as $key => $user) {
+                array_push($bcc, $user->email);
+            }
+            $n = 0;
+            $div  =  500;
+            while($n < count($bcc)){
+                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $n+$div))->queue(new Announcement($notificationMessage));
+                $n+=$div;
+            }
+        }else{
+            foreach ($users as $key => $user) { 
+                $user->notify(new $classType($user, $notificationMessage));
+            }
         }
         return $this->successResponse($notificationMessage?$notificationMessage:[]);
     }

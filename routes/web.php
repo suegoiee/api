@@ -11,27 +11,10 @@
 |
 */
 //API
-/*
-Route::get('/test/notice/email',function(){
-	$data=[
-		'header_pic'=>'FavoriteStockAlert_header.jpg',
-		'content'=>'test',
-		'title'=>'title',
-		'nickname'=>'shouwda',
-		'products'=>[new stdClass()],
-		'promocodes'=>[new stdClass()],
-	];
-	$data['promocodes'][0]->name='test';
-	$data['promocodes'][0]->deadline='2018/12/12';
-	$data['promocodes'][0]->code='asdljslkdjfdf';
-	$data['promocodes'][0]->offer='100';
-	$data['products'][0]->name='test';
-	$data['products'][0]->deadline='2018/12/12';
-	$data['products'][0]->code='asdljslkdjfdf';
-	$data['products'][0]->offer='100';
-	return view('emails.favoriteStockAlert',$data);
-});*/
+
 Route::post('/register', 'Auth\RegisterController@register');
+Route::post('/registerbyforum', 'Auth\RegisterController@registerbyforum');
+
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
 Route::get('/auth/verified','Auth\VerifiedUserController@verified');
@@ -116,6 +99,8 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
+
+	Route::put('/referrers/check','ReferrerController@check');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -315,6 +300,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/analysts/{analyst}/grants/details', 'Admin\AnalystController@details');
 
 	Route::get('/analysts/{analyst}/grants/amounts', 'Admin\AnalystController@getAmounts');
+
+	Route::get('/referrers/{referrer}/delete','Admin\ReferrerController@destroy');
+	Route::delete('/referrers','Admin\ReferrerController@destroy');
+	Route::resource('/referrers', 'Admin\ReferrerController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
@@ -331,6 +320,8 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
 });
+
+//Server task
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
 Route::get('/server/clearOAuthTokenTable', 'Admin\ServerTaskController@clearOAuthTokenTable');
 Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCompanyIndustries');

@@ -26,6 +26,7 @@ return [
         'type_FavoriteStockAlert'=>'我的最愛股',
         'type_ProductReceive'=>'商品贈送',
         'type_PromocodeReceive'=>'優惠券發送',
-        'type_Others'=>'其他'
+        'type_Others'=>'其他',
+        'type_MassiveAnnouncement'=>'全站寄信'
     ]
 ];

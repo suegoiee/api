@@ -97,6 +97,7 @@ trait ResponseFormatter
                 case 'The product is not exists':                           return 'E400147';
                 case 'The phone has already been taken.':                   return 'E400148';
                 case 'The user is not exists':                              return 'E400149';
+                case 'The product is required':                            return 'E400150';
             }
         }
     }
