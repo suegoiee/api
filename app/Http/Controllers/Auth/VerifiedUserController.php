@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Uanalyze\Mitake\Facades\Mitake;
+use App\Events\UserVerified;
 
 class VerifiedUserController extends Controller
 {
@@ -38,6 +39,7 @@ class VerifiedUserController extends Controller
    
         if(Verify_user::where('email',$request->input('email'))->where('token', $request->input('token'))->count()>0){
             User::where('email', $request->input('email'))->update(['mail_verified_at'=>date('Y-m-d H:i:s')]);
+            event(new UserVerified($request->input('email')));
         }
        
         return redirect(env('APP_FRONT_URL'));

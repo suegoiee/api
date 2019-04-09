@@ -64,7 +64,8 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
-            //'mail_verified_at'=> date('Y-m-d H:i:s'),
+            'is_socialite' => isset($data['is_socialite']) ? $data['is_socialite'] : 0,
+            'mail_verified_at'=> isset($data['mail_verified_at']) ? $data['mail_verified_at'] : NULL
         ]);
     }
 

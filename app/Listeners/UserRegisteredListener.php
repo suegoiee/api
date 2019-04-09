@@ -48,6 +48,8 @@ class UserRegisteredListener
                 'github_id' => 0,
                 'github_username' => 'ua',
                 'confirmation_code' => null,
+                'is_socialite'=>$user->is_socialite,
+                'confirmed'=>$user->mail_verified_at ? 1 : 0,
                 'password'=> $password,
                 'type' => 1,
                 'remember_token' => 'Y8LWuIcjee'

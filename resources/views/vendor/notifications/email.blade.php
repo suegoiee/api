@@ -45,7 +45,7 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-投資順利<br>台股優分析  UAnalyze API
+投資順利<br>台股優分析  UAnalyze
 @endif
 
 {{-- Subcopy --}}

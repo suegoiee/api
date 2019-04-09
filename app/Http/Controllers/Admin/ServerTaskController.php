@@ -219,6 +219,8 @@ class ServerTaskController extends AdminController
                     'github_id' => '',
                     'github_username' => '',
                     'confirmation_code' => null,
+                    'is_socialite'=>$user->is_socialite,
+                    'confirmed'=>$user->mail_verified_at ? 1 : 0,
                     //'password'=>$hasher->make($this->password),
                     'password'=> $user->getAuthPassword(),
                     'type' => 1,
