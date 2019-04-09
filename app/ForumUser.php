@@ -21,5 +21,6 @@ class ForumUser extends UanalyzeModel
 	        'type',
 	        'remember_token',
 	        'bio',
+	        'is_socialite'
 	];
 }
