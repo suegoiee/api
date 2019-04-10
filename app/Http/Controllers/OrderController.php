@@ -45,7 +45,7 @@ class OrderController extends Controller
         if(count($products)==0){
             $products = $request->input('product_id', false);
             if($products){
-                $quantity = $request->input('quantity_id', false);
+                $quantity = $request->input('product_quantity', false);
                 if($quantity === false ){
                     return $this->failedResponse(['message'=>['The quantity is required']]);
                 }
@@ -63,6 +63,7 @@ class OrderController extends Controller
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
         $request_data['use_invoice'] =  $request->input('use_invoice',0);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
+        $request_data['referrer_code'] = isset($request_data['referrer_code']) ? $request_data['referrer_code'] :  '';
         $product_ids = [];
         $product_data = [];
         $product_free = [];
@@ -442,7 +443,7 @@ class OrderController extends Controller
         }else{
             $products = $request->input('product_id', false);
             if($products){
-                $quantity = $request->input('quantity_id', false);
+                $quantity = $request->input('product_quantity', false);
                 if($quantity === false ){
                     return $this->failedResponse(['message'=>['The quantity is required']]);
                 }
