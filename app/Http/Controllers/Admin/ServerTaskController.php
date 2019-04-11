@@ -208,6 +208,7 @@ class ServerTaskController extends AdminController
     }
     public function importUsersToForum()
     {
+        set_time_limit(0);
         $users  = User::get();
         foreach ($users as $key => $user) {
             if(ForumUser::where('email', $user->email)->count()==0){
