@@ -100,8 +100,6 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
-
-	Route::put('/referrers/check','ReferrerController@check');
 });
 
 Route::middleware(['web'])->group(function(){
@@ -128,6 +126,8 @@ Route::middleware(['web'])->group(function(){
 
 	Route::get('/edms','EdmController@onPublishList');
 	Route::get('/edms/{edm}','EdmController@onPublish');
+
+	Route::get('/referrers/check/{code}','ReferrerController@check');
 
 	Route::get('fetch/A0003KLineModel/{stock_code}','DataController@A0003KLineModel');
 	Route::get('fetch/ETFKLine/{stock_code}','DataController@ETFKLine');

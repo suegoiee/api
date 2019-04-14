@@ -15,10 +15,10 @@ class ReferrerController extends Controller
     {
         $this->referrerRepository = $referrerRepository;
     }
-    public function check(Request $request)
+    public function check(Request $request, $code = 0)
     {
-        $code = $request->input('code');
-        $referrer = $this->referrerRepository->whereBy(['code'=>$code])->toGet();
+        $code = $request->input('code', $code);
+        $referrer = $this->referrerRepository->getBy(['code'=>$code]);
         if($referrer){
             return $this->successResponse(["code"=>$referrer->code, "name"=>$referrer->name, "is_exists"=>1]);
         }
