@@ -1,0 +1,181 @@
+.pull-left{
+	float: left;
+}
+.pull-right{
+	float: right;
+}
+.actions span{
+	margin: 0 5px;
+}
+.actions span:hover{
+	color:#F44336;
+}
+.breadcrumb .float-right{
+	margin-left: 5px;
+}
+.pagination .page-number.active{
+	background-color: #BBDEFB;
+	border-radius:2px; 
+}
+.bs-bars{
+	max-width: 100%;
+}
+#table-toolbar #date{
+	width: 50px;
+	font-size: 17px;
+	color:  #32415d;
+	padding: 0;
+	margin: -3px 0 0 23px;
+}
+#table-toolbar .dates{
+	width: 10%;
+	height: 32px;
+	border-radius: 5px;
+	font-size: 16.5px;
+	margin-top: -4px;
+	background: url(../images/caret-down.svg) no-repeat right;
+	background-size: 10px 10px;
+	background-position: 95% 55%;
+	color: #32415d;
+	text-align: left;
+	padding: 0 0 0 5%;
+}
+#table-toolbar .line{
+	margin-top: -5px;
+}
+#table-toolbar .dates:hover{
+	background-color: #f0f0f0;
+}
+#table-toolbar #dates01{
+	margin-left: 10px;
+}
+#table-toolbar .btn{
+	width: 10%;
+	height: auto;
+	font-size: 16.5px;
+	line-height: 10px;
+	background-color: #33609f;
+	color: #fff;
+	padding: 0;
+	margin-top: -3px;
+}
+#table-toolbar .btn:hover{
+	background-color: #427AC2;
+}
+
+.thead-type{
+	background-color: #32415d;
+	color: #fff;
+	font-size: 16px;
+}
+.thead-type .th-inner{
+	font-weight: normal;
+}
+.thead-type .th-inner:hover{
+	background-color: #427ac2;
+}
+
+.search .form-control{
+	width: 204px;
+	height: 32px;
+	margin: 10px 33px 0 0;
+	color: #7d8d99;
+	font-size: 16.5px;
+	padding-left: 13px;
+
+}
+.topArticle{
+	color: #FFF59D;
+	float:right;
+	text-shadow: 1px 1px 2px  #777;
+}
+.breadcrumb li{
+	margin-left:5px;
+}
+
+.page-link{
+	line-height: 1.2rem;
+}
+.pagination span{
+	line-height: 1.2rem;
+}
+@media (max-width: 768px){
+	#content .card{
+		margin-top: 20px;
+	}
+	.sidebar .text{
+		font-size: 13px;
+		margin-left: 0;
+	}
+}
+
+@media (max-width: 512px){
+	.breadcrumb{
+		padding: 0;
+		margin: 0 0 10px;
+	}
+	/* 麵包屑 */
+	.breadcrumb .breadcrumb-item{
+		font-size: 0.9rem !important;
+		padding: 8px 0 !important;
+	}
+	/* 日期查詢 */
+	.bs-bars{
+		height: 50px;
+	}
+	#table-toolbar #date{
+		margin-left: auto;
+		font-size: 0.8rem;
+		width: auto;
+	}
+	#table-toolbar .dates{
+		font-size: 0.8rem;
+	}
+	#table-toolbar #dates01{
+		margin-left: auto;
+	}
+	#table-toolbar .line{
+		margin: -5px 0 0 0 !important; 
+	}
+	#table-toolbar .btn{
+		margin-left: 0 !important;
+		font-size: 0.8rem;
+	}
+	.search{
+		margin-top: 0px !important;
+	}
+	/* 底部顯示多少數據 */
+	.pagination-info{
+		float: right;
+		font-size: 0.8rem !important;
+		margin: auto !important;
+	}
+	.page-list{
+		float: right;
+		font-size: 0.8rem !important;
+		margin: auto !important;
+	}
+	.pagination-detail .btn{
+		width: 95% !important;
+		height: auto;
+		font-size: 0.8rem;
+	}
+	/* 分頁 */
+	.pagination{
+		width: 100%;
+	}
+	.pagination{
+		padding: 0 !important;
+	}
+	.page-item{
+		width: 11%;
+		font-size: 0.4rem;
+	}
+	.page-link{
+		padding: 8px 0 8px 35% !important;
+	}
+	.fixed-table-pagination .dropup .dropdown-menu{
+		min-width: 7rem !important;
+	}
+}
+

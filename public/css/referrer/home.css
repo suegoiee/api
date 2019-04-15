@@ -1,0 +1,16 @@
+#method{
+  color:#FFF;
+}
+#content .form-horizontal{
+	width: 80%;
+	min-height: 100%;
+	margin: auto;
+	left: 0;
+	right: 0;
+} 
+#content .form-horizontal .btn{
+	background-color: #32415d;
+	color: #fff;
+}
+
+

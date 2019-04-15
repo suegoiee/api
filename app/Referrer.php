@@ -16,8 +16,13 @@ class Referrer extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function grants()
+    {
+        return $this->hasMany('App\Referrer_grant');
+    }
     public function products()
     {
-    	return $this->belongsToMany('App\Product');
+    	return $this->belongsToMany('App\Product')->withPivot(['divided']);
     }
 }

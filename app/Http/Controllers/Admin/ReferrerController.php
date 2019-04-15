@@ -96,7 +96,7 @@ class ReferrerController extends AdminController
             'module_name'=> $this->moduleName,
             'referrer'=>$referrer,
             'data' => $grant,
-            'details'=>$grant->details
+            'others'=>$grant->others
         ];
         return view('admin.referrer.grant_form',$data);
     }
@@ -121,7 +121,11 @@ class ReferrerController extends AdminController
         $request_data = $request->only(['email','name','no', 'code', 'divided', 'bank_code', 'bank_branch', 'bank_name', 'bank_account']);
         $request_data['password'] = bcrypt($request->input('password'));
         $referrer = $this->moduleRepository->create($request_data);
-        $products_ids = $request->input('products', []);
+        $products_ids = []; 
+        $products = $request->input('products', []);
+        foreach ($products as $key => $product) {
+            $products_ids[$product['id']] = ['divided'=>$product['divided']];
+        }
         $referrer->products()->sync($products_ids);
 
         return $request->input('action')=="save_exit" ? redirect(url('/admin/'.str_plural($this->moduleName))) : redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer->id.'/edit'));
@@ -132,8 +136,15 @@ class ReferrerController extends AdminController
         if(!$referrer){
             return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer->id.'/grants/create'));
         }
-        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee','ratio']);
+        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee','divided']);
         $request_data['year_month'] = $request_data['year_month'] ? $request_data['year_month']:date('Y-m'); 
+        $request_data['price'] = $request_data['price'] ? $request_data['price'] : 0;  
+        $request_data['handle_fee'] = $request_data['handle_fee'] ? $request_data['handle_fee'] : 0;  
+        $request_data['income_tax'] = $request_data['income_tax'] ? $request_data['income_tax'] : 0;  
+        $request_data['second_generation_nhi'] = $request_data['second_generation_nhi'] ? $request_data['second_generation_nhi'] : 0;  
+        $request_data['interbank_remittance_fee'] = $request_data['interbank_remittance_fee'] ? $request_data['interbank_remittance_fee'] : 0;  
+        $request_data['platform_fee'] = $request_data['platform_fee'] ? $request_data['platform_fee'] : 0; 
+
         if($referrer->grants()->where('year_month', $request_data['year_month'])->count()!=0){
            return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer->id.'/grants/create'));
         }
@@ -163,7 +174,11 @@ class ReferrerController extends AdminController
         }
         $referrer = $this->moduleRepository->update($id, $request_data);
 
-        $products_ids = $request->input('products', []);
+        $products_ids = []; 
+        $products = $request->input('products', []);
+        foreach ($products as $key => $product) {
+            $products_ids[$product['id']] = ['divided'=>$product['divided']];
+        }
         $referrer->products()->sync($products_ids);
 
         return $request->input('action')=="save_exit" ? redirect(url('/admin/'.str_plural($this->moduleName))) : redirect(url('/admin/'.str_plural($this->moduleName).'/'.$id.'/edit'));
@@ -205,7 +220,16 @@ class ReferrerController extends AdminController
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|max:255|unique:referrers,email'.($id?','.$id:'')
+            'year_month' => 'required|max:255',
+
+        ]);        
+    }
+    protected function grantValidator(array $data)
+    {
+        return Validator::make($data, [
+            'divided' => 'required',
+            'email' => 'required|max:255|unique:referrers,email',
+            'password' => 'required|max:255',
         ]);        
     }
 
@@ -279,24 +303,36 @@ class ReferrerController extends AdminController
         }
         return $id ? redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer_id.'/grants')):$this->successResponse(['id'=>$ids]);
     }
-    public function details(Request $request,$referrer_id)
+    public function details(Request $request, $referrer_id = 0)
     {
-        $month = date('Y-m').'-01';
-        $ratio = $request->input('ratio');
         $where= [
             'status' => 1,
             'price.<>'=>0
         ];
         $query_string=[];
-        if($request->has('year_month')){
-            $where['created_at.>=']=$request->input('year_month').'-01';
-            $query_string['start_date'] =$request->input('year_month').'-01';
-            $where['created_at.<']=date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
-            $query_string['end_date'] = date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
+        if($request->has('end_date')){
+            $end_date =  date('Y-m-d',strtotime($request->input('end_date').' +1 day'));
+        }else{
+            $end_date  =  date('Y-m-d',strtotime(date('Y-m-d').' +1 day'));
         }
-        $referrer = $this->moduleRepository->get($referrer_id);
-        $products_ids = $referrer->products->map(function($item, $key){return $item->id;})->toArray();
+        if($request->has('year_month')){
+            $start_date = $request->input('year_month').'-01';
+            $end_date = date('Y-m-d',strtotime($request->input('year_month').'-01 next month'));
+        }else if($request->has('start_date')){
+            $start_date = $request->input('start_date');
+        }else{
+            $start_date = date('Y-m').'-01';
+        }
+        $where['created_at.>='] = $start_date;
+        $query_string['start_date'] = $start_date;
+        $where['created_at.<'] = $end_date;
+        $query_string['end_date'] = date('Y-m-d',strtotime($end_date.' -1 day'));
 
+        $referrer = $this->moduleRepository->get($referrer_id);
+        $ratio = $request->input('divided');
+        $ratio = isset($ratio) ? $ratio : $referrer->divide;
+        $products_ids = $referrer->products->map(function($item, $key){return $item->id;})->toArray();
+        $where['referrer_code'] = $referrer->code;
         $orders = $this->orderRepository->getsWith(['products','promocodes'], $where, ['created_at'=>'DESC'], ['products'=>function($query) use ($products_ids){
                 $query->whereIn('id',$products_ids);
             }]);

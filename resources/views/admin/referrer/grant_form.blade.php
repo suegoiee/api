@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}">
 
-    <link rel="stylesheet" href="{{asset('css/analyst_grant.css')}}">
+    <link rel="stylesheet" href="{{asset('css/referrer_grant.css')}}">
 @endsection
 @section('content')
     <ol class="breadcrumb">
@@ -18,8 +18,8 @@
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{url('admin/'.str_plural($module_name).'/'.$analyst->id.'/grants')}}">
-                <span class="">{{$analyst->name}} {{trans($module_name.'.admin.grant_menu_title')}}</span>
+            <a href="{{url('admin/'.str_plural($module_name).'/'.$referrer->id.'/grants')}}">
+                <span class="">{{$referrer->name}} {{trans($module_name.'.admin.grant_menu_title')}}</span>
             </a>
         </li>
         <li class="breadcrumb-item active">
@@ -30,13 +30,13 @@
     </ol>
     
     @include('admin.form_error')
-    <form id="form" class="mt-5" action="{{$data ? url('/admin/'.str_plural($module_name).'/'.$analyst->id.'/grants/'.$data->id) : url('/admin/'.str_plural($module_name).'/'.$analyst->id.'/grants')}}" method="POST" enctype="multipart/form-data">
+    <form id="form" class="mt-5" action="{{$data ? url('/admin/'.str_plural($module_name).'/'.$referrer->id.'/grants/'.$data->id) : url('/admin/'.str_plural($module_name).'/'.$referrer->id.'/grants')}}" method="POST" enctype="multipart/form-data">
         {{ $data ? method_field('PUT'):'' }}
         {{ csrf_field() }}
         <div class="form-group row">
             <label class="form-control-label col-sm-2">{{trans($module_name.'.admin.name')}}</label>
             <div class="form-control-label col-sm-8 text-left">
-                {{$analyst->name}}
+                {{$referrer->name}}
             </div>
             <div class="col-sm-2 text-danger msg">
                         
@@ -45,7 +45,7 @@
         <div class="form-group row">
             <label class="form-control-label col-sm-2">{{trans($module_name.'.admin.no')}}</label>
             <div class="form-control-label col-sm-8 text-left">
-                {{$analyst->no}}
+                {{$referrer->no}}
             </div>
             <div class="col-sm-2 text-danger msg">
                         
@@ -61,9 +61,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="form-control-label col-sm-2" for="ratio">{{trans($module_name.'.admin.ratio')}} <span class="text-danger">*</span></label>
+            <label class="form-control-label col-sm-2" for="divided">{{trans($module_name.'.admin.divided')}} <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="ratio" name="ratio" placeholder="{{trans($module_name.'.admin.ratio')}}" value="{{$data ? $data->ratio:$analyst->ratio}}">
+                <input type="text" class="form-control" id="divided" name="divided" placeholder="{{trans($module_name.'.admin.divided')}}" value="{{$data ? $data->divided:$referrer->divided}}">
             </div>
             <div class="col-sm-2 text-danger msg">
                         
@@ -139,13 +139,13 @@
                 </tr>
                 </tbody>
                 <tbody id="extra_amount">
-                    @forelse($details as $key => $detail)
+                    @forelse($others as $key => $other)
                         <tr>
                             <th>
-                                <input type="hidden" name="grant_amounts[{{$key}}][id]" value="{{$detail->id}}">
-                                <input type="text" name="grant_amounts[{{$key}}][name]" placeholder="{{trans($module_name.'.admin.detail_exrta_amount')}}" class="form-control" value="{{$detail->name}}"></th>
+                                <input type="hidden" name="grant_amounts[{{$key}}][id]" value="{{$other->id}}">
+                                <input type="text" name="grant_amounts[{{$key}}][name]" placeholder="{{trans($module_name.'.admin.detail_exrta_amount')}}" class="form-control" value="{{$other->name}}"></th>
                             <td>-</td>
-                            <td><input type="text" name="grant_amounts[{{$key}}][amount]" class="form-control extra_amounts"  value="{{$detail->amount}}"></td>
+                            <td><input type="text" name="grant_amounts[{{$key}}][amount]" class="form-control extra_amounts"  value="{{$other->amount}}"></td>
                             <td>
                                 @if($key == 0)
                                     <button class="btn btn-success text-center" id="extra_amount_add"><span class="oi oi-plus"></span></button>
@@ -195,7 +195,7 @@
 <script src="{{asset('thirdparty/bootstrap-datepicker/locales/bootstrap-datepicker.zh-TW.min.js')}}"></script>
 <script>
 var module_name = "{{str_plural($module_name)}}";
-var analyst_id = "{{$analyst->id}}";
+var referrer_id = "{{$referrer->id}}";
 $(function(){
     updateAmount();
    $('#form').on('keyup keypress','input[type=text]',function(e) {
@@ -207,11 +207,11 @@ $(function(){
     });
     $('#year_month').on('change',function(e) {
         $('#detail_page span').html($(this).val());
-        if($('#ratio').val()!=''){
+        if($('#divided').val()!=''){
             getAmount();
         }
     });
-    $('#ratio').on('change',function(e) {
+    $('#divided').on('change',function(e) {
         if($('#year_month').val()!=''){
             getAmount();
         }
@@ -239,13 +239,13 @@ $(function(){
    $('#detail_page').click(function(event){
         event.preventDefault();
         var query = '?year_month='+$('#year_month').val();
-        if($('#ratio').val()!=''){
-           query += '&ratio='+$('#ratio').val();
+        if($('#divided').val()!=''){
+           query += '&divided='+$('#divided').val();
         }
-        window.open(url('admin/'+module_name+'/'+analyst_id+'/grants/details'+query));
+        window.open(url('admin/'+module_name+'/'+referrer_id+'/grants/details'+query));
    });
    function getAmount(){
-        $.get(url('admin/'+module_name+'/'+analyst_id+'/grants/amounts'),{year_month:$('#year_month').val(),ratio:$('#ratio').val()},function(response){
+        $.get(url('admin/'+module_name+'/'+referrer_id+'/grants/amounts'),{year_month:$('#year_month').val(),divided:$('#divided').val()},function(response){
             $('#price').val(response.price);
             $('#handle_fee').val(response.handle_fee);
             $('#platform_fee').val(response.platform_fee);

@@ -302,9 +302,17 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 
 	Route::get('/analysts/{analyst}/grants/amounts', 'Admin\AnalystController@getAmounts');
 
+	Route::get('/referrers/{referrer}/orders','Admin\ReferrerController@details');
 	Route::get('/referrers/{referrer}/delete','Admin\ReferrerController@destroy');
 	Route::delete('/referrers','Admin\ReferrerController@destroy');
 	Route::resource('/referrers', 'Admin\ReferrerController');
+
+	Route::get('/referrers/{referrer}/grants', 'Admin\ReferrerController@grantList');
+	Route::get('/referrers/{referrer}/grants/create', 'Admin\ReferrerController@grantCreate');
+	Route::get('/referrers/{referrer}/grants/{grant}/edit', 'Admin\ReferrerController@grantEdit');
+	Route::post('/referrers/{referrer}/grants', 'Admin\ReferrerController@grantStore');
+	Route::put('/referrers/{referrer}/grants/{grant}', 'Admin\ReferrerController@grantUpdate');
+	Route::get('/referrers/{referrer}/grants/details', 'Admin\ReferrerController@details');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');

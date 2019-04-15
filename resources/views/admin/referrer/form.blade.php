@@ -88,17 +88,47 @@
                 
     </div>
 </div>
+<hr>
 <div class="form-group row">
     <div class="col-sm-1"></div>
     <label class="text col-sm-9" for="products">{{trans($module_name.'.admin.products')}}</label>
 </div>
-<div class="form-group row" id="products_select">
+<div class="form-group row">
     <div class="col-sm-1"></div>
-    <div class="col-sm-10">
-        <select class="form-control chosen-select" id="products" name="products[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+    <div class="col-sm-9">
+        <select class="form-control selectpicker" id="product_selects" multiple="multiple" data-placeholder="{{trans('form.do_select')}}" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
             @foreach($products as $product)
-                <option value="{{$product->id}}" {{ $data && $data->products->where('id',$product->id)->count()!=0 ? 'selected':''}}>{{$product->name}} ({{$product->status==1 ? '上架':'下架'}})</option>
+                @if(!$data || $data->products->where('id',$product->id)->count()==0)
+                    <option value="{{$product->id}}" data-name="{{$product->name}}" >{{$product->name}}</option>
+                @endif
             @endforeach
         </select>
+    </div>
+    <div class="col-sm-2">
+        <button class="btn btn-info" id="product_select_btn">加入
+        </button>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>{{trans($module_name.'.admin.product_name')}}</th>
+                    <th>{{trans($module_name.'.admin.ratio')}}</th>
+                    <th>{{trans('table.action_label')}}</th>
+                </tr> 
+            </thead>
+            <tbody id="product_table">
+               @foreach( $data->products as $key => $product)
+                    <tr>
+                        <td>{{$product->name}}<input type="hidden" name="products[{{$key}}][id]" value="{{$product->id}}"></td>
+                        <td><input type="text" class="form-control" name="products[{{$key}}][divided]" value="{{$product->pivot->divided}}"></td>
+                        <td class="text-center"><span class="oi oi-trash remove" data-name="{{$product->name}}" data-id="{{$product->id}}"></span></td>
+                    </tr> 
+               @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
