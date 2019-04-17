@@ -121,6 +121,7 @@
                 </tr> 
             </thead>
             <tbody id="product_table">
+            @if($data)
                @foreach( $data->products as $key => $product)
                     <tr>
                         <td>{{$product->name}}<input type="hidden" name="products[{{$key}}][id]" value="{{$product->id}}"></td>
@@ -128,6 +129,7 @@
                         <td class="text-center"><span class="oi oi-trash remove" data-name="{{$product->name}}" data-id="{{$product->id}}"></span></td>
                     </tr> 
                @endforeach
+               @endif
             </tbody>
         </table>
     </div>
