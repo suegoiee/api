@@ -66,10 +66,7 @@ class NotificationMessageController extends Controller
             $n = 0;
             $div  =  250;
             while($n < count($bcc)){
-                //Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new Announcement($notificationMessage));
-                foreach (array_slice($bcc, $n, $div) as $key => $email) {
-                    echo $key.' : '.$email.'<br>';
-                }
+                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new Announcement($notificationMessage));
                 $n+=$div;
             }
         }else{
