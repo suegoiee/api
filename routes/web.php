@@ -344,3 +344,4 @@ Route::get('/server/seedUsers', 'Admin\ServerTaskController@seedUsers');
 Route::get('/server/destroySeedUsers', 'Admin\ServerTaskController@destroySeedUsers');
 
 Route::get('/server/importUsersToForum', 'Admin\ServerTaskController@importUsersToForum');
+Route::get('/server/importArchivesToForum', 'Admin\ServerTaskController@importArchivesToForum');

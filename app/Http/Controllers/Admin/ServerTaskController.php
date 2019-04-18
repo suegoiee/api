@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\ForumUser;
+use App\Article;
 use Illuminate\Http\File;
 use Storage;
 use App\Traits\ImageStorage;
@@ -229,5 +230,18 @@ class ServerTaskController extends AdminController
                 ]);
             }
         }
+    }
+
+    public function importArchivesToForum()
+    {
+        set_time_limit(0);
+        $articles = Article::get();
+        $archives  = [];
+        foreach ($articles as $key => $article) {
+            echo $article->title.'<br>';
+            array_push($archives, ['author_id'=>0, 'subject'=>$article->title,'slug'=>$article->slug, 'body'=>$article->content,'solution_reply_id'=>0, 'created_at'=>$article->created_at ,'updated_at'=>$article->updated_at]);
+            break;
+        }
+        DB::connection('mysql_3')->select('*');
     }
 }
