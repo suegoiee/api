@@ -37,7 +37,7 @@ class Announcement extends Mailable
             'nickname' => ''
         ];
 
-        return $this->subject(env('APP_NAME').' 通知 - '. $this->notificationMessage->title)
+        return $this->subject($this->notificationMessage->title)
                 ->from(env('APP_EMAIL','no-reply@uanalyze.com.tw'), env('APP_SYSTEM_NAME','Service'))
                ->view('emails.massiveAnnouncement', $data);
     }
