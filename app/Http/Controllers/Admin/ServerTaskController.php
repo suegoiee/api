@@ -239,9 +239,8 @@ class ServerTaskController extends AdminController
         $archives  = [];
         foreach ($articles as $key => $article) {
             echo $article->title.'<br>';
-            array_push($archives, ['author_id'=>0, 'subject'=>$article->title,'slug'=>$article->slug, 'body'=>$article->content,'solution_reply_id'=>0, 'created_at'=>$article->created_at ,'updated_at'=>$article->updated_at]);
-            break;
+            array_push($archives, ['author_id'=>0, 'subject'=>$article->title,'slug'=>substr($article->id.'_'.urlencode($article->title),0,191), 'body'=>$article->content,'solution_reply_id'=>0, 'created_at'=>$article->created_at ,'updated_at'=>$article->updated_at]);
         }
-        DB::connection('mysql_3')->select('*');
+        DB::connection('mysql_3')->table('archives')->insert($archives);
     }
 }
