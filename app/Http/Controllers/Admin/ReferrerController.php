@@ -220,7 +220,7 @@ class ReferrerController extends AdminController
     {
         return Validator::make($data, [
             'name' => 'required|max:255',
-            'email' => 'required|max:255|unique:analysts,email'.($id?','.$id:'')
+            'email' => 'required|max:255|unique:referrers,email'.($id?','.$id:'')
 
         ]);        
     }
