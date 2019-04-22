@@ -24,7 +24,7 @@ class Article extends UanalyzeModel
 
     public function generateUniqueSlug()
     {
-    	$value = $this->slug;
+    	$value = $this->title;
         $slug = $originalSlug = str_slug($value);
         $counter = 0;
 
