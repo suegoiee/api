@@ -43,8 +43,39 @@ class OrderController extends AdminController
             'tabs'=>['status'=>[1,0,5],'free'=>[0]],
             'query_string' => $query_string,
             'table_data' => $orders,
-            'table_head' =>['no','user_nickname','user_email','price','status','created_at'],
+            'table_head' =>['no',/*'user_nickname','user_email',*/'price','status','created_at'],
             'table_formatter' =>['user_email','status'],
+        ];
+        return view('admin.list',$data);
+    }
+
+    public function test(Request $request)
+    {
+        $query_string=[];
+        if($request->has('free')){
+            $where['price.='] = 0;
+            $query_string = $request->only(['free']);
+        }else if($request->has('status')){
+            $where['status'] = $request->input('status',1);
+            $where['price.<>'] = 0;
+            $query_string = $request->only(['status']);
+        }else{
+            $where['status'] = $request->input('status',1);
+            $where['price.<>'] = 0;
+            $query_string['status'] = $request->input('status',1);
+        }
+
+        $orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
+
+        $data = [
+            'actionName'=>__FUNCTION__,
+            'module_name'=> $this->moduleName,
+            'actions'=>[],
+            'tabs'=>['status'=>[1,0,5],'free'=>[0]],
+            'query_string' => $query_string,
+            'table_data' => $orders,
+            'table_head' =>['no','price','status','created_at'],
+            'table_formatter' =>['status'],
         ];
         return view('admin.list',$data);
     }

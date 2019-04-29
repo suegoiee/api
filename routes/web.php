@@ -329,6 +329,8 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
 });
+//Test
+Route::get('/test/orders','Admin\OrderController@test');
 
 //Server task
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');
