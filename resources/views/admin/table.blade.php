@@ -11,7 +11,7 @@
     </div>
     @endif
 </div>
-<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="100" data-page-list="[10,25,50,100,All]" data-pagination-pre-text="<span class='oi oi-chevron-left'></span>" data-pagination-next-text="<span class='oi oi-chevron-right'></span>" data-pagination-h-align="left" data-pagination-detail-h-align="right" data-pagination-v-align="both">
+<table id="table" class="table table-bordered table-hover table-sm table-striped" data-toggle="table" data-search="true" data-toolbar="#table-toolbar" data-maintain-selected="true" data-unique-id="id" data-pagination="true" data-page-size="100" data-page-list="[10,25,50,100,All]" data-pagination-pre-text="<span class='oi oi-chevron-left'></span>" data-pagination-next-text="<span class='oi oi-chevron-right'></span>" data-pagination-h-align="left" data-pagination-detail-h-align="right" data-pagination-v-align="both" {!! isset($server_side) ? 'data-side-pagination="server" data-ajax="ajaxRequest"': '' !!}  data-query-params="queryParams">
     <thead class="thead-inverse text-center">
         <tr>
             @if(!isset($table_action) || $table_action)

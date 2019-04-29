@@ -247,6 +247,7 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/users/{user}/delete','Admin\UserController@destroy');
 	Route::get('/users/{user}/edit','Admin\UserController@edit');
 	Route::delete('/users','Admin\UserController@destroy');
+	Route::get('/users/data','Admin\UserController@data');
 	Route::resource('/users', 'Admin\UserController');
 	Route::post('/users/export','Admin\UserController@export');
 
@@ -254,6 +255,7 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/orders/{order}/delete','Admin\OrderController@destroy');
 	Route::get('/orders/{order}/cancel','Admin\OrderController@cancel');
 	Route::delete('/orders','Admin\OrderController@destroy');
+	Route::get('/orders/data','Admin\OrderController@data');
 	Route::resource('/orders', 'Admin\OrderController');
 
 	Route::post('/messages/export','Admin\MessageController@export');
@@ -329,8 +331,6 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
 });
-//Test
-Route::get('/test/orders','Admin\OrderController@test');
 
 //Server task
 Route::get('/server/flatLaboratoriesProducts','Admin\ServerTaskController@flatLaboratoriesProducts');

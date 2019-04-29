@@ -21,20 +21,27 @@ class OrderController extends AdminController
     public function index(Request $request)
     {
         $query_string=[];
+        $query_data = [];
         if($request->has('free')){
             $where['price.='] = 0;
             $query_string = $request->only(['free']);
+            $query_data['free'] = 1;
         }else if($request->has('status')){
             $where['status'] = $request->input('status',1);
             $where['price.<>'] = 0;
             $query_string = $request->only(['status']);
+            $query_data['free'] = 0;
+            $query_data['status'] = $where['status'];
         }else{
             $where['status'] = $request->input('status',1);
             $where['price.<>'] = 0;
             $query_string['status'] = $request->input('status',1);
+            $query_data['free'] = 0;
+            $query_data['status'] = $where['status'];
         }
 
-        $orders = $this->moduleRepository->getsWith(['user','products'], $where, ['created_at'=>'DESC']);
+
+        $orders = [];//$this->moduleRepository->getsWith(['user','products'], $where, ['created_at'=>'DESC']);
 
         $data = [
             'actionName'=>__FUNCTION__,
@@ -42,42 +49,57 @@ class OrderController extends AdminController
             'actions'=>[],
             'tabs'=>['status'=>[1,0,5],'free'=>[0]],
             'query_string' => $query_string,
+            'query_data' => $query_data,
+            'server_side' => 'active',
             'table_data' => $orders,
-            'table_head' =>['no',/*'user_nickname','user_email',*/'price','status','created_at'],
+            'table_head' =>['no','user_nickname','user_email','price','status','created_at'],
             'table_formatter' =>['user_email','status'],
         ];
         return view('admin.list',$data);
     }
 
-    public function test(Request $request)
+    public function data(Request $request)
     {
-        $query_string=[];
+        $query_string = [];
+        $query_data = [];
+        $orderBy=[];
+        $orders_by = $this->moduleRepository;
+        $search_fields = ['price', 'created_at'];
+        $search_relation_fields = ['user.profile.nickname','user.email'];
+        $search = ""; 
         if($request->has('free')){
             $where['price.='] = 0;
-            $query_string = $request->only(['free']);
         }else if($request->has('status')){
             $where['status'] = $request->input('status',1);
             $where['price.<>'] = 0;
-            $query_string = $request->only(['status']);
         }else{
             $where['status'] = $request->input('status',1);
             $where['price.<>'] = 0;
-            $query_string['status'] = $request->input('status',1);
         }
 
-        $orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
+        if($request->has('sort')){
+            $order_column = $request->input('sort');
+            $order = $request->input('order');
+            $orderBy[$order_column] = $order;
+        }
 
+        $offset = $request->input('offset',0);
+        $limit = $request->input('limit',100);
+
+        if($request->has('search') && $request->input('search','')!=''){
+            $search = $request->input('search','');
+        }
+        $orders_total = $orders_by->whereBy($where)->toCount();
+        $orders_total_filtered = $orders_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->toCount();
+        $orders = $orders_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->limit($offset, $limit)->toGets();
+        
+        //$orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
         $data = [
-            'actionName'=>__FUNCTION__,
-            'module_name'=> $this->moduleName,
-            'actions'=>[],
-            'tabs'=>['status'=>[1,0,5],'free'=>[0]],
-            'query_string' => $query_string,
-            'table_data' => $orders,
-            'table_head' =>['no','price','status','created_at'],
-            'table_formatter' =>['status'],
+            "total" => $orders_total,
+            "totalNotFiltered" => $orders_total_filtered,
+            "rows" => $orders
         ];
-        return view('admin.list',$data);
+        return response()->json($data);
     }
 
     public function create()

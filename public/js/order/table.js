@@ -28,6 +28,20 @@ function actionFormatter(value,row,index){
 	actions+='</div>';
 	return actions;
 }
+function queryParams(params) {
+	if( 'free'  in query_data){
+    	params.free = query_data.free;
+	}
+	if('status'  in query_data){
+    	params.status = query_data.status;
+	}
+    return params
+  }
+ function ajaxRequest(params) {
+    $.get(url('admin/orders/data') + '?' + $.param(params.data)).then(function (res) {
+      params.success(res);
+    })
+  }
 $(function(){
 	 $('#table').on('click','.cancel-btn',function(event){
         if(confirm('確定退訂?')){

@@ -43,6 +43,7 @@
 <script src="{{asset('thirdparty/tableExport/tableExport.min.js')}}"></script>
 <script>
 var module_name = "{{str_plural($module_name)}}";
+var query_data = {!! isset($query_data) ? json_encode($query_data) : "{}"!!};
 $(function(){
     var data = {!!json_encode($table_data)!!};
     $('#table').bootstrapTable('load',data);

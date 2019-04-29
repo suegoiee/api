@@ -4,7 +4,8 @@ use App\User;
 
 class UserRepository extends Repository
 {
-	public function __construct(User $user){
-		$this->model = $user;
-	}
+	public function __construct(User $model){
+		$this->model = $model;
+		$this->condition = $model;
+	}	
 }

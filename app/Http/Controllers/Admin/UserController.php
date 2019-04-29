@@ -17,15 +17,52 @@ class UserController extends AdminController
 
     public function index()
     {
-        $users = $this->moduleRepository->getsWith();
+        $users = [];//$this->moduleRepository->getsWith();
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
+            'server_side' => 'active',
             'table_data' => $users,
-            'table_head' =>['id','email','mail_verified_at','updated_at','created_at'],
-            'table_formatter' =>['nickname','mail_verified_at'],
+            'table_head' =>['id', 'email', 'mail_verified_at', 'updated_at', 'created_at'],
+            'table_formatter' =>['nickname', 'mail_verified_at'],
         ];
         return view('admin.list',$data);
+    }
+
+    public function data(Request $request)
+    {
+        $query_string = [];
+        $query_data = [];
+        $orderBy=[];
+        $where=[];
+        $module_by = $this->moduleRepository;
+        $search_fields = ['email', 'updated_at', 'created_at'];
+        $search_relation_fields = [];
+        $search = ""; 
+
+        if($request->has('sort')){
+            $order_column = $request->input('sort');
+            $order = $request->input('order');
+            $orderBy[$order_column] = $order;
+        }
+
+        $offset = $request->input('offset',0);
+        $limit = $request->input('limit',100);
+
+        if($request->has('search') && $request->input('search','')!=''){
+            $search = $request->input('search','');
+        }
+        $module_total = $module_by->whereBy($where)->toCount();
+        $module_total_filtered = $module_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->toCount();
+        $module = $module_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->limit($offset, $limit)->toGets();
+        
+        //$orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
+        $data = [
+            "total" => $module_total,
+            "totalNotFiltered" => $module_total_filtered,
+            "rows" => $module
+        ];
+        return response()->json($data);
     }
 
     public function create()

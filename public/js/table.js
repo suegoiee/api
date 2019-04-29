@@ -5,3 +5,6 @@ function actionFormatter(value,row,index){
 	actions+='</div>';
 	return actions;
 }
+function queryParams(params){
+	return params;
+}
