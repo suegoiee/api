@@ -67,11 +67,9 @@ class OrderController extends AdminController
         $search_fields = ['price', 'created_at'];
         $search_relation_fields = ['user.profile.nickname','user.email'];
         $search = ""; 
-        if($request->has('free')){
+        $free =  $request->input('free', 0);
+        if($free == 1){
             $where['price.='] = 0;
-        }else if($request->has('status')){
-            $where['status'] = $request->input('status',1);
-            $where['price.<>'] = 0;
         }else{
             $where['status'] = $request->input('status',1);
             $where['price.<>'] = 0;
