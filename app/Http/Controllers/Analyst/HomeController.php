@@ -43,9 +43,7 @@ class HomeController extends Controller
         $promocodes = $promocodeRepository->getsWith(['used','products'],[],[],['products'=>function($query) use($product_ids) { $query->whereIn('id',$product_ids); }]);
         $promocode_num = 0;
         foreach ($promocodes as $key => $value) {
-            if($value->used->count()>0){
-                $promocode_num +=1 ;
-            }
+            $promocode_num += $value->used->count();
         }
     	$data=[
             'subtitle'=>'home',
