@@ -34,6 +34,7 @@ class Announcement extends Mailable
             'title'=> $this->notificationMessage->title,
             'header_pic'=> 'Announcement_header.jpg',
             'content' => $this->notificationMessage->content,
+            'is_pic' => 'false',
             'nickname' => ''
         ];
 
