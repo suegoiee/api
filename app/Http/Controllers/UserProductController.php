@@ -24,14 +24,14 @@ class UserProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = $request->user()->products()->with(['faqs','plans'=>function($query){
+        $products = $request->user()->products()->with(['plans'=>function($query){
             $query->where('active',1);
-        }])->orderBy('product_user.sort', 'asc')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot','price']);
+        }])->orderBy('product_user.sort', 'asc')->get()->makeHidden(['model','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at', 'avatar_detail','pivot','price','faqs']);
         foreach ($products as $key => $product) {
             $product->installed = $product->pivot->installed;
             $product->deadline = $product->pivot->deadline ? $product->pivot->deadline:0;
             $product->sort = $product->pivot->sort;
-            $product->faqs = $product->faqs;
+            //$product->faqs = $product->faqs;
         }
         
         return $this->successResponse($products?$products:[]);
