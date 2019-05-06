@@ -26,8 +26,7 @@ class ProductController extends Controller
         $where = [];
         $with = [
                 'tags'=>function($query){$query->select('name');},
-                'plans'=>function($query){$query->where('active',1);},
-                'faqs',
+                'plans'=>function($query){$query->where('active',1);}
             ];
         $user = $request->user();
         if($user){
@@ -44,8 +43,13 @@ class ProductController extends Controller
             }else{
                 $product->owned = 0;
             }
+            $product->month = 0;
+            $orders = $product->orders;
+            foreach ($orders as $key => $order) {
+                $product->month += $order->pivot->quantity;
+            }
         }
-        $products->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users']);
+        $products->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users','info_more','orders','faqs']);
         return $this->successResponse($products);
     }
 

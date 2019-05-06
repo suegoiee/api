@@ -39,6 +39,11 @@ class Product extends UanalyzeModel
         return $this->morphToMany('App\Tag', 'taggable')->withTimestamps();
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany('App\Order', 'order_product')->withPivot('quantity');
+    }
+
     public function avatars()
     {
         return $this->morphMany('App\Avatar', 'imageable');
