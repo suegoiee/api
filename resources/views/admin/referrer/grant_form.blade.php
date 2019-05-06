@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4-datetimepicker/css/bootstrap-datetimepicker.min.css')}}">
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}">
 
-    <link rel="stylesheet" href="{{asset('css/referrer_grant.css')}}">
+    <link rel="stylesheet" href="{{asset('css/referrer/grant.css')}}">
 @endsection
 @section('content')
     <ol class="breadcrumb">

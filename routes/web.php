@@ -315,6 +315,8 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::post('/referrers/{referrer}/grants', 'Admin\ReferrerController@grantStore');
 	Route::put('/referrers/{referrer}/grants/{grant}', 'Admin\ReferrerController@grantUpdate');
 	Route::get('/referrers/{referrer}/grants/details', 'Admin\ReferrerController@details');
+	
+	Route::get('/referrers/{analyst}/grants/amounts', 'Admin\ReferrerController@getAmounts');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');

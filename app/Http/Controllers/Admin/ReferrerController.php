@@ -154,7 +154,7 @@ class ReferrerController extends AdminController
             if(!isset($extra_amount['name']) || $extra_amount['name']==''){
                 continue;
             }
-            $grant->details()->create(['name'=> $extra_amount['name'],'amount'=>$extra_amount['amount']]);
+            $grant->others()->create(['name'=> isset($extra_amount['name']) ? $extra_amount['name'] :'','amount'=>$extra_amount['amount']]);
         }
         return $request->input('action')=="save_exit" ? redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer_id.'/grants')) : redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer->id.'/grants/'.$grant->id.'/edit'));
     }
@@ -189,23 +189,27 @@ class ReferrerController extends AdminController
         if(!$referrer){
              return redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer->id.'/grants/create'));
         }
-        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee','ratio']);
+        $request_data = $request->only(['statement_no', 'year_month','price','handle_fee','platform_fee','income_tax','second_generation_nhi','interbank_remittance_fee','divided']);
 
         $referrer->grants()->where('id',$id)->update($request_data);
         $grant = $referrer->grants()->find($id);
         $extra_amounts = $request->input('grant_amounts', []);
         $extra_amount_ids = [];
         foreach ($extra_amounts as $key => $extra_amount) {
-            $data = ['name'=> $extra_amount['name'],'amount'=>$extra_amount['amount']];
+             if(!isset($extra_amount['name']) || $extra_amount['name']==''){
+                continue;
+            }
+            $data = ['name'=> isset($extra_amount['name']) ? $extra_amount['name'] :'',
+                    'amount'=>$extra_amount['amount']];
             if($extra_amount['id']=='0'){
-                $grant_detail = $grant->details()->create($data);
+                $grant_detail = $grant->others()->create($data);
             }else{
-                $grant->details()->where('id',$extra_amount['id'])->update($data);
-                $grant_detail = $grant->details()->find($extra_amount['id']);
+                $grant->others()->where('id',$extra_amount['id'])->update($data);
+                $grant_detail = $grant->others()->find($extra_amount['id']);
             }
             array_push($extra_amount_ids, $grant_detail->id);
         }
-        $grant->details()->whereNotIn('id',$extra_amount_ids)->delete();
+        $grant->others()->whereNotIn('id',$extra_amount_ids)->delete();
         return $request->input('action')=="save_exit" ? redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer_id.'/grants')) : redirect(url('/admin/'.str_plural($this->moduleName).'/'.$referrer->id.'/grants/'.$grant->id.'/edit'));
     }
     protected function referrerCreateValidator(array $data)

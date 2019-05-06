@@ -25,12 +25,15 @@ class OrderController extends AnalystController
         if($request->has('start_date')){
             $where['created_at.>=']=$request->input('start_date');
             $query_string['start_date'] = $request->input('start_date');
+        }else{
+             $where['created_at.>='] = $month;
         }
         if($request->has('end_date')){
             $where['created_at.<'] = date('Y-m-d', strtotime($request->input('end_date').' +1 day'));
             $query_string['end_date'] = $request->input('end_date');
         }
         $user = $request->user();
+        $ratio = $user->ratio;
         $products_ids = $user->products->map(function($item, $key){return $item->id;})->toArray();
 
         $orders = $this->moduleRepository->getsWith(['products','promocodes'], $where, ['created_at'=>'DESC'], ['products'=>function($query) use ($products_ids){
@@ -55,7 +58,7 @@ class OrderController extends AnalystController
                     $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price - $offer + $overflow_offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*0.3;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee) * $ratio;
                     $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     array_push($order_products, $order_product);
                 }

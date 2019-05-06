@@ -60,7 +60,7 @@ class VerifiedUserController extends Controller
             return $this->successResponse(['message'=>['The email was verified']]);
         }
         $verify = Verify_user::create(['email'=>$user->email,'token'=>md5(rand(1, 10) . microtime())]);
-        $user->notify(new VerifyMailSend($user, $verify->token));
+        $user->notify((new VerifyMailSend($user, $verify->token))->onQueue("verify"));
         //$response = Mail::to($user->email)->send(new VerifyMail($user, $verify->token));
 
         return $this->sendVerifyResponse();

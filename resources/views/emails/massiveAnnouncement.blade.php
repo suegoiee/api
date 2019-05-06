@@ -14,3 +14,8 @@
 @section('btn_end')
 	</a>
 @endsection
+
+<hr>
+<a href="">
+	
+</a>
