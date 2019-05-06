@@ -25,7 +25,7 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id']);
+        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id','faqs']);
         foreach ($laboratories as $key => $laboratory) {
             if(!$laboratory->customized){
                 $collect_product = $user->products()->find($laboratory->collection_product_id);
