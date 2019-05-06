@@ -13,9 +13,12 @@
 @endsection
 @section('btn_end')
 	</a>
+	<hr>
+	<div style="font-size:9px; text-align: right;">
+		欲取消訂閱優分析最新消息請於網站內的個人資料頁面取消訂閱(
+		<a href="{{env('APP_FRONT_URL','https://pro.uanalyze.com.tw').'porfile'}}">
+			個人資料
+		</a>)
+	</div>
 @endsection
 
-<hr>
-<a href="">
-	
-</a>

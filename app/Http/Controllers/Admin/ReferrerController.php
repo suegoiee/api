@@ -278,7 +278,7 @@ class ReferrerController extends AdminController
                     $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee) * $ratio;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee) * (1 - $ratio);
                     $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     $sumOfOrderPrice += $order_product->order_price;
                     $sumOfHandleFee += $order_product->handle_fee;
@@ -357,7 +357,7 @@ class ReferrerController extends AdminController
                     $order_product->product_price = $product->pivot->unit_price;// * $product->pivot->quantity;
                     $order_product->order_price = $order_product->product_price<$offer ? 0:$order_product->product_price-$offer;
                     $order_product->handle_fee = round($this->getHandleFee($order->paymentType, $order_product->order_price, $order->created_at), 2);
-                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee)*$ratio;
+                    $order_product->platform_fee = (($order_product->order_price/1.05) - $order_product->handle_fee) *  (1 - $ratio);
                     $order_product->platform_fee = $order_product->platform_fee < 0 ? 0 : $order_product->platform_fee;
                     array_push($order_products, $order_product);
                 }
