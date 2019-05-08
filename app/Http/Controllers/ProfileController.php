@@ -36,6 +36,7 @@ class ProfileController extends Controller
         $user = $request->user();
         $profile = $user->profile;
         $profile->email =  $user->email;
+        $profile->subscription = $user->subscription;
         return $this->successResponse($profile?$profile:[]);
     }
 

@@ -10,10 +10,10 @@ class AdminsTableSeeder extends Seeder
     	DB::table('admins')->truncate();
     	if(DB::table('admins')->count()==0){
 	        DB::table('admins')->insert([
-	            'name' => 'uanalyze',
-	            'password' => Hash::make('57f0a7008635d0a0fe7a6c9335185020'),
-	            'auth' => 0
-	        ]);
+                   'name' => 'uanalyze',
+                   'password' => Hash::make('57f0a7008635d0a0fe7a6c9335185020'),
+                   'auth' => 0
+               ]);
      	}
     }
 }
