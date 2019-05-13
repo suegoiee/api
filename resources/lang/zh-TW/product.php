@@ -56,6 +56,7 @@ return [
         'faq_a'=>'A',
         'seo'=>'SEO',
         'date_range'=>'持有期間',
+        'inflated'=>'購買月數灌水',
         'assigned_products'=>'選擇欲贈送的產品',
         'assigned_users'=>'選擇贈與的使用者',
         'send_email'=>'是否寄信',

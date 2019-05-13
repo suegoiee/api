@@ -43,13 +43,13 @@ class ProductController extends Controller
             }else{
                 $product->owned = 0;
             }
-            $product->month = 0;
+            $product->month = 0 + $product->inflated;
             $orders = $product->orders;
             foreach ($orders as $key => $order) {
                 $product->month += $order->pivot->quantity;
             }
         }
-        $products->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users','info_more','orders','faqs']);
+        $products->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users','info_more','orders','faqs', 'inflated']);
         return $this->successResponse($products);
     }
 
@@ -71,7 +71,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo','date_range']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo','date_range','inflated']);
         $request_data['date_range'] = isset($request_data['date_range'])? $request_data['date_range']:'';
         $request_data['expiration'] = isset($request_data['expiration'])? $request_data['expiration']:0;
         $request_data['price'] = isset($request_data['price'])? $request_data['price']:0;
@@ -163,7 +163,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo','date_range']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','price','expiration','status','faq', 'pathname','seo','date_range', 'inflated']);
         $request_data['model'] = $request_data['model'] ? $request_data['model']:'';
         $request_data['column'] = $request_data['column'] ? $request_data['column']:'';
         $request_data['info_more'] = $request_data['info_more'] ? $request_data['info_more']:'';
@@ -251,6 +251,7 @@ class ProductController extends Controller
             'type'=>'required|max:255',
             //'price'=>'required|numeric',
             'faq'=>'string',
+            'inflated'=>'numeric'
         ]);        
     }
 
@@ -265,6 +266,7 @@ class ProductController extends Controller
             'type'=>'max:255',
             //'price'=>'numeric',
             'faq'=>'string',
+            'inflated'=>'numeric'
         ]);        
     }
 }
