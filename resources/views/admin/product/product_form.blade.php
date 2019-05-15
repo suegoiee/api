@@ -11,9 +11,9 @@
     <label class="form-control-label col-sm-2" for="category">{{trans($module_name.'.admin.category')}}</label>
     <div class="col-sm-8">
         <select class="form-control" id="category" name="category" >
-            <option value="研究室套件" {{ $data && $data->category=='研究室套件' ? 'selected':'' }} >{{trans($module_name.'.admin.type_0')}}</option>
-            <option value="大師" {{ $data && $data->category=='大師' ? 'selected':'' }} >{{trans($module_name.'.admin.type_1')}}</option>
-            <option value="達人" {{ $data && $data->category=='達人' ? 'selected':'' }} >{{trans($module_name.'.admin.type_2')}}</option>
+            <option value="研究室套件" {{ $data && $data->category=='研究室套件' ? 'selected':'' }} >{{trans($module_name.'.admin.category_0')}}</option>
+            <option value="大師" {{ $data && $data->category=='大師' ? 'selected':'' }} >{{trans($module_name.'.admin.category_1')}}</option>
+            <option value="達人" {{ $data && $data->category=='達人' ? 'selected':'' }} >{{trans($module_name.'.admin.category_2')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">

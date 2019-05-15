@@ -17,6 +17,10 @@ return [
         'avatar_tab'=>'產品圖片',
         'faq_tab'=>'FAQ',
 
+        'category'=>'類別',
+        'category_0'=>'研究室套件',
+        'category_1'=>'大師',
+        'category_2'=>'達人',
         'month'=>'月',
         'active'=>'啟用方案',
         'active_0'=>'不啟用',
