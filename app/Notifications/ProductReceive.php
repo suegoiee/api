@@ -16,15 +16,17 @@ class ProductReceive extends Notification implements ShouldQueue
     protected $user;
     protected $notification_types;
     protected $notificationMessage;
+    protected $quantity;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $product_ids = [], $notificationMessage)
+    public function __construct($user, $quantity = 1, $product_ids = [], $notificationMessage)
     {
         $this->product_ids = $product_ids;
         $this->user = $user;
+        $this->quantity = $quantity;
         $this->notificationMessage = $notificationMessage;
         $this->notification_types = [];
         if($this->notificationMessage->send_notice==1){

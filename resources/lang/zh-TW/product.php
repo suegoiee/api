@@ -64,6 +64,7 @@ return [
         'assigned_products'=>'選擇欲贈送的產品',
         'assigned_users'=>'選擇贈與的使用者',
         'send_email'=>'是否寄信',
+        'quantity'=>'贈送月數',
 	],
     'collection_cant_del' =>'無法個別刪除。',
     'cant_no_products' =>'需至少有一項產品。',
