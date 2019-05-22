@@ -39,7 +39,7 @@ class Laboratory extends UanalyzeModel
         if(!$collection){
             return null;
         }
-        return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort']);
+        return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort','date_range','inflated','faqs','faq']);
     }
     public function getPathnameAttribute()
     {

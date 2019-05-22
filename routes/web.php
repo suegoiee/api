@@ -87,8 +87,10 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::put('/user/laboratories/{laboratory}/products/sort','LaboratoryController@productSorted')->name('laboratories.product.sort');
 	Route::put('/user/laboratories/sort', 'LaboratoryController@sorted');
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
-			'index','show', 'store', 'update','destroy'
+			'index','show', 'store', 'update'
 		]]);
+	Route::delete('/user/laboratories/{laboratory?}','LaboratoryController@destroy')->name('laboratories.destroy');
+
 	Route::get('/user/laboratories/product/{pathname}','LaboratoryController@mapping')->name('laboratories.product.mapping');
 
 	Route::post('/user/lab_avatar/{module_id}','AvatarController@store')->name('laboratories.avatar.store');

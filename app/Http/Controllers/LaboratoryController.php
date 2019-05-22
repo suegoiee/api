@@ -255,29 +255,37 @@ class LaboratoryController extends Controller
 
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id = 0)
     {
+
         $user = $request->user();
-        if(!($this->laboratoryRepository->isOwner($user->id,$id))){
-            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
-        }
-        $laboratory = $user->laboratories()->find($id);
-        $user->laboratories()->where('id',$id)->delete();
-        
-        if($laboratory->customized){
-            $products = $laboratory->products;
-            foreach ($products as $key => $product) {
-                $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
-                if($install_num==0){
-                    $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
-                }
+        $ids = $id ? [$id] : $request->input('laboratories', []);
+        foreach ($ids as $key => $id) {
+            if(!($this->laboratoryRepository->isOwner($user->id,$id))){
+                return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
-        }else{
-            $user->products()->updateExistingPivot($laboratory->collection_product_id, ['installed'=>0]);
+        }
+        foreach ($ids as $key => $id) {
+            $laboratory = $user->laboratories()->find($id);
+            $user->laboratories()->where('id',$id)->delete();
+            
+            if($laboratory->customized){
+                $products = $laboratory->products;
+                foreach ($products as $key => $product) {
+                    $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
+                    if($install_num==0){
+                        $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+                    }
+                }
+            }else{
+                $user->products()->updateExistingPivot($laboratory->collection_product_id, ['installed'=>0]);
+            }
+        }
+        if(count($ids)==0){
+            return $this->successResponse(['message'=>['No laboratory was deleted.'], 'deleted'=>count($ids)]);
         }
 
-        return $this->successResponse(['message'=>['The laboratory was deleted.'], 'deleted'=>1]);
-
+        return $this->successResponse(['message'=>['The laboratory was deleted.'], 'deleted'=>count($ids)]);
     }
     public function sorted(Request $request)
     {
