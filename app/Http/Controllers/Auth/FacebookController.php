@@ -81,7 +81,7 @@ class FacebookController extends Controller
     {
         $this->createProfile($request, $user);
         $adminToken = $this->clientCredentialsGrantToken($request);
-        event(new UserRegistered($user, $adminToken, $request->input('password')));
+        event(new UserRegistered($user, $adminToken, $request->input('password'), false));
         $token = $this->passwordGrantToken($request);
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
         //$token['user'] = $user;
