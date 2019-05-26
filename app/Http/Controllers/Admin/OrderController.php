@@ -52,8 +52,8 @@ class OrderController extends AdminController
             'query_data' => $query_data,
             'server_side' => 'active',
             'table_data' => $orders,
-            'table_head' =>['no','user_nickname','user_email','price','status','created_at'],
-            'table_formatter' =>['user_email','status'],
+            'table_head' =>['no','user_nickname','user_email','price','products','status','created_at'],
+            'table_formatter' =>['user_email','status', 'products'],
         ];
         return view('admin.list',$data);
     }
@@ -63,9 +63,10 @@ class OrderController extends AdminController
         $query_string = [];
         $query_data = [];
         $orderBy=[];
+        $with = ['products'];
         $orders_by = $this->moduleRepository;
         $search_fields = ['price', 'created_at'];
-        $search_relation_fields = ['user.profile.nickname','user.email'];
+        $search_relation_fields = ['user.profile.nickname','user.email', 'products.name'];
         $search = ""; 
         $free =  $request->input('free', 0);
         if($free == 1){
@@ -93,12 +94,12 @@ class OrderController extends AdminController
         }
         $orders_total = $orders_by->whereBy($where)->toCount();
         $orders_total_filtered = $orders_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->toCount();
-        $orders = $orders_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->limit($offset, $limit)->toGets();
+        $orders = $orders_by->toWith($with)->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->limit($offset, $limit)->toGets();
         
         //$orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
         $data = [
-            "total" => $orders_total,
-            "totalNotFiltered" => $orders_total_filtered,
+            "total" => $orders_total_filtered,
+            "totalNotFiltered" => $orders_total,
             "rows" => $orders
         ];
         return response()->json($data);

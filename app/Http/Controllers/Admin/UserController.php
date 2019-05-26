@@ -58,8 +58,8 @@ class UserController extends AdminController
         
         //$orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
         $data = [
-            "total" => $module_total,
-            "totalNotFiltered" => $module_total_filtered,
+            "total" => $module_total_filtered,
+            "totalNotFiltered" => $module_total,
             "rows" => $module
         ];
         return response()->json($data);

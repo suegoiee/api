@@ -173,7 +173,7 @@ class Repository
     }
     public function toWith($with=false){
         if($with){
-             $this->condition = $this->condition->with($with);
+            $this->condition = $this->condition->with($with);
         }
         return $this;
     }

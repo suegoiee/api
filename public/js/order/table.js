@@ -18,6 +18,13 @@ function user_emailFormatter(value,row,index){
 	return value;
 }
 
+function productsFormatter(value, row, index){
+	var html = '';
+	for (var i = 0; i < value.length; i++) {
+		html += '<div>'+value[i].name+'</div>';
+	}
+	return html;
+}
 function actionFormatter(value,row,index){
 	var actions='<div class="actions">';
 	actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/edit"><span class="oi oi-pencil edit-btn"></span></a>';
