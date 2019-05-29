@@ -94,7 +94,8 @@ trait OauthToken
         );
         $instance = Route::dispatch($tokenRequest);
         $reponseData = json_decode($instance->getContent(), true);
-        $reponseData['expires_in'] = date('Y-m-d H:i:s',time()+$reponseData['expires_in']);
+        
+        $reponseData['expires_in'] = isset($reponseData['expires_in']) ? date('Y-m-d H:i:s', time() + $reponseData['expires_in']) : 0;
         return $reponseData;
     }
     

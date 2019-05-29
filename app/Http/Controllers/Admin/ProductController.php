@@ -122,8 +122,7 @@ class ProductController extends AdminController
                 $response_avatar = json_decode((string) $response->getBody(), true);
             }
         }
-        dd($response_product);
-        //return $this->adminResponse($request,$response_product);
+        return $this->adminResponse($request,$response_product);
     }
 
     public function update(Request $request, $id)
