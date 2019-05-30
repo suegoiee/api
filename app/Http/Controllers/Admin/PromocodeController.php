@@ -134,6 +134,7 @@ class PromocodeController extends AdminController
                     }
                 }
                 array_push($insertArray, $lineData);
+                $count++;
             }
             $resultInsert = $this->moduleRepository->insertArray($insertArray);
             foreach ($resultInsert['data'] as $key => $data) {
@@ -143,15 +144,16 @@ class PromocodeController extends AdminController
             foreach ($resultInsert['errors'] as $key => $error) {
                 array_push($result['errors'], $error->code.' '.trans('import.is_exist'));
             }
-            $count++;
+            $count=$resultInsert['success'];
             fclose($file);
         }else{
             $result['errors'] = [trans('import.file_error')];
         }
         if(count($result['errors'])>0){
-            return redirect()->back()->with(['infos' => $result['errors']]);
+            return redirect('admin/promocodes')->with('errors', $result['errors']);
+
         }else{
-            return redirect()->back()->with(['infos' => trans('import.success', ['num'=>$count])]);
+            return redirect('admin/promocodes')->with('infos', [trans('import.success', ['num'=>$count])]);
         }
         //$content = file_get_contents($request->file('promocodefile')->getRealPath());
     }

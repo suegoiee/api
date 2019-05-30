@@ -8,10 +8,21 @@
 		@endforeach
     </ul>
 @endif
-@if (Session::has('infos'))
+@if (session('errors'))
     <ul>
+		@foreach($errors as $error)
+			<li class="list-group-item list-group-item-danger">
+				{{$error}}
+			</li>
+		@endforeach
+    </ul>
+@endif
+@if (session('infos'))
+    <ul>
+    	@foreach(session('infos') as $infos)
 		<li class="list-group-item list-group-item-info">
-			{{Session::get('infos')}}
+			{{ $infos}}
 		</li>
+		@endforeach
     </ul>
 @endif
