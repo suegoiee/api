@@ -11,7 +11,7 @@
 @if (Session::has('infos'))
     <ul>
 		<li class="list-group-item list-group-item-info">
-				{{Session::get('infos')}}
-			</li>
+			{{Session::get('infos')}}
+		</li>
     </ul>
 @endif

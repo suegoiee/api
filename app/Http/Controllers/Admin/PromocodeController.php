@@ -95,6 +95,7 @@ class PromocodeController extends AdminController
         $file = fopen($filepath,"r");
         $result = ['success'=>0, 'errors'=>[],'infos'=>[]];
         $rows = 0;
+        $count = 0;
         if($file){
             $insertArray = [];
             $promocodes = [];
@@ -104,8 +105,9 @@ class PromocodeController extends AdminController
                     $ignoreLine--;
                     continue;
                 }
+                $row_name = $line[0];
                 $lineData=[
-                    'name'=>$line[0],
+                    'name'=>mb_detect_encoding($row_name, 'ASCII', true) ? mb_convert_encoding($row_name, "UTF-8") : $row_name,
                     'code'=>$line[1],
                     'offer'=>$line[2],
                     'deadline'=>$line[3]!=''?$line[3]:null,
@@ -137,18 +139,20 @@ class PromocodeController extends AdminController
             foreach ($resultInsert['data'] as $key => $data) {
                 $data->products()->sync($promocodes[$data->code]['products']);
             }
-            $result['success']= $resultInsert['success'];
+            $result['success'] = $resultInsert['success'];
             foreach ($resultInsert['errors'] as $key => $error) {
                 array_push($result['errors'], $error->code.' '.trans('import.is_exist'));
             }
+            $count++;
             fclose($file);
         }else{
-            $result['errors']=[trans('import.file_error')];
+            $result['errors'] = [trans('import.file_error')];
         }
         if(count($result['errors'])>0){
-            Session::flash('infos', $result);
+            return redirect()->back()->with(['infos' => $result['errors']]);
+        }else{
+            return redirect()->back()->with(['infos' => trans('import.success', ['num'=>$count])]);
         }
-        return redirect()->back();
         //$content = file_get_contents($request->file('promocodefile')->getRealPath());
     }
 
