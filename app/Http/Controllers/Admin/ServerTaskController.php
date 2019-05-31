@@ -244,4 +244,18 @@ class ServerTaskController extends AdminController
         DB::connection('mysql_3')->table('archives')->insert($archives);
     }
 
+    public function updateLaboratoryProduct(LaboratoryRepository $laboratoryRepository)
+    {
+        set_time_limit(0);
+        $laboratories = $laboratoryRepository->getsWith([],['collection_product_id'=>188]);
+        foreach ($laboratories as $key => $laboratory) {
+            $laboratory->products()->attach([
+                230 => ['sort' => 4],
+                232 => ['sort' => 3]
+            ]);
+            $laboratory->products()->updateExistingPivot(172, ['sort' => 5]);
+            echo $laboratory->title.' '.$laboratory->user_id.'<br/>';
+        }
+
+    }
 }
