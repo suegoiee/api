@@ -1,3 +1,6 @@
+function idFormatter(value,row,index){
+	return value;
+}
 function statusFormatter(value,row,index){
 	switch(value){
 		case 0:return '未付款';
@@ -11,7 +14,6 @@ function statusFormatter(value,row,index){
 }
 
 function user_profile_nicknameFormatter(value,row,index){
-	console.log(row);
 	return value;
 }
 
