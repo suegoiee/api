@@ -14,7 +14,7 @@ class Order extends UanalyzeModel
         'user_id','status','price','memo', 'use_invoice', 'invoice_type', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title','paymentType', 'LoveCode', 'RelateNumber', 'referrer_code'
     ];
     protected $hidden = [
-        'user','user_id','profile'
+        'user_id'
     ];
     public function user(){
     	return $this->belongsTo('App\User');

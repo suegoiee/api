@@ -18,7 +18,7 @@
             <th data-align="center" data-checkbox="true">{{trans('table.action_label')}}</th>
             @endif
             @foreach($table_head as $th)
-                <th data-align="center" data-field="{{$th}}" {!! in_array($th,$table_formatter)?'data-formatter="'.$th.'Formatter"':'' !!} data-sortable="true" 
+                <th data-align="center" data-field="{{$th}}" {!! in_array($th, $table_formatter)?'data-formatter="'.str_replace('.', '_', $th).'Formatter"':'' !!} {!! !isset($table_sortable) || in_array($th, $table_sortable) ? 'data-sortable="true"' : '' !!}
                 >
                 {{trans($module_name.'.admin.'.$th)}}
                 </th>

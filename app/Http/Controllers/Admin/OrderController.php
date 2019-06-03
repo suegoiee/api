@@ -52,8 +52,9 @@ class OrderController extends AdminController
             'query_data' => $query_data,
             'server_side' => 'active',
             'table_data' => $orders,
-            'table_head' =>['no','user_nickname','user_email','price','products','status','created_at'],
-            'table_formatter' =>['user_email','status', 'products'],
+            'table_head' =>['id','user.profile.nickname','user.email','price','products','status','created_at'],
+            'table_sortable' =>['id','price','status','created_at'],
+            'table_formatter' =>['user.profile.nickname', 'user.email','status', 'products'],
         ];
         return view('admin.list',$data);
     }
@@ -63,7 +64,7 @@ class OrderController extends AdminController
         $query_string = [];
         $query_data = [];
         $orderBy=[];
-        $with = ['products'];
+        $with = ['products', 'user', 'user.profile'];
         $orders_by = $this->moduleRepository;
         $search_fields = ['price', 'created_at'];
         $search_relation_fields = ['user.profile.nickname','user.email', 'products.name'];
@@ -79,13 +80,16 @@ class OrderController extends AdminController
         if($request->has('sort')){
             $order_column = $request->input('sort');
             $order = $request->input('order');
-            $orderBy[$order_column] = $order;
+            if($order_column == 'products'){
+                $orderBy['products.name'] = $order;
+            }else{
+                $orderBy[$order_column] = $order;
+            }
         }else{
             $order_column = $request->input('sort');
             $order = $request->input('order');
             $orderBy['created_at'] = 'DESC';
         }
-
         $offset = $request->input('offset',0);
         $limit = $request->input('limit',100);
 
