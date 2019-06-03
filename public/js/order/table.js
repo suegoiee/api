@@ -10,7 +10,8 @@ function statusFormatter(value,row,index){
 	return value;
 }
 
-function user_nick_nameFormatter(value,row,index){
+function user_profile_nicknameFormatter(value,row,index){
+	console.log(row);
 	return value;
 }
 
