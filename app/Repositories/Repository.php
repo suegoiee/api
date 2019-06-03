@@ -136,6 +136,7 @@ class Repository
         }
         return $this;
     }
+
     public function whereHas($query,$relation_column,$value){
         $self = $this;
         $whereHas_array = explode('.', $relation_column,2);
@@ -155,18 +156,20 @@ class Repository
     		return $this;
     	}
         $self = $this;
-        foreach ($orWhereHas as $key => $value) {
-            $orWhereHas_array = explode('.', $value,2);
-            $relation_table = $orWhereHas_array[0];
-            $relation_column = $orWhereHas_array[1];
-            $this->condition =  $this->condition->orWhereHas($relation_table, function ($query) use ($relation_column, $searchText, $self) {
-                    $self->whereHas($query,$relation_column,$searchText);
-                });
-        }
-        $this->condition = $this->condition->orWhere(function($query) use ($columns, $searchText){
-            foreach ($columns as $key => $value) {
-                $query->orWhere($value,'like','%'.$searchText.'%');
+        $this->condition = $this->condition->where(function($query) use ($self, $columns, $searchText,$orWhereHas){
+            foreach ($orWhereHas as $key => $value) {
+                $orWhereHas_array = explode('.', $value,2);
+                $relation_table = $orWhereHas_array[0];
+                $relation_column = $orWhereHas_array[1];
+                $query = $query->orWhereHas($relation_table, function ($whereQuery) use ($relation_column, $searchText, $self) {
+                        $self->whereHas($whereQuery,$relation_column,$searchText);
+                    });
             }
+            $query = $query->orWhere(function($whereQuery) use ($columns, $searchText){
+                foreach ($columns as $key => $value) {
+                    $whereQuery->orWhere($value,'like','%'.$searchText.'%');
+                }
+            });
         });
 
         return $this;

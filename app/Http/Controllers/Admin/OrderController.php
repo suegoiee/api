@@ -54,15 +54,14 @@ class OrderController extends AdminController
             'table_data' => $orders,
             'table_head' =>['id','user.profile.nickname','user.email','price','products','status','created_at'],
             'table_sortable' =>['id','price','status','created_at'],
-            'table_formatter' =>['user.profile.nickname', 'user.email','status', 'products'],
+            'table_formatter' =>[ 'user.profile.nickname', 'user.email','status', 'products'],
         ];
         return view('admin.list',$data);
     }
 
     public function data(Request $request)
     {
-        $query_string = [];
-        $query_data = [];
+        $where=[];
         $orderBy=[];
         $with = ['products', 'user', 'user.profile'];
         $orders_by = $this->moduleRepository;
@@ -70,6 +69,7 @@ class OrderController extends AdminController
         $search_relation_fields = ['user.profile.nickname','user.email', 'products.name'];
         $search = ""; 
         $free =  $request->input('free', 0);
+
         if($free == 1){
             $where['price.='] = 0;
         }else{
@@ -90,6 +90,7 @@ class OrderController extends AdminController
             $order = $request->input('order');
             $orderBy['created_at'] = 'DESC';
         }
+
         $offset = $request->input('offset',0);
         $limit = $request->input('limit',100);
 
@@ -98,6 +99,7 @@ class OrderController extends AdminController
         }
         $orders_total = $orders_by->whereBy($where)->toCount();
         $orders_total_filtered = $orders_by->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->toCount();
+
         $orders = $orders_by->toWith($with)->searchBy( $search_fields, $search, $search_relation_fields)->whereBy($where)->orderBy($orderBy)->limit($offset, $limit)->toGets();
         
         //$orders = $this->moduleRepository->getsWith([], $where, ['created_at'=>'DESC']);
