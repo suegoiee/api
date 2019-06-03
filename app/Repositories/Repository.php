@@ -147,7 +147,7 @@ class Repository
                 $self->whereHas($query2, $relation_column, $value);
             });
         }else{
-            $query->where($relation_column, 'like', '%'.$value.'%');
+            $query->where($relation_column, 'like binary', '%'.$value.'%');
         }
         return $query;
     }
@@ -167,7 +167,7 @@ class Repository
             }
             $query = $query->orWhere(function($whereQuery) use ($columns, $searchText){
                 foreach ($columns as $key => $value) {
-                    $whereQuery->orWhere($value,'like','%'.$searchText.'%');
+                    $whereQuery->orWhere($value,'like binary','%'.$searchText.'%');
                 }
             });
         });
