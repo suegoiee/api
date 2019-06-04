@@ -7,6 +7,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\Repository;
 use App\Repositories\StockRepository;
 use App\Repositories\PromocodeRepository;
+use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
@@ -257,5 +258,21 @@ class ServerTaskController extends AdminController
             echo $laboratory->title.' '.$laboratory->user_id.'<br/>';
         }
 
+    }
+
+    public function countUserPayment(OrderRepository $orderRepository, $product_id)
+    {
+        set_time_limit(0);
+        $orders = $orderRepository->getsWith([],['price'=>0,'status'=>1],[],['products'=>function($query)use ($product_id){ $query->where('id', $product_id);}]);
+        $users = [];
+        $total_pay = 0;
+        foreach ($orders as $key => $order) {
+            if(!isset($users[$order->user_id])){
+                $users[$order->user_id] = ['user'=>$order->user,'total_pay'=>$order->user->orders()->where('status',1)->where('price','<>',0)->sum('price')];
+                $total_pay += $users[$order->user_id]['total_pay'];
+                echo $order->user_id.','.($order->user->profile ? $order->user->profile->nickname:'').','.$users[$order->user_id]['total_pay'].'<br>';
+            }
+        }
+        echo  $total_pay;
     }
 }

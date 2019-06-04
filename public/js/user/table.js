@@ -15,5 +15,10 @@ function actionFormatter(value,row,index){
     })
   }
 function mail_verified_atFormatter(value,row,index){
-	return row.is_socialite == 1 ? 'Facebook': ( value ? '已驗證':'尚未驗證');
+	switch(row.is_socialite){
+		case 1:return 'Facebook';
+		case 2:return 'Google';
+		case 0:
+		default:return ( value ? '已驗證':'尚未驗證');
+	}
 }

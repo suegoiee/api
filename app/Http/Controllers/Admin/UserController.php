@@ -36,7 +36,7 @@ class UserController extends AdminController
         $orderBy=[];
         $where=[];
         $module_by = $this->moduleRepository;
-        $search_fields = ['email', 'updated_at', 'created_at'];
+        $search_fields = ['id','email', 'updated_at', 'created_at'];
         $search_relation_fields = [];
         $search = ""; 
 
