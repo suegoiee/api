@@ -260,15 +260,16 @@ class ServerTaskController extends AdminController
 
     }
 
-    public function countUserPayment(OrderRepository $orderRepository, $product_id)
+    public function countUserPayment(OrderRepository $orderRepository, ProductRepository $productRepository, $product_id, $date=false)
     {
         set_time_limit(0);
         $orders = $orderRepository->getsWith([],['price'=>0,'status'=>1],[],['products'=>function($query)use ($product_id){ $query->where('id', $product_id);}]);
         $users = [];
         $total_pay = 0;
+        $product = $productRepository->get($product_id);
         foreach ($orders as $key => $order) {
             if(!isset($users[$order->user_id])){
-                $users[$order->user_id] = ['user'=>$order->user,'total_pay'=>$order->user->orders()->where('status',1)->where('price','<>',0)->sum('price')];
+                $users[$order->user_id] = ['user'=>$order->user,'total_pay'=>$order->user->orders()->where('status',1)->where('price','<>',0)->where('create_at','>=', $date ? ($date.' 00:00:00'):$product->created_at)->sum('price')];
                 $total_pay += $users[$order->user_id]['total_pay'];
                 echo $order->user_id.','.($order->user->profile ? $order->user->profile->nickname:'').','.$users[$order->user_id]['total_pay'].'<br>';
             }
