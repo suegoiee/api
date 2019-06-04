@@ -269,7 +269,7 @@ class ServerTaskController extends AdminController
         $product = $productRepository->get($product_id);
         foreach ($orders as $key => $order) {
             if(!isset($users[$order->user_id])){
-                $users[$order->user_id] = ['user'=>$order->user,'total_pay'=>$order->user->orders()->where('status',1)->where('price','<>',0)->where('create_at','>=', $date ? ($date.' 00:00:00'):$product->created_at)->sum('price')];
+                $users[$order->user_id] = ['user'=>$order->user,'total_pay'=>$order->user->orders()->where('status',1)->where('price','<>',0)->where('created_at','>=', $date ? ($date.' 00:00:00'):$product->created_at)->sum('price')];
                 $total_pay += $users[$order->user_id]['total_pay'];
                 echo $order->user_id.','.($order->user->profile ? $order->user->profile->nickname:'').','.$users[$order->user_id]['total_pay'].'<br>';
             }
