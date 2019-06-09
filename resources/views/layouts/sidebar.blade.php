@@ -83,6 +83,12 @@
                 <span class="text">{{trans('referrer.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/events')}}">
+                <span class="oi oi-bullhorn"></span>
+                <span class="text">{{trans('event.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">

@@ -45,6 +45,7 @@ class AuthServiceProvider extends ServiceProvider
             'notificationMessage'=>'create update delete',
             'edm'=>'create update delete',
             'user'=>'update',
+            'event'=>'create update delete',
 			]);
     }
 }

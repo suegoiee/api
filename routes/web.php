@@ -105,6 +105,10 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/user/notifications','NotificationController@read')->name('notifications.index');
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
+
+	Route::resource('/events', 'EventController', ['only' => [
+		'index','show'
+	]]);
 });
 
 Route::middleware(['web'])->group(function(){
@@ -210,6 +214,13 @@ Route::middleware(['client:edm'])->group(function(){
 
 Route::middleware(['client:user'])->group(function(){
 	Route::put('/users/{user}','UserController@update')->name('users.update');
+});
+
+
+Route::middleware(['client:event'])->group(function(){
+	Route::post('/events','EventController@store')->name('events.store');
+	Route::put('/events/{event}','EventController@update')->name('events.update');
+	Route::delete('/events/{event}','EventController@destroy')->name('events.destroy');
 });
 
 //Admin
@@ -323,6 +334,9 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/referrers/{referrer}/grants/details', 'Admin\ReferrerController@details');
 	
 	Route::get('/referrers/{analyst}/grants/amounts', 'Admin\ReferrerController@getAmounts');
+
+	Route::get('events/data','Admin\EventController@data');
+	Route::resource('/events', 'Admin\EventController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');

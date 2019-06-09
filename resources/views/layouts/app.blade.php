@@ -12,6 +12,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{asset('thirdparty/bootstrap4/css/bootstrap.min.css')}}" >
     <link rel="stylesheet" href="{{asset('thirdparty/open-iconic/font/css/open-iconic-bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('thirdparty/fontawesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/layout.css')}}">
     <link rel="stylesheet" href="{{asset('css/sidebar.css')}}">
 	@yield('css_file')  

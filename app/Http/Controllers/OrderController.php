@@ -9,6 +9,7 @@ use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
 use App\Repositories\PromocodeRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\EventRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
@@ -18,13 +19,15 @@ class OrderController extends Controller
     protected $orderRepository;
     protected $promocodeRepository;
     protected $productRepository;
+    protected $eventRepository;
     protected $ecpay;
-    public function __construct(OrderRepository $orderRepository, ProductRepository $productRepository, PromocodeRepository $promocodeRepository)
+    public function __construct(OrderRepository $orderRepository, ProductRepository $productRepository, PromocodeRepository $promocodeRepository, EventRepository $eventRepository )
     {
         $this->ecpay = new Ecpay();
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->promocodeRepository = $promocodeRepository;
+        $this->eventRepository = $eventRepository;
     }
     public function index(Request $request)
     {
@@ -110,6 +113,8 @@ class OrderController extends Controller
             foreach ($product_ids as $key => $product) {
                 array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity']]);
             }
+            $bonus_products = $this->checkEvents($product_pass);
+            array_push($product_pass, ...$bonus_products);
             $result = $this->addProducts($request, $user->id, $product_pass);
         }else{
             if(count($product_free)>0){
@@ -175,12 +180,15 @@ class OrderController extends Controller
         if( $order->status==1){
             $order_products = $order->products;
             $product_data = [];
+            $condition_products = [];
             foreach ($order_products as $key => $product) {
                 if($product->pivot->unit_price>0){
                     array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
-                    //$this->addProducts($user->id,  [['id'=>$product->id, 'quantity'=>$product->pivot->quantity]]);
                 }
+                array_push($condition_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
             }
+            $bonus_products = $this->checkEvents($condition_products);
+            array_push($product_data, ...$bonus_products);
             if(count($product_data)>0){
                 $this->addProducts($request, $user->id, $product_data);
             }
@@ -583,5 +591,29 @@ class OrderController extends Controller
         }
         $result['total_price'] = $result['total_price'] <= $order_offer ? 0 : $result['total_price'] - $order_offer;
         return $result;
+    }
+    function checkEvents($products)
+    {
+        $products = collect($products);
+        $evnets = $this->eventRepository->getsWith(['condition_products','products'],['status'=>1]);
+        $bonus_products = [];
+        foreach ($evnets as $key => $evnet) {
+            if($evnet->type == 1){
+                $pass = true;
+                foreach ($evnet->condition_products as $key => $condition_product) {
+                    $product = $products->where('id', $condition_product->id)->first();
+                    if(!$product || $product->quantity < $condition_product->pivot->quantity){
+                        $pass = false ;
+                    }
+                }
+
+                if($pass){
+                    foreach ($evnet->products as $key => $product) {
+                        array_push($bonus_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]]);
+                    }
+                }
+            }
+        }
+        return $bonus_products;
     }
 }
