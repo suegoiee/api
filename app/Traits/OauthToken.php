@@ -2,6 +2,7 @@
 namespace App\Traits;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\PersonalAccessClient;
+use Laravel\Passport\Client;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,7 @@ trait OauthToken
         return json_decode($instance->getContent(), true);
     }
 
-    protected function passwordGrantToken($request){
+    protected function passwordGrantToken($request, $isMobile=false){
         /*
         $http = new \GuzzleHttp\Client;
         $client = PersonalAccessClient::first()->client;
@@ -55,7 +56,7 @@ trait OauthToken
         return json_decode((string) $response->getBody(), true);
         */
         $client = PersonalAccessClient::first()->client;
-        $oauth_client = $this->getPasswordGrantClient();
+        $oauth_client = $isMobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $request->request->add([
             "grant_type" => "password",
             "username" => $request->input('email'),
@@ -75,7 +76,7 @@ trait OauthToken
         return $reponseData;
     }
 
-    protected function refreshGrantToken($request){
+    protected function refreshGrantToken($request, $isMobile=false){
         /*
         $http = new \GuzzleHttp\Client;
         $client = PersonalAccessClient::first()->client;
@@ -93,7 +94,7 @@ trait OauthToken
         return json_decode((string) $response->getBody(), true);
         */
         $client = PersonalAccessClient::first()->client;
-        $oauth_client = $this->getPasswordGrantClient();
+        $oauth_client = $isMobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $request->request->add([
             'grant_type' => 'refresh_token',
             'client_id' =>  $oauth_client->id,
@@ -114,6 +115,11 @@ trait OauthToken
     
     private function getPasswordGrantClient(){
         $client = DB::table('oauth_clients')->where('password_client',1)->first();
+        return $client;
+    }
+
+    private function getMobilePasswordGrantClient(){
+        $client = Client::where('name','uanalyze_api_mobile')->where('password_client',1)->first();
         return $client;
     }
 }

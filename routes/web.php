@@ -18,6 +18,8 @@ Route::post('/auth/confirmbyforum','Auth\VerifiedUserController@confirmByForum')
 
 Route::post('/auth/token', 'Auth\TokenController@accessToken');
 Route::post('/auth/token/refresh', 'Auth\TokenController@refreshAccessToken');
+Route::post('/auth/mobile/token', 'Auth\MobileTokenController@accessToken');
+Route::post('/auth/mobile/token/refresh', 'Auth\MobileTokenController@refreshAccessToken');
 Route::get('/auth/verified','Auth\VerifiedUserController@verified');
 
 Route::get('/auth/facebook/email','Auth\FacebookController@email_exist');

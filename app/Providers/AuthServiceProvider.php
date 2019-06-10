@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensExpireIn(Carbon::now()->addHours(24));
 
-        Passport::refreshTokensExpireIn(Carbon::now()->addHours(48));
+        Passport::refreshTokensExpireIn(Carbon::now()->addHours(72));
 
         Passport::tokensCan([
 			'product'=>'create update delete product',
