@@ -108,9 +108,6 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
 
-	Route::resource('/events', 'EventController', ['only' => [
-		'index','show'
-	]]);
 });
 
 Route::middleware(['web'])->group(function(){
@@ -143,6 +140,10 @@ Route::middleware(['web'])->group(function(){
 	Route::get('fetch/A0003KLineModel/{stock_code}','DataController@A0003KLineModel');
 	Route::get('fetch/ETFKLine/{stock_code}','DataController@ETFKLine');
 	Route::get('fetch/MonthlyRevenueGrowthRate/{stock_code}','DataController@MonthlyRevenueGrowthRate');
+
+	Route::resource('/events', 'EventController', ['only' => [
+		'index','show'
+	]]);
 });
 
 

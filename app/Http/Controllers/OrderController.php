@@ -114,7 +114,9 @@ class OrderController extends Controller
                 array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity']]);
             }
             $bonus_products = $this->checkEvents($product_pass);
-            array_push($product_pass, ...$bonus_products);
+            if(count($bonus_products)>0){
+                array_push($product_pass, ...$bonus_products);
+            }
             $result = $this->addProducts($request, $user->id, $product_pass);
         }else{
             if(count($product_free)>0){
@@ -188,7 +190,9 @@ class OrderController extends Controller
                 array_push($condition_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
             }
             $bonus_products = $this->checkEvents($condition_products);
-            array_push($product_data, ...$bonus_products);
+            if(count($bonus_products)>0){
+                array_push($product_data, ...$bonus_products);
+            }
             if(count($product_data)>0){
                 $this->addProducts($request, $user->id, $product_data);
             }
@@ -562,7 +566,7 @@ class OrderController extends Controller
                 $product_price = $product_plan->price;
                 $result['total_price'] += $product_price;
                 $result['origin_price'] += $product_price;
-                $min_diff = $product_price;
+                $min_diff = PHP_INT_MAX;//$product_price;
                 $use_promocode = false;
                 foreach ($product_offers as $key => $product_promocode) {
                     if($product_promocode->products()->where('id', $product->id)->count()!=0){
@@ -602,14 +606,20 @@ class OrderController extends Controller
                 $pass = true;
                 foreach ($evnet->condition_products as $key => $condition_product) {
                     $product = $products->where('id', $condition_product->id)->first();
-                    if(!$product || $product->quantity < $condition_product->pivot->quantity){
+                    if($product){
+                        if($product['quantity'] < $condition_product->pivot->quantity){
+                            $pass = false ;
+                            break;
+                        }
+                    }else{
                         $pass = false ;
+                        break;
                     }
                 }
 
                 if($pass){
                     foreach ($evnet->products as $key => $product) {
-                        array_push($bonus_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]]);
+                        array_push($bonus_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
                     }
                 }
             }
