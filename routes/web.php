@@ -13,6 +13,7 @@
 //API
 
 Route::post('/register', 'Auth\RegisterController@register');
+Route::post('/mobile/register', 'Auth\RegisterController@mobileRegister');
 Route::post('/registerbyforum', 'Auth\RegisterController@registerByForum');
 Route::post('/auth/confirmbyforum','Auth\VerifiedUserController@confirmByForum');
 

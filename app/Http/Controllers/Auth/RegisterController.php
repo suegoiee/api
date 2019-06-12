@@ -25,6 +25,14 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+        return $this->registerHandler($request);
+    }
+    public function mobileRegister(Request $request)
+    {
+        return $this->registerHandler($request, true);
+    }
+    protected function registerHandler($request, $mobile=false)
+    {
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
@@ -34,8 +42,9 @@ class RegisterController extends Controller
             return $this->validateErrorResponse($profileValidator->errors()->all());
         }
         event(new Registered($user = $this->create($request->all())));
-        return $this->registered($request, $user);
+        return $this->registered($request, $user, $mobile);
     }
+
     public function registerByForum(Request $request)
     {
         $validator = $this->validator($request->all());
@@ -47,7 +56,7 @@ class RegisterController extends Controller
             return $this->validateErrorResponse($profileValidator->errors()->all());
         }
         event(new Registered($user = $this->createByForum($request->all())));
-        return $this->registered($request, $user, true);
+        return $this->registered($request, $user, false, true);
     }
 
     protected function create(array $data)
@@ -69,12 +78,12 @@ class RegisterController extends Controller
         ]);
     }
 
-    protected function registered(Request $request, $user, $byForum=false)
+    protected function registered(Request $request, $user, $mobile, $byForum=false)
     {
         $this->createProfile($request,$user);
         $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken, $request->input('password'), $byForum));
-        $token = $this->passwordGrantToken($request);
+        $token = $this->passwordGrantToken($request, $mobile);
         //$token['user'] = $user;
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
         //$token['profile'] = $this->createProfile($request,$user);
