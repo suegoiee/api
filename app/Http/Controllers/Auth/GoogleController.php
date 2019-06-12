@@ -19,26 +19,32 @@ class GoogleController extends Controller
     }
     public function login(Request $request)
     {
-
-    	$validator = $this->validator($request->all());
+    	return $this->loginHandler($request);
+    }
+    public function mobileLogin(Request $request)
+    {
+        return $this->loginHandler($request, true);
+    }
+    protected function loginHandler($request, $mobile=false){
+        $validator = $this->validator($request->all());
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
         $user = User::where('is_socialite',2)->where('email',$request->input('email'))->first();
         if( $user ){
-        	if(Hash::check($request->input('password'), $user->getAuthPassword())){
-        		$user->touch();
-        		return $this->logined($request,$user);
-        	}else{
-        		return $this->validateErrorResponse([trans('auth.facebook_error')]);
-        	}
+            if(Hash::check($request->input('password'), $user->getAuthPassword())){
+                $user->touch();
+                return $this->logined($request, $user, $mobile);
+            }else{
+                return $this->validateErrorResponse([trans('auth.facebook_error')]);
+            }
         }else{
             $n_user = User::whereIn('is_socialite',[0,1])->where('email',$request->input('email'))->first();
             if($n_user ){
                 return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
             }
-        	$user = $this->create($request->all());
-        	return $this->registered($request,$user);
+            $user = $this->create($request->all());
+            return $this->registered($request, $user, $mobile);
         }
     }
 
@@ -53,20 +59,20 @@ class GoogleController extends Controller
         ]);
     }
 
-    protected function registered(Request $request,$user)
+    protected function registered(Request $request, $user, $mobile)
     {
         $this->createProfile($request, $user);
         $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken, $request->input('password'), false));
-        $token = $this->passwordGrantToken($request);
+        $token = $this->passwordGrantToken($request, $mobile);
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
         //$token['user'] = $user;
         //$token['profile'] = $this->createProfile($request, $user);
         return $this->successResponse($token);
     }
-    protected function logined(Request $request,$user)
+    protected function logined(Request $request,$user, $mobile)
     {
-        $token = $this->passwordGrantToken($request);
+        $token = $this->passwordGrantToken($request, $mobile);
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
         //$token['user'] = $user;
         $this->updateProfile($request,$user);

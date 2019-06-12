@@ -34,10 +34,11 @@ Route::post('/ecpay/feedback','EcpayController@feedback');
 Route::get('/ecpay/result','EcpayController@result');
 Route::post('/ecpay/result','EcpayController@result');
 
-Route::get('/auth/facebook', 'Auth\FacebookController@login');
 Route::post('/auth/facebook', 'Auth\FacebookController@login');
-
 Route::post('/auth/google', 'Auth\GoogleController@login');
+
+Route::post('/auth/mobile/facebook', 'Auth\FacebookController@mobileLogin');
+Route::post('/auth/mobile/google', 'Auth\GoogleController@mobileLogin');
 
 Route::post('/stocks/products', 'StockModelController@getModelProducts');
 Route::middleware(['auth'])->group(function(){
