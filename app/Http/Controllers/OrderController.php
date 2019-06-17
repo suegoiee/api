@@ -459,12 +459,16 @@ class OrderController extends Controller
                 if($quantity === false ){
                     return $this->failedResponse(['message'=>['The quantity is required']]);
                 }
-                $products = [['id'=>$products, 'quantity'=>$quantity]];
+                $temp_products = [];
                 foreach ($products as $key => $product_id) {
+                    array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key]]);
                     $product = $this->productRepository->get($product_id['id']);
                     if(!$product){
                         return $this->failedResponse(['message'=>['The selected products is invalid.']]);
                     }
+                }
+                if(count($temp_products)>0){
+                    $products = $temp_products;
                 }
             }else{
                 return $this->failedResponse(['message'=>['The product is required']]);
@@ -533,27 +537,27 @@ class OrderController extends Controller
                 }else{
                     $user_promocode_used = $promocode->used()->where('user_id',$user->id)->count();
                     $promocode_use_time = $promocode->used()->count();
-                if($promocode->disabled == 1){
-                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>6];
-                }else if($promocode->used_at != null || $user_promocode_used != 0 ||
-                            ( $promocode->times_limit != 0 && $promocode_use_time >= $promocode->times_limit )){
-                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>2];
-                }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
-                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Expired','error'=>3];
-                }else if( $promocode->specific==1 && $promocode->products()->whereIn('id',$product_ids)->count()==0){
-                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Not match','error'=>4];
-                }else if( $promocode->specific==1 && $promocode->retrict_type == 1 && $products_data->where('quantity',$promocode->retrict_condition)->count()==0){
-                    $result['promocodes'][$promocode_code]=[ 'msg' => 'Retrict condition not match','error'=>6];
-                }else if(array_key_exists($promocode_code,$result['promocodes'])){
-                    continue;
-                }else{
-                    if($promocode->specific==1){
-                        array_push($product_offers, $promocode);
+                    if($promocode->disabled == 1){
+                        $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>6];
+                    }else if($promocode->used_at != null || $user_promocode_used != 0 ||
+                                ( $promocode->times_limit != 0 && $promocode_use_time >= $promocode->times_limit )){
+                        $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>2];
+                    }else if($promocode->deadline !=null && strtotime($promocode->deadline. ' +1 day') <= time()){
+                        $result['promocodes'][$promocode_code]=[ 'msg' => 'Expired','error'=>3];
+                    }else if( $promocode->specific==1 && $promocode->products()->whereIn('id',$product_ids)->count()==0){
+                        $result['promocodes'][$promocode_code]=[ 'msg' => 'Not match','error'=>4];
+                    }else if( $promocode->specific==1 && $promocode->retrict_type == 1 && $products_data->where('quantity',$promocode->retrict_condition)->count()==0){
+                        $result['promocodes'][$promocode_code]=[ 'msg' => 'Retrict condition not match','error'=>6];
+                    }else if(array_key_exists($promocode_code,$result['promocodes'])){
+                        continue;
                     }else{
-                        $result['promocodes'][$promocode->code] = ['name'=>$promocode->name, 'offer'=>$promocode->offer, 'overflow_offer'=>0];
-                        $order_offer += $promocode->offer;
+                        if($promocode->specific==1){
+                            array_push($product_offers, $promocode);
+                        }else{
+                            $result['promocodes'][$promocode->code] = ['name'=>$promocode->name, 'offer'=>$promocode->offer, 'overflow_offer'=>0];
+                            $order_offer += $promocode->offer;
+                        }
                     }
-                }
                 }
             }
         }
