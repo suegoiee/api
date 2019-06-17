@@ -528,8 +528,11 @@ class OrderController extends Controller
                 if(!$promocode){
                     $promocode = $this->promocodeRepository->getBy(['user_id'=>0, 'type'=>0, 'code'=>$promocode_code]);
                 }
-                $user_promocode_used = $promocode->used()->where('user_id',$user->id)->count();
-                $promocode_use_time = $promocode->used()->count();
+                if(!$promocode){
+                    $result['promocodes'][$promocode_code]=[ 'msg' => 'not exists','error'=>1];
+                }else{
+                    $user_promocode_used = $promocode->used()->where('user_id',$user->id)->count();
+                    $promocode_use_time = $promocode->used()->count();
                 if($promocode->disabled == 1){
                     $result['promocodes'][$promocode_code]=[ 'msg' => 'Used','error'=>6];
                 }else if($promocode->used_at != null || $user_promocode_used != 0 ||
@@ -550,6 +553,7 @@ class OrderController extends Controller
                         $result['promocodes'][$promocode->code] = ['name'=>$promocode->name, 'offer'=>$promocode->offer, 'overflow_offer'=>0];
                         $order_offer += $promocode->offer;
                     }
+                }
                 }
             }
         }
