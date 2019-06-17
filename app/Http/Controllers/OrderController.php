@@ -462,7 +462,7 @@ class OrderController extends Controller
                 $temp_products = [];
                 foreach ($products as $key => $product_id) {
                     array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key]]);
-                    $product = $this->productRepository->get($product_id['id']);
+                    $product = $this->productRepository->get($product_id);
                     if(!$product){
                         return $this->failedResponse(['message'=>['The selected products is invalid.']]);
                     }
