@@ -52,7 +52,17 @@ class OrderController extends Controller
                 if($quantity === false ){
                     return $this->failedResponse(['message'=>['The quantity is required']]);
                 }
-                $products = [['id'=>$products, 'quantity'=>$quantity]];
+                $temp_products = [];
+                foreach ($products as $key => $product_id) {
+                    array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key]]);
+                    $product = $this->productRepository->get($product_id);
+                    if(!$product){
+                        return $this->failedResponse(['message'=>['The selected products is invalid.']]);
+                    }
+                }
+                if(count($temp_products)>0){
+                    $products = $temp_products;
+                }
             }else{
                 return $this->failedResponse(['message'=>['No product to check order']]);
             }
