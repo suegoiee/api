@@ -149,7 +149,7 @@ class OrderController extends Controller
         foreach ($order->products as $key => $product) {
             $product->quantity = $product->pivot->quantity;
         }
-        return $this->successResponse($order?$order:[]);
+        return $this->successResponse($order?$order->makeHidden('user'):[]);
     }
     public function show(Request $request, $id)
     {
