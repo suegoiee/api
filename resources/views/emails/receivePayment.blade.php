@@ -20,6 +20,6 @@
 @section('btn_end')
 </a>
 <hr/>
-	<p style="font-size:9px;margin:0;padding-left: 10px;">本信件由系統自動發送，請勿直接回信，感謝您的配合!</p>
-	<p style="font-size:9px;margin:0;padding-left: 10px;">如果您有任何疑問或建議，歡迎您直接連絡我們。</p>
+	<p style="font-size:11px;margin:0;padding-left: 10px;">本信件由系統自動發送，請勿直接回信，感謝您的配合!</p>
+	<p style="font-size:11px;margin:0;padding-left: 10px;">如果您有任何疑問或建議，歡迎您直接連絡我們。</p>
 @endsection
