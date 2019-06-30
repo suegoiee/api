@@ -52,6 +52,8 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/subscript/cancel', 'SubscriptController@cancel');
 	Route::put('/subscript', 'SubscriptController@subscript');
 	Route::get('/auth/login','Auth\TokenController@isLogin');
+
+	Route::get('/auth/verified/check','Auth\VerifiedUserController@isVerified');
 });
 Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
