@@ -12,7 +12,7 @@
     <div class="col-sm-8">
         <select class="form-control chosen-select" id="stocks" name="stocks[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
             @foreach($stocks as $stock)
-                <option value="{{$stock->no}}" {{$data && $data->stocks->where('no',$stock->no)->count()>0 ? 'selected':''}} >{{$stock->stock_code}}</option>
+                <option value="{{$stock->no}}" {{$data && $data->stocks->where('no',$stock->no)->count()>0 ? 'selected':''}} >{{$stock->stock_name}} [{{$stock->stock_code}}]</option>
             @endforeach
         </select>
     </div>
