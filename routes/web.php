@@ -148,7 +148,9 @@ Route::middleware(['web'])->group(function(){
 	]]);
 });
 
-
+Route::middleware(['client'])->group(function(){
+	Route::get('/client/token/check','Auth\ClientTokenController@check');
+});
 Route::middleware(['client:tag'])->group(function(){
 	Route::post('/tags','TagController@store')->name('tags.store');
 	Route::put('/tags/{tag}','TagController@update')->name('tags.update');
