@@ -35,45 +35,7 @@ $(function(){
                         that.$selectionUl.focus();
                         return false;
                     }
-                });/*
-            $( "#collections_select .ms-selection .ms-list" ).sortable({
-                placeholder: "ui-state-highlight",
-                start: function(event, ui) {
-                    //var start_pos = ui.item.index();
-                    var start_pos = $( "#collections_select .ms-selection .ms-list .ms-elem-selection" ).map(function(index, item){return $(item).attr('id');}).toArray().indexOf(ui.item.attr("id"));
-                    ui.item.data('start_index', start_pos);
-                },
-                stop: function( event, ui ) {
-                    var start_pos = ui.item.data('start_index');
-                    
-                    //var current_pos = ui.item.index();
-                    console.log( ui.item.attr('id'));
-                    var current_pos = $( "#collections_select .ms-selection .ms-list .ms-elem-selection" ).map(function(index, item){return $(item).attr('id');}).toArray().indexOf(ui.item.attr("id"));
-                    var start_option = that.$element.find('option').eq(start_pos);
-                    var temp = {val:start_option.val(), html:start_option.html()};
-                    if(start_pos<=current_pos){
-                        for (var i = start_pos; i < current_pos; i++) {
-                            var option_1 = that.$element.find('option').eq(i);
-                            var option_2 = that.$element.find('option').eq(i+1);
-                            option_1.val(option_2.val());
-                            option_1.html(option_2.html());
-                        }
-                    }else{
-                        for (var i = start_pos; i > current_pos; i--) {
-                            var option_1 = that.$element.find('option').eq(i);
-                            var option_2 = that.$element.find('option').eq(i-1);
-                            option_1.val(option_2.val());
-                            option_1.html(option_2.html());
-                        }
-                    }
-                    var current_option = that.$element.find('option').eq(current_pos);
-                    current_option.val(temp.val);
-                    current_option.html(temp.html);
-                    console.log(that.sanitize())
-                    console.log(that.$element.val());
-                    //$('#collections').multiSelect('refresh');
-                }
-            });*/console.log(that.$element.val());
+                });
         },
         afterSelect: function(value){
             this.qs1.cache();
@@ -88,6 +50,19 @@ $(function(){
         }
     });
 	$("#tags").chosen();
+    $('#category').change(function(event){
+        var category = $(this).val();
+        $('#affiliated_product_select').hide();
+        switch(category){
+            case '0':case 0:$('#type').prop('disabled',false);break;
+            case '1':case 1:$('#type').val('single').prop('disabled',true).change();break;
+            case '2':case 2:$('#type').val('collection').prop('disabled',true).change();break;
+            case '3':case 3:$('#type').val('collection').prop('disabled',true).change();break;
+            case '4':case 4:$('#type').prop('disabled',false);$('#affiliated_product_select').show();break;
+        }
+    });
+    $('#category').change();
+
     $('#type').change(function(event){
         var type = $(this).val();
         if(type=='collection'){
@@ -97,34 +72,9 @@ $(function(){
             $('#collections_select').hide();
         }
     });
+    
     $('#type').change();
-	/*
-	$('#tags').multiselect({
-			enableFiltering: true,s
-			templates: {
-				ul: '<ul class="multiselect-container dropdown-menu container-fluid"></ul>',
-				li: '<li><a href="javascript:void(0);"><label class="w-100"></label></a></li>',
-				filter: '<li class="multiselect-item filter"><div class="input-group mx-auto px-1"><span class="input-group-addon"><i class="oi oi-magnifying-glass"></i></span><input class="form-control multiselect-search" type="text"></div></li>',
-            	filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default multiselect-clear-filter" type="button"><i class="oi oi-circle-x"></i></button></span>',
-            },
-            buttonWidth: '100%',
-            buttonText: function(options, select) {
-                if (options.length === 0) {
-                    return '尚未選擇';
-                }else {
-                    var labels = [];
-                    options.each(function() {
-                         if ($(this).attr('label') !== undefined) {
-                             labels.push($(this).attr('label'));
-                         }
-                         else {
-                             labels.push($(this).html());
-                         }
-                     });
-                     return labels.join(', ') + '';
-                 }
-            }
-        });*/
+	
     var avatar_detail_index=0;
     $("#new_avatar_detail_btn").click(function(event){
         event.preventDefault();
@@ -246,5 +196,9 @@ $(function(){
         if(confirm('確定刪除？')){
             $(this).parent().parent().remove();
         }
+    });
+    $('#form').submit(function(event){
+        $('#type').prop('disabled',false);
+        return true;
     });
 });

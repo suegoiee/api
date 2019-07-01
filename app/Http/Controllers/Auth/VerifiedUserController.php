@@ -93,4 +93,10 @@ class VerifiedUserController extends Controller
     {
 	   return $this->successResponse(['message'=>['Email error'], 'sent'=>0]);
     }
+
+    public function isVerified(Request $request)
+    {
+        $user = $request->user();
+        return $this->successResponse(['verified'=>$user && $user->mail_verified_at ? 1 : 0]);
+    }
 }

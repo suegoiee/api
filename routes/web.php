@@ -52,6 +52,8 @@ Route::middleware(['auth:api'])->group(function(){
 	Route::put('/subscript/cancel', 'SubscriptController@cancel');
 	Route::put('/subscript', 'SubscriptController@subscript');
 	Route::get('/auth/login','Auth\TokenController@isLogin');
+
+	Route::get('/auth/verified/check','Auth\VerifiedUserController@isVerified');
 });
 Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
@@ -376,7 +378,7 @@ Route::get('/server/seedUsers', 'Admin\ServerTaskController@seedUsers');
 Route::get('/server/destroySeedUsers', 'Admin\ServerTaskController@destroySeedUsers');
 
 Route::get('/server/importUsersToForum', 'Admin\ServerTaskController@importUsersToForum');
-Route::get('/server/importArchivesToForum', 'Admin\ServerTaskController@importArchivesToForum');
-Route::get('/server/updateLaboratoryProduct', 'Admin\ServerTaskController@updateLaboratoryProduct');*/
+Route::get('/server/importArchivesToForum', 'Admin\ServerTaskController@importArchivesToForum');*/
+Route::get('/server/updateLaboratoryProduct', 'Admin\ServerTaskController@updateLaboratoryProduct');
 Route::get('/server/countUserPayment/{product_id}', 'Admin\ServerTaskController@countUserPayment');
 Route::get('/server/countUserPayment/{product_id}/{date}', 'Admin\ServerTaskController@countUserPayment');

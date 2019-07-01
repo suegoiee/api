@@ -1,6 +1,6 @@
 <div style="background-color:#f4f4f4;width:100%;padding: 50px 0; font-family: arial,'微軟正黑體','黑體';">
-	<div style="width:50%; margin:0 auto; min-width: 320px; border-bottom: 3px solid #C8C8C8;">
-		<div style="background:transparent url({{url('images/ua-logo-b.png')}}) no-repeat; background-size: 25%; background-position: left center; height: 60px;"></div>
+	<div style="width:80%; margin:0 auto; min-width: 320px; border-bottom: 3px solid #C8C8C8;">
+		<div style="background:transparent url({{url('images/ua-logo-b.png')}}) no-repeat; background-size: 20%; background-position: left center; height: 60px;"></div>
 		<div style="background-color:#FFF;padding: 10px 0 20px 0; font-size:16px;color:#000;">
 			@if(!isset($is_pic))
 				@if(!isset($type))

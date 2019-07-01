@@ -59,7 +59,8 @@ class ProductController extends AdminController
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
-            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single']),
+            'singles'=>$this->moduleRepository->getsWith([],['type'=>'single']),
+            'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection'],['created_at'=>'DESC']),
             'data'=>null,
         ];
         return view('admin.form',$data);
@@ -72,7 +73,8 @@ class ProductController extends AdminController
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
-            'collections'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
+            'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection']),
+            'singles'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
             'data' => $product,
         ];
         return view('admin.form',$data);
