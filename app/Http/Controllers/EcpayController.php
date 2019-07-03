@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\PaymentReceive;
 use Shouwda\Ecpay\Ecpay;
 use Illuminate\Support\Facades\Storage;
 use Shouwda\EcpayInvoice\EcpayInvoice;
@@ -54,16 +55,19 @@ class EcpayController extends Controller
             if($ecpay){
                 $ecpay->feedbacks()->create($feedback_data);
                 $order = $ecpay->order;
+                $user = $order->user;
                 switch ($order->paymentType) {
                     case 'credit':case 'webatm':
                         if($feedback_data['RtnCode']==1){
                             $this->order_update($request, $ecpay->order_id,1);
+                            $user->notify(new PaymentReceive($user, $order->no, $feedback_data['PaymentDate']));
                         }else{
                             $this->order_update($request, $ecpay->order_id,2);
                         }
                         return '1|OK';
                     case 'atm':
                         if($feedback_data['RtnCode']==1){
+                            $user->notify(new PaymentReceive($user, $order->no, $feedback_data['PaymentDate']));
                             $this->order_update($request, $ecpay->order_id,1);
                         }else if($feedback_data['RtnCode']==2){
                             $this->order_update($request, $ecpay->order_id,3);
@@ -73,6 +77,7 @@ class EcpayController extends Controller
                         return '1|OK';
                     case 'barcode':case 'cvs':
                         if($feedback_data['RtnCode']==1){
+                            $user->notify(new PaymentReceive($user, $order->no, $feedback_data['PaymentDate']));
                             $this->order_update($request, $ecpay->order_id,1);
                         }else if($feedback_data['RtnCode']==10100073){
                             $this->order_update($request, $ecpay->order_id,3);

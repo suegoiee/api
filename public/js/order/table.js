@@ -31,10 +31,11 @@ function productsFormatter(value, row, index){
 function actionFormatter(value,row,index){
 	var actions='<div class="actions">';
 	actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/edit"><span class="oi oi-pencil edit-btn"></span></a>';
+	actions+=' ';
 	if(row.status==1 && row.price!=0){
 		actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/cancel"><span class="oi oi-action-undo cancel-btn"></span>';
 	}
-	actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/delete"><span class="oi oi-trash delete-btn"></span></a>';
+	//actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/delete"><span class="oi oi-trash delete-btn"></span></a>';
 	actions+='</div>';
 	return actions;
 }

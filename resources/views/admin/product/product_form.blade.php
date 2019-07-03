@@ -11,9 +11,24 @@
     <label class="form-control-label col-sm-2" for="category">{{trans($module_name.'.admin.category')}}</label>
     <div class="col-sm-8">
         <select class="form-control" id="category" name="category" >
-            <option value="研究室套件" {{ $data && $data->category=='研究室套件' ? 'selected':'' }} >{{trans($module_name.'.admin.category_0')}}</option>
-            <option value="大師" {{ $data && $data->category=='大師' ? 'selected':'' }} >{{trans($module_name.'.admin.category_1')}}</option>
-            <option value="達人" {{ $data && $data->category=='達人' ? 'selected':'' }} >{{trans($module_name.'.admin.category_2')}}</option>
+            <option value="1" {{ $data && $data->category=='1' ? 'selected':'' }} >{{trans($module_name.'.admin.category_1')}}</option>
+            <option value="2" {{ $data && $data->category=='2' ? 'selected':'' }} >{{trans($module_name.'.admin.category_2')}}</option>
+            <option value="3" {{ $data && $data->category=='3' ? 'selected':'' }} >{{trans($module_name.'.admin.category_3')}}</option>
+            <option value="4" {{ $data && $data->category=='4' ? 'selected':'' }} >{{trans($module_name.'.admin.category_4')}}</option>
+            <option value="0" {{ $data && $data->category=='0' ? 'selected':'' }} >{{trans($module_name.'.admin.category_0')}}</option>
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row" id="affiliated_product_select">
+    <label class="form-control-label col-sm-2" for="collections">{{trans($module_name.'.admin.affiliated_product')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control selectpicker" id="affiliated_product_id" name="affiliated_product_id"  data-placeholder="{{trans('form.do_select')}}" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
+            @foreach($collections as $product)
+                <option value="{{$product->id}}" {{$data && $data->affiliated_product_id==$product->id ? 'selected':''}} >{{$product->name}}</option>
+            @endforeach
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">
@@ -50,7 +65,7 @@
                     <option value="{{$product->id}}" selected>{{$product->name}}</option>
                 @endforeach
             @endif
-            @foreach($collections as $product)
+            @foreach($singles as $product)
                 <option value="{{$product->id}}" {{$data && $data->collections->where('id',$product->id)->count()>0 ? 'selected':''}} >{{$product->name}}</option>
             @endforeach
         </select>

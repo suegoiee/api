@@ -11,11 +11,6 @@ class Edm extends UanalyzeModel
 	
 	public function images()
     {
-        return $this->morphMany('App\Image', 'imageable');
-    }
-
-    public function getAvatarAttribute()
-    {
-        return $this->avatars()->orderBy('created_at','DESC')->first();
-    }
+        return $this->morphMany('App\Image', 'imageable')->orderBy('sort','asc');
+    } 
 }

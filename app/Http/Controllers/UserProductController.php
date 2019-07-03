@@ -101,10 +101,11 @@ class UserProductController extends Controller
                 $collections = $product_data->collections;
             }
             $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
-            
+            $user_product[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
+            $user->products()->syncWithoutDetaching($user_product);
             array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
         }
-        $user->products()->syncWithoutDetaching($products);
+        //$user->products()->syncWithoutDetaching($products);
 
         return $this->successResponse($result);
     }
