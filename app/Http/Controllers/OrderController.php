@@ -87,7 +87,7 @@ class OrderController extends Controller
                  return $this->failedResponse(['message'=>['The selected products is invalid.']]);
             }
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-            $order_plan = $product->plans()->where('expiration',$quantity)->first();
+            $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
             if(!$order_plan){
                 return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
@@ -577,7 +577,7 @@ class OrderController extends Controller
             if($product){
                 $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
 
-                $product_plan = $product->plans()->where('expiration',$quantity)->first();
+                $product_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
                 if(!$product_plan){
                     return false;
                 }
