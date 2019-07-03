@@ -148,6 +148,7 @@ Route::middleware(['web'])->group(function(){
 	Route::resource('/events', 'EventController', ['only' => [
 		'index','show'
 	]]);
+	Route::post('/events/products', 'EventController@productEvents');
 });
 
 
