@@ -17,9 +17,44 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-       $event = $this->eventRepository->getsWith([],['status'=>1]);
+        $events = $this->eventRepository->getsWith([],['status'=>1]);
+        return $this->successResponse($events);
+    }
 
-        return $this->successResponse($event?$event:[]);
+    public function productEvents(Request $request)
+    {
+        $products = $request->input('products',[]);
+        $event_products = $this->checkEvents($products);
+        
+        return $this->successResponse($event_products);
+    }
+    function checkEvents($products)
+    {
+        $products = collect($products);
+        $events = $this->eventRepository->getsWith(['condition_products','products'],['status'=>1]);
+        $bonus_products = [];
+        foreach ($events as $key => $event) {
+            if($event->type == 1){
+                $pass = true;
+                foreach ($event->condition_products as $key => $condition_product) {
+                    $product = $products->where('id', $condition_product->id)->first();
+                    if($product){
+                        if($product['quantity'] < $condition_product->pivot->quantity){
+                            $pass = false ;
+                            break;
+                        }
+                    }else{
+                        $pass = false ;
+                        break;
+                    }
+                }
+
+                if($pass){
+                    array_push($bonus_products, ['name'=>$event->name]);
+                }
+            }
+        }
+        return $bonus_products;
     }
 
     public function create()
@@ -54,6 +89,9 @@ class EventController extends Controller
             $product_ids[$product['id']] = $data;
         }
         $event->condition_products()->sync($product_ids);
+        foreach ($product_ids as $product_id => $product_pivot) {
+            $event->condition_products()->updateExistingPivot($product_id, $product_pivot);
+        }
 
         $products = $request->input('products',[]);
         $product_ids = [];
@@ -65,6 +103,9 @@ class EventController extends Controller
             $product_ids[$product['id']] = $data;
         }
         $event->products()->sync($product_ids);
+        foreach ($product_ids as $product_id => $product_pivot) {
+            $event->products()->updateExistingPivot($product_id, $product_pivot);
+        }
 
         return $this->successResponse($event?$event:[]);
     }

@@ -280,4 +280,21 @@ class ServerTaskController extends AdminController
         }
         echo  $total_pay;
     }
+
+    public function fixUserProductByOrder(OrderRepository $orderRepository)
+    {
+        set_time_limit(0);
+        //$users = $userRepository->getsWith(['orders', 'products'],['mail_verified_at.<>'=>null]);
+        $fix_product_ids["240"]=1;
+        $fix_product_ids["250"]=12;
+        foreach ($fix_product_ids as $fix_product_id => $fix_product_month) {
+            $orders = $orderRepository->getsWith(['products'], ['status'=>1], [], ['products'=>function($query) use ($fix_product_id){$query->where('id',$fix_product_id);}]);
+            foreach ($orders as $key => $order) {
+                $user = $order->user;
+                $deadline = date('Y-m-d H:i:s', strtotime($order->created_at . ' +'.$fix_product_month.' month'));
+                $user->products()->updateExistingPivot($fix_product_id, ['deadline'=>$deadline]);
+                echo $user->email.' '.$deadline.'<br/>';
+            }
+        }
+    }
 }

@@ -87,7 +87,7 @@ class OrderController extends Controller
                  return $this->failedResponse(['message'=>['The selected products is invalid.']]);
             }
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-            $order_plan = $product->plans()->where('expiration',$quantity)->first();
+            $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
             if(!$order_plan){
                 return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
@@ -577,7 +577,7 @@ class OrderController extends Controller
             if($product){
                 $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
 
-                $product_plan = $product->plans()->where('expiration',$quantity)->first();
+                $product_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
                 if(!$product_plan){
                     return false;
                 }
@@ -617,12 +617,12 @@ class OrderController extends Controller
     function checkEvents($products)
     {
         $products = collect($products);
-        $evnets = $this->eventRepository->getsWith(['condition_products','products'],['status'=>1]);
+        $events = $this->eventRepository->getsWith(['condition_products','products'],['status'=>1]);
         $bonus_products = [];
-        foreach ($evnets as $key => $evnet) {
-            if($evnet->type == 1){
+        foreach ($events as $key => $event) {
+            if($event->type == 1){
                 $pass = true;
-                foreach ($evnet->condition_products as $key => $condition_product) {
+                foreach ($event->condition_products as $key => $condition_product) {
                     $product = $products->where('id', $condition_product->id)->first();
                     if($product){
                         if($product['quantity'] < $condition_product->pivot->quantity){
@@ -636,7 +636,7 @@ class OrderController extends Controller
                 }
 
                 if($pass){
-                    foreach ($evnet->products as $key => $product) {
+                    foreach ($event->products as $key => $product) {
                         array_push($bonus_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
                     }
                 }

@@ -6,6 +6,7 @@ use Hash;
 use App\User;
 use App\Traits\OauthToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -62,11 +63,13 @@ class MobileTokenController extends Controller
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
+        $verified_request = clone $request;
         $response = $this->refreshGrantToken($request, true);
-        $response['verified']= $user && $user->mail_verified_at ? 1 : 0;
         if(isset($response['error'])){
             return $this->failedResponse(['message'=>[trans('auth.refresh_token_invalid')]]);
         }
+        $isVerified = $this->isVerified($verified_request, $response['access_token']);
+        $response['verified']= $isVerified;
         return $this->successResponse($response);
     }
     public function isLogin(Request $request)
@@ -91,5 +94,20 @@ class MobileTokenController extends Controller
         return Validator::make($data, [
             'refresh_token' => 'required',
         ]);
+    }
+    protected function isVerified($request, $access_token){
+        $http = new \GuzzleHttp\Client;
+        $instance = $http->get(url('auth/verified/check'), [
+            'headers'=>[
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer '.$access_token
+                ],
+        ]);
+
+        $response_data = json_decode((string) $instance->getBody(), true);
+        if(isset($response_data['error'])){
+            return '0';
+        }
+        return $response_data['data']['verified'];
     }
 }
