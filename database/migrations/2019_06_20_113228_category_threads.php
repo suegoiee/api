@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Taggables extends Migration
+class CategoryThreads extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class Taggables extends Migration
      */
     public function up()
     {
-        Schema::create('taggables', function (Blueprint $table) {
+        Schema::create('category_threads', function (Blueprint $table) {
             $table->increments('id')
                     ->unsigned();
-            $table->integer('taggable_id')
+            $table->integer('category_thread_id')
                     ->index();
             $table->integer('tag_id')
                     ->unsigned()
                     ->index();
-            $table->string('taggable_type', 191);
+            $table->string('category_thread_type', 191);
             $table->timestamps();
             $table->foreign('tag_id')
                     ->references('id')->on('categories')
@@ -36,6 +36,6 @@ class Taggables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taggables');
+        Schema::dropIfExists('category_threads');
     }
 }

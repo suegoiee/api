@@ -25,8 +25,7 @@ class Threads extends Migration
                     ->unique()
                     ->index();
             $table->integer('solution_reply_id')
-                    ->unsigned()
-                    ->index();
+                    ->unsigned();
             $table->timestamps();
             $table->foreign('author_id')
                     ->references('id')->on('users')

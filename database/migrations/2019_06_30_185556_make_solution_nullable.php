@@ -28,7 +28,6 @@ class MakeSolutionNullable extends Migration
         Schema::table('threads', function (Blueprint $table) {
             $table->integer('solution_reply_id')
                     ->unsigned()
-                    ->index()
                     ->change();
         });
     }
