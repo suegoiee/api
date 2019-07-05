@@ -79,6 +79,7 @@ class FacebookController extends Controller
     {
         return User::create([
             'email' => $data['email'],
+            'name' => $data['nickname'],
             'password' => bcrypt($data['password']),
             'is_socialite' => 1,
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
