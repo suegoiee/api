@@ -59,6 +59,12 @@ class User  extends Authenticatable
     {
         return $this->hasMany('App\Laboratory');
     }
+
+    public function master_laboratories()
+    {
+        return $this->belongsToMany('App\Laboratory')->withPivot('sort')->withTimestamps();
+    }
+
     public function favorites(){
         return $this->hasMany('App\Favorite');
     }
