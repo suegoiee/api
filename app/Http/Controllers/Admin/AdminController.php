@@ -45,7 +45,7 @@ class AdminController extends Controller
         $instance = Route::dispatch($tokenRequest);
 
         $response_data = json_decode($instance->getContent(), true);
-        return $response_data;//['status']=='success';
+        return $response_data['status']=='success';
     }
     protected function getAccessToken($request){
         $request->request->add($request->all());

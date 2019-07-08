@@ -61,6 +61,10 @@ class Product extends UanalyzeModel
     {
         return ($seo!=null ? $seo : '');
     }
+    public function master_laboratory()
+    {
+        return $this->hasOne('App\Laboratory', 'collection_product_id', 'id');
+    }
 
     public function laboratories()
     {

@@ -40,6 +40,12 @@ class LaboratoryController extends Controller
 
         return $this->successResponse($laboratories);
     }
+    public function openList(Request $request)
+    {
+        $laboratories = $this->laboratoryRepository->getsWith([],['user_id'=>0],['sort'=>'asc'])->makeHidden(['collection_product_id','faqs']);
+
+        return $this->successResponse($laboratories);
+    }
 
     public function create()
     {

@@ -4,6 +4,7 @@ use App\Notifications\ProductReceive;
 use App\Repositories\TagRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\LaboratoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,7 @@ class ProductController extends AdminController
 {	
     protected $tagRepository;
     protected $userRepository;
+    protected $laboratoryRepository;
     public function __construct(Request $request, ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
     {
         parent::__construct($request);
@@ -167,10 +169,16 @@ class ProductController extends AdminController
                                 'name'     => 'avatar_type',
                                 'contents' => $avatar['avatar_type'],
                             ],
+                            [
+                                'name'     => '_method',
+                                'contents' => 'PUT',
+                            ],
                         ],
                     ]);
 
                 $response_avatar = json_decode((string) $response->getBody(), true);
+                
+            dd($response_avatar);
             }
             if($request->input('deleted')){
                 
@@ -295,5 +303,4 @@ class ProductController extends AdminController
         }
         $this->tableExport($sheet);
     }
-
 }

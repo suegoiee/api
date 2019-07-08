@@ -106,7 +106,7 @@ class ProductController extends Controller
                 $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
             }
         }
-        
+        $this->productUpdated($product);
         return $this->successResponse($product?$product:[]);
     }
 
@@ -214,6 +214,8 @@ class ProductController extends Controller
             array_push($faq_ids,$faq_data->id);
         }
         $product->faqs()->whereNotIn('id',$faq_ids)->delete();
+        
+        $this->productUpdated($product);
 
         return $this->successResponse($product?$product:[]);
     }
@@ -273,5 +275,31 @@ class ProductController extends Controller
             'faq'=>'string',
             'inflated'=>'numeric'
         ]);        
+    }
+    protected function productUpdated($product){
+        if($product->type=='collection'){
+            $laboratory = $product->master_laboratory;
+            if($laboratory){
+                $laboratory->update([
+                    'category'=>$product->category,
+                    'title'=>$product->name, 
+                    'customized'=>0
+                ]);
+            }else{
+                $laboratory = $product->master_laboratory()->create([
+                    'user_id'=> 0,
+                    'category'=> $product->category,
+                    'title'=> $product->name, 
+                    'customized'=> 0
+                ]);
+            }
+
+            $collections_ids = [];
+            foreach ($product->collections as $key => $collection_product) {
+                $collection_sort = $collection_product->pivot->sort;
+                $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];           
+            }
+            $laboratory->products()->sync($collections_ids);
+        }
     }
 }
