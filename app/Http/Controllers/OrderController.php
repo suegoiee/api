@@ -74,7 +74,7 @@ class OrderController extends Controller
         }
         $request_data = $request->only(['memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode', 'referrer_code']);
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
-        $request_data['use_invoice'] =  $request->input('use_invoice',0);
+        $request_data['use_invoice'] =  $request->input('use_invoice',2);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $request_data['referrer_code'] = isset($request_data['referrer_code']) ? $request_data['referrer_code'] :  '';
         $product_ids = [];
@@ -87,7 +87,7 @@ class OrderController extends Controller
                  return $this->failedResponse(['message'=>['The selected products is invalid.']]);
             }
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-            $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
+            $order_plan = $product->plans()->where('expiration',$quantity)->first();
             if(!$order_plan){
                 return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
@@ -395,17 +395,17 @@ class OrderController extends Controller
         $extendData = [];
         if($order->use_invoice==2){
             $extendData['CustomerID'] = 'm'.str_pad($order->user->id, 6, '0', STR_PAD_LEFT);
-            $extendData['CustomerName'] = '';//urlencode($order->invoice_name);
-            $extendData['CustomerAddr'] = '';//$order->invoice_address);
+            $extendData['CustomerName'] = $order->invoice_name;//urlencode($order->invoice_name);
+            $extendData['CustomerAddr'] = $order->invoice_address;//$order->invoice_address;
             $extendData['CustomerPhone'] = $order->invoice_phone;
-            $extendData['CustomerEmail'] = $order->user->email;
+            $extendData['CustomerEmail'] = urlencode($order->user->email);
             if($order->company_id && strlen($order->company_id) <= 8){
                 $extendData['CustomerIdentifier'] = $order->company_id;
             }
             $extendData['TaxType'] = 1;
-            $extendData['Donation'] = $order->invoice_type==0 ? 1:'';
+            $extendData['Donation'] = $order->invoice_type==0 ? 1 : '';
             $extendData['LoveCode']= $order->invoice_type==0 ? $order->LoveCode:'';
-            $extendData['Print'] = 0;
+            $extendData['Print'] = $order->use_invoice==2 ? '0' : '1';
             $extendData['InvoiceItems'] = $invoiceItems;
             $extendData['RelateNumber'] = $order->RelateNumber;
             $extendData['InvType'] = '07';
@@ -577,7 +577,7 @@ class OrderController extends Controller
             if($product){
                 $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
 
-                $product_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
+                $product_plan = $product->plans()->where('expiration',$quantity)->first();
                 if(!$product_plan){
                     return false;
                 }
@@ -617,12 +617,12 @@ class OrderController extends Controller
     function checkEvents($products)
     {
         $products = collect($products);
-        $events = $this->eventRepository->getsWith(['condition_products','products'],['status'=>1]);
+        $evnets = $this->eventRepository->getsWith(['condition_products','products'],['status'=>1]);
         $bonus_products = [];
-        foreach ($events as $key => $event) {
-            if($event->type == 1){
+        foreach ($evnets as $key => $evnet) {
+            if($evnet->type == 1){
                 $pass = true;
-                foreach ($event->condition_products as $key => $condition_product) {
+                foreach ($evnet->condition_products as $key => $condition_product) {
                     $product = $products->where('id', $condition_product->id)->first();
                     if($product){
                         if($product['quantity'] < $condition_product->pivot->quantity){
@@ -636,7 +636,7 @@ class OrderController extends Controller
                 }
 
                 if($pass){
-                    foreach ($event->products as $key => $product) {
+                    foreach ($evnet->products as $key => $product) {
                         array_push($bonus_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
                     }
                 }
