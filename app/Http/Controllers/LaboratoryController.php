@@ -25,6 +25,17 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $master_laboratories = $user->master_laboratories()->get()->makeHidden(['collection_product_id','faqs']);
+        foreach ($master_laboratories as $key => $laboratory) {
+            $collect_product = $user->products()->find($laboratory->collection_product_id);
+            if($collect_product){
+                $deadline = $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
+                $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
+            }
+            $laboratory->sort = $laboratory->pivot->sort;
+        }
+        $master_laboratories = $master_laboratories->sortBy('sort');
+
         $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id','faqs']);
         foreach ($laboratories as $key => $laboratory) {
             if(!$laboratory->customized){
@@ -37,6 +48,7 @@ class LaboratoryController extends Controller
                 $laboratory->available = 1;
             }
         }
+        $laboratories->merge($master_laboratories);
 
         return $this->successResponse($laboratories);
     }
