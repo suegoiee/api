@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Passport\PersonalAccessClient;
 use Maatwebsite\Excel\Facades\Excel;
 class AdminController extends Controller
-{	
+{
     use OauthToken;
     protected $moduleName;
     protected $moduleRepository;
