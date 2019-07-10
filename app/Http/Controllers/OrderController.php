@@ -390,22 +390,26 @@ class OrderController extends Controller
             'ChoosePayment' => \ECPay_PaymentMethod::Credit,
             'ChooseSubPayment' => \ECPay_PaymentMethodItem::None,
             'Items' => $items,
-            'InvoiceMark'=>$order->use_invoice==2 ? 'Y':'',
+            'InvoiceMark'=>$order->use_invoice=='2' ? 'Y':'',
         ];
         $extendData = [];
-        if($order->use_invoice==2){
+        if($order->use_invoice=='2'){
             $extendData['CustomerID'] = 'm'.str_pad($order->user->id, 6, '0', STR_PAD_LEFT);
             $extendData['CustomerName'] = $order->invoice_name;//urlencode($order->invoice_name);
             $extendData['CustomerAddr'] = $order->invoice_address;//$order->invoice_address;
             $extendData['CustomerPhone'] = $order->invoice_phone;
-            $extendData['CustomerEmail'] = urlencode($order->user->email);
+            $extendData['CustomerEmail'] = $order->user->email;
             if($order->company_id && strlen($order->company_id) <= 8){
                 $extendData['CustomerIdentifier'] = $order->company_id;
             }
-            $extendData['TaxType'] = 1;
-            $extendData['Donation'] = $order->invoice_type==0 ? 1 : '';
-            $extendData['LoveCode']= $order->invoice_type==0 ? $order->LoveCode:'';
-            $extendData['Print'] = $order->use_invoice==2 ? '0' : '1';
+            
+            if($order->invoice_type=='0'){
+                $extendData['Donation'] = $order->invoice_type=='0' ? 1 : 0;
+                $extendData['LoveCode']= $order->LoveCode;
+                unset($extendData['CustomerIdentifier']);
+            }
+            $extendData['TaxType'] = '1';
+            $extendData['Print'] = $order->invoice_type=='2' ? '1' : '0';
             $extendData['InvoiceItems'] = $invoiceItems;
             $extendData['RelateNumber'] = $order->RelateNumber;
             $extendData['InvType'] = '07';
