@@ -197,7 +197,7 @@ class OrderController extends AdminController
                         $order['Email'] = $value;
                         break;
                     case "use_invoice":
-                        $order['使用發票'] = $value;
+                        $order['使用發票'] = $value=='1' ? '紙本':'電子';
                         break;
                 }
             }
