@@ -63,7 +63,7 @@ class RegisterController extends Controller
     {
         return User::create([
             'email' => $data['email'],
-            'name' => $data['nickname'],
+            //'name' => $data['nickname'],
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
         ]);
@@ -72,7 +72,7 @@ class RegisterController extends Controller
     {
         return User::create([
             'email' => $data['email'],
-            'name' => $data['nickname'],
+            //'name' => $data['nickname'],
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'is_socialite' => isset($data['is_socialite']) ? $data['is_socialite'] : 0,
