@@ -320,5 +320,18 @@ class ServerTaskController extends AdminController
         }      
     
     }
-
+    public function fixProdcutCategory(ProductRepository $productRepository)
+    {
+        set_time_limit(0);
+        $products = $productRepository->gets();
+        foreach($products as $key =>$product)
+        {
+            if($product->type == 'collection'){
+                $productRepository->update($product->id, ['category'=>3]);
+                echo $product->name.'<br/>';
+            }
+            
+        }      
+    
+    }
 }

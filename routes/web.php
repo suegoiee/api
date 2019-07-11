@@ -387,3 +387,4 @@ Route::get('/server/countUserPayment/{product_id}/{date}', 'Admin\ServerTaskCont
 Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
 
 Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
+Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
