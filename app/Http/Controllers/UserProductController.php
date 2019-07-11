@@ -50,6 +50,7 @@ class UserProductController extends Controller
         }
         $user = User::find($request->input('user_id'));
         $_products = $request->input('products',[]);
+        $assigned = $request->input('assigned',false);
         $products = [];
         $result = [];
         foreach ($_products as $key => $product) {
@@ -58,7 +59,11 @@ class UserProductController extends Controller
 
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            $product_plan = $product_data->plans()->where('expiration', $quantity)->where('active',1)->first();
+            if($assigned){
+                $product_plan = $product_data->plans()->where('expiration', $quantity)->first();
+            }else{
+                $product_plan = $product_data->plans()->where('expiration', $quantity)->where('active',1)->first();
+            }
             if(!$product_plan){
                 continue;
             }

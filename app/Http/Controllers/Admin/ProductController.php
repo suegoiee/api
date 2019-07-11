@@ -205,6 +205,7 @@ class ProductController extends AdminController
         $products = $request->input('products', []);
         $quantity = $request->input('quantity', 1);
         $user_ids = $request->input('users', []);
+        $product_ids = [];
         $notificationMessage = new \stdClass();
         $notificationMessage->send_notice = 1;
         $notificationMessage->send_email = $send_email;
@@ -212,13 +213,13 @@ class ProductController extends AdminController
                 
         foreach ($products as $key => $product) {
             $products[$key]['quantity'] = $quantity;
+            array_push($product_ids, $product['id']);
         }
-
         foreach ($user_ids as $key => $user_id) {
             $result = $this->addProducts($request, $user_id, $products);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
-                $user->notify(new ProductReceive($user, $quantity , $products, $notificationMessage));
+                $user->notify(new ProductReceive($user, $quantity , $product_ids, $notificationMessage));
             }
         }
         return redirect('admin/products');
@@ -245,6 +246,7 @@ class ProductController extends AdminController
         $request->request->add([
             'products' => $products,
             'user_id' => $user_id,
+            'assigned'=>'1'
         ]);
         $tokenRequest = $request->create(
             url('/user/products'),

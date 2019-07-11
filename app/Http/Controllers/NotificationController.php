@@ -38,8 +38,8 @@ class NotificationController extends Controller
                 unset($data['promocodes']);
             }
             if($type[count($type)-1] == 'ProductReceive' && isset($data['content'])){
-               $data['content'] = str_replace('/e-com', 'e-com', $data['content']);
-               $data['content'] = str_replace('/profile', 'profile', $data['content']);
+               $data['content'] = str_replace('//e-com', '/e-com', $data['content']);
+               $data['content'] = str_replace('//profile', '/profile', $data['content']);
             }
             array_push($notifications,['id'=> $notification->id, 'type'=> $type[count($type)-1],'created_at'=> $notification->created_at->toDateTimeString(),'data'=>$data, 'status'=>$status]);
         }
