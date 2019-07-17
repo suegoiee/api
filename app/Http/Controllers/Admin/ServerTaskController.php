@@ -297,4 +297,41 @@ class ServerTaskController extends AdminController
             }
         }
     }
+    public function fixAdditionUserProducts(UserRepository $userRepository)
+    {
+        set_time_limit(0);
+        $users = $userRepository->getsWith([],['mail_verified_at.<>'=>null]);
+        foreach($users as $key =>$user)
+        {
+            $product188 = $user->products()->where('id',188)->first();
+            $product233 = $user->products()->where('id',233)->first();
+            if($product188 && $product233)
+            {
+                echo $user->id.' '.$user->email.' : 188=>'.$product188->pivot->deadline.' : 233=>'.$product233->pivot->deadline.'<br/>';
+                $orders = $user->orders()->whereHas('products',function($query){$query->whereIn('id',[188,233]);})->get();
+                foreach($orders as $key2 =>$order){
+                    echo $order->created_at.'<br/>';
+                    foreach ($order->products as $key => $product) {
+                        echo $product->id.' '.$product->quantity.'<br/>';
+                    }
+                }
+            }
+            
+        }      
+    
+    }
+    public function fixProdcutCategory(ProductRepository $productRepository)
+    {
+        set_time_limit(0);
+        $products = $productRepository->gets();
+        foreach($products as $key =>$product)
+        {
+            if($product->type == 'collection'){
+                $productRepository->update($product->id, ['category'=>3]);
+                echo $product->name.'<br/>';
+            }
+            
+        }      
+    
+    }
 }

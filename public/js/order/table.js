@@ -12,6 +12,14 @@ function statusFormatter(value,row,index){
 	}
 	return value;
 }
+function use_invoiceFormatter(value,row,index){
+	switch(value){
+		case 0:return '不使用';
+		case 1:return '紙本發票';
+		case 2:return '電子發票';
+	}
+	return value;
+}
 
 function user_profile_nicknameFormatter(value,row,index){
 	return value;

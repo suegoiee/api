@@ -125,7 +125,7 @@ class LaboratoryController extends Controller
     public function mapping(Request $request, $pathname)
     {
         $user = $request->user();
-        $product = $user->products()->where('pathname', $pathname)->first();
+        $product = $user->products()->where('pathname', $pathname)->orderBy('created_at','DESC')->first();
         if(!$product){
             return $this->failedResponse(['message'=>[trans('product.no_product_is_match')]]);
         }

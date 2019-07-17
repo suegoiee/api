@@ -52,9 +52,9 @@ class OrderController extends AdminController
             'query_data' => $query_data,
             'server_side' => 'active',
             'table_data' => $orders,
-            'table_head' =>['id','user.profile.nickname','user.email','price','products','status','created_at'],
+            'table_head' =>['id','user.profile.nickname','user.email','price','products','use_invoice','status','created_at'],
             'table_sortable' =>['id','price','status','created_at'],
-            'table_formatter' =>[ 'user.profile.nickname', 'user.email','status', 'products'],
+            'table_formatter' =>[ 'user.profile.nickname', 'user.email','use_invoice','status', 'products'],
         ];
         return view('admin.list',$data);
     }
@@ -163,7 +163,7 @@ class OrderController extends AdminController
         $where['id.in'] = $request->ids;
         $data = $this->moduleRepository->getsWith(['user', 'products'], $where, ['created_at'=>'DESC'])->toArray();
         $sheet = [];
-        $order = ['訂單編號' => null, '訂購者' => null, '金額' => null, '付款狀態' => null, '訂購時間' => null, '購買人姓名' => null, '購買人電話' => null, '購買人地址' => null, '更改地址' => null, 'Email' => null];
+        $order = ['訂單編號' => null, '訂購者' => null, '金額' => null, '付款狀態' => null, '訂購時間' => null, '購買人姓名' => null, '購買人電話' => null, '購買人地址' => null, '更改地址' => null, 'Email' => null, '使用發票'=>null, '發票'=>null];
         //$productColsHeader = ['產品' => null, '編號' => null, '名稱' => null, '類型' => null, '價格' => null];
         foreach ($data as $row) {
             $products = [];
@@ -195,6 +195,12 @@ class OrderController extends AdminController
                         break;
                     case "user_email":
                         $order['Email'] = $value;
+                        break;
+                    case "use_invoice":
+                        $order['使用發票'] = $value=='1' ? '紙本':'電子';
+                        break;
+                    case "invoice_type":
+                        $order['發票'] = $value=='0' ? '捐贈': ($value=='1' ? '二聯':'三聯');
                         break;
                 }
             }

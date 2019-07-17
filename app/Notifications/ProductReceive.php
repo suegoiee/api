@@ -83,9 +83,9 @@ class ProductReceive extends Notification implements ShouldQueue
         $content = '優分析贈送了產品';
         foreach ($products as $key => $product) {
             $product->deadline = $product->pivot->deadline;
-            $content.= '<a href="'.env('APP_FRONT_URL','https://pro.uanalyze.com.tw').'/e-com/product-detail/'.$product->id.'">'.$product->name.'</a>';
+            $content.= '<a href="'.env('APP_FRONT_URL','https://pro.uanalyze.com.tw/').'e-com/product-detail/'.$product->id.'">'.$product->name.'</a>';
         }
-        $content .= '給您，可以從 <a href="'.env('APP_FRONT_URL','https://pro.uanalyze.com.tw').'/profile">個人資訊</a> 的已購模組中確認。';
+        $content .= '給您，可以從 <a href="'.env('APP_FRONT_URL','https://pro.uanalyze.com.tw/').'profile">個人資訊</a> 的已購模組中確認。';
         return [
             'title'=>'收到贈禮',
             'content'=>$content,
