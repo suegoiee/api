@@ -139,8 +139,13 @@ class OrderController extends Controller
         $order->products()->attach($product_ids);
         $order->promocodes()->attach($promocode_ids);
         if($order_price>0){
-            $ecpay_form = $this->ecpay_form($order);
-            $order['form_html'] = $ecpay_form;
+            if($order->paymentType == 'capital'){
+                $capital_response = $this->capitalCheckout($order);
+                $order['capital_response'] = $capital_response;
+            }else{
+                $ecpay_form = $this->ecpay_form($order);
+                $order['form_html'] = $ecpay_form;
+            }
         }
 
         if($order_price==0){
@@ -247,6 +252,10 @@ class OrderController extends Controller
         }
         return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
     }
+    private function capitalCheckout($order){
+
+
+    }
     public function cancel(Request $request, $id)
     {   
         $order = $this->orderRepository->get($id);
@@ -280,7 +289,7 @@ class OrderController extends Controller
             //'price' => 'required|numeric',
             //'products.id'=>'exists:products,id,status,1',
             //'products.*.id'=>'exists:products,id,status,1',
-            'paymentType'=>'in:credit,atm,webatm,cvs,barcode',
+            'paymentType'=>'in:credit,atm,webatm,cvs,barcode,capital',
             'use_invoice'=>'in:0,1,2',
             'invoice_type'=>'in:0,1,2',
         ]);        
