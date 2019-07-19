@@ -11,19 +11,19 @@ class Capital
     }
     public function checkout($data)
     {
-        $query = http_build_query($data);
+        $query = json_encode($data);
         $ch = curl_init($this->capital->capitalServiceURL);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_VERBOSE => 1,
         ]);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        $response = curl_exec ($ch);
+        $response = curl_exec($ch);
         $error = curl_error($ch);
         curl_close($ch);
-        return $response;
+        return json_decode($response);
         /*$http = new \GuzzleHttp\Client;
         $response = $http->request('post', $this->capital->capitalServiceURL,
                 [
