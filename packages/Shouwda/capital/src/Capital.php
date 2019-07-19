@@ -23,15 +23,15 @@ class Capital
         $response = curl_exec($ch);
         $error = curl_error($ch);
         curl_close($ch);
-        return json_decode($response);
+        return json_decode($response, true);
         /*$http = new \GuzzleHttp\Client;
         $response = $http->request('post', $this->capital->capitalServiceURL,
                 [
                     'form_params' => $data,
                 ]);
-        return $response;*/
+        return $response;
 
-        //$response_data = json_decode((string) $response->getBody(), true);
-        return $response_data;
+        $response_data = json_decode((string) $response->getBody(), true);
+        return $response_data;*/
     }
 }

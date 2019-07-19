@@ -144,7 +144,7 @@ class OrderController extends Controller
                 $CustID = $request->input('CustID','');
                 $capital_response = $this->capitalCheckout($order, $CustID);
 
-                dd($capital_response);
+                return $this->successResponse($capital_response);
                 $order['capital_response'] = $capital_response;
                 if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
                     $this->orderRepository->update($order->id, ['status'=>1]);
