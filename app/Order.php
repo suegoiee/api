@@ -26,6 +26,9 @@ class Order extends UanalyzeModel
     public function ecpays(){
         return $this->hasMany('App\Ecpay');
     }
+    public function capitals(){
+        return $this->hasMany('App\Capital');
+    }
 
     public function products(){
         return $this->belongsToMany('App\Product')->select(['id','name','type','order_product.quantity as quantity','order_product.unit_price as price'])->withPivot('unit_price','quantity');

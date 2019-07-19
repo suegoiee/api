@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Shouwda\Ecpay\Ecpay;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethodItem;
+use Shouwda\Capital\Capital;
 use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
 use App\Repositories\PromocodeRepository;
@@ -140,17 +141,22 @@ class OrderController extends Controller
         $order->promocodes()->attach($promocode_ids);
         if($order_price>0){
             if($order->paymentType == 'capital'){
-                $capital_response = $this->capitalCheckout($order);
+                $CustID = $request->input('CustID','');
+                $capital_response = $this->capitalCheckout($order, $CustID);
                 $order['capital_response'] = $capital_response;
+                if($capital_response['StatusCode']=='1'){
+                    $this->orderRepository->update($order->id, ['status'=>1]);
+                }else{
+                    $this->orderRepository->update($order->id, ['status'=>2]);
+                }
             }else{
                 $ecpay_form = $this->ecpay_form($order);
                 $order['form_html'] = $ecpay_form;
             }
-        }
-
-        if($order_price==0){
+        }else if($order_price==0){
             $this->orderRepository->update($order->id, ['status'=>1]);
         }
+
         foreach ($order->products as $key => $product) {
             $product->quantity = $product->pivot->quantity;
         }
@@ -252,9 +258,29 @@ class OrderController extends Controller
         }
         return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
     }
-    private function capitalCheckout($order){
-
-
+    private function capitalCheckout($order, $CustID){
+        $capital = new Capital();
+        $AwardName = '';
+        foreach ($order->products as $key => $product) {
+            if($key!=0){
+                        $AwardName .= '/'; 
+                    }
+            $AwardName .= $product->name;
+        }
+        $AwardName = str_limit($AwardName, 27);
+        $capital_data = [
+            'CustID'=>$CustID, 
+            'AwardName'=>$AwardName, 
+            'Points'=>$order->price,
+            'VendorName'=>env('APP_NAME','優分析'), 
+            'PayAmt'=>$order->price
+        ];
+        $order_capital = $order->capitals()->create($capital_data);
+        $capital_response = $capital->checkout($capital_data);
+        if(isset($capital_response['StatusCode'])){
+            $order_capital->update($capital_response);
+        }
+        return $capital_response;
     }
     public function cancel(Request $request, $id)
     {   
@@ -282,6 +308,7 @@ class OrderController extends Controller
 
         return $this->successResponse($order?$order:[]);
     }
+
     protected function orderValidator(array $data)
     {
         return Validator::make($data, [
@@ -292,6 +319,7 @@ class OrderController extends Controller
             'paymentType'=>'in:credit,atm,webatm,cvs,barcode,capital',
             'use_invoice'=>'in:0,1,2',
             'invoice_type'=>'in:0,1,2',
+            'CustID'=>'nullable|size:10'
         ]);        
     }
     protected function orderPayment(Request $request, $id)

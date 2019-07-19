@@ -48,11 +48,15 @@ class Handler extends ExceptionHandler
             // get the full text of the exception (including stack trace),
             // and replace the original message (possibly truncated),
             // with the full text of the entire response body.
-            $message = str_replace(
-                rtrim($exception->getMessage()),
-                (string) $exception->getResponse()->getBody(),
-                (string) $exception
-            );
+            if($exception->getResponse()){
+                $message = str_replace(
+                    rtrim($exception->getMessage()),
+                    (string) $exception->getResponse()->getBody(),
+                    (string) $exception
+                );
+            }else{
+                $message = rtrim($exception->getMessage());
+            }
 
             // log your new custom guzzle error message
             return $logger->error($exception);
@@ -87,7 +91,7 @@ class Handler extends ExceptionHandler
 
                 $response['error']['message'] = [(isset($exception_response['message']) ? $exception_response['message']:$message_body)];
                 $response['error']['code'] = "E400002";
-                //$response['error']['trace'] = $exception->getTrace();
+                $response['error']['trace'] = $exception;
             }else if($exception instanceof AuthenticationException){
                 $response['error']['message'] = ['Unauthenticated.'];
                 $response['error']['code'] = "E400001";
