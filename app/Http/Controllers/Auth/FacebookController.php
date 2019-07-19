@@ -81,7 +81,7 @@ class FacebookController extends Controller
             'email' => $data['email'],
             'name' => $data['nickname'],
             'username'=>$data['email'],
-            'confirmed'=>0,
+            'confirmed'=>1,
             'bio'=>'',
             'password' => bcrypt($data['password']),
             'is_socialite' => 1,

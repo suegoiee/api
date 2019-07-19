@@ -143,8 +143,10 @@ class OrderController extends Controller
             if($order->paymentType == 'capital'){
                 $CustID = $request->input('CustID','');
                 $capital_response = $this->capitalCheckout($order, $CustID);
+
+                dd($capital_response);
                 $order['capital_response'] = $capital_response;
-                if($capital_response['StatusCode']=='1'){
+                if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
                     $this->orderRepository->update($order->id, ['status'=>1]);
                 }else{
                     $this->orderRepository->update($order->id, ['status'=>2]);
@@ -277,9 +279,11 @@ class OrderController extends Controller
         ];
         $order_capital = $order->capitals()->create($capital_data);
         $capital_response = $capital->checkout($capital_data);
+        
         if(isset($capital_response['StatusCode'])){
             $order_capital->update($capital_response);
         }
+
         return $capital_response;
     }
     public function cancel(Request $request, $id)
