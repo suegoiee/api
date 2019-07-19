@@ -18,7 +18,7 @@ class Capital
             CURLOPT_VERBOSE => 1,
         ]);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
 
         $response = curl_exec($ch);
         $error = curl_error($ch);
