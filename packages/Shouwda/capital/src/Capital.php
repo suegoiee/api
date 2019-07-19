@@ -23,7 +23,7 @@ class Capital
         $response = curl_exec($ch);
         $error = curl_error($ch);
         curl_close($ch);
-        return $response;
+        return json_decode($response, true);
         /*$http = new \GuzzleHttp\Client;
         $response = $http->request('post', $this->capital->capitalServiceURL,
                 [
