@@ -61,6 +61,7 @@ class GoogleController extends Controller
             'bio'=>'',
             'password' => bcrypt($data['password']),
             'is_socialite' => 2,
+            'confirmation_code'=>'',
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);

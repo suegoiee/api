@@ -85,6 +85,7 @@ class FacebookController extends Controller
             'bio'=>'',
             'password' => bcrypt($data['password']),
             'is_socialite' => 1,
+            'confirmation_code'=>'',
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);
