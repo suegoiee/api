@@ -141,7 +141,7 @@ class OrderController extends Controller
         $order->promocodes()->attach($promocode_ids);
         if($order_price>0){
             if($order->paymentType == 'capital'){
-                $CustID = $request->input('CustID','');
+                $CustID = $request->input('custID','');
                 $capital_response = $this->capitalCheckout($order, $CustID);
                 $order['capital_response'] = $capital_response;
                 if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
