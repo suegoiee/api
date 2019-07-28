@@ -50,6 +50,7 @@ class UserProductController extends Controller
         }
         $user = User::find($request->input('user_id'));
         $_products = $request->input('products',[]);
+        $assigned = $request->input('assigned',false);
         $products = [];
         $result = [];
         foreach ($_products as $key => $product) {
@@ -58,31 +59,45 @@ class UserProductController extends Controller
 
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            $product_plan = $product_data->plans()->where('expiration', $quantity)->first();
+            if($assigned){
+                $product_plan = $product_data->plans()->where('expiration', $quantity)->first();
+            }else{
+                $product_plan = $product_data->plans()->where('expiration', $quantity)->where('active',1)->first();
+            }
             if(!$product_plan){
                 continue;
             }
             $expiration = $product_plan->expiration;
             $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
-            $collections_ids = [];
-            $collection_products = [];
-            $collections =[];
-            if($product_data->type=='collection'){
+            $user_products = [];
+            if($product_data->category != 1){//not single
                 if($installed==0){
-                    $master_laboratory = $product_data->master_laboratory;
-                    if($master_laboratory){
-                        $user->master_laboratories()->sync($master_laboratory->id);
+                    $laboratory = $product_data->laboratory;
+                    if($laboratory){
+                        $user->master_laboratories()->sync($laboratory->id);
+                        if($laboratory->category == 3){
+                            $affiliated_products = $product_data->affiliated_products;
+                            foreach ($affiliated_products as $key => $affiliated_product) {
+                                $affiliated_old_product = $affiliated_product->user()->where('id',$user->id)->first();
+                                $affiliated_old_deadline = $affiliated_old_product ? $affiliated_old_product->pivot->deadline : 0;
+                                $affiliated_installed = $affiliated_old_product ? $affiliated_old_product->pivot->installed : 0;
+                                $affiliated_deadline = $this->getExpiredDate($expiration, $affiliated_old_deadline);
+                                $affiliated_laboratory = $affiliated_product->laboratory;
+                                if($affiliated_laboratory){
+                                    $user->master_laboratories()->sync($affiliated_laboratory->id);
+                                }
+                                $user_products[$affiliated_product->id] = ['deadline'=>$affiliated_deadline,'installed'=>$affiliated_installed];
+                            }
+                        }
                         $installed = 1;
                     }
                 }
-                $collections = $product_data->collections;
             }
-            $products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
-            $user_product = [];
-            $user_product[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
-            $user->products()->syncWithoutDetaching($user_product);
-            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed, 'collections'=>$collections,'msg'=>$expiration]);
+            $user_products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
+            $user->products()->syncWithoutDetaching($user_products);
+            
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed,'msg'=>$expiration]);
         }
 
         return $this->successResponse($result);
@@ -115,21 +130,34 @@ class UserProductController extends Controller
             return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
         $installed = 0;
-        if($product->type=='collection'){
+        if($product->category != 1){
             if($product->pivot->installed==0){
-                $master_laboratory = $product->master_laboratory;
-                if($master_laboratory){
-                    $user->master_laboratories()->sync($master_laboratory->id);
+                $laboratory = $product->laboratory;
+                if($laboratory){
+                    $user->master_laboratories()->sync($laboratory->id);
                     $installed = 1;
+                    if($laboratory->category == 3){
+                        $user_products = [];
+                        $affiliated_products = $product_data->affiliated_products;
+                        foreach ($affiliated_products as $key => $affiliated_product) {
+                            $affiliated_laboratory = $affiliated_product->laboratory;
+                            if($affiliated_laboratory){
+                                $user->master_laboratories()->sync($affiliated_laboratory->id);
+                                $user_products[$affiliated_product->id] = ['installed'=>1];
+                            }
+                        }
+                        $user->products()->updateExistingPivot($user_products);
+                    }
                 }
             }
-        }else if($product->type=='single'){
+        }else{
             $laboratory = $user->laboratories()->find($laboratory_id);
             if($laboratory){
                 $laboratory->products()->syncWithoutDetaching($id);
                 $installed = 1;
             }
         }
+
         if($installed){
             $user->products()->updateExistingPivot($product->id,['installed'=>1]);
         }
@@ -144,10 +172,22 @@ class UserProductController extends Controller
             return $this->validateErrorResponse([trans('auth.permission_denied')]);
         }
         if($product->type=='collection'){
-            $master_laboratory = $product->master_laboratory;
-            if($master_laboratory){
-                $user->master_laboratories()->detach($master_laboratory->id);
+            $laboratory = $product->laboratory;
+            if($laboratory){
+                $user->master_laboratories()->detach($laboratory->id);
                 $user->products()->updateExistingPivot($id,['installed'=>0]);
+                if($laboratory->category == 3){
+                    $user_products = [];
+                    $affiliated_products = $product_data->affiliated_products;
+                    foreach ($affiliated_products as $key => $affiliated_product) {
+                        $affiliated_laboratory = $affiliated_product->laboratory;
+                        if($affiliated_laboratory){
+                            $user->master_laboratories()->detach($affiliated_laboratory->id);
+                            $user_products[$affiliated_product->id] = ['installed'=>0];
+                        }
+                    }
+                    $user->products()->updateExistingPivot($user_products);
+                }
             }
         }
         return $this->successResponse(['message'=>[$product->name.' uninstalled'],'install'=>0]);
@@ -179,27 +219,24 @@ class UserProductController extends Controller
 
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            $product_plan = $product_data->plans()->where('expiration', $quantity)->where('active', 1)->first();
-            if(!$product_plan){
-                continue;
-            }
-            $expiration = $product_plan->expiration;
+            $expiration = $quantity;
             $deadline = $this->getExpiredDateBack($expiration, $old_deadline);
-            $installed = $old_product ? $old_product->pivot->installed : 0;
-            $collections_ids = [];
-            $collection_products = [];
-            $collections =[];
-            if($product_data->type=='collection'){
-                if($installed==0){
-                   
+            
+            if($product_data->category!=1){
+                if($product_data->category == 3){
+                    $affiliated_products = $product_data->affiliated_products;
+                    foreach ($affiliated_products as $key => $affiliated_product) {
+                        $affiliated_old_product = $affiliated_product->user()->where('id',$user->id)->first();
+                        $affiliated_old_deadline = $affiliated_old_product ? $affiliated_old_product->pivot->deadline : 0;
+                        $affiliated_deadline = $this->getExpiredDateBack($expiration, $affiliated_old_deadline);
+                        $user_products[$affiliated_product->id] = ['deadline'=>$affiliated_deadline];
+                    }
                 }
-                $collections = $product_data->collections;
             }
-            $products[$product_data->id] = ['deadline'=>$deadline];
             $user_product = [];
             $user_product[$product_data->id] = ['deadline'=>$deadline]; 
             $user->products()->syncWithoutDetaching($user_product);
-            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline,'collections'=>$collections,'msg'=>$expiration]);
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline,'msg'=>$expiration]);
         }
 
         return $this->successResponse($result);

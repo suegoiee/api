@@ -32,10 +32,10 @@ class ServerTaskController extends AdminController
             if($laboratory->user_id !='0'){
                 continue;
             }
-            if(!$laboratory->customized && !$laboratory->collection_product_id){
+            if(!$laboratory->customized && !$laboratory->product_id){
                 $product = $laboratory->products->first();
                 $this->output_msg($laboratory->title);
-                $laboratory->update(['collection_product_id' => $product ? $product->id : 0]);
+                $laboratory->update(['product_id' => $product ? $product->id : 0]);
                 $laboratory_products = [];
                 foreach ($product->collections as $key => $collection_product) {
                     array_push($laboratory_products, $collection_product->id);
@@ -159,9 +159,9 @@ class ServerTaskController extends AdminController
                 $user->profile()->create(['nickname'=>'Guest']);
             }
             $user->products()->sync([$product->id => ['deadline'=>'2019-01-13 17:00:00','installed'=>1]]);
-            $laboratory = $user->laboratories()->where('collection_product_id',$product->id)->first();
+            $laboratory = $user->laboratories()->where('product_id',$product->id)->first();
             if(!$laboratory){
-                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0, 'collection_product_id' => $product->id]);
+                $laboratory = $user->laboratories()->create(['title'=>$product->name, 'customized'=>0, 'product_id' => $product->id]);
                 $this->create_avatar($laboratory, $product->avatar_small);
             }
             $laboratory->products()->sync($collections_ids);
@@ -248,7 +248,7 @@ class ServerTaskController extends AdminController
     public function updateLaboratoryProduct(LaboratoryRepository $laboratoryRepository)
     {
         set_time_limit(0);
-        $laboratories = $laboratoryRepository->getsWith([],['collection_product_id'=>250]);
+        $laboratories = $laboratoryRepository->getsWith([],['product_id'=>250]);
         foreach ($laboratories as $key => $laboratory) {
             $laboratory->products()->detach(192);
             $laboratory->products()->attach([

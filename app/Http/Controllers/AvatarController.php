@@ -178,8 +178,8 @@ class AvatarController extends Controller
     }
     protected function productAvatarCreated($request, $moduleRepository){
         if($this->getModuleName() == 'products'){
-            if($moduleRepository->master_laboratory){
-                $laboratory = $moduleRepository->master_laboratory;
+            if($moduleRepository->laboratory){
+                $laboratory = $moduleRepository->laboratory;
                 $laboratory_avatar_data = [ 'path' => $this->storeAvatar($request->file('avatar'), $laboratory->id, 'laboratories'),'type'=>$request->input('avatar_type','normal')];
                 return $laboratory->avatars()->create($laboratory_avatar_data);
             }
@@ -188,8 +188,8 @@ class AvatarController extends Controller
 
     protected function productAvatarUpdated($request, $moduleRepository){
         if($this->getModuleName() == 'product'){
-            if($moduleRepository->master_laboratory){
-                $laboratory = $moduleRepository->master_laboratory;
+            if($moduleRepository->laboratory){
+                $laboratory = $moduleRepository->laboratory;
                 $laboratory_avatar_data = [ 'path' => $this->storeAvatar($request->file('avatar'), $laboratory->id, 'laboratories'),'type'=>$request->input('avatar_type','normal')];
                 if($request->input('avatar_type','normal')=='detail'){
                     $avatar = $laboratory->avatars()->find($request->input('id'));
@@ -210,8 +210,8 @@ class AvatarController extends Controller
 
     protected function productAvatarDeleted($request, $moduleRepository){
         if($this->getModuleName() == 'product'){
-            if($moduleRepository->master_laboratory){
-                $laboratory = $moduleRepository->master_laboratory;
+            if($moduleRepository->laboratory){
+                $laboratory = $moduleRepository->laboratory;
                 $id = $request->input('deleted');
                 if($id){
                     $ids = is_array($id)? $id : [$id];

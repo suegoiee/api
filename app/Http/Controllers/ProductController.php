@@ -106,6 +106,14 @@ class ProductController extends Controller
                 $product->faqs()->create(['question'=>$faq['question'],'answer'=>$faq['answer']]);
             }
         }
+        
+        $affiliated_products = $request->input('affiliated_products',[]);
+        $update_affiliated_products = [];
+        foreach ($affiliated_products as $key => $affiliated_product) {
+            $update_affiliated_products[$affiliated_product] = ['sort' => $key];
+        }
+        $product->affiliated_products()->attach($update_affiliated_products);
+
         $this->productUpdated($product);
         return $this->successResponse($product?$product:[]);
     }
@@ -188,7 +196,7 @@ class ProductController extends Controller
             $update_collections[$collection] = ['sort' => $key];
         }
         $product->collections()->sync($update_collections);
-        //$product->collections()->sync($collections);
+        
         $plans = $request->input('plans',[]);
         foreach ($plans as $key => $plan) {
             if($plan['id']==0){
@@ -214,6 +222,13 @@ class ProductController extends Controller
             array_push($faq_ids,$faq_data->id);
         }
         $product->faqs()->whereNotIn('id',$faq_ids)->delete();
+
+        $affiliated_products = $request->input('affiliated_products',[]);
+        $update_affiliated_products = [];
+        foreach ($affiliated_products as $key => $affiliated_product) {
+            $update_affiliated_products[$affiliated_product] = ['sort' => $key];
+        }
+        $product->affiliated_products()->sync($update_affiliated_products);
         
         $this->productUpdated($product);
 
@@ -278,7 +293,7 @@ class ProductController extends Controller
     }
     protected function productUpdated($product){
         if($product->type=='collection'){
-            $laboratory = $product->master_laboratory;
+            $laboratory = $product->laboratory;
             if($laboratory){
                 $laboratory->update([
                     'category'=>$product->category,
@@ -286,7 +301,7 @@ class ProductController extends Controller
                     'customized'=>0
                 ]);
             }else{
-                $laboratory = $product->master_laboratory()->create([
+                $laboratory = $product->laboratory()->create([
                     'user_id'=> 0,
                     'category'=> $product->category,
                     'title'=> $product->name, 

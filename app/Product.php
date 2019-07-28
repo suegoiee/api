@@ -33,6 +33,9 @@ class Product extends UanalyzeModel
     public function collections(){
     	return $this->belongsToMany('App\Product','product_collections','collection_id','product_id')->select(['id','name','column','model','type','product_collections.sort'])->withTimestamps()->withPivot('sort');
     }
+    public function affiliated_products(){
+        return $this->belongsToMany('App\Product','affiliated_product','affiliated_product_id','product_id')->select(['id','name','column','model','type','affiliated_product.sort'])->withTimestamps()->withPivot('sort');
+    }
 
     public function tags()
     {
@@ -61,9 +64,9 @@ class Product extends UanalyzeModel
     {
         return ($seo!=null ? $seo : '');
     }
-    public function master_laboratory()
+    public function laboratory()//
     {
-        return $this->hasOne('App\Laboratory', 'collection_product_id', 'id');
+        return $this->hasOne('App\Laboratory', 'laboratory_id', 'id');
     }
 
     public function laboratories()

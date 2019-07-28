@@ -31,12 +31,15 @@ class ProductController extends AdminController
         if($request->has('status')){
             $where['status'] = $request->input('status',1);
             $query_string['status'] = $request->input('status',1);
+        }else if($request->has('category')){
+            $where['category'] = $request->input('category','3');
+            $query_string['category'] = $request->input('category','3');
         }else if($request->has('type')){
             $where['type'] = $request->input('type','collection');
             $query_string['type'] = $request->input('type','collection');
         }else{
-            $where['type'] = $request->input('type','collection');
-            $query_string['type'] = $request->input('type','collection');
+            $where['category'] = $request->input('category','3');
+            $query_string['category'] = $request->input('category','3');
         }
 
         $product = $this->moduleRepository->getsWith(['tags','collections','plans'=>function($query){
@@ -47,7 +50,7 @@ class ProductController extends AdminController
             'module_name'=> $this->moduleName,
             'query_string' => $query_string,
             'actions'=>['assigned','sorted','new'],
-            'tabs'=>['type'=>['collection','single'], 'status'=>[1,0]],
+            'tabs'=>['category'=>['3','0','4','1'], 'status'=>[1,0]],
             'table_data' => $product,
             'table_head' =>['id','name','type','model','plans','status'],
             'table_formatter' =>['plans', 'status'],
@@ -63,6 +66,7 @@ class ProductController extends AdminController
             'tags'=>$this->tagRepository->gets(),
             'singles'=>$this->moduleRepository->getsWith([],['type'=>'single']),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection'],['created_at'=>'DESC']),
+            'affiliated_products'=>$this->moduleRepository->getsWith([],['category.in'=>['0','4']],['created_at'=>'DESC']),
             'data'=>null,
         ];
         return view('admin.form',$data);
@@ -70,13 +74,14 @@ class ProductController extends AdminController
 
     public function edit($id)
     {
-        $product =  $this->moduleRepository->getWith($id,['tags','collections']);
+        $product =  $this->moduleRepository->getWith($id,['tags','collections','affiliated_products']);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection']),
             'singles'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
+            'affiliated_products'=>$this->moduleRepository->getsWith([],['category.in'=>['0','4']],['created_at'=>'DESC']),
             'data' => $product,
         ];
         return view('admin.form',$data);
@@ -177,8 +182,6 @@ class ProductController extends AdminController
                     ]);
 
                 $response_avatar = json_decode((string) $response->getBody(), true);
-                
-            dd($response_avatar);
             }
             if($request->input('deleted')){
                 

@@ -25,9 +25,9 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $master_laboratories = $user->master_laboratories()->get()->makeHidden(['collection_product_id','faqs']);
+        $master_laboratories = $user->master_laboratories()->get()->makeHidden(['product_id','faqs']);
         foreach ($master_laboratories as $key => $laboratory) {
-            $collect_product = $user->products()->find($laboratory->collection_product_id);
+            $collect_product = $user->products()->find($laboratory->product_id);
             if($collect_product){
                 $deadline = $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
                 $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
@@ -36,10 +36,10 @@ class LaboratoryController extends Controller
         }
         $master_laboratories = $master_laboratories->sortBy('sort');
 
-        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['collection_product_id','faqs']);
+        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
         foreach ($laboratories as $key => $laboratory) {
             if(!$laboratory->customized){
-                $collect_product = $user->products()->find($laboratory->collection_product_id);
+                $collect_product = $user->products()->find($laboratory->product_id);
                 if($collect_product){
                     $deadline = $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
                     $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
@@ -54,7 +54,7 @@ class LaboratoryController extends Controller
     }
     public function openList(Request $request)
     {
-        $laboratories = $this->laboratoryRepository->getsWith([],['user_id'=>0],['sort'=>'asc'])->makeHidden(['collection_product_id','faqs']);
+        $laboratories = $this->laboratoryRepository->getsWith([],['user_id'=>0],['sort'=>'asc'])->makeHidden(['product_id','faqs']);
 
         return $this->successResponse($laboratories);
     }
@@ -110,7 +110,7 @@ class LaboratoryController extends Controller
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
 
         if(!$laboratory->customized){
-            $collect_product = $user->products()->find($laboratory->collection_product_id);
+            $collect_product = $user->products()->find($laboratory->product_id);
             $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
             if($collect_product){
                 $laboratory->deadline = $deadline ? $deadline : 0;
@@ -137,7 +137,7 @@ class LaboratoryController extends Controller
          }
          $laboratory->products=$laboratory->products->sortBy('sort');
         
-        return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
+        return $this->successResponse($laboratory?$laboratory->makeHidden(['product_id']):[]);
     }
 
     public function mapping(Request $request, $pathname)
@@ -147,14 +147,14 @@ class LaboratoryController extends Controller
         if(!$product){
             return $this->failedResponse(['message'=>[trans('product.no_product_is_match')]]);
         }
-        $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->where('collection_product_id', $product->id)->first();
+        $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->where('product_id', $product->id)->first();
         if(!$laboratory){
             return $this->failedResponse(['message'=>[trans('laboratory.product_is_uninstalled')]]);        
         }
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
 
         if(!$laboratory->customized){
-            $collect_product = $user->products()->find($laboratory->collection_product_id);
+            $collect_product = $user->products()->find($laboratory->product_id);
             $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
             $laboratory->available = ($deadline != 0 && time() <= strtotime($deadline)) ? 1 : 0;
         }
@@ -175,7 +175,7 @@ class LaboratoryController extends Controller
             }
          }
          $laboratory->products=$laboratory->products->sortBy('sort');
-        return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
+        return $this->successResponse($laboratory?$laboratory->makeHidden(['product_id']):[]);
     }
 
     public function edit($id)
@@ -237,7 +237,7 @@ class LaboratoryController extends Controller
 	        }
         }
 
-        return $this->successResponse($laboratory?$laboratory->makeHidden(['collection_product_id']):[]);
+        return $this->successResponse($laboratory?$laboratory->makeHidden(['product_id']):[]);
     }
 
     public function removeProducts(Request $request, $id)
@@ -296,7 +296,7 @@ class LaboratoryController extends Controller
                     }
                 }
             }else{
-                $user->products()->updateExistingPivot($laboratory->collection_product_id, ['installed'=>0]);
+                $user->products()->updateExistingPivot($laboratory->product_id, ['installed'=>0]);
             }
         }
         if(count($ids)==0){
