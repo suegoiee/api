@@ -52,7 +52,7 @@ class ProductController extends AdminController
             'actions'=>['assigned','sorted','new'],
             'tabs'=>['category'=>['3','0','4','1'], 'status'=>[1,0]],
             'table_data' => $product,
-            'table_head' =>['id','name','type','model','plans','status'],
+            'table_head' =>['id','name','model','plans','status'],
             'table_formatter' =>['plans', 'status'],
         ];
         return view('admin.list',$data);
