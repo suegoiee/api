@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Shouwda\Ecpay\Ecpay;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethod;
 use Shouwda\Ecpay\SDK\ECPay_PaymentMethodItem;
+use Shouwda\Capital\Capital;
 use App\Traits\OauthToken;
 use App\Repositories\OrderRepository;
 use App\Repositories\PromocodeRepository;
@@ -74,7 +75,7 @@ class OrderController extends Controller
         }
         $request_data = $request->only(['memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode', 'referrer_code']);
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
-        $request_data['use_invoice'] =  $request->input('use_invoice',0);
+        $request_data['use_invoice'] =  $request->input('use_invoice',2);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $request_data['referrer_code'] = isset($request_data['referrer_code']) ? $request_data['referrer_code'] :  '';
         $product_ids = [];
@@ -87,7 +88,7 @@ class OrderController extends Controller
                 return $this->failedResponse(['message'=>['The selected products is invalid.']]);
             }
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-            $order_plan = $product->plans()->where('expiration',$quantity)->first();
+            $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
             if(!$order_plan){
                 return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
@@ -139,13 +140,23 @@ class OrderController extends Controller
         $order->products()->attach($product_ids);
         $order->promocodes()->attach($promocode_ids);
         if($order_price>0){
-            $ecpay_form = $this->ecpay_form($order);
-            $order['form_html'] = $ecpay_form;
-        }
-
-        if($order_price==0){
+            if($order->paymentType == 'capital'){
+                $CustID = $request->input('custID','');
+                $capital_response = $this->capitalCheckout($order, $CustID);
+                $order['capital_response'] = $capital_response;
+                if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
+                    $this->orderRepository->update($order->id, ['status'=>1]);
+                }else{
+                    $this->orderRepository->update($order->id, ['status'=>2]);
+                }
+            }else{
+                $ecpay_form = $this->ecpay_form($order);
+                $order['form_html'] = $ecpay_form;
+            }
+        }else if($order_price==0){
             $this->orderRepository->update($order->id, ['status'=>1]);
         }
+
         foreach ($order->products as $key => $product) {
             $product->quantity = $product->pivot->quantity;
         }
@@ -246,6 +257,32 @@ class OrderController extends Controller
             return $this->successResponse(['message'=>['The order was deleted'], 'deleted'=>1]);
         }
         return $this->failedResponse(['message'=>[trans('order.delete_error')]]);
+    }
+    private function capitalCheckout($order, $CustID){
+        $capital = new Capital();
+        $AwardName = '';
+        foreach ($order->products as $key => $product) {
+            if($key!=0){
+                        $AwardName .= '/'; 
+                    }
+            $AwardName .= $product->name;
+        }
+        $AwardName = str_limit($AwardName, 27);
+        $capital_data = [
+            'CustID'=>$CustID, 
+            'AwardName'=>$AwardName, 
+            'Points'=>$order->price,
+            'VendorName'=>env('APP_NAME','優分析'), 
+            'PayAmt'=>$order->price
+        ];
+        $order_capital = $order->capitals()->create($capital_data);
+        $capital_response = $capital->checkout($capital_data);
+        
+        if(isset($capital_response['StatusCode'])){
+            $order_capital->update($capital_response);
+        }
+
+        return $capital_response;
     }
     public function cancel(Request $request, $id)
     {   
@@ -366,9 +403,10 @@ class OrderController extends Controller
             //'price' => 'required|numeric',
             //'products.id'=>'exists:products,id,status,1',
             //'products.*.id'=>'exists:products,id,status,1',
-            'paymentType'=>'in:credit,atm,webatm,cvs,barcode',
+            'paymentType'=>'in:credit,atm,webatm,cvs,barcode,capital',
             'use_invoice'=>'in:0,1,2',
             'invoice_type'=>'in:0,1,2',
+            'CustID'=>'nullable|size:10'
         ]);        
     }
     protected function orderPayment(Request $request, $id)
@@ -476,22 +514,26 @@ class OrderController extends Controller
             'ChoosePayment' => \ECPay_PaymentMethod::Credit,
             'ChooseSubPayment' => \ECPay_PaymentMethodItem::None,
             'Items' => $items,
-            'InvoiceMark'=>$order->use_invoice==2 ? 'Y':'',
+            'InvoiceMark'=>$order->use_invoice=='2' ? 'Y':'',
         ];
         $extendData = [];
-        if($order->use_invoice==2){
+        if($order->use_invoice=='2'){
             $extendData['CustomerID'] = 'm'.str_pad($order->user->id, 6, '0', STR_PAD_LEFT);
-            $extendData['CustomerName'] = '';//urlencode($order->invoice_name);
-            $extendData['CustomerAddr'] = '';//$order->invoice_address);
+            $extendData['CustomerName'] = $order->invoice_name;//urlencode($order->invoice_name);
+            $extendData['CustomerAddr'] = $order->invoice_address;//$order->invoice_address;
             $extendData['CustomerPhone'] = $order->invoice_phone;
             $extendData['CustomerEmail'] = $order->user->email;
             if($order->company_id && strlen($order->company_id) <= 8){
                 $extendData['CustomerIdentifier'] = $order->company_id;
             }
-            $extendData['TaxType'] = 1;
-            $extendData['Donation'] = $order->invoice_type==0 ? 1:'';
-            $extendData['LoveCode']= $order->invoice_type==0 ? $order->LoveCode:'';
-            $extendData['Print'] = 0;
+            
+            if($order->invoice_type=='0'){
+                $extendData['Donation'] = $order->invoice_type=='0' ? 1 : 0;
+                $extendData['LoveCode']= $order->LoveCode;
+                unset($extendData['CustomerIdentifier']);
+            }
+            $extendData['TaxType'] = '1';
+            $extendData['Print'] = $order->invoice_type=='2' ? '1' : '0';
             $extendData['InvoiceItems'] = $invoiceItems;
             $extendData['RelateNumber'] = $order->RelateNumber;
             $extendData['InvType'] = '07';
@@ -665,7 +707,7 @@ class OrderController extends Controller
                 if($is_renew){
                     $product_price = $value['unit_price'];
                 }else{
-                    $product_plan = $product->plans()->where('expiration',$quantity)->first();
+                    $product_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
                     if(!$product_plan){
                         return false;
                     }

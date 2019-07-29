@@ -55,8 +55,13 @@ class GoogleController extends Controller
     {
         return User::create([
             'email' => $data['email'],
+            'name' => $data['nickname'],
+            'username'=>$data['email'],
+            'confirmed'=>1,
+            'bio'=>'',
             'password' => bcrypt($data['password']),
             'is_socialite' => 2,
+            'confirmation_code'=>'',
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'mail_verified_at'=>date('Y-m-d H:i:s'),
         ]);

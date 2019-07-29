@@ -280,4 +280,58 @@ class ServerTaskController extends AdminController
         }
         echo  $total_pay;
     }
+
+    public function fixUserProductByOrder(OrderRepository $orderRepository)
+    {
+        set_time_limit(0);
+        //$users = $userRepository->getsWith(['orders', 'products'],['mail_verified_at.<>'=>null]);
+        $fix_product_ids["240"]=1;
+        $fix_product_ids["250"]=12;
+        foreach ($fix_product_ids as $fix_product_id => $fix_product_month) {
+            $orders = $orderRepository->getsWith(['products'], ['status'=>1], [], ['products'=>function($query) use ($fix_product_id){$query->where('id',$fix_product_id);}]);
+            foreach ($orders as $key => $order) {
+                $user = $order->user;
+                $deadline = date('Y-m-d H:i:s', strtotime($order->created_at . ' +'.$fix_product_month.' month'));
+                $user->products()->updateExistingPivot($fix_product_id, ['deadline'=>$deadline]);
+                echo $user->email.' '.$deadline.'<br/>';
+            }
+        }
+    }
+    public function fixAdditionUserProducts(UserRepository $userRepository)
+    {
+        set_time_limit(0);
+        $users = $userRepository->getsWith([],['mail_verified_at.<>'=>null]);
+        foreach($users as $key =>$user)
+        {
+            $product188 = $user->products()->where('id',188)->first();
+            $product233 = $user->products()->where('id',233)->first();
+            if($product188 && $product233)
+            {
+                echo $user->id.' '.$user->email.' : 188=>'.$product188->pivot->deadline.' : 233=>'.$product233->pivot->deadline.'<br/>';
+                $orders = $user->orders()->whereHas('products',function($query){$query->whereIn('id',[188,233]);})->get();
+                foreach($orders as $key2 =>$order){
+                    echo $order->created_at.'<br/>';
+                    foreach ($order->products as $key => $product) {
+                        echo $product->id.' '.$product->quantity.'<br/>';
+                    }
+                }
+            }
+            
+        }      
+    
+    }
+    public function fixProdcutCategory(ProductRepository $productRepository)
+    {
+        set_time_limit(0);
+        $products = $productRepository->gets();
+        foreach($products as $key =>$product)
+        {
+            if($product->type == 'collection'){
+                $productRepository->update($product->id, ['category'=>3]);
+                echo $product->name.'<br/>';
+            }
+            
+        }      
+    
+    }
 }

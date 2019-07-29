@@ -25,6 +25,7 @@ class UserVerifiedListener
      */
     public function handle(UserVerified $event)
     {
+        /*
         $email = $event->email;
 
         $http = new \GuzzleHttp\Client;
@@ -39,6 +40,6 @@ class UserVerifiedListener
                 ],
                 'form_params' => $data
             ]);
-        }
+        }*/
     }
 }

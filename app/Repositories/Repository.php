@@ -41,7 +41,9 @@ class Repository
 			if(count($field_array)>1){
 				if($field_array[1] == 'in'){
 					$query = $query->whereIn($field_array[0], $value);
-				}else{
+				}else if($field_array[1] == 'pivot'){
+                    $query = $query->wherePivot($field_array[0], $field_array[2], $value);
+                }else{
 					$query = $query->where($field_array[0], $field_array[1], $value);
 				}
 			}else{

@@ -40,6 +40,7 @@ class UserRegisteredListener
                     'user_id' => $user['id'],
                 ],
             ]);
+        /*
         if(!$byForum && env('UA_FORUM_REGISTER_API_URL','')!=''){
             $data = [
                 'name' => $user->profile->nickname,
@@ -61,6 +62,6 @@ class UserRegisteredListener
                 ],
                 'form_params' => $data
             ]);
-        }
+        }*/
     }
 }

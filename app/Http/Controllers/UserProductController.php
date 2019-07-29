@@ -220,6 +220,7 @@ class UserProductController extends Controller
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
             $expiration = $quantity;
+            
             $deadline = $this->getExpiredDateBack($expiration, $old_deadline);
             
             if($product_data->category!=1){

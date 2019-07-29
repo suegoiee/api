@@ -151,6 +151,7 @@ Route::middleware(['web'])->group(function(){
 	Route::resource('/events', 'EventController', ['only' => [
 		'index','show'
 	]]);
+	Route::post('/events/products', 'EventController@productEvents');
 });
 
 Route::middleware(['client'])->group(function(){
@@ -383,5 +384,12 @@ Route::get('/server/destroySeedUsers', 'Admin\ServerTaskController@destroySeedUs
 Route::get('/server/importUsersToForum', 'Admin\ServerTaskController@importUsersToForum');
 Route::get('/server/importArchivesToForum', 'Admin\ServerTaskController@importArchivesToForum');*/
 Route::get('/server/updateLaboratoryProduct', 'Admin\ServerTaskController@updateLaboratoryProduct');
+
 Route::get('/server/countUserPayment/{product_id}', 'Admin\ServerTaskController@countUserPayment');
+
 Route::get('/server/countUserPayment/{product_id}/{date}', 'Admin\ServerTaskController@countUserPayment');
+
+Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
+
+Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
+Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');

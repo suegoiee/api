@@ -38,7 +38,7 @@ class VerifiedUserController extends Controller
         }
    
         if(Verify_user::where('email',$request->input('email'))->where('token', $request->input('token'))->count()>0){
-            User::where('email', $request->input('email'))->update(['mail_verified_at'=>date('Y-m-d H:i:s')]);
+            User::where('email', $request->input('email'))->update(['mail_verified_at'=>date('Y-m-d H:i:s'),'confirmed'=>1]);
             event(new UserVerified($request->input('email')));
         }
        
