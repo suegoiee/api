@@ -326,11 +326,13 @@ class ServerTaskController extends AdminController
         $products = $productRepository->gets();
         foreach($products as $key =>$product)
         {
+            echo $product->name.'<br/>';
             if($product->type == 'collection'){
                 $productRepository->update($product->id, ['category'=>3]);
-                echo $product->name.'<br/>';
+            }else{
+                $productRepository->update($product->id, ['category'=>1]);
             }
-            
+
         }      
     
     }
