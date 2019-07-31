@@ -389,7 +389,17 @@ Route::get('/server/countUserPayment/{product_id}', 'Admin\ServerTaskController@
 
 Route::get('/server/countUserPayment/{product_id}/{date}', 'Admin\ServerTaskController@countUserPayment');
 
-Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
+Route::get('/server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
 
-Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
-Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
+Route::get('/server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
+
+Route::get('/server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
+
+Route::get('/server/newLaboratory','Admin\ServerTaskController@newLaboratory');
+
+Route::get('/server/linkNewLaboratory','Admin\ServerTaskController@linkNewLaboratory');
+
+Route::get('/server/clearDeletedLaboratory','Admin\ServerTaskController@clearDeletedLaboratory');
+
+Route::get('/server/FixLabProductDuplicated','Admin\ServerTaskController@FixLabProductDuplicated');
+

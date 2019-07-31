@@ -198,12 +198,16 @@ class ServerTaskController extends AdminController
         }
         return false;
     }
-    private function delete_avatar($laboratory){
+    private function delete_avatar($laboratory, $forceDelete=false){
         if($laboratory->avatar){
             if(Storage::disk('public')->exists($laboratory->avatar->path)){
                 $this->destroyAvatar($laboratory->avatar->path);
             }
-            $laboratory->avatars()->delete();
+            if($forceDelete){
+                $laboratory->avatars()->withTrashed()->forceDelete();
+            }else{
+                $laboratory->avatars()->delete();
+            }
             return true;
         }
         return false;
@@ -335,5 +339,109 @@ class ServerTaskController extends AdminController
 
         }      
     
+    }
+    public function newLaboratory(ProductRepository $productRepository, LaboratoryRepository $laboratoryRepository)
+    {
+        set_time_limit(0);
+        $products = $productRepository->getsWith(['laboratory']);
+        foreach ($products as $key => $product) {
+            if($product->category != 1){
+                if($product->laboratory){
+                    if(!$laboratoryRepository->getBy(['user_id'=>'0', 'product_id'=>$product->id])){
+                        $laboratory_data = ['title'=>$product->name, 'category'=>$product->category, 'pathname'=>$product->pathname, 'sort'=>$product->sort, 'customized'=>0, 'user_id'=>0];
+                        $laboratory = $product->laboratory()->create($laboratory_data);
+                        $this->create_avatar($laboratory, $product->avatar_small);
+                        $collections_ids = [];
+                        foreach ($product->collections as $key => $collection_product) {
+                            $collection_sort = $collection_product->pivot->sort;
+                            $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];           
+                        }
+                        $laboratory->products()->sync($collections_ids);
+                        echo $laboratory->title.'<br/>';
+                    }
+                }
+            }
+        }
+    }
+    public function linkNewLaboratory(UserRepository $userRepository, LaboratoryRepository $laboratoryRepository)
+    {
+        set_time_limit(0);
+        $users = $userRepository->gets();
+        foreach($users as $key =>$user){
+            echo $user->email.'<br/>';
+            foreach ($user->laboratories as $key2 => $laboratory) {
+                if($laboratory->customized==0){
+                    echo 'link new '.$laboratory->title.'<br/>';
+                    $new_laboratory = $laboratoryRepository->getBy(['user_id'=>'0', 'product_id'=>$laboratory->product_id]);
+                    if($new_laboratory){
+                        echo 'New laboratory '.$new_laboratory->title.'<br/>';
+                        $user->master_laboratories()->syncWithoutDetaching($new_laboratory->id);
+                    }
+
+                    echo '  Remove '.$laboratory->title.' all products...<br/>';
+                    $laboratory->products()->detach();
+
+                    echo '  Remove '.$laboratory->title.' avatar file...<br/>';
+                    $this->delete_avatar($laboratory, true);
+
+                    echo '  Remove '.$laboratory->title.'...<br/>';
+                    $laboratory->forceDelete();
+
+                    ob_flush(); 
+                    flush();
+                }
+            }
+        }
+    }
+    public function clearDeletedLaboratory(UserRepository $userRepository)
+    {
+        set_time_limit(0);
+        $users = $userRepository->gets();
+        foreach($users as $key =>$user){
+            echo $user->id.' '.$user->email.'<br/>';
+            $laboratories = $user->laboratories()->withTrashed()->get();
+            foreach ($laboratories as $key2 => $laboratory) {
+                if($laboratory->trashed()){
+                    echo $laboratory->title.'<br/>';
+
+                    echo '  Remove '.$laboratory->title.' all products...<br/>';
+                    $laboratory->products()->detach();
+
+                    echo '  Remove '.$laboratory->title.' avatar file...<br/>';
+                    $laboratory->avatars()->withTrashed()->forceDelete();
+
+                    echo '  Remove '.$laboratory->title.'...<br/>';
+                    $laboratory->forceDelete();
+                }
+            }
+        }
+    }
+    public function FixLabProductDuplicated(UserRepository $userRepository)
+    {
+        set_time_limit(0);
+        $users = $userRepository->gets();
+        foreach($users as $key =>$user){
+            echo $user->id.' '.$user->email.'<br/>';
+            $laboratories = $user->laboratories()->get();
+            foreach ($laboratories as $key2 => $laboratory) {
+                if($laboratory->product_id != 0){
+                    if(!$user->products()->find($laboratory->product_id)){
+                        echo '  Remove '.$laboratory->title.'...<br/>';
+                        $laboratory->forceDelete();
+                    }else if($laboratory->customized == 1){
+                        echo $laboratory->title.'<br/>';
+                        echo '  Adjust '.$laboratory->title.' product id...<br/>';
+                        $laboratory->update(['product_id'=>0]);
+                    }
+                }
+            }
+            $laboratories = $user->master_laboratories()->get();
+            foreach ($laboratories as $key2 => $laboratory) {
+                if(!$user->products()->find($laboratory->product_id)){
+                    echo '  Remove relation '.$laboratory->title.'...<br/>';
+                    $user->master_laboratories()->detach($laboratory->id);
+                }
+            }
+        }
     }
 }

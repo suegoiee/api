@@ -9,6 +9,13 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach($data->master_laboratories as $key => $laboratory)
+                <tr>
+                    <td>{{$laboratory->id}}</td>
+                    <td>{{$laboratory->title}}</td>
+                    <td>{{$laboratory->created_at}}</td>
+                </tr>
+                @endforeach
                 @foreach($data->laboratories as $key => $laboratory)
                 <tr>
                     <td>{{$laboratory->id}}</td>

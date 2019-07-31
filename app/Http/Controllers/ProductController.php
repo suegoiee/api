@@ -298,13 +298,17 @@ class ProductController extends Controller
                 $laboratory->update([
                     'category'=>$product->category,
                     'title'=>$product->name, 
+                    'pathname'=> $product->pathname,
+                    'sort'=> $product->sort,
                     'customized'=>0
                 ]);
             }else{
                 $laboratory = $product->laboratory()->create([
                     'user_id'=> 0,
                     'category'=> $product->category,
-                    'title'=> $product->name, 
+                    'title'=> $product->name,
+                    'pathname'=> $product->pathname,
+                    'sort'=> $product->sort,
                     'customized'=> 0
                 ]);
             }

@@ -25,6 +25,7 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        
         $master_laboratories = $user->master_laboratories()->get()->makeHidden(['product_id','faqs']);
         foreach ($master_laboratories as $key => $laboratory) {
             $collect_product = $user->products()->find($laboratory->product_id);
@@ -34,7 +35,10 @@ class LaboratoryController extends Controller
             }
             $laboratory->sort = $laboratory->pivot->sort;
         }
-        $master_laboratories = $master_laboratories->sortBy('sort');
+        $merge_laboratories = collect([]);
+        foreach ($master_laboratories->sortBy('sort') as $key => $laboratory) {
+            $merge_laboratories->push($laboratory);
+        }
 
         $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
         foreach ($laboratories as $key => $laboratory) {
@@ -47,10 +51,10 @@ class LaboratoryController extends Controller
             }else{
                 $laboratory->available = 1;
             }
+            $merge_laboratories->push($laboratory);
         }
-        $laboratories->merge($master_laboratories);
 
-        return $this->successResponse($laboratories);
+        return $this->successResponse($merge_laboratories);
     }
     public function openList(Request $request)
     {
@@ -147,7 +151,7 @@ class LaboratoryController extends Controller
         if(!$product){
             return $this->failedResponse(['message'=>[trans('product.no_product_is_match')]]);
         }
-        $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->where('product_id', $product->id)->first();
+        $laboratory = $user->master_laboratories()->with(['products','products.collections','products.faqs'])->where('product_id', $product->id)->first();
         if(!$laboratory){
             return $this->failedResponse(['message'=>[trans('laboratory.product_is_uninstalled')]]);        
         }
@@ -310,10 +314,16 @@ class LaboratoryController extends Controller
         $user = $request->user();
         $sorted_laboratories = $request->input('sorted_laboratories', []);
         foreach ($sorted_laboratories as $key => $laboratory) {
-            if($user->laboratories()->where('id', $laboratory)->count()==0){
-                return $this->failedResponse(['message'=>['The selected laboratory is invalid.']]);
+            if(!$user->laboratories()->find('id', $laboratory)){
+                continue;
             }
             $user->laboratories()->where('id', $laboratory)->update(['sort' => $key]);
+        }
+        foreach ($sorted_laboratories as $key => $laboratory) {
+            if(!$user->master_laboratories()->find($laboratory)){
+                continue;
+            }
+            $user->master_laboratories()->updateExistingPivot($laboratory,['sort' => $key]);
         }
 
         return $this->successResponse(['sorted_laboratories' => $sorted_laboratories]);

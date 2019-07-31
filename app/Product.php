@@ -66,7 +66,7 @@ class Product extends UanalyzeModel
     }
     public function laboratory()//
     {
-        return $this->hasOne('App\Laboratory', 'laboratory_id', 'id');
+        return $this->hasOne('App\Laboratory');
     }
 
     public function laboratories()
