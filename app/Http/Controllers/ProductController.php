@@ -41,20 +41,20 @@ class ProductController extends Controller
 
         $products = $this->productRepository->getsWithByStatus($with,$where);
         foreach ($products as $key => $product) {
-            //if($product->id!=189){continue;}
+            if($product->id!=255){continue;}
 
-            //return $this->successResponse($product->users);
             $product_user = $user ? $product->users->where('id', $user->id)->first() : false;
             if($product_user){
-                $product->owned = time() <= strtotime($product_user->pivot->deadline) ? 1 : 0;
+                $product->owned = $product_user->pivot->deadline==null || time() <= strtotime($product_user->pivot->deadline) ? 1 : 0;
             }else{
                 $product->owned = 0;
             }
-            $product->month = 0 + $product->inflated;
-            $orders = $product->orders;
+            $product->month = 0 ;//+ $product->inflated;
+            /*$orders = $product->orders;
             foreach ($orders as $key => $order) {
                 $product->month += $order->pivot->quantity;
-            }
+            }*/
+            return $this->successResponse($product);
         }
         $products->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users','info_more','orders','faqs', 'inflated']);
         return $this->successResponse($products);
