@@ -318,7 +318,7 @@ class LaboratoryController extends Controller
         $user = $request->user();
         $sorted_laboratories = $request->input('sorted_laboratories', []);
         foreach ($sorted_laboratories as $key => $laboratory) {
-            if(!$user->laboratories()->find('id', $laboratory)){
+            if(!$user->laboratories()->find($laboratory)){
                 continue;
             }
             $user->laboratories()->where('id', $laboratory)->update(['sort' => $key]);
