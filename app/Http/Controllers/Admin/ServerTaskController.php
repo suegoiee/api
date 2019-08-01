@@ -375,7 +375,7 @@ class ServerTaskController extends AdminController
                     $new_laboratory = $laboratoryRepository->getBy(['user_id'=>'0', 'product_id'=>$laboratory->product_id]);
                     if($new_laboratory){
                         echo 'New laboratory '.$new_laboratory->title.'<br/>';
-                        $user->master_laboratories()->syncWithoutDetaching($new_laboratory->id);
+                        $user->master_laboratories()->syncWithoutDetaching($new_laboratory->id,['sort'=>$laboratory->sort]);
                     }
 
                     echo '  Remove '.$laboratory->title.' all products...<br/>';
@@ -442,6 +442,25 @@ class ServerTaskController extends AdminController
                     $user->master_laboratories()->detach($laboratory->id);
                 }
             }
+        }
+    }
+    public function installUserProduct(UserRepository $userRepository, $email=false)
+    {
+        set_time_limit(0);
+        if($email){
+            $users = $userRepository->getsWith([],['email'=>$email]);
+        }else{
+            $users = $userRepository->getsWith([],['mail_verified_at.<>'=>null]);
+        }
+        foreach($users as $key =>$user){
+            $product_ids = [];
+            foreach ($user->products as $key => $product) {
+                if($product->category=='3' && $product->laboratory){
+                    array_push($product_ids, $product->laboratory->id);
+                }
+            }
+            echo $user->email.' '. count($product_ids).'<br/>';
+            $user->master_laboratories()->syncWithoutDetaching($product_ids);
         }
     }
 }
