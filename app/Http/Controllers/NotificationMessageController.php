@@ -56,8 +56,9 @@ class NotificationMessageController extends Controller
         }
         $notificationMessage = $this->notificationMessageRepository->create($request_data);
         $users = count($user_ids) > 0 ? 
-                    $this->userRepository->getsWith([],['id.in'=>$user_ids,'subscription'=>1]) : 
-                    $this->userRepository->getsWith([],['subscription'=>1]) ;
+                    $this->userRepository->getsWith([],['mail_verified_at.<>'=>null,'id.in'=>$user_ids,'subscription'=>1]) : 
+                    $this->userRepository->getsWith([],['mail_verified_at.<>'=>null,'subscription'=>1]) ;
+
         if($notificationType=='MassiveAnnouncement'){
             $bcc = [];
             foreach ($users as $key => $user) {
@@ -117,8 +118,8 @@ class NotificationMessageController extends Controller
         $notificationMessage = $this->notificationMessageRepository->update($id,$request_data);
         
         $users = count($user_ids) > 0 ? 
-                    $this->userRepository->getsWith([],['id.in'=>$user_ids]) : 
-                    $this->userRepository->gets() ;
+                    $this->userRepository->getsWith([],['mail_verified_at.<>'=>null,'id.in'=>$user_ids,'subscription'=>1]) : 
+                    $this->userRepository->getsWith([],['mail_verified_at.<>'=>null,'subscription'=>1]) ;
         if($notificationType=='MassiveAnnouncement'){
             $bcc = [];
             foreach ($users as $key => $user) {
