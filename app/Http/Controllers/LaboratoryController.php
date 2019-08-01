@@ -106,7 +106,7 @@ class LaboratoryController extends Controller
     public function show(Request $request, $id)
     {
         $user = $request->user();
-        if(!($this->laboratoryRepository->isOwner($user->id,$id)) && $user->master_laboratories()->find($id)){
+        if(!($this->laboratoryRepository->isOwner($user->id,$id)) && !$user->master_laboratories()->find($id)){
             return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
         }
 

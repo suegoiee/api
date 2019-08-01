@@ -28,16 +28,23 @@ class ProductController extends Controller
                 'tags'=>function($query){$query->select('name');},
                 'plans'=>function($query){$query->where('active',1);}
             ];
+
         $user = $request->user();
+
         if($user){
             $with['users'] = function($query) use($user){$query->where('id',$user->id);};
         }
+
         if($request->has('type')){
             $where['type'] = $request->input('type');
         }
+
         $products = $this->productRepository->getsWithByStatus($with,$where);
         foreach ($products as $key => $product) {
-            $product_user = $user ? $product->users('id', $user)->first() : false;
+            if($product->id!=189){continue;}
+
+            return $this->successResponse($product->users);
+            $product_user = $user ? $product->users->where('id', $user->id)->first() : false;
             if($product_user){
                 $product->owned = time() <= strtotime($product_user->pivot->deadline) ? 1 : 0;
             }else{
