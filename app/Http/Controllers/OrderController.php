@@ -143,13 +143,13 @@ class OrderController extends Controller
             if($order->paymentType == 'capital'){
                 $CustID = $request->input('custID','');
                 $capital_response = $this->capitalCheckout($order, $CustID);
-                $order['capital_response'] = $capital_response;
                 if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
-                    $this->orderRepository->update($order->id, ['status'=>1]);
-                    $order = $order = $this->paymentProcess($order);
+                    $order = $this->orderRepository->update($order->id, ['status'=>1]);
+                    $order = $this->paymentProcess($order);
                 }else{
                     $this->orderRepository->update($order->id, ['status'=>2]);
                 }
+                $order['capital_response'] = $capital_response;
             }else{
                 $ecpay_form = $this->ecpay_form($order);
                 $order['form_html'] = $ecpay_form;
