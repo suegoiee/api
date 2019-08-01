@@ -146,7 +146,7 @@ class OrderController extends Controller
                 $order['capital_response'] = $capital_response;
                 if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
                     $this->orderRepository->update($order->id, ['status'=>1]);
-                    $order = $this->paymentProcess($order);
+                    $order = $order = $this->paymentProcess($order);
                 }else{
                     $this->orderRepository->update($order->id, ['status'=>2]);
                 }
