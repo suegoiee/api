@@ -52,7 +52,6 @@ class ProductController extends Controller
             foreach ($orders as $key => $order) {
                 $product->month += $order->pivot->quantity;
             }*/
-            return $this->successResponse($product);
         }
         $products->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users','info_more','orders','faqs', 'inflated']);
         return $this->successResponse($products);
