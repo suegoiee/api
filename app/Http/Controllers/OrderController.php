@@ -143,12 +143,13 @@ class OrderController extends Controller
             if($order->paymentType == 'capital'){
                 $CustID = $request->input('custID','');
                 $capital_response = $this->capitalCheckout($order, $CustID);
-                $order['capital_response'] = $capital_response;
                 if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
-                    $this->orderRepository->update($order->id, ['status'=>1]);
+                    $order = $this->orderRepository->update($order->id, ['status'=>1]);
+                    $order = $this->paymentProcess($request, $order);
                 }else{
                     $this->orderRepository->update($order->id, ['status'=>2]);
                 }
+                $order['capital_response'] = $capital_response;
             }else{
                 $ecpay_form = $this->ecpay_form($order);
                 $order['form_html'] = $ecpay_form;
@@ -190,7 +191,9 @@ class OrderController extends Controller
         }
 
         $request_data = $request->only('status');
+
         $pre_order = $this->orderRepository->get($id);
+
         if($pre_order->status==1){
             return $this->successResponse($pre_order?$pre_order:[]);
         }
@@ -199,6 +202,12 @@ class OrderController extends Controller
         if(!$order){
             return $this->notFoundResponse();
         }
+
+        $order = $this->paymentProcess($request, $order);
+
+        return $this->successResponse($order?$order:[]);
+    }
+    private function paymentProcess($request, $order){
         $user = $order->user;
         if( $order->status==1){
             $order_products = $order->products;
@@ -230,9 +239,9 @@ class OrderController extends Controller
             }
             $order->promocodes()->detach($cancel_promocode_ids);
         }
-
-        return $this->successResponse($order?$order:[]);
+        return $order;
     }
+
     public function destroy(Request $request, $id)
     {
         $user = $request->user();
