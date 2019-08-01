@@ -41,9 +41,9 @@ class ProductController extends Controller
 
         $products = $this->productRepository->getsWithByStatus($with,$where);
         foreach ($products as $key => $product) {
-            if($product->id!=189){continue;}
+            //if($product->id!=189){continue;}
 
-            return $this->successResponse($product->users);
+            //return $this->successResponse($product->users);
             $product_user = $user ? $product->users->where('id', $user->id)->first() : false;
             if($product_user){
                 $product->owned = time() <= strtotime($product_user->pivot->deadline) ? 1 : 0;
