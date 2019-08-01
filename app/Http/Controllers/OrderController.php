@@ -145,7 +145,7 @@ class OrderController extends Controller
                 $capital_response = $this->capitalCheckout($order, $CustID);
                 if(isset($capital_response['StatusCode']) && $capital_response['StatusCode']=='1'){
                     $order = $this->orderRepository->update($order->id, ['status'=>1]);
-                    $order = $this->paymentProcess($order);
+                    $order = $this->paymentProcess($request, $order);
                 }else{
                     $this->orderRepository->update($order->id, ['status'=>2]);
                 }
@@ -203,11 +203,11 @@ class OrderController extends Controller
             return $this->notFoundResponse();
         }
 
-        $order = $this->paymentProcess($order);
+        $order = $this->paymentProcess($request, $order);
 
         return $this->successResponse($order?$order:[]);
     }
-    private function paymentProcess($order){
+    private function paymentProcess($request, $order){
         $user = $order->user;
         if( $order->status==1){
             $order_products = $order->products;
