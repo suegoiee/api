@@ -75,7 +75,7 @@ class UserProductController extends Controller
                 if($installed==0){
                     $laboratory = $product_data->laboratory;
                     if($laboratory){
-                        $user->master_laboratories()->sync($laboratory->id);
+                        $user->master_laboratories()->syncWithoutDetaching($laboratory->id);
                         if($laboratory->category == 3){
                             $affiliated_products = $product_data->affiliated_products;
                             foreach ($affiliated_products as $key => $affiliated_product) {
@@ -85,7 +85,7 @@ class UserProductController extends Controller
                                 $affiliated_deadline = $this->getExpiredDate($expiration, $affiliated_old_deadline);
                                 $affiliated_laboratory = $affiliated_product->laboratory;
                                 if($affiliated_laboratory){
-                                    $user->master_laboratories()->sync($affiliated_laboratory->id);
+                                    $user->master_laboratories()->syncWithoutDetaching($affiliated_laboratory->id);
                                 }
                                 $user_products[$affiliated_product->id] = ['deadline'=>$affiliated_deadline,'installed'=>$affiliated_installed];
                             }
@@ -134,7 +134,7 @@ class UserProductController extends Controller
             if($product->pivot->installed==0){
                 $laboratory = $product->laboratory;
                 if($laboratory){
-                    $user->master_laboratories()->sync($laboratory->id);
+                    $user->master_laboratories()->syncWithoutDetaching($laboratory->id);
                     $installed = 1;
                     if($laboratory->category == 3){
                         $user_products = [];
@@ -142,7 +142,7 @@ class UserProductController extends Controller
                         foreach ($affiliated_products as $key => $affiliated_product) {
                             $affiliated_laboratory = $affiliated_product->laboratory;
                             if($affiliated_laboratory){
-                                $user->master_laboratories()->sync($affiliated_laboratory->id);
+                                $user->master_laboratories()->syncWithoutDetaching($affiliated_laboratory->id);
                                 $user_products[$affiliated_product->id] = ['installed'=>1];
                             }
                         }
