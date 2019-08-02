@@ -32,6 +32,7 @@ class NotificationMessageController extends Controller
 
     public function store(Request $request)
     {
+        set_time_limit(0);
         $validator = $this->notificationMessageValidator($request->all());
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
