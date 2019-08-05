@@ -67,6 +67,7 @@ class RegisterController extends Controller
             'username'=>$data['email'],
             'confirmed'=>0,
             'bio'=>'',
+            'confirmation_code'=>'',
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
         ]);
@@ -79,6 +80,7 @@ class RegisterController extends Controller
             'username'=>$data['email'],
             'confirmed'=>0,
             'bio'=>'',
+            'confirmation_code'=>'',
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'is_socialite' => isset($data['is_socialite']) ? $data['is_socialite'] : 0,
