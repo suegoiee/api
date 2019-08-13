@@ -1,0 +1,63 @@
+
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="title">{{trans($module_name.'.admin.title')}} <span class="text-danger">*</span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="title" name="name" placeholder="{{trans($module_name.'.admin.title')}}" value="{{@$data->name}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="date">{{trans($module_name.'.admin.date')}} <span class="text-danger">*</span></label>
+    <div class="col-sm-8">
+        <input type="datetime-local" class="form-control" id="date" name="date" value="{{@$data->date}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="quota">{{trans($module_name.'.admin.quota')}}</label>
+    <div class="col-sm-8">
+        <input type="number" class="form-control" id="quota" name="quota" value="{{@$data->quota}}" min="0">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="onlineCourseContent">{{trans($module_name.'.admin.introduction')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <textarea class="form-control" id="onlineCourseContent" rows="6" name="introduction">{{@$data->introduction}}</textarea>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="tags">{{trans($module_name.'.admin.tags')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control chosen-select" id="tags" name="tags[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @foreach($tags as $tag)
+                <option value="{{$tag->id}}" {{$data && $data->tags->where('id',$tag->id)->count()>0 ? 'selected':''}} >{{$tag->name}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="experts">{{trans($module_name.'.admin.experts')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control chosen-select" id="experts" name="experts[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @foreach($experts as $expert)
+                <option value="{{$expert->id}}" {{$data && $data->experts->where('id',$expert->id)->count()>0 ? 'selected':''}} >{{$expert->expert_name}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>

@@ -89,6 +89,24 @@
                 <span class="text">{{trans('event.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/online_courses')}}">
+                <span class="oi oi-monitor"></span>
+                <span class="text">{{trans('online_course.admin.menu_title')}}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{url('/admin/physical_courses')}}">
+                <span class="oi oi-book"></span>
+                <span class="text">{{trans('physical_course.admin.menu_title')}}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{url('/admin/experts')}}">
+                <span class="oi oi-thumb-up"></span>
+                <span class="text">{{trans('expert.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">
