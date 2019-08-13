@@ -55,7 +55,7 @@
         <select class="form-control chosen-select" id="experts" name="user_id" data-placeholder="{{trans('form.do_select')}}">
             <option />
             @foreach($users as $user)
-                <option value="{{$user->id}}" {{$user->id == $data->user->id ? 'selected':''}} >{{$user->name.'('.$user->email.')'}}</option>
+                <option value="{{$user->id}}" {{$data && $user->id == $data->user->id ? 'selected':''}} >{{$user->name.'('.$user->email.')'}}</option>
             @endforeach
         </select>
     </div>
