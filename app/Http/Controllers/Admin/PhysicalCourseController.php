@@ -55,6 +55,7 @@ class PhysicalCourseController extends AdminController
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
         $request_data = $request->only(['name','date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image']);
+        dd($request_data);
         $referrer = $this->PhysicalCourseRepository->create($request_data);
         $tags = $request->input('tags',[]);
         $referrer->tags()->attach($tags);

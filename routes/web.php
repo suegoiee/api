@@ -350,8 +350,8 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::resource('/online_courses', 'Admin\OnlineCourseController');
 	Route::put('/online_courses/{id}', 'Admin\OnlineCourseController@update');
 
-	Route::get('/physical_courses/{id}/delete','Admin\physicalCourseController@destroy');
-	Route::delete('/physical_courses','Admin\physicalCourseController@destroy');
+	Route::get('/physical_courses/{id}/delete','Admin\PhysicalCourseController@destroy');
+	Route::delete('/physical_courses','Admin\PhysicalCourseController@destroy');
 	Route::resource('/physical_courses', 'Admin\PhysicalCourseController');
 	Route::put('/physical_courses/{id}', 'Admin\physicalCourseController@update');
 
