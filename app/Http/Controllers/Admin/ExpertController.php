@@ -51,7 +51,7 @@ class ExpertController extends AdminController
     public function store(Request $request)
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
-        $request_data = $request->only(['name', 'investment_style', 'introduction', 'investment_period', 'book', 'interview', 'user_id']);
+        $request_data = $request->only(['expert_name', 'investment_style', 'introduction', 'investment_period', 'book', 'interview', 'user_id', 'experience', 'aratar']);
         $referrer = $this->expertRepository->create($request_data);
         $tags = $request->input('tags',[]);
         $referrer->tags()->attach($tags);
@@ -67,7 +67,7 @@ class ExpertController extends AdminController
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        $request_data = $request->only(['expert_name', 'investment_style', 'introduction', 'investment_period', 'book', 'interview', 'user_id']);
+        $request_data = $request->only(['expert_name', 'investment_style', 'introduction', 'investment_period', 'book', 'interview', 'user_id', 'experience', 'aratar']);
         //dd($request_data, $id);
         $referrer = $this->expertRepository->update($id, $request_data);
         $tags = $request->input('tags',[]);

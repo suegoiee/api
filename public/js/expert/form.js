@@ -4,6 +4,8 @@ $(function(){
         removeButtons:'About'
     }
     CKEDITOR.replace( 'ExpertCourseContent',ckeditor_config);
+    CKEDITOR.replace( 'ExpertAvatarContent',ckeditor_config);
+    CKEDITOR.replace( 'ExpertExperienceContent',ckeditor_config);
     CKEDITOR.replace( 'ExpertBookContent',ckeditor_config);
     CKEDITOR.replace( 'ExpertInterviewContent',ckeditor_config);
     CKEDITOR.config.height=400;
