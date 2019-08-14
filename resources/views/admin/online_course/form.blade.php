@@ -22,3 +22,6 @@
         @include('admin.online_course.image_form')
     </div>
 </div>
+@if ($errors->any())
+        {{ implode('', $errors->all('<div>:message</div>')) }}
+@endif

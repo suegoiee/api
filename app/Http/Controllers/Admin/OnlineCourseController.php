@@ -79,8 +79,9 @@ class OnlineCourseController extends AdminController
         if(!$id){
             return redirect()->back();
         }
-        $validator = $this->referrerUpdateValidator($request->all(), $id);
+        $validator = $this->referrerUpdateValidator($request->all());
         if($validator->fails()){
+            dd($validator);
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
@@ -130,31 +131,34 @@ class OnlineCourseController extends AdminController
             'end_date',
             'quota' => 'int',
             'introduction' => 'string',
-            'seo' => 'string',
-            'electric_ticket' => 'string',
+            'seo',
+            'electric_ticket',
             'status' => 'int',
             'host' => 'string',
             'suitable' => 'string',
             'tags' => 'array',
             'experts' => 'array',
+            'image',
         ]);        
     }
 
-    protected function referrerUpdateValidator(array $data,$id)
+    protected function referrerUpdateValidator(array $data)
     {
+        //dd($data);
         return Validator::make($data, [
             'name' => 'required|string',
             'date',
             'end_date',
             'quota' => 'int',
             'introduction' => 'string',
-            'seo' => 'string',
-            'electric_ticket' => 'string',
+            'seo',
+            'electric_ticket',
             'status' => 'int',
             'host' => 'string',
             'suitable' => 'string',
             'tags' => 'array',
             'experts' => 'array',
+            'image',
         ]);        
     }
 }
