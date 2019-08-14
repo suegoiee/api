@@ -22,10 +22,16 @@ final class PhysicalCourse extends UanalyzeModel
     protected $fillable = [
         'name',
         'date',
+        'end_date',
         'quota',
         'location',
         'introduction',
+        'seo',
+        'electric_ticket',
         'status',
+        'image',
+        'suitable',
+        'host',
     ];
 
     public function tags()

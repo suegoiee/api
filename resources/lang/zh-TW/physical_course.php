@@ -13,6 +13,7 @@ return [
         'ended_at'=>'結束時間',
         'introduction'=>'課程介紹',
         'date'=>'開課時間',
+        'end_date'=>'結束時間',
         'quota'=>'報名上限',
         'host'=>'主辦單位',
         'image'=>'圖片連結',
@@ -20,10 +21,16 @@ return [
         'tags'=>'標籤',
         'suitable'=>'適合對象',
         'experts'=>'授課達人',
+        'seo'=>'搜尋用文字',
+        'electric_ticket'=>'電子票券',
+        'status_0'=>'下架',
+        'status_1'=>'上架',
+        'status'=>'狀態',
         
         'physical_course_tab'=>'實體課程基本資訊',
         'host_tab'=>'主辦單位',
         'suitable_tab'=>'適合對象',
-        'image_tab'=>'課程圖片'
+        'image_tab'=>'課程圖片',
+        'electric_ticket_tab'=>'電子票券內容',
 	],
 ];

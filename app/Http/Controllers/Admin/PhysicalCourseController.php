@@ -6,12 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
+use App\Traits\ImageStorage;
 use App\Repositories\TagRepository;
 use App\Repositories\ExpertRepository;
 use App\Repositories\PhysicalCourseRepository;
 
 class PhysicalCourseController extends AdminController
 {	
+    use ImageStorage;
+
     protected $PhysicalCourseRepository;
 
     public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository)
@@ -54,8 +57,17 @@ class PhysicalCourseController extends AdminController
     public function store(Request $request)
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
-        $request_data = $request->only(['name','date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image']);
-        dd($request_data);
+        if($validator->fails()){
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
+        $request_data = $request->only(['name', 'date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket']);
+        if($request->file('image')){
+            $path = $this->storeImage($request->file('image'), 'physical_course');
+            $request_data['image'] = $path;
+        }
+        else{
+            $request_data['image'] = '';
+        }
         $referrer = $this->PhysicalCourseRepository->create($request_data);
         $tags = $request->input('tags',[]);
         $referrer->tags()->attach($tags);
@@ -73,7 +85,14 @@ class PhysicalCourseController extends AdminController
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        $request_data = $request->only(['name','date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image']);
+        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'status']);
+        if($request->file('image')){
+            $path = $this->storeImage($request->file('image'), 'physical_course');
+            $request_data['image'] = $path;
+        }
+        else{
+            $request_data['image'] = '';
+        }
         $referrer = $this->PhysicalCourseRepository->update($id, $request_data);
         $tags = $request->input('tags',[]);
         $referrer->tags()->sync($tags);
@@ -86,8 +105,14 @@ class PhysicalCourseController extends AdminController
     public function edit($id)
     {
         $product =  $this->PhysicalCourseRepository->getWith($id,['tags', 'experts']);
-        $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
-        $product['date'] = $dt->format('Y-m-d\TH:i:s');
+        if($product['date']){
+            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
+            $product['date'] = $dt->format('Y-m-d\TH:i:s');
+        }
+        if($product['end_date']){
+            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['end_date']);
+            $product['end_date'] = $dt->format('Y-m-d\TH:i:s');
+        }
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -102,15 +127,18 @@ class PhysicalCourseController extends AdminController
     {
         return Validator::make($data, [
             'name' => 'required|string',
-            'date',
+            'date', 
+            'end_date',
             'quota' => 'int',
             'introduction' => 'string',
+            'seo' => 'string',
+            'electric_ticket' => 'string',
+            'status' => 'int',
             'host' => 'string',
             'suitable' => 'string',
             'tags' => 'array',
             'experts' => 'array',
             'location' => 'string',
-            'image' => 'string',
         ]);        
     }
 
@@ -118,14 +146,18 @@ class PhysicalCourseController extends AdminController
     {
         return Validator::make($data, [
             'name' => 'required|string',
+            'date', 
+            'end_date',
             'quota' => 'int',
             'introduction' => 'string',
+            'seo' => 'string',
+            'electric_ticket' => 'string',
+            'status' => 'int',
             'host' => 'string',
             'suitable' => 'string',
             'tags' => 'array',
             'experts' => 'array',
             'location' => 'string',
-            'image' => 'string',
         ]);        
     }
 }

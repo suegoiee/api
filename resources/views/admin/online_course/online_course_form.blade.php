@@ -18,6 +18,15 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="end_date">{{trans($module_name.'.admin.end_date')}} </label>
+    <div class="col-sm-8">
+        <input type="datetime-local" class="form-control" id="end_date" name="end_date" value="{{@$data->end_date}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
     <label class="form-control-label col-sm-2" for="quota">{{trans($module_name.'.admin.quota')}}</label>
     <div class="col-sm-8">
         <input type="number" class="form-control" id="quota" name="quota" value="{{@$data->quota}}" min="0">
@@ -30,6 +39,27 @@
     <label class="form-control-label col-sm-2" for="onlineCourseContent">{{trans($module_name.'.admin.introduction')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
         <textarea class="form-control" id="onlineCourseContent" rows="6" name="introduction">{{@$data->introduction}}</textarea>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="seo">{{trans($module_name.'.admin.seo')}}</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="seo" name="seo" value="{{@$data->seo}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="status">{{trans($module_name.'.admin.status')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control" id="status" name="status" >
+            <option value="0"  {{ $data && $data->status=='0' ? 'selected':'' }} >{{trans($module_name.'.admin.status_0')}}</option>
+            <option value="1"  {{ $data && $data->status=='1' ? 'selected':'' }} >{{trans($module_name.'.admin.status_1')}}</option>
+        </select>
     </div>
     <div class="col-sm-2 text-danger msg">
                 

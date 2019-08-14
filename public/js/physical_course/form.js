@@ -6,7 +6,8 @@ $(function(){
     CKEDITOR.replace( 'physicalCourseContent',ckeditor_config);
     CKEDITOR.replace( 'physicalCourseHost',ckeditor_config);
     CKEDITOR.replace( 'physicalCourseSuitable',ckeditor_config);
-    CKEDITOR.replace( 'physicalCourseImage',ckeditor_config);
+    //CKEDITOR.replace( 'physicalCourseImage',ckeditor_config);
+    CKEDITOR.replace( 'physicalCourseElectricTicketContent',ckeditor_config);
     CKEDITOR.config.height=400;
     CKEDITOR.config.extraPlugins = 'uploadimage';
     CKEDITOR.config.uploadUrl = url('admin/ckeditor/images'),
@@ -20,6 +21,23 @@ $(function(){
     
 	$("#tags").chosen();
 	$("#experts").chosen();
+
+    $('#physicalCourseImage').on('click','.remove_btn',function(event){
+        event.preventDefault();
+        var row = $(this);
+        if(confirm('確定刪除 ?')){
+            $('#physicalCourseImage').html('<div class="col-sm-10">'+
+                '<div class="input-group">'+
+                    '<input type="file" class="form-control" name="img" value="">'+
+                '</div>'+
+            '</div>'+
+            '<div class="col-sm-2 text-danger msg">'+
+            '</div>');
+            if(row.data('id')){
+                $('#avatar_small').append('<input type="hidden" name="deleted[]" value="'+row.data('id')+'">');
+            } 
+        }
+    });
 
     $('#posted_at').datetimepicker({
         icons:{
