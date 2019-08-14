@@ -82,7 +82,6 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::post('/user/orders/renew','OrderController@renew')->name('orders.renew');
 	Route::get('/user/invoices/{RelatedNumber}','EcpayController@invoiceQuery')->name('invoices.show');
 	
-	
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
 	Route::put('/user/products/{product}/uninstall', 'UserProductController@uninstall');
 	Route::put('/user/products/sort', 'UserProductController@sorted');
@@ -350,6 +349,20 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 
 	Route::get('events/data','Admin\EventController@data');
 	Route::resource('/events', 'Admin\EventController');
+	
+	Route::get('/online_courses/{id}/delete','Admin\OnlineCourseController@destroy');
+	Route::delete('/online_courses','Admin\OnlineCourseController@destroy');
+	Route::resource('/online_courses', 'Admin\OnlineCourseController');
+	Route::put('/online_courses/{id}', 'Admin\OnlineCourseController@update');
+
+	Route::get('/physical_courses/{id}/delete','Admin\PhysicalCourseController@destroy');
+	Route::delete('/physical_courses','Admin\PhysicalCourseController@destroy');
+	Route::resource('/physical_courses', 'Admin\PhysicalCourseController');
+	Route::put('/physical_courses/{id}', 'Admin\physicalCourseController@update');
+
+	Route::get('/experts/{id}/delete','Admin\ExpertController@destroy');
+	Route::delete('/experts','Admin\ExpertController@destroy');
+	Route::resource('/experts', 'Admin\ExpertController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
