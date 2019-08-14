@@ -58,13 +58,12 @@ class OnlineCourseController extends AdminController
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
         if($validator->fails()){
-            dd($validator);
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'online_course');
-            $request_data['image'] = $path;
+            $request_data['image'] = env('APP_FRONT_URL').'stroage/'.$path;
         }
         else{
             $request_data['image'] = '';
@@ -85,13 +84,12 @@ class OnlineCourseController extends AdminController
         }
         $validator = $this->referrerUpdateValidator($request->all());
         if($validator->fails()){
-            dd($validator);
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'online_course');
-            $request_data['image'] = $path;
+            $request_data['image'] = env('APP_FRONT_URL').'stroage/'.$path;
         }
         else{
             $request_data['image'] = '';
