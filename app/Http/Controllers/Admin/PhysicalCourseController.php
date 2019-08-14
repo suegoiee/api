@@ -132,15 +132,15 @@ class PhysicalCourseController extends AdminController
             'date', 
             'end_date',
             'quota' => 'int',
-            'introduction' => 'string',
+            'introduction',
             'seo',
             'electric_ticket',
             'status' => 'int',
-            'host' => 'string',
-            'suitable' => 'string',
+            'host',
+            'suitable',
             'tags' => 'array',
             'experts' => 'array',
-            'location' => 'string',
+            'location',
         ]);        
     }
 
@@ -151,15 +151,15 @@ class PhysicalCourseController extends AdminController
             'date', 
             'end_date',
             'quota' => 'int',
-            'introduction' => 'string',
+            'introduction',
             'seo',
             'electric_ticket',
             'status' => 'int',
-            'host' => 'string',
-            'suitable' => 'string',
+            'host',
+            'suitable',
             'tags' => 'array',
             'experts' => 'array',
-            'location' => 'string',
+            'location',
         ]);        
     }
 }
