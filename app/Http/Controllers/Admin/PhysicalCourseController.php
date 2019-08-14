@@ -63,7 +63,7 @@ class PhysicalCourseController extends AdminController
         $request_data = $request->only(['name', 'date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'physical_course');
-            $request_data['image'] = env('APP_FRONT_URL').'stroage/'.$path;
+            $request_data['image'] = $path;
         }
         else{
             $request_data['image'] = '';
@@ -88,7 +88,7 @@ class PhysicalCourseController extends AdminController
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'status']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'physical_course');
-            $request_data['image'] = env('APP_FRONT_URL').'stroage/'.$path;
+            $request_data['image'] = $path;
         }
         else{
             $request_data['image'] = '';
