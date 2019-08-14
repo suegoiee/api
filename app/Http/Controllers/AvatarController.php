@@ -49,8 +49,8 @@ class AvatarController extends Controller
         if($validator->fails()){
             return $this->validateErrorResponse($validator->errors()->all());
         }
-
-        $data = [ 'path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
+        $moduleName = $this->getModuleName();
+        $data = [ 'path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $moduleName),'type'=>$request->input('avatar_type','normal')];
 
         if($request->input('avatar_type','normal')!='detail'){
             $avatars = $moduleRepository->avatars()->where('type',$request->input('avatar_type','normal'))->orderBy('created_at', 'desc')->get();
@@ -59,7 +59,11 @@ class AvatarController extends Controller
         }
         $moduleRepository->avatars()->create($data);
         $data['url'] = url('storage/'.$data['path']);
+        
+        $this->productAvatarCreated($request, $moduleRepository);
+        
         return $this->successResponse($data);
+
     }
 
     public function show(Request $request, $module_id = 0)
@@ -90,6 +94,7 @@ class AvatarController extends Controller
         }
 
         $data = ['path' => $this->storeAvatar($request->file('avatar'), $moduleRepository->id, $this->getModuleName()),'type'=>$request->input('avatar_type','normal')];
+
         if($request->input('avatar_type','normal')=='detail'){
             $avatar = $moduleRepository->avatars()->find($request->input('id'));
         }else{
@@ -99,9 +104,12 @@ class AvatarController extends Controller
             $this->avatarRepository->update($avatar->id,$data);
             $this->destroyAvatar($avatar->path);
         }else{
-            $moduleRepository->avatars()->create($data);
+            $avatar = $moduleRepository->avatars()->create($data);
         }
+
         $data['url'] = url('storage/'.$data['path']);
+
+        return $this->productAvatarUpdated($request, $moduleRepository);
         return $this->successResponse($data);
     }
 
@@ -122,7 +130,11 @@ class AvatarController extends Controller
             $moduleRepository->avatars()->delete();
         }
         $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
+        
         $this->destroyAvatar($deleted);
+
+        $this->productAvatarDeleted($request, $moduleRepository);
+        
         if(count($deleted)==0){
             return $this->successResponse(['path'=>$deleted,'message'=>['No avatars to delete.'],'deleted'=>0]);
         }
@@ -163,5 +175,56 @@ class AvatarController extends Controller
             return $module_name[0];
         }
         return 'undefine';
+    }
+    protected function productAvatarCreated($request, $moduleRepository){
+        if($this->getModuleName() == 'products'){
+            if($moduleRepository->laboratory){
+                $laboratory = $moduleRepository->laboratory;
+                $laboratory_avatar_data = [ 'path' => $this->storeAvatar($request->file('avatar'), $laboratory->id, 'laboratories'),'type'=>$request->input('avatar_type','normal')];
+                return $laboratory->avatars()->create($laboratory_avatar_data);
+            }
+        }
+    }
+
+    protected function productAvatarUpdated($request, $moduleRepository){
+        if($this->getModuleName() == 'product'){
+            if($moduleRepository->laboratory){
+                $laboratory = $moduleRepository->laboratory;
+                $laboratory_avatar_data = [ 'path' => $this->storeAvatar($request->file('avatar'), $laboratory->id, 'laboratories'),'type'=>$request->input('avatar_type','normal')];
+                if($request->input('avatar_type','normal')=='detail'){
+                    $avatar = $laboratory->avatars()->find($request->input('id'));
+                }else{
+                    $avatar = $laboratory->avatars()->where('type',$request->input('avatar_type','normal'))->orderBy('created_at', 'desc')->first();
+                }
+
+                if($avatar){
+                    $this->destroyAvatar($avatar->path);
+                    $avatar = $this->avatarRepository->update($avatar->id, $laboratory_avatar_data);
+                }else{
+                    $avatar = $laboratory->avatars()->create($laboratory_avatar_data);
+                }
+                return $avatar;
+            }
+        }
+    }
+
+    protected function productAvatarDeleted($request, $moduleRepository){
+        if($this->getModuleName() == 'product'){
+            if($moduleRepository->laboratory){
+                $laboratory = $moduleRepository->laboratory;
+                $id = $request->input('deleted');
+                if($id){
+                    $ids = is_array($id)? $id : [$id];
+                    $avatars = $laboratory->avatars()->whereIn('id',$ids)->get();
+                    $laboratory->avatars()->whereIn('id',$ids)->delete();
+                }else{
+                    $avatars = $laboratory->avatars()->get();
+                    $laboratory->avatars()->delete();
+                }
+                $deleted = $avatars->map(function($item,$key){return $item->path;})->all();
+                
+                $this->destroyAvatar($deleted);
+            }
+        }
     }
 }

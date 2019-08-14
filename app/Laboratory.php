@@ -10,11 +10,11 @@ class Laboratory extends UanalyzeModel
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
-	protected $fillable=['user_id','title','layout','customized', 'sort', 'collection_product_id'];
+	protected $fillable=['user_id','title','category','layout','customized', 'sort', 'product_id' , 'pathname'];
 
     protected $hidden=['user_id','created_at', 'updated_at', 'deleted_at'];
 
-	protected $appends = [ 'avatar' , 'master', 'pathname' ];
+	protected $appends = [ 'avatar' , 'master'];
 	
 	public function avatars()
     {
@@ -30,19 +30,15 @@ class Laboratory extends UanalyzeModel
         $user_id = $this->user_id;
 		return $this->belongsToMany('App\Product')->with(['users'])->orderBy('pivot_sort', 'ASC')->withPivot('sort')->withTimestamps();
 	}
-    public function collection_products(){
-        return $this->belongsTo('App\Product','collection_product_id','id');
+    public function product(){
+        return $this->belongsTo('App\Product');
     }
     public function getMasterAttribute()
     {
-        $collection = $this->collection_products()->with('faqs')->first();
+        $collection = $this->product()->with('faqs')->first();
         if(!$collection){
             return null;
         }
         return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort','date_range','inflated','faqs','faq']);
-    }
-    public function getPathnameAttribute()
-    {
-        return $this->master ? $this->master->pathname : '';
     }
 }

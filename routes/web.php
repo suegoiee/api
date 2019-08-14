@@ -79,6 +79,7 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 			'index','show','store','destroy'
 		]]);
 	Route::post('/user/orders/trial','OrderController@trial')->name('orders.trial');
+	Route::post('/user/orders/renew','OrderController@renew')->name('orders.renew');
 	Route::get('/user/invoices/{RelatedNumber}','EcpayController@invoiceQuery')->name('invoices.show');
 	
 	Route::put('/user/products/{product}/install', 'UserProductController@install');
@@ -126,6 +127,8 @@ Route::middleware(['web'])->group(function(){
 	Route::get('/products/{product}','ProductController@onShelf')->name('products.onShelf')->where('product', '[a-zA-Z0-9_-]+');
 	Route::get('/products/avatar/{module_id}','AvatarController@show')->name('product.avatar.show');
 
+	Route::get('/laboratories/open','LaboratoryController@openList')->name('laboratories.openList');
+
 	Route::get('/stocks','StockController@lists');
 
 	Route::get('/articles','ArticleController@publishList')->name('articles.publishList');
@@ -150,7 +153,9 @@ Route::middleware(['web'])->group(function(){
 	Route::post('/events/products', 'EventController@productEvents');
 });
 
-
+Route::middleware(['client'])->group(function(){
+	Route::get('/client/token/check','Auth\ClientTokenController@check');
+});
 Route::middleware(['client:tag'])->group(function(){
 	Route::post('/tags','TagController@store')->name('tags.store');
 	Route::put('/tags/{tag}','TagController@update')->name('tags.update');
@@ -383,21 +388,21 @@ Route::get('/server/transCompanyIndustries', 'Admin\ServerTaskController@transCo
 Route::get('/server/extendProductExpired', 'Admin\ServerTaskController@extendProductExpired');
 Route::get('/server/addProductPlans', 'Admin\ServerTaskController@addProductPlans');
 Route::get('/server/addProductToPromocode', 'Admin\ServerTaskController@addProductToPromocode');
-
 Route::get('/server/verifiedFBUser', 'Admin\ServerTaskController@verifiedFBUser');
-
 Route::get('/server/seedUsers', 'Admin\ServerTaskController@seedUsers');
 Route::get('/server/destroySeedUsers', 'Admin\ServerTaskController@destroySeedUsers');
-
 Route::get('/server/importUsersToForum', 'Admin\ServerTaskController@importUsersToForum');
-Route::get('/server/importArchivesToForum', 'Admin\ServerTaskController@importArchivesToForum');*/
+Route::get('/server/importArchivesToForum', 'Admin\ServerTaskController@importArchivesToForum');
 Route::get('/server/updateLaboratoryProduct', 'Admin\ServerTaskController@updateLaboratoryProduct');
-
 Route::get('/server/countUserPayment/{product_id}', 'Admin\ServerTaskController@countUserPayment');
-
 Route::get('/server/countUserPayment/{product_id}/{date}', 'Admin\ServerTaskController@countUserPayment');
+Route::get('/server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
+Route::get('/server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
+*/
+Route::get('/server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
+Route::get('/server/newLaboratory','Admin\ServerTaskController@newLaboratory');
+Route::get('/server/linkNewLaboratory','Admin\ServerTaskController@linkNewLaboratory');
+Route::get('/server/clearDeletedLaboratory','Admin\ServerTaskController@clearDeletedLaboratory');
+Route::get('/server/FixLabProductDuplicated','Admin\ServerTaskController@FixLabProductDuplicated');
+Route::get('/server/installUserProduct/{email?}','Admin\ServerTaskController@installUserProduct');
 
-Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
-
-Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
-Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');

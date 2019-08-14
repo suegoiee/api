@@ -17,13 +17,35 @@ class AdminController extends Controller
     protected $token;
     public function __construct($request)
     {
-        $this->token = $this->clientCredentialsGrantToken($request);
-    }
-    protected function checkLogin($request){
-        if(!$this->getAccessToken($request)){
-            $request->session()->put('access_token', $this->clientCredentialsGrantToken($request));
+        $client_request = clone $request;
+        if($request->session()->exists('access_token') && $request->session()->get('token_expired_at') > time()){
+            $check_request = clone $request;
+            if($this->checkLogin($check_request, session('access_token'))){
+                $this->token = ['access_token'=>session('access_token')];
+            }else{
+                $this->token = $this->clientCredentialsGrantToken($client_request);
+                $request->session()->put('access_token', $this->token['access_token']);
+                $request->session()->put('token_expired_at', time() + $this->token['expires_in']);
+            }
+        }else{
+            $this->token = $this->clientCredentialsGrantToken($client_request);
+            if(isset($this->token['access_token'])){
+                $request->session()->put('access_token', $this->token['access_token']);
+                $request->session()->put('token_expired_at', time() + $this->token['expires_in']);
+            }
         }
-        $this->token = $request->session()->get('access_token');
+    }
+    protected function checkLogin($request, $access_token){
+        $request->headers->set('Accept','application/json');
+        $request->headers->set('Authorization','Bearer '.$access_token);
+        $tokenRequest = $request->create(
+            env('APP_URL').'/client/token/check',
+            'get'
+        );
+        $instance = Route::dispatch($tokenRequest);
+
+        $response_data = json_decode($instance->getContent(), true);
+        return $response_data['status']=='success';
     }
     protected function getAccessToken($request){
         $request->request->add($request->all());

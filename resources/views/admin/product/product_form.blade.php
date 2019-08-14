@@ -25,9 +25,9 @@
 <div class="form-group row" id="affiliated_product_select">
     <label class="form-control-label col-sm-2" for="collections">{{trans($module_name.'.admin.affiliated_product')}}</label>
     <div class="col-sm-8">
-        <select class="form-control selectpicker" id="affiliated_product_id" name="affiliated_product_id"  data-placeholder="{{trans('form.do_select')}}" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
-            @foreach($collections as $product)
-                <option value="{{$product->id}}" {{$data && $data->affiliated_product_id==$product->id ? 'selected':''}} >{{$product->name}}</option>
+        <select class="form-control chosen-select" id="affiliated_products" name="affiliated_products[]" multiple="multiple">
+            @foreach($affiliated_products as $product)
+                <option value="{{$product->id}}" {{($data && $data->affiliated_products->where('id',$product->id)->count())? 'selected':''}} >{{$product->name}}</option>
             @endforeach
         </select>
     </div>

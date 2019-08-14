@@ -5,7 +5,6 @@ $(function(){
     }
     CKEDITOR.replace( 'info_more',ckeditor_config);
     // CKEDITOR.replace( 'faq', ckeditor_config);
-    console.log(CKEDITOR.config);
     CKEDITOR.config.height=400;
     CKEDITOR.config.filebrowserImageUploadUrl=url('admin/ckeditor/images'),
     CKEDITOR.config.removeButtons='About',
@@ -40,9 +39,44 @@ $(function(){
         afterSelect: function(value){
             this.qs1.cache();
             this.qs2.cache();
-            console.log(value);
             this.$element.find('[value='+value+']').insertAfter($('#collections :last-child'));
-            console.log(this.$element.val());
+        },
+        afterDeselect: function(){
+            this.qs1.cache();
+            this.qs2.cache();
+        }
+    });
+    $('#affiliated_products').multiSelect({
+        keepOrder: true,
+        selectableHeader: "<div class='text-center'>可選附屬產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
+        selectionHeader: "<div class='text-center'>已選附屬產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
+        afterInit: function(ms){
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function(e){
+                    if (e.which === 40){
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function(e){
+                    if (e.which == 40){
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+        },
+        afterSelect: function(value){
+            this.qs1.cache();
+            this.qs2.cache();
+            //this.$element.find('[value='+value+']').insertAfter($('#affiliated_products :last-child'));
         },
         afterDeselect: function(){
             this.qs1.cache();
@@ -50,6 +84,7 @@ $(function(){
         }
     });
 	$("#tags").chosen();
+
     $('#category').change(function(event){
         var category = $(this).val();
         $('#affiliated_product_select').hide();
@@ -57,10 +92,11 @@ $(function(){
             case '0':case 0:$('#type').prop('disabled',false);break;
             case '1':case 1:$('#type').val('single').prop('disabled',true).change();break;
             case '2':case 2:$('#type').val('collection').prop('disabled',true).change();break;
-            case '3':case 3:$('#type').val('collection').prop('disabled',true).change();break;
-            case '4':case 4:$('#type').prop('disabled',false);$('#affiliated_product_select').show();break;
+            case '3':case 3:$('#type').val('collection').prop('disabled',true).change();$('#affiliated_product_select').show();break;
+            case '4':case 4:$('#type').prop('disabled',false);break;
         }
     });
+
     $('#category').change();
 
     $('#type').change(function(event){

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 trait OauthToken
 {
     protected function clientCredentialsGrantToken( $request){
-        $client = PersonalAccessClient::first()->client;
+        /*$client = PersonalAccessClient::first()->client;
         $request->request->add([
             'grant_type' => 'client_credentials',
             'client_id' => $client->id,
@@ -21,7 +21,7 @@ trait OauthToken
             'post'
         );
         $instance = Route::dispatch($tokenRequest);
-        /*
+        */
         $http = new \GuzzleHttp\Client;
         $client = PersonalAccessClient::first()->client;
         $response = $http->post(url('oauth/token'), [
@@ -33,8 +33,8 @@ trait OauthToken
             ],
         ]);
 
-        return json_decode((string) $response->getBody(), true);*/
-        return json_decode($instance->getContent(), true);
+        return json_decode((string) $response->getBody(), true);
+        //return json_decode($instance->getContent(), true);
     }
 
     protected function passwordGrantToken($request, $isMobile=false){
