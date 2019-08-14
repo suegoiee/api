@@ -57,6 +57,10 @@ class OnlineCourseController extends AdminController
     public function store(Request $request)
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
+        if($validator->fails()){
+            dd($validator);
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'online_course');

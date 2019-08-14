@@ -58,6 +58,7 @@ class PhysicalCourseController extends AdminController
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
         if($validator->fails()){
+            dd($validator);
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
         $request_data = $request->only(['name', 'date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket']);
@@ -83,6 +84,7 @@ class PhysicalCourseController extends AdminController
         }
         $validator = $this->referrerUpdateValidator($request->all(), $id);
         if($validator->fails()){
+            dd($validator);
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'status']);
