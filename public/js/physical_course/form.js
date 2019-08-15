@@ -28,14 +28,12 @@ $(function(){
         if(confirm('確定刪除 ?')){
             $('#physicalCourseImage').html('<div class="col-sm-10">'+
                 '<div class="input-group">'+
-                    '<input type="file" class="form-control" name="img" value="">'+
+                    '<input type="file" class="form-control" name="image" value="">'+
+                    '<input type="hidden" name="delete_image" value="1">'+
                 '</div>'+
             '</div>'+
             '<div class="col-sm-2 text-danger msg">'+
             '</div>');
-            if(row.data('id')){
-                $('#avatar_small').append('<input type="hidden" name="deleted[]" value="'+row.data('id')+'">');
-            } 
         }
     });
 

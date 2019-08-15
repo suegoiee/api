@@ -30,7 +30,6 @@ class PhysicalCourseController extends AdminController
     public function index()
     {
         $physical = $this->PhysicalCourseRepository->getsWith(['tags', 'experts']);
-        //dd($physical);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -87,11 +86,14 @@ class PhysicalCourseController extends AdminController
         }
         $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'status']);
         if($request->file('image')){
-            $path = $this->storeImage($request->file('image'), 'physical_course');
+            $path = $this->storeImage($request->file('image'), 'online_course');
             $request_data['image'] = $path;
         }
-        else{
+        elseif($request->has('delete_image') && !$request->file('image')){
             $request_data['image'] = '';
+        }
+        else{
+            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status']);
         }
         $referrer = $this->PhysicalCourseRepository->update($id, $request_data);
         $tags = $request->input('tags',[]);

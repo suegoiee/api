@@ -30,7 +30,6 @@ class OnlineCourseController extends AdminController
     public function index()
     {
         $online = $this->OnlineCourseRepository->getsWith(['tags', 'experts']);
-        //dd($online);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -91,8 +90,11 @@ class OnlineCourseController extends AdminController
             $path = $this->storeImage($request->file('image'), 'online_course');
             $request_data['image'] = $path;
         }
-        else{
+        elseif($request->has('delete_image') && !$request->file('image')){
             $request_data['image'] = '';
+        }
+        else{
+            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status']);
         }
         $referrer = $this->OnlineCourseRepository->update($id, $request_data);
         $tags = $request->input('tags',[]);
@@ -146,7 +148,6 @@ class OnlineCourseController extends AdminController
 
     protected function referrerUpdateValidator(array $data)
     {
-        //dd($data);
         return Validator::make($data, [
             'name' => 'required|string',
             'date',
@@ -161,6 +162,7 @@ class OnlineCourseController extends AdminController
             'tags' => 'array',
             'experts' => 'array',
             'image',
+            'delete_image',
         ]);        
     }
 }
