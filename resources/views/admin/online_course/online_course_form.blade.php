@@ -1,6 +1,6 @@
 
 <div class="form-group row">
-    <label class="form-control-label col-sm-2" for="title">{{trans($module_name.'.admin.title')}} <span class="text-danger">*</span></label>
+    <label class="form-control-label col-sm-2" for="title">{{trans($module_name.'.admin.name')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
         <input type="text" class="form-control" id="title" name="name" placeholder="{{trans($module_name.'.admin.title')}}" value="{{@$data->name}}">
     </div>

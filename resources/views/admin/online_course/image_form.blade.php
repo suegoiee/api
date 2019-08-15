@@ -1,6 +1,6 @@
 
 <div class="form-group row">
-	<label for="onlineCourseImage" class="col-sm-2 form-control-label">{{trans('$module_name.admin.image')}}</label>
+	<label for="onlineCourseImage" class="col-sm-2 form-control-label">{{trans($module_name.'.admin.image')}}</label>
 	<div class="col-sm-8 row" id="onlineCourseImage">
 	@if($data && $data->image)
 		<div class="col-sm-10 text-center">

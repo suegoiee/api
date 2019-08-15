@@ -16,7 +16,7 @@ return [
         'end_date'=>'結束時間',
         'quota'=>'名額上限',
         'host'=>'主辦單位',
-        'image'=>'圖片連結',
+        'image'=>'課程圖片',
         'tags'=>'標籤',
         'suitable'=>'適合對象',
         'seo'=>'搜尋用文字',
@@ -24,6 +24,7 @@ return [
         'status_0'=>'下架',
         'status_1'=>'上架',
         'status'=>'狀態',
+        'experts'=>'授課達人',
 
         'online_course_tab'=>'線上課程基本資訊',
         'host_tab'=>'主辦單位',
