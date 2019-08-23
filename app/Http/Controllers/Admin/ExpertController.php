@@ -56,8 +56,11 @@ class ExpertController extends AdminController
         $validator = $this->referrerCreateValidator($request->all(), null);
         $request_data = $request->only(['expert_name', 'investment_style', 'introduction', 'investment_period', 'book', 'interview', 'user_id', 'experience', 'avatar']);
         if($request->file('avatar')){
-            $path = $this->storeImage($request->file('avatar'), 'online_course');
+            $path = $this->storeImage($request->file('avatar'));
             $request_data['avatar'] = $path;
+        }
+        else{
+            $request_data['avatar'] = '';
         }
         $referrer = $this->expertRepository->create($request_data);
         $tags = $request->input('tags',[]);

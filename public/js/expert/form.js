@@ -4,7 +4,6 @@ $(function(){
         removeButtons:'About'
     }
     CKEDITOR.replace( 'ExpertCourseContent',ckeditor_config);
-    CKEDITOR.replace( 'ExpertAvatarContent',ckeditor_config);
     CKEDITOR.replace( 'ExpertExperienceContent',ckeditor_config);
     CKEDITOR.replace( 'ExpertBookContent',ckeditor_config);
     CKEDITOR.replace( 'ExpertInterviewContent',ckeditor_config);
@@ -22,6 +21,21 @@ $(function(){
 	$("#tags").chosen();
 	$("#experts").chosen({
         allow_single_deselect:true,
+    });
+
+    $('#ExpertAvatarContent').on('click','.remove_btn',function(event){
+        event.preventDefault();
+        var row = $(this);
+        if(confirm('確定刪除 ?')){
+            $('#ExpertAvatarContent').html('<div class="col-sm-10">'+
+                '<div class="input-group">'+
+                    '<input type="file" class="form-control" name="avatar" value="">'+
+                    '<input type="hidden" name="delete_image" value="1">'+
+                '</div>'+
+            '</div>'+
+            '<div class="col-sm-2 text-danger msg">'+
+            '</div>');
+        }
     });
 
     $('#posted_at').datetimepicker({
