@@ -55,6 +55,7 @@ Route::middleware(['auth:api'])->group(function(){
 
 	Route::get('/auth/verified/check','Auth\VerifiedUserController@isVerified');
 });
+
 Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
 
@@ -151,6 +152,8 @@ Route::middleware(['web'])->group(function(){
 		'index','show'
 	]]);
 	Route::post('/events/products', 'EventController@productEvents');
+
+	Route::post('user/records','UserRecordController@store');
 });
 
 Route::middleware(['client'])->group(function(){
