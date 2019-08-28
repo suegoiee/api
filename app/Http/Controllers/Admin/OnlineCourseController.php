@@ -6,12 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
+use App\Traits\ImageStorage;
 use App\Repositories\TagRepository;
 use App\Repositories\ExpertRepository;
 use App\Repositories\OnlineCourseRepository;
 
 class OnlineCourseController extends AdminController
 {	
+    use ImageStorage;
+
     protected $OnlineCourseRepository;
 
     public function __construct(Request $request, OnlineCourseRepository $OnlineCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository)
@@ -27,7 +30,6 @@ class OnlineCourseController extends AdminController
     public function index()
     {
         $online = $this->OnlineCourseRepository->getsWith(['tags', 'experts']);
-        //dd($online);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -54,7 +56,17 @@ class OnlineCourseController extends AdminController
     public function store(Request $request)
     {
         $validator = $this->referrerCreateValidator($request->all(), null);
-        $request_data = $request->only(['name','date', 'quota', 'introduction', 'host', 'suitable', 'image']);
+        if($validator->fails()){
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
+        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
+        if($request->file('image')){
+            $path = $this->storeImage($request->file('image'), 'online_course');
+            $request_data['image'] = $path;
+        }
+        else{
+            $request_data['image'] = '';
+        }
         $referrer = $this->OnlineCourseRepository->create($request_data);
         $tags = $request->input('tags',[]);
         $referrer->tags()->attach($tags);
@@ -66,16 +78,24 @@ class OnlineCourseController extends AdminController
 
     public function update(Request $request, $id)
     {
-        //dd($request, $id);
         if(!$id){
             return redirect()->back();
         }
-        $validator = $this->referrerUpdateValidator($request->all(), $id);
+        $validator = $this->referrerUpdateValidator($request->all());
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        //dd($validator);
-        $request_data = $request->only(['name','date', 'quota', 'introduction', 'host', 'suitable', 'image']);
+        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
+        if($request->file('image')){
+            $path = $this->storeImage($request->file('image'), 'online_course');
+            $request_data['image'] = $path;
+        }
+        elseif($request->has('delete_image') && !$request->file('image')){
+            $request_data['image'] = '';
+        }
+        else{
+            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status']);
+        }
         $referrer = $this->OnlineCourseRepository->update($id, $request_data);
         $tags = $request->input('tags',[]);
         $referrer->tags()->sync($tags);
@@ -89,8 +109,14 @@ class OnlineCourseController extends AdminController
     {
         $product =  $this->OnlineCourseRepository->getWith($id,['tags', 'experts']);
         //$product['date'] = date("Y-m-dTH:i", strtotime($product['date']));
-        $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
-        $product['date'] = $dt->format('Y-m-d\TH:i:s');
+        if($product['date']){
+            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
+            $product['date'] = $dt->format('Y-m-d\TH:i:s');
+        }
+        if($product['end_date']){
+            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['end_date']);
+            $product['end_date'] = $dt->format('Y-m-d\TH:i:s');
+        }
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -106,29 +132,37 @@ class OnlineCourseController extends AdminController
         return Validator::make($data, [
             'name' => 'required|string',
             'date',
+            'end_date',
             'quota' => 'int',
             'introduction' => 'string',
+            'seo',
+            'electric_ticket',
+            'status' => 'int',
             'host' => 'string',
             'suitable' => 'string',
             'tags' => 'array',
             'experts' => 'array',
-            'image' => 'string',
-            /*'interested' => 'int',*/
+            'image',
         ]);        
     }
 
-    protected function referrerUpdateValidator(array $data,$id)
+    protected function referrerUpdateValidator(array $data)
     {
         return Validator::make($data, [
             'name' => 'required|string',
+            'date',
+            'end_date',
             'quota' => 'int',
-            'introduction' => 'string',
-            'host' => 'string',
-            'suitable' => 'string',
+            'introduction',
+            'seo',
+            'electric_ticket',
+            'status' => 'int',
+            'host',
+            'suitable',
             'tags' => 'array',
             'experts' => 'array',
-            'image' => 'string',
-            /*'interested' => 'int',*/
+            'image',
+            'delete_image',
         ]);        
     }
 }

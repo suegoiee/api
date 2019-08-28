@@ -22,13 +22,16 @@ final class OnlineCourse extends UanalyzeModel
     protected $fillable = [
         'name',
         'date',
+        'end_date',
         'quota',
         'introduction',
+        'seo',
+        'electric_ticket',
         'status',
         'image',
         'host',
         'interested',
-        'Suitable',
+        'suitable',
     ];
 
     public function tags()

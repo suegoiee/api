@@ -6,7 +6,8 @@ $(function(){
     CKEDITOR.replace( 'onlineCourseContent',ckeditor_config);
     CKEDITOR.replace( 'onlineCourseHost',ckeditor_config);
     CKEDITOR.replace( 'onlineCourseSuitable',ckeditor_config);
-    CKEDITOR.replace( 'onlineCourseImage',ckeditor_config);
+    //CKEDITOR.replace( 'onlineCourseImage',ckeditor_config);
+    CKEDITOR.replace( 'onlineCourseElectricTicketContent',ckeditor_config);
     CKEDITOR.config.height=400;
     CKEDITOR.config.extraPlugins = 'uploadimage';
     CKEDITOR.config.uploadUrl = url('admin/ckeditor/images'),
@@ -20,6 +21,21 @@ $(function(){
     
 	$("#tags").chosen();
 	$("#experts").chosen();
+
+    $('#onlineCourseImage').on('click','.remove_btn',function(event){
+        event.preventDefault();
+        var row = $(this);
+        if(confirm('確定刪除 ?')){
+            $('#onlineCourseImage').html('<div class="col-sm-10">'+
+                '<div class="input-group">'+
+                    '<input type="file" class="form-control" name="image" value="">'+
+                    '<input type="hidden" name="delete_image" value="1">'+
+                '</div>'+
+            '</div>'+
+            '<div class="col-sm-2 text-danger msg">'+
+            '</div>');
+        }
+    });
 
     $('#posted_at').datetimepicker({
         icons:{

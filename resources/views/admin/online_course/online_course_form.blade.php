@@ -1,6 +1,6 @@
 
 <div class="form-group row">
-    <label class="form-control-label col-sm-2" for="title">{{trans($module_name.'.admin.title')}} <span class="text-danger">*</span></label>
+    <label class="form-control-label col-sm-2" for="title">{{trans($module_name.'.admin.name')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
         <input type="text" class="form-control" id="title" name="name" placeholder="{{trans($module_name.'.admin.title')}}" value="{{@$data->name}}">
     </div>
@@ -12,6 +12,15 @@
     <label class="form-control-label col-sm-2" for="date">{{trans($module_name.'.admin.date')}} <span class="text-danger">*</span></label>
     <div class="col-sm-8">
         <input type="datetime-local" class="form-control" id="date" name="date" value="{{@$data->date}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="end_date">{{trans($module_name.'.admin.end_date')}} </label>
+    <div class="col-sm-8">
+        <input type="datetime-local" class="form-control" id="end_date" name="end_date" value="{{@$data->end_date}}">
     </div>
     <div class="col-sm-2 text-danger msg">
                 
@@ -30,6 +39,27 @@
     <label class="form-control-label col-sm-2" for="onlineCourseContent">{{trans($module_name.'.admin.introduction')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
         <textarea class="form-control" id="onlineCourseContent" rows="6" name="introduction">{{@$data->introduction}}</textarea>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="seo">{{trans($module_name.'.admin.seo')}}</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="seo" name="seo" value="{{@$data->seo}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="status">{{trans($module_name.'.admin.status')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control" id="status" name="status" >
+            <option value="0"  {{ $data && $data->status=='0' ? 'selected':'' }} >{{trans($module_name.'.admin.status_0')}}</option>
+            <option value="1"  {{ $data && $data->status=='1' ? 'selected':'' }} >{{trans($module_name.'.admin.status_1')}}</option>
+        </select>
     </div>
     <div class="col-sm-2 text-danger msg">
                 
