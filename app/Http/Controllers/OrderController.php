@@ -75,7 +75,7 @@ class OrderController extends Controller
         }
         $request_data = $request->only(['memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode', 'referrer_code']);
         $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
-        $request_data['use_invoice'] =  $request->input('use_invoice',2);
+        $request_data['use_invoice'] = '2';// $request->input('use_invoice',2);
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $request_data['referrer_code'] = isset($request_data['referrer_code']) ? $request_data['referrer_code'] :  '';
         $product_ids = [];
