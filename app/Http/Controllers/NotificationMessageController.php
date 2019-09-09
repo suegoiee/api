@@ -85,10 +85,10 @@ class NotificationMessageController extends Controller
                 foreach ($product->users as $key => $product_user) {
                     if($product_user->subscription==1){
                         if($request_data['expired_user'] == 1 && strtotime($product_user->pivot->deadline) < $now){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                         if($request_data['non_expired_user'] == 1 && (!$product_user->pivot->deadline || strtotime($product_user->pivot->deadline) > $now)){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                     }
                 }
@@ -183,10 +183,10 @@ class NotificationMessageController extends Controller
                 foreach ($product->users as $key => $product_user) {
                     if($product_user->subscription==1){
                         if($request_data['expired_user'] == 1 && strtotime($product_user->pivot->deadline) < $now){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                         if($request_data['non_expired_user'] == 1 && (!$product_user->pivot->deadline || strtotime($product_user->pivot->deadline) > $now)){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                     }
                 }
