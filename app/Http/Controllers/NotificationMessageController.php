@@ -93,13 +93,17 @@ class NotificationMessageController extends Controller
                     }
                 }
             }
-            $bcc = array_values($send_users);
-
-            $n = 0;
-            $div  =  250;
-            while($n < count($bcc)){
-                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
-                $n+=$div;
+            if($request_data['send_email']==1){
+                $bcc = array_values($send_users);
+                $n = 0;
+                $div  =  250;
+                while($n < count($bcc)){
+                    Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
+                    $n+=$div;
+                }
+            }
+            foreach ($bcc as $key => $user) {
+                $user->notify(new $classType($user, $notificationMessage));
             }
         }else if($notificationType == 'MassiveAnnouncement'){
             $bcc = [];
@@ -191,13 +195,17 @@ class NotificationMessageController extends Controller
                     }
                 }
             }
-            $bcc = array_values($send_users);
-
-            $n = 0;
-            $div  =  250;
-            while($n < count($bcc)){
-                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
-                $n+=$div;
+            if($request_data['send_email']==1){
+                $bcc = array_values($send_users);
+                $n = 0;
+                $div  =  250;
+                while($n < count($bcc)){
+                    Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
+                    $n+=$div;
+                }
+            }
+            foreach ($bcc as $key => $user) {
+                $user->notify(new $classType($user, $notificationMessage));
             }
         }else if($notificationType=='MassiveAnnouncement'){
             $bcc = [];

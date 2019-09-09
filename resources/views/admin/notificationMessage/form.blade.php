@@ -42,7 +42,7 @@
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="all_user">{{trans($module_name.'.admin.all_user')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
-        <input type="checkbox" class="" id="all_user" name="all_user" value="1" {{ $data && $data->user_ids==null ? 'checked':'' }} >
+        <input type="checkbox" class="" id="all_user" name="all_user" value="1" {{ $data && $data->user_ids==null && $data->type!='RelatedProduct' ? 'checked':'' }} >
     </div>
     <div class="col-sm-2 text-danger msg">
                 
