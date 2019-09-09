@@ -102,7 +102,7 @@ class NotificationMessageController extends Controller
                     $n+=$div;
                 }
             }
-            foreach ($bcc as $key => $user) {
+            foreach ($send_users as $key => $user) {
                 $user->notify(new $classType($user, $notificationMessage));
             }
         }else if($notificationType == 'MassiveAnnouncement'){
@@ -204,7 +204,7 @@ class NotificationMessageController extends Controller
                     $n+=$div;
                 }
             }
-            foreach ($bcc as $key => $user) {
+            foreach ($send_users as $key => $user) {
                 $user->notify(new $classType($user, $notificationMessage));
             }
         }else if($notificationType=='MassiveAnnouncement'){
