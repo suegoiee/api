@@ -303,7 +303,7 @@ class ProductController extends Controller
                     'category'=>$product->category,
                     'title'=>$product->name, 
                     'pathname'=> $product->pathname,
-                    'sort'=> $product->sort,
+                    'sort'=> 0,
                     'customized'=>0
                 ]);
             }else{
@@ -312,7 +312,7 @@ class ProductController extends Controller
                     'category'=> $product->category,
                     'title'=> $product->name,
                     'pathname'=> $product->pathname,
-                    'sort'=> $product->sort,
+                    'sort'=> 0,
                     'customized'=> 0
                 ]);
             }
