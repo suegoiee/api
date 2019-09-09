@@ -12,8 +12,11 @@ return [
         'content' => '訊息',
         'all_user'=>'通知全會員',
         'user_ids' => '通知對象',
+        'product_ids'=> '通知產品使用者',
         'send_email'=>'寄送Email',
         'send_notice'=>'寄送站內通知',
+        'expired_user'=>'過期的使用者',
+        'non_expired_user'=>'未過期的使用者',
         'created_at' => $module_name.'時間',
         'type' =>'通知類型',
         'type_Announcement'=>'系統公告',
@@ -27,6 +30,7 @@ return [
         'type_ProductReceive'=>'商品贈送',
         'type_PromocodeReceive'=>'優惠券發送',
         'type_Others'=>'其他',
-        'type_MassiveAnnouncement'=>'全站寄信'
+        'type_MassiveAnnouncement'=>'全站寄信',
+        'type_RelatedProduct'=>'產品使用者通知'
     ]
 ];

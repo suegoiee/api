@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 use App\Repositories\UserRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\NotificationMessageRepository;
 use App\Notifications\Others;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\Announcement;
+use App\Mail\RelatedProduct;
 use Illuminate\Support\Facades\Mail;
 
 class NotificationMessageController extends Controller
 {	
     protected $notificationMessageRepository;
     protected $userRepository;
-    public function __construct(NotificationMessageRepository $notificationMessageRepository, UserRepository $userRepository)
+    protected $productRepository;
+    public function __construct(NotificationMessageRepository $notificationMessageRepository, UserRepository $userRepository, ProductRepository $productRepository)
     {
 	   $this->notificationMessageRepository = $notificationMessageRepository;
        $this->userRepository = $userRepository;
+       $this->productRepository = $productRepository;
     }
 
     public function index()
@@ -55,13 +59,49 @@ class NotificationMessageController extends Controller
             $user_ids = [];
             $request_data['user_ids'] = NULL;
         }
+
+        $product_ids = $request->input('product_ids',[]);
+        if(count($product_ids)>0){
+            $request_data['product_ids'] = json_encode($product_ids, true);
+        }else{
+            $request_data['product_ids'] = NULL;
+        }
+
+        $request_data['expired_user'] = $request->input('expired_user', 0);
+        $request_data['non_expired_user'] = $request->input('non_expired_user', 0);
+
+
         $notificationMessage = $this->notificationMessageRepository->create($request_data);
         
         $users = count($user_ids) > 0 ? 
                     $this->userRepository->getsWith([],['mail_verified_at.<>'=>null,'id.in'=>$user_ids]) : 
                     $this->userRepository->getsWith([],['mail_verified_at.<>'=>null]) ;
+        
+        if($notificationType == 'RelatedProduct'){
+            $products = $this->productRepository->getsWith([],['id.in'=>$product_ids]);
+            $send_users = [];
+            $now = time();
+            foreach ($products as $key => $product) {
+                foreach ($product->users as $key => $product_user) {
+                    if($user->subscription==1){
+                        if($request_data['expired_user'] == 1 && strtotime($product_user->pivot->deadline) < $now){
+                            $send_users[$send_users->id] = $send_users;
+                        }
+                        if($request_data['non_expired_user'] == 1 && (!$product_user->pivot->deadline || strtotime($product_user->pivot->deadline) > $now)){
+                            $send_users[$send_users->id] = $send_users;
+                        }
+                    }
+                }
+            }
+            $bcc = array_values($send_users);
 
-        if($notificationType=='MassiveAnnouncement'){
+            $n = 0;
+            $div  =  250;
+            while($n < count($bcc)){
+                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
+                $n+=$div;
+            }
+        }else if($notificationType == 'MassiveAnnouncement'){
             $bcc = [];
             foreach ($users as $key => $user) {
                 if($user->subscription==1){
@@ -119,12 +159,47 @@ class NotificationMessageController extends Controller
             $request_data['user_ids'] = NULL;
         }
 
+        $product_ids = $request->input('product_ids',[]);
+        if(count($product_ids)>0){
+            $request_data['product_ids'] = json_encode($product_ids, true);
+        }else{
+            $request_data['product_ids'] = NULL;
+        }
+
+        $request_data['expired_user'] = $request->input('expired_user', 0);
+        $request_data['non_expired_user'] = $request->input('non_expired_user', 0);
+
         $notificationMessage = $this->notificationMessageRepository->update($id,$request_data);
         
         $users = count($user_ids) > 0 ? 
                     $this->userRepository->getsWith([],['mail_verified_at.<>'=>null,'id.in'=>$user_ids]) : 
                     $this->userRepository->getsWith([],['mail_verified_at.<>'=>null]) ;
-        if($notificationType=='MassiveAnnouncement'){
+        
+        if($notificationType == 'RelatedProduct'){
+            $products = $this->productRepository->getsWith([],['id.in'=>$product_ids]);
+            $send_users = [];
+            $now = time();
+            foreach ($products as $key => $product) {
+                foreach ($product->users as $key => $product_user) {
+                    if($user->subscription==1){
+                        if($request_data['expired_user'] == 1 && strtotime($product_user->pivot->deadline) < $now){
+                            $send_users[$send_users->id] = $send_users;
+                        }
+                        if($request_data['non_expired_user'] == 1 && (!$product_user->pivot->deadline || strtotime($product_user->pivot->deadline) > $now)){
+                            $send_users[$send_users->id] = $send_users;
+                        }
+                    }
+                }
+            }
+            $bcc = array_values($send_users);
+
+            $n = 0;
+            $div  =  250;
+            while($n < count($bcc)){
+                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
+                $n+=$div;
+            }
+        }else if($notificationType=='MassiveAnnouncement'){
             $bcc = [];
             foreach ($users as $key => $user) {
                 if($user->subscription==1){
