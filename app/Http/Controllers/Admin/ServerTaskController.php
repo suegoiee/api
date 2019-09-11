@@ -248,16 +248,12 @@ class ServerTaskController extends AdminController
     public function updateLaboratoryProduct(LaboratoryRepository $laboratoryRepository)
     {
         set_time_limit(0);
-        $laboratories = $laboratoryRepository->getsWith([],['collection_product_id'=>250]);
+        $laboratories = $laboratoryRepository->getsWith([],['collection_product_id'=>17]);
         foreach ($laboratories as $key => $laboratory) {
-            $laboratory->products()->detach(192);
             $laboratory->products()->attach([
-                257 => ['sort' => 4],
-                139 => ['sort' => 5],
-                255 => ['sort' => 6],
-                204 => ['sort' => 7],
-                256 => ['sort' => 8],
-                258 => ['sort' => 9],
+                15 => ['sort' => 0],
+                14 => ['sort' => 1],
+                16 => ['sort' => 2],
             ]);
             echo $laboratory->title.' '.$laboratory->user_id.'<br/>';
         }
