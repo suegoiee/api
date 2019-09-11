@@ -404,3 +404,5 @@ Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserPro
 
 Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
 Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
+
+Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\ServerTaskController@listProductPaymentUserByPlan');

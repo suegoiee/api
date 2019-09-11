@@ -334,4 +334,20 @@ class ServerTaskController extends AdminController
         }      
     
     }
+
+    public function listProductPaymentUserByPlan(OrderRepository $orderRepository, ProductRepository $productRepository, $product_id, $plan=0)
+    {
+        set_time_limit(0);
+        $orders = $orderRepository->getsWith([],['status'=>1],[],['products'=>function($query)use ($product_id){ $query->where('id', $product_id);}]);
+        $users = [];
+        foreach ($orders as $key => $order) {
+            if(!isset($users[$order->user_id])){
+                $product = $order->products->where('id',$product_id)->first();
+                if($product->quantity == $plan){
+                    $users[$order->user_id] = ['user'=>$order->user,'product'=>$product];
+                    echo $order->user_id.','.($order->user_nickname).','.($order->user_email).','.$product->name.'<br>';
+                }
+            }
+        }
+    }
 }
