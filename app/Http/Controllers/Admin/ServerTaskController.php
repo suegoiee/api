@@ -343,7 +343,7 @@ class ServerTaskController extends AdminController
         foreach ($orders as $key => $order) {
             if(!isset($users[$order->user_id])){
                 $product = $order->products->where('id',$product_id)->first();
-                if($product->quantity == $plan){
+                if($product->quantity == $plan && strtotime($order->created_at) > strtotime(date('Y-m-d').' -1 year')){
                     $users[$order->user_id] = ['user'=>$order->user,'product'=>$product];
                     echo $order->user_id.','.($order->user_nickname).','.($order->user_email).','.$product->name.'<br>';
                 }
