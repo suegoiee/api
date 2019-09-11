@@ -28,9 +28,6 @@ class RelatedProduct extends Notification implements ShouldQueue
         if($this->notificationMessage->send_notice==1){
             array_push($this->notification_types, 'database');
         }
-        if($this->notificationMessage->send_email==1){
-            array_push($this->notification_types, 'mail');
-        }
     }
 
     /**

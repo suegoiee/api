@@ -83,23 +83,29 @@ class NotificationMessageController extends Controller
             $now = time();
             foreach ($products as $key => $product) {
                 foreach ($product->users as $key => $product_user) {
-                    if($user->subscription==1){
+                    if($product_user->subscription==1){
                         if($request_data['expired_user'] == 1 && strtotime($product_user->pivot->deadline) < $now){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                         if($request_data['non_expired_user'] == 1 && (!$product_user->pivot->deadline || strtotime($product_user->pivot->deadline) > $now)){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                     }
                 }
             }
-            $bcc = array_values($send_users);
-
-            $n = 0;
-            $div  =  250;
-            while($n < count($bcc)){
-                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
-                $n+=$div;
+            if($request_data['send_email']==1){
+                $bcc = array_values($send_users);
+                $n = 0;
+                $div  =  250;
+                while($n < count($bcc)){
+                    Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
+                    $n+=$div;
+                }
+            }
+            if($request_data['send_notice']==1){
+                foreach ($send_users as $key => $user) {
+                    $user->notify(new $classType($user, $notificationMessage));
+                }
             }
         }else if($notificationType == 'MassiveAnnouncement'){
             $bcc = [];
@@ -181,23 +187,29 @@ class NotificationMessageController extends Controller
             $now = time();
             foreach ($products as $key => $product) {
                 foreach ($product->users as $key => $product_user) {
-                    if($user->subscription==1){
+                    if($product_user->subscription==1){
                         if($request_data['expired_user'] == 1 && strtotime($product_user->pivot->deadline) < $now){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                         if($request_data['non_expired_user'] == 1 && (!$product_user->pivot->deadline || strtotime($product_user->pivot->deadline) > $now)){
-                            $send_users[$send_users->id] = $send_users;
+                            $send_users[$product_user->id] = $product_user;
                         }
                     }
                 }
             }
-            $bcc = array_values($send_users);
-
-            $n = 0;
-            $div  =  250;
-            while($n < count($bcc)){
-                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
-                $n+=$div;
+            if($request_data['send_email']==1){
+                $bcc = array_values($send_users);
+                $n = 0;
+                $div  =  250;
+                while($n < count($bcc)){
+                    Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
+                    $n+=$div;
+                }
+            }
+            if($request_data['send_notice']==1){
+                foreach ($send_users as $key => $user) {
+                    $user->notify(new $classType($user, $notificationMessage));
+                }
             }
         }else if($notificationType=='MassiveAnnouncement'){
             $bcc = [];
