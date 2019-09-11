@@ -250,11 +250,9 @@ class ServerTaskController extends AdminController
         set_time_limit(0);
         $laboratories = $laboratoryRepository->getsWith([],['collection_product_id'=>17]);
         foreach ($laboratories as $key => $laboratory) {
-            $laboratory->products()->sync([
-                15 => ['sort' => 0],
-                14 => ['sort' => 1],
-                16 => ['sort' => 2],
-            ]);
+            $laboratory->products()->updateExistingPivot(15 ,['sort' => 1]);
+            $laboratory->products()->updateExistingPivot(14 ,['sort' => 2]);
+            $laboratory->products()->updateExistingPivot(16 ,['sort' => 3]);
             echo $laboratory->title.' '.$laboratory->user_id.'<br/>';
         }
 
