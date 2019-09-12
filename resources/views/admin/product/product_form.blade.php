@@ -7,15 +7,16 @@
                 
     </div>
 </div>
+
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="category">{{trans($module_name.'.admin.category')}}</label>
     <div class="col-sm-8">
         <select class="form-control" id="category" name="category" >
-            <option value="1" {{ $data && $data->category=='1' ? 'selected':'disabled' }} >{{trans($module_name.'.admin.category_1')}}</option>
-            <option value="2" {{ $data && $data->category=='2' ? 'selected':'disabled' }} >{{trans($module_name.'.admin.category_2')}}</option>
-            <option value="3" {{ $data && $data->category=='3' ? 'selected':'disabled' }} >{{trans($module_name.'.admin.category_3')}}</option>
-            <option value="4" {{ $data && $data->category=='4' ? 'selected':'disabled' }} >{{trans($module_name.'.admin.category_4')}}</option>
-            <option value="0" {{ $data && $data->category=='0' ? 'selected':'disabled' }} >{{trans($module_name.'.admin.category_0')}}</option>
+            <option value="1" {{ $data && $data->category=='1' ? 'selected':'' }} {{$data ? 'disabled':''}}>{{trans($module_name.'.admin.category_1')}}</option>
+            <option value="2" {{ $data && $data->category=='2' ? 'selected':'' }} {{$data ? 'disabled':''}}>{{trans($module_name.'.admin.category_2')}}</option>
+            <option value="3" {{ $data && $data->category=='3' ? 'selected':'' }} {{$data ? 'disabled':''}}>{{trans($module_name.'.admin.category_3')}}</option>
+            <option value="4" {{ $data && $data->category=='4' ? 'selected':'' }} {{$data ? 'disabled':''}}>{{trans($module_name.'.admin.category_4')}}</option>
+            <option value="0" {{ $data && $data->category=='0' ? 'selected':'' }} {{$data ? 'disabled':''}}>{{trans($module_name.'.admin.category_0')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">

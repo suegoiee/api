@@ -1,4 +1,4 @@
-@if($data->category == 3)
+@if($data && $data->category == 3)
     <div class="col-12 text-center new_solution_btn_container">
         <button class="btn btn-success" id="new_solution_btn"><span class="oi oi-plus"></span></button>
     </div>
@@ -11,7 +11,6 @@
                         <label class="form-control-label col-sm-2" for="expert_affiliated_products{{$plan->id}}">{{trans($module_name.'.admin.expert_affiliated_products')}}</label>
                         <div class="col-sm-8">
                             <select class="form-control chosen-select expert_affiliated_products" id="expert_affiliated_products{{$plan->id}}" name="plans[{{$plan->id}}][expert_affiliated_product_select][]" multiple="multiple">
-                            
                             @if($data->affiliated_products && $data->affiliated_products->count()!=0)
                                 @foreach($data->affiliated_products as $product)
                                     <option value="{{$product->id}}" {{($data && $data->solutions->where('solution_product_id',$product->id)->where('product_prices_id', $plan->id)->count())? 'selected':''}}>{{$product->name}}</option>
