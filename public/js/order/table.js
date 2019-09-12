@@ -32,7 +32,7 @@ function user_emailFormatter(value,row,index){
 function productsFormatter(value, row, index){
 	var html = '';
 	for (var i = 0; i < value.length; i++) {
-		html += '<div>'+value[i].name+'</div>';
+		html += '<div>'+value[i].name+'('+value[i].quantity+'個月)</div>';
 	}
 	return html;
 }

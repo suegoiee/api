@@ -23,6 +23,7 @@
             <!--<option value="PromocodeReceive"  {{ $data && $data->type=='PromocodeReceive' ? 'selected':'' }} >{{trans($module_name.'.admin.type_PromocodeReceive')}}</option>-->
             <option value="Others"  {{ $data && $data->type=='Others' ? 'selected':'' }} >{{trans($module_name.'.admin.type_Others')}}</option>
             <option value="MassiveAnnouncement"  {{ $data && $data->type=='MassiveAnnouncement' ? 'selected':'' }} >{{trans($module_name.'.admin.type_MassiveAnnouncement')}}</option>
+            <option value="RelatedProduct"  {{ $data && $data->type=='RelatedProduct' ? 'selected':'' }} >{{trans($module_name.'.admin.type_RelatedProduct')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">
@@ -41,7 +42,7 @@
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="all_user">{{trans($module_name.'.admin.all_user')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
-        <input type="checkbox" class="" id="all_user" name="all_user" value="1" {{ $data && $data->user_ids==null ? 'checked':'' }} >
+        <input type="checkbox" class="" id="all_user" name="all_user" value="1" {{ $data && $data->user_ids==null && $data->type!='RelatedProduct' ? 'checked':'' }} >
     </div>
     <div class="col-sm-2 text-danger msg">
                 
@@ -65,7 +66,7 @@
                 
     </div>
 </div>
-<div class="form-group row" id="user_selection" > 
+<div class="form-group row {{ $data && $data->type=='RelatedProduct' ? 'hide':'' }}" id="user_selection" > 
     <label class="form-control-label col-sm-2" for="user_ids">{{trans($module_name.'.admin.user_ids')}} <span class="text-danger"></span></label>
     <div class="col-sm-8">
     	 <select class="form-control selectpicker" id="user_ids" name="user_ids[]" data-placeholder="{{trans('form.do_select')}}"  multiple="multiple" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
@@ -77,5 +78,33 @@
     </div>
     <div class="col-sm-2 text-danger msg">
                 
+    </div>
+</div>
+<div id="RelatedProductOption" class=" {{ $data && $data->type!='RelatedProduct' ? 'hide':'' }}">
+    <div class="form-group row" id="product_selection" > 
+        <label class="form-control-label col-sm-2" for="product_ids">{{trans($module_name.'.admin.product_ids')}} <span class="text-danger"></span></label>
+        <div class="col-sm-8">
+             <select class="form-control selectpicker" id="product_ids" name="product_ids[]" data-placeholder="{{trans('form.do_select')}}"  multiple="multiple" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
+                @foreach($products as $product)
+                    <option value="{{$product->id}}" {{($data && in_array($user->id, $data->product_ids)) ? 'selected':''}} >{{$product->name}} ({{ trans('product.admin.status_'.$product->status)}}) </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-sm-2 text-danger msg">
+                    
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="form-control-label col-sm-2" for="expired_user">{{trans($module_name.'.admin.expired_user')}} <span class="text-danger"></span></label>
+        <div class="col-sm-1">
+            <input type="checkbox" class="" id="expired_user" name="expired_user" value="1" {{ $data && $data->expired_user==1 ? 'checked':'' }} >
+        </div>
+        <label class="form-control-label col-sm-2" for="non_expired_user">{{trans($module_name.'.admin.non_expired_user')}} <span class="text-danger"></span></label>
+        <div class="col-sm-5">
+            <input type="checkbox" class="" id="non_expired_user" name="non_expired_user" value="1" {{ $data && $data->non_expired_user==1 ? 'checked':'' }} >
+        </div>
+        <div class="col-sm-2 text-danger msg">
+                    
+        </div>
     </div>
 </div>

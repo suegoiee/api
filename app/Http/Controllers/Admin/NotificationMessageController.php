@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Repositories\UserRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\NotificationMessageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class NotificationMessageController extends AdminController
 {	
     protected $userRepository;
-    public function __construct(Request $request, NotificationMessageRepository $notificationMessageRepository,UserRepository $userRepository)
+    protected $productRepository;
+    public function __construct(Request $request, NotificationMessageRepository $notificationMessageRepository,UserRepository $userRepository, ProductRepository $productRepository)
     {
         parent::__construct($request);
         $this->moduleName='notificationMessage';
         $this->moduleRepository = $notificationMessageRepository;
         $this->userRepository = $userRepository;
+        $this->productRepository = $productRepository;
         //$this->token = $this->clientCredentialsGrantToken();
     }
 
@@ -48,6 +51,7 @@ class NotificationMessageController extends AdminController
             'actionName'=>__FUNCTION__,
             'module_name' => $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
+            'products' => $this->productRepository->getsWith([],[],['type'=>'collection','status'=>'desc']),
             'data' => null,
             'send_actions'=>true
         ];
@@ -58,10 +62,12 @@ class NotificationMessageController extends AdminController
     {
         $notificationMessage = $this->moduleRepository->get($id);
         $notificationMessage->user_ids = $notificationMessage->user_ids ? json_decode($notificationMessage->user_ids) : [];
+        $notificationMessage->product_ids = $notificationMessage->product_ids ? json_decode($notificationMessage->product_ids) : [];
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name' => $this->moduleName,
             'users' => $this->userRepository->getsWith(['profile']),
+            'products' => $this->productRepository->getsWith([],[],['type'=>'collection','status'=>'desc']),
             'data' => $notificationMessage,
             'send_actions'=>true
         ];

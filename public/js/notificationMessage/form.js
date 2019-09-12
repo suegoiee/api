@@ -24,12 +24,20 @@ $(function(){
         if(type == 'MassiveAnnouncement'){
             $('#send_email_input').addClass('hide');
             $('#send_notice_input').addClass('hide');
+        }else if(type == 'RelatedProduct'){
+            $('#send_email_input').removeClass('hide');
+            $('#send_notice_input').removeClass('hide');
+            $('#RelatedProductOption').removeClass('hide');
+            $('#user_selection').addClass('hide');
         }else{
             $('#send_email_input').removeClass('hide');
             $('#send_notice_input').removeClass('hide');
+            $('#RelatedProductOption').addClass('hide');
+            $('#user_selection').removeClass('hide');
         }
 
     });
+    $('#type').change();
     /*
     $('#user_ids').multiSelect({
         selectableHeader: "<div class='text-center'>可選使用者</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",

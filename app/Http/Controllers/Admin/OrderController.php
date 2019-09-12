@@ -166,7 +166,7 @@ class OrderController extends AdminController
         $order = ['訂單編號' => null, '訂購者' => null, '金額' => null, '付款狀態' => null, '訂購時間' => null, '購買人姓名' => null, '購買人電話' => null, '購買人地址' => null, '更改地址' => null, 'Email' => null, '使用發票'=>null, '發票'=>null];
         //$productColsHeader = ['產品' => null, '編號' => null, '名稱' => null, '類型' => null, '價格' => null];
         foreach ($data as $row) {
-            $products = [];
+            $products = $row['products'];
             foreach ($row as $key => $value) {
                 switch ($key) {
                     case "no":
@@ -202,6 +202,10 @@ class OrderController extends AdminController
                     case "invoice_type":
                         $order['發票'] = $value=='0' ? '捐贈': ($value=='1' ? '二聯':'三聯');
                         break;
+                }
+                $order['產品']  =  '';
+                foreach ($products as $key => $product) {
+                    $order['產品'] .= $product['name']." (".$product['quantity'].")\n";
                 }
             }
             array_push($sheet, $order);

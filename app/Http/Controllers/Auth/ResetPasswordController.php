@@ -44,6 +44,7 @@ class ResetPasswordController extends Controller
     	if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
+        
         if(Hash::check($request->input('old_password'), $user->getAuthPassword())){
     		$this->resetPassword($user, $request->input('password'));
         	$request->merge(['email' => $user->email]);
