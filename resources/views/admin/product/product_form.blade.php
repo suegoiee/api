@@ -22,12 +22,25 @@
                 
     </div>
 </div>
+<div class="form-group row" id="belongs_to_expert">
+    <label class="form-control-label col-sm-2" for="belongs_to_experts">{{trans($module_name.'.admin.expert')}}</label>
+    <div class="col-sm-8">
+        <select class="form-control chosen-select" id="belongs_to_experts" name="experts[]" multiple="multiple" data-placeholder="{{trans('form.do_select')}}">
+            @foreach($experts as $expert)
+                <option value="{{$expert->id}}" {{$data && $data->experts->where('id',$expert->id)->count()>0 ? 'selected':''}} >{{$expert->expert_name}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 <div class="form-group row" id="affiliated_product_select">
-    <label class="form-control-label col-sm-2" for="collections">{{trans($module_name.'.admin.affiliated_product')}}</label>
+    <label class="form-control-label col-sm-2" for="affiliated_products">{{trans($module_name.'.admin.affiliated_product')}}</label>
     <div class="col-sm-8">
         <select class="form-control chosen-select" id="affiliated_products" name="affiliated_products[]" multiple="multiple">
             @foreach($affiliated_products as $product)
-                <option value="{{$product->id}}" {{($data && $data->affiliated_products->where('id',$product->id)->count())? 'selected':''}} >{{$product->name}}</option>
+                <option class="collections_unaffiliated" value="{{$product->id}}" {{($data && $data->affiliated_products->where('id',$product->id)->count())? 'selected':''}} >{{$product->name}}</option>
             @endforeach
         </select>
     </div>

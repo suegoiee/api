@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
 use App\Repositories\ProfileRepository;
+use App\Repositories\PermissionRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,10 +14,11 @@ class UserController extends Controller
     protected $profileRepository;
     protected $userRepository;
 
-    public function __construct(ProfileRepository $profileRepository, UserRepository $userRepository)
+    public function __construct(ProfileRepository $profileRepository, UserRepository $userRepository, PermissionRepository $permissionRepository)
     {
 	   $this->profileRepository = $profileRepository;
        $this->userRepository = $userRepository;
+       $this->permissionRepository = $permissionRepository;
     }
 
     public function index()
@@ -68,8 +70,21 @@ class UserController extends Controller
         $profile = $user->profile;
 
         $products = $request->input('products');
-        foreach ($products as $key => $product) {
-            $user->products()->updateExistingPivot($product['id'], [ 'deadline' => $product['deadline'] == '0' ? null : $product['deadline'] ]);
+        if($products){
+            foreach ($products as $key => $product) {
+                $user->products()->updateExistingPivot($product['id'], [ 'deadline' => $product['deadline'] == '0' ? null : $product['deadline'] ]);
+            }
+        }
+        
+        $user->permissions()->delete();
+        if($request['categories']){
+            foreach($request['categories'] as $category_id){
+                $tmp = array();
+                $tmp['category_id'] = $category_id;
+                $tmp['user_id'] = $user->id;
+                $tmp['permission'] = 5;
+                $this->permissionRepository->create($tmp);
+            }
         }
         return $this->successResponse($user?$user:[]);
     }

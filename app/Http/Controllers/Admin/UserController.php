@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Repositories\UserRepository;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class UserController extends AdminController
 {	
-    public function __construct(Request $request, UserRepository $userRepository)
+    public function __construct(Request $request, UserRepository $userRepository, CategoryRepository $categoryRepository)
     {
         parent::__construct($request);
         $this->moduleName='user';
         $this->moduleRepository = $userRepository;
+        $this->categoryRepository = $categoryRepository;
         //$this->token = $this->clientCredentialsGrantToken();
     }
 
@@ -69,6 +71,7 @@ class UserController extends AdminController
     {
         $data = [
             'module_name'=> $this->moduleName,
+            'categories'=> $this->categoryRepository->gets(),
             'data'=>null,
         ];
         return view('admin.form',$data);
@@ -79,7 +82,8 @@ class UserController extends AdminController
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
-            'data' => $this->moduleRepository->get($id),
+            'categories'=> $this->categoryRepository->gets(),
+            'data' => $this->moduleRepository->getWith($id, ['permissions']),
         ];
         return view('admin.form',$data);
     }

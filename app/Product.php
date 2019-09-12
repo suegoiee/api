@@ -42,6 +42,15 @@ class Product extends UanalyzeModel
         return $this->morphToMany('App\Tag', 'taggable')->withTimestamps();
     }
 
+    public function experts()
+    {
+        return $this->morphToMany('App\Expert', 'expertable')->withTimestamps();
+    }
+    
+    public function solutions() {
+        return $this->hasManyThrough('App\Product_solutions', 'App\Product_price', 'product_id', 'product_prices_id');
+    }
+
     public function orders()
     {
         return $this->belongsToMany('App\Order', 'order_product')->withPivot('quantity');

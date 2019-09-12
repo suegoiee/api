@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\OnlineCourse;
 use App\PhysicalCourse;
+use App\CategoryProduct;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             OnlineCourse::TABLE => OnlineCourse::class,
             PhysicalCourse::TABLE => PhysicalCourse::class,
+            CategoryProduct::TABLE => CategoryProduct::class,
         ]);
     }
 

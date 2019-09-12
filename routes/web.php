@@ -363,6 +363,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/experts/{id}/delete','Admin\ExpertController@destroy');
 	Route::delete('/experts','Admin\ExpertController@destroy');
 	Route::resource('/experts', 'Admin\ExpertController');
+	
+	Route::get('/forumCategories/{id}/delete','Admin\ForumCategoeyController@destroy');
+	Route::delete('/forumCategories','Admin\ForumCategoeyController@destroy');
+	Route::resource('/forumCategories', 'Admin\ForumCategoeyController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
