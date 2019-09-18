@@ -4,9 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\ResponseFormatter;
 
 class VerifyEmailMiddleware
 {
+    use ResponseFormatter;
     /**
      * Handle an incoming request.
      *
@@ -19,7 +21,7 @@ class VerifyEmailMiddleware
     {
         $user = $request->user();
         if($user && !$user->mail_verified_at){
-            return response()->json(['status'=>'error','error'=>['message'=>'Email is not verified'], 'uri'=>$request->path(), 'method'=>$request->method()]);
+            return $this->failedResponse(['message'=>['Email is not verified']]);
         }
         return $next($request);
     }
