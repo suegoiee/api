@@ -409,3 +409,10 @@ Route::get('/server/clearDeletedLaboratory','Admin\ServerTaskController@clearDel
 Route::get('/server/FixLabProductDuplicated','Admin\ServerTaskController@FixLabProductDuplicated');
 Route::get('/server/installUserProduct/{email?}','Admin\ServerTaskController@installUserProduct');
 
+
+Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
+
+Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
+Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
+
+Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\ServerTaskController@listProductPaymentUserByPlan');
