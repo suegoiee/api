@@ -107,6 +107,12 @@
                 <span class="text">{{trans('expert.admin.menu_title')}}</span>
             </a>
         </li>
+        <li>
+            <a href="{{url('/admin/forumCategories')}}">
+                <span class="oi oi-list-rich"></span>
+                <span class="text">{{trans('forumCategory.admin.menu_title')}}</span>
+            </a>
+        </li>
     </ul>
 </nav>
 <div class="sidebar-toggler">

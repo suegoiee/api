@@ -55,7 +55,6 @@ Route::middleware(['auth:api'])->group(function(){
 
 	Route::get('/auth/verified/check','Auth\VerifiedUserController@isVerified');
 });
-
 Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::put('/password/reset', 'Auth\ResetPasswordController@update');
 
@@ -152,8 +151,6 @@ Route::middleware(['web'])->group(function(){
 		'index','show'
 	]]);
 	Route::post('/events/products', 'EventController@productEvents');
-
-	Route::post('user/records','UserRecordController@store');
 });
 
 Route::middleware(['client'])->group(function(){
@@ -366,6 +363,10 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/experts/{id}/delete','Admin\ExpertController@destroy');
 	Route::delete('/experts','Admin\ExpertController@destroy');
 	Route::resource('/experts', 'Admin\ExpertController');
+	
+	Route::get('/forumCategories/{id}/delete','Admin\ForumCategoeyController@destroy');
+	Route::delete('/forumCategories','Admin\ForumCategoeyController@destroy');
+	Route::resource('/forumCategories', 'Admin\ForumCategoeyController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
@@ -409,10 +410,10 @@ Route::get('/server/clearDeletedLaboratory','Admin\ServerTaskController@clearDel
 Route::get('/server/FixLabProductDuplicated','Admin\ServerTaskController@FixLabProductDuplicated');
 Route::get('/server/installUserProduct/{email?}','Admin\ServerTaskController@installUserProduct');
 
-
 Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
 
 Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
 Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
 
 Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\ServerTaskController@listProductPaymentUserByPlan');
+

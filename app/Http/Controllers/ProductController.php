@@ -83,9 +83,11 @@ class ProductController extends Controller
         $request_data['price'] = isset($request_data['price'])? $request_data['price']:0;
         $product = $this->productRepository->create($request_data);
 
-
         $tags = $request->input('tags',[]);
         $product->tags()->attach($tags);
+
+        $experts = $request->input('experts',[]);
+        $product->experts()->attach($experts);
 
         if( $product->type =='collection' ){
             $collections = $request->input('collections',[]);
@@ -98,9 +100,12 @@ class ProductController extends Controller
         $plans = $request->input('plans',[]);
         foreach ($plans as $key => $plan) {
             if($plan['id']==0){
-                $product->plans()->create(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0 ]);
+                $new_plan = $product->plans()->create(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'', 'freecourses'=>isset($plan['free_courses'])?$plan['free_courses']:0]);
+                foreach($plan['expert_affiliated_product_select'] as $key => $solution){
+                    $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$new_plan->id]);
+                }
             }else{
-                $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])? $plan['active']:0 ]);
+                $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])? $plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'' ]);
             }
         }
 
@@ -193,6 +198,9 @@ class ProductController extends Controller
 
         $tags = $request->input('tags',[]);
         $product->tags()->sync($tags);
+
+        $experts = $request->input('experts',[]);
+        $product->experts()->sync($experts);
         
         $collections = $request->input('collections',[]);
         $update_collections = [];
@@ -204,10 +212,36 @@ class ProductController extends Controller
         $plans = $request->input('plans',[]);
         foreach ($plans as $key => $plan) {
             if($plan['id']==0){
-                $product->plans()->create(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0]);
+                $new_plan = $product->plans()->create(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'', 'freecourses'=>isset($plan['free_courses'])?$plan['free_courses']:0]);
+                if(array_key_exists('expert_affiliated_product_select', $plan)){
+                    foreach($plan['expert_affiliated_product_select'] as $solution){
+                        $product->solutions()->where('product_prices_id', $plan['id'])->delete();
+                    }
+                    foreach($plan['expert_affiliated_product_select'] as $key => $solution){
+                        $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$new_plan->id]);
+                    }
+                }
+                else{
+                    $product->solutions()->where('product_prices_id', $plan['id'])->delete();
+                }
             }else{
-                $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0]);
+                $new_plan = $product->plans()->where('id', $plan['id'])->toBase()->update(['price'=>isset($plan['price'])?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'', 'freecourses'=>isset($plan['free_courses'])?$plan['free_courses']:0]);
+                if(array_key_exists('expert_affiliated_product_select', $plan)){
+                    foreach($plan['expert_affiliated_product_select'] as $solution){
+                        $product->solutions()->where('product_prices_id', $plan['id'])->delete();
+                    }
+                    foreach($plan['expert_affiliated_product_select'] as $key => $solution){
+                        $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$plan['id']]);
+                    }
+                }
+                else{
+                    $product->solutions()->where('product_prices_id', $plan['id'])->delete();
+                }
             }
+        }
+        $delete_solutions = $request->input('delete_solutions', []);
+        foreach ($delete_solutions as $key => $delete_solution) {
+            $product->plans()->where('id', $delete_solution)->delete();
         }
         $faqs = $request->input('faqs',[]);
         $faq_ids = [];

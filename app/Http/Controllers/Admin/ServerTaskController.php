@@ -256,9 +256,15 @@ class ServerTaskController extends AdminController
         $laboratories = $laboratoryRepository->getsWith([],['product_id'=>250]);
 
         foreach ($laboratories as $key => $laboratory) {
-            $laboratory->products()->updateExistingPivot(15 ,['sort' => 1]);
-            $laboratory->products()->updateExistingPivot(14 ,['sort' => 2]);
-            $laboratory->products()->updateExistingPivot(16 ,['sort' => 3]);
+            $laboratory->products()->detach(192);
+            $laboratory->products()->attach([
+                257 => ['sort' => 4],
+                139 => ['sort' => 5],
+                255 => ['sort' => 6],
+                204 => ['sort' => 7],
+                256 => ['sort' => 8],
+                258 => ['sort' => 9],
+            ]);
             echo $laboratory->title.' '.$laboratory->user_id.'<br/>';
         }
 

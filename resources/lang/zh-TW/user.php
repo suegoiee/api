@@ -11,7 +11,8 @@ return [
     	'product_tab'=>'購買產品',
     	'order_tab'=>'訂單',
     	'laboratory_tab'=>'研究室',
-    	'favorite_tab'=>'股票收藏',
+		'favorite_tab'=>'股票收藏',
+		'forum_category_tab'=>'論壇文章管理員',
 
     	'id' => $module_name.'編號',
     	'email' => 'E-mail',

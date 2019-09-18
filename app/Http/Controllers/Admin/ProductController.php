@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use Illuminate\Http\Request;
 use App\Notifications\ProductReceive;
 use App\Repositories\TagRepository;
-use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\ExpertRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\LaboratoryRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Lang;
@@ -14,14 +15,17 @@ class ProductController extends AdminController
 {	
     protected $tagRepository;
     protected $userRepository;
+    protected $expertRepository;
     protected $laboratoryRepository;
-    public function __construct(Request $request, ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository)
+    
+    public function __construct(Request $request, ProductRepository $productRepository, TagRepository $tagRepository, UserRepository $userRepository, ExpertRepository $expertRepository)
     {
         parent::__construct($request);
         $this->moduleName='product';
-        $this->moduleRepository = $productRepository;
         $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
+        $this->expertRepository = $expertRepository;
+        $this->moduleRepository = $productRepository;
     }
 
     public function index(Request $request)
@@ -44,7 +48,7 @@ class ProductController extends AdminController
 
         $product = $this->moduleRepository->getsWith(['tags','collections','plans'=>function($query){
             $query->where('active',1);
-        }],$where,['status'=>'DESC','updated_at'=>'DESC']);
+        }]);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -64,6 +68,7 @@ class ProductController extends AdminController
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
+            'experts'=>$this->expertRepository->gets(),
             'singles'=>$this->moduleRepository->getsWith([],['type'=>'single']),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection'],['created_at'=>'DESC']),
             'affiliated_products'=>$this->moduleRepository->getsWith([],['category.in'=>['0','4']],['created_at'=>'DESC']),
@@ -74,11 +79,12 @@ class ProductController extends AdminController
 
     public function edit($id)
     {
-        $product =  $this->moduleRepository->getWith($id,['tags','collections','affiliated_products']);
+        $product =  $this->moduleRepository->getWith($id,['tags','collections','affiliated_products', 'solutions', 'plans']);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
+            'experts'=>$this->expertRepository->gets(),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection']),
             'singles'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
             'affiliated_products'=>$this->moduleRepository->getsWith([],['category.in'=>['0','4']],['created_at'=>'DESC']),
@@ -145,7 +151,6 @@ class ProductController extends AdminController
                 'form_params' => $request->all(),
             ]);
         $response_product = json_decode((string) $response->getBody(), true);
-        
         if($response_product['status']=='success'){
             $requet_avatars = $request->only('avatars');
 
@@ -186,12 +191,12 @@ class ProductController extends AdminController
             if($request->input('deleted')){
                 
                 $response = $http->request('delete',url('/'.str_plural($this->moduleName)).'/avatar/'.$response_product['data']['id'],[
-                        'headers'=>[
-                            'Accept' => 'application/json',
-                            'Authorization' => 'Bearer '.$this->token['access_token'],
-                        ],
-                        'form_params' => $request->only('deleted'),
-                    ]);
+                    'headers'=>[
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer '.$this->token['access_token'],
+                    ],
+                    'form_params' => $request->only('deleted'),
+                ]);
 
                 $response_avatar = json_decode((string) $response->getBody(), true);
             }

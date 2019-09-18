@@ -20,7 +20,6 @@
             </span>
         </li>
     </ol>
-    
     @include('admin.form_error')
     <form id="form" class="mt-5" action="{{$data ? url('/admin/'.str_plural($module_name).'/'.$data->id) : url('/admin/'.str_plural($module_name))}}" method="POST" enctype="multipart/form-data">
         @include('admin.'.$module_name.'.form')

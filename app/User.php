@@ -76,4 +76,8 @@ class User  extends Authenticatable
     {
         return $this->hasMany('App\Promocode');
     }
+    public function permissions()
+    {
+        return $this->hasMany('App\Permission');
+    }
 }
