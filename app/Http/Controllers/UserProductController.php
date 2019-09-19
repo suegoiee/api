@@ -60,7 +60,7 @@ class UserProductController extends Controller
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
             if($assigned){
-                $expiration = $product_plan->quantity;
+                $expiration = $quantity;
             }else{
                 $product_plan = $product_data->plans()->where('expiration', $quantity)->where('active',1)->first();
                 $expiration = $product_plan->expiration;
