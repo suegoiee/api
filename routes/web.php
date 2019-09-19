@@ -151,6 +151,7 @@ Route::middleware(['web'])->group(function(){
 		'index','show'
 	]]);
 	Route::post('/events/products', 'EventController@productEvents');
+	Route::post('user/records','UserRecordController@store');
 });
 
 Route::middleware(['client'])->group(function(){
