@@ -5,6 +5,12 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="form-control-label col-sm-2" for="no">{{trans($module_name.'.admin.MerchantTradeNo')}}</label>
+    <div class="col-sm-8 text">
+        {{$data->MerchantTradeNo}}
+    </div>
+</div>
+<div class="form-group row">
     <label class="form-control-label col-sm-2" for="price">{{trans($module_name.'.admin.price')}}</label>
     <div class="col-sm-8 text">
         $ {{$data->price}}
