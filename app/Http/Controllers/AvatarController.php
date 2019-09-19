@@ -109,7 +109,7 @@ class AvatarController extends Controller
 
         $data['url'] = url('storage/'.$data['path']);
 
-        return $this->productAvatarUpdated($request, $moduleRepository);
+        $this->productAvatarUpdated($request, $moduleRepository);
         return $this->successResponse($data);
     }
 

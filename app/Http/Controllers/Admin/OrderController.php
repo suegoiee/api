@@ -123,11 +123,13 @@ class OrderController extends AdminController
 
     public function edit($id)
     {
-
+        $order =  $this->moduleRepository->getWith($id,['products']);
+        $ecpay = $order->ecpays()->orderBy('id','desc')->first();
+        $order->MerchantTradeNo = $ecpay ? $ecpay->MerchantTradeNo: '';
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
-            'data' => $this->moduleRepository->getWith($id,['products']),
+            'data' => $order,
         ];
         return view('admin.form',$data);
     }

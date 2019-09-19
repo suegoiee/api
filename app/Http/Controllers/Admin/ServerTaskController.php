@@ -252,7 +252,9 @@ class ServerTaskController extends AdminController
     public function updateLaboratoryProduct(LaboratoryRepository $laboratoryRepository)
     {
         set_time_limit(0);
+
         $laboratories = $laboratoryRepository->getsWith([],['product_id'=>250]);
+
         foreach ($laboratories as $key => $laboratory) {
             $laboratory->products()->detach(192);
             $laboratory->products()->attach([
@@ -340,6 +342,7 @@ class ServerTaskController extends AdminController
         }      
     
     }
+
     public function newLaboratory(ProductRepository $productRepository, LaboratoryRepository $laboratoryRepository)
     {
         set_time_limit(0);
@@ -461,6 +464,22 @@ class ServerTaskController extends AdminController
             }
             echo $user->email.' '. count($product_ids).'<br/>';
             $user->master_laboratories()->syncWithoutDetaching($product_ids);
+        }
+    }
+
+    public function listProductPaymentUserByPlan(OrderRepository $orderRepository, ProductRepository $productRepository, $product_id, $plan=0)
+    {
+        set_time_limit(0);
+        $orders = $orderRepository->getsWith([],['status'=>1],[],['products'=>function($query)use ($product_id){ $query->where('id', $product_id);}]);
+        $users = [];
+        foreach ($orders as $key => $order) {
+            if(!isset($users[$order->user_id])){
+                $product = $order->products->where('id',$product_id)->first();
+                if($product->quantity == $plan && strtotime($order->created_at) > strtotime(date('Y-m-d').' -1 year')){
+                    $users[$order->user_id] = ['user'=>$order->user,'product'=>$product];
+                    echo $order->user_id.','.($order->user_nickname).','.($order->user_email).','.$product->name.'<br>';
+                }
+            }
         }
     }
 }

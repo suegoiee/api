@@ -48,7 +48,7 @@ class ProductController extends AdminController
 
         $product = $this->moduleRepository->getsWith(['tags','collections','plans'=>function($query){
             $query->where('active',1);
-        }]);
+        }], $where, ['status'=>'DESC','updated_at'=>'DESC']);
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,

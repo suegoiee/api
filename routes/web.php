@@ -151,6 +151,7 @@ Route::middleware(['web'])->group(function(){
 		'index','show'
 	]]);
 	Route::post('/events/products', 'EventController@productEvents');
+	Route::post('user/records','UserRecordController@store');
 });
 
 Route::middleware(['client'])->group(function(){
@@ -409,4 +410,11 @@ Route::get('/server/linkNewLaboratory','Admin\ServerTaskController@linkNewLabora
 Route::get('/server/clearDeletedLaboratory','Admin\ServerTaskController@clearDeletedLaboratory');
 Route::get('/server/FixLabProductDuplicated','Admin\ServerTaskController@FixLabProductDuplicated');
 Route::get('/server/installUserProduct/{email?}','Admin\ServerTaskController@installUserProduct');
+
+Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserProductByOrder');
+
+Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
+Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
+
+Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\ServerTaskController@listProductPaymentUserByPlan');
 
