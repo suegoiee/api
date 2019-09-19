@@ -2,7 +2,7 @@
     <button class="btn btn-success" id="new_solution_btn"><span class="oi oi-plus"></span></button>
 </div>
 
-@if( ($data && !isset($data->plans[0]['introduction'])) || !$data)
+@if( ($data && $data->plans[0]['introduction'] == '') || !$data)
     <div id="solutions">
         <div  class="form-group row">
             <div class="col-sm-2">
