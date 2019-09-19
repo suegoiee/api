@@ -286,25 +286,29 @@ class LaboratoryController extends Controller
 
         $user = $request->user();
         $ids = $id ? [$id] : $request->input('laboratories', []);
-        foreach ($ids as $key => $id) {
-            if(!($this->laboratoryRepository->isOwner($user->id,$id))){
-                return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
-            }
-        }
+        
         foreach ($ids as $key => $id) {
             $laboratory = $user->laboratories()->find($id);
-            $user->laboratories()->where('id',$id)->delete();
-            
-            if($laboratory->customized){
-                $products = $laboratory->products;
-                foreach ($products as $key => $product) {
-                    $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
-                    if($install_num==0){
-                        $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+            if($laboratory){
+                $user->laboratories()->where('id',$id)->delete();
+                
+                if($laboratory->customized){
+                    $products = $laboratory->products;
+                    foreach ($products as $key => $product) {
+                        $install_num = $product->laboratories()->where('user_id',$user->id)->whereNull('deleted_at')->count();
+                        if($install_num==0){
+                            $user->products()->updateExistingPivot($product->id, ['installed'=>0]);
+                        }
                     }
+                }else{
+                    $user->products()->updateExistingPivot($laboratory->product_id, ['installed'=>0]);
                 }
             }else{
-                $user->products()->updateExistingPivot($laboratory->product_id, ['installed'=>0]);
+                $laboratory = $user->master_laboratories()->find($id);
+                if($laboratory){
+                    $user->master_laboratories()->detach($laboratory->id);
+                    $user->products()->updateExistingPivot($laboratory->product_id, ['installed'=>0]);
+                }
             }
         }
         if(count($ids)==0){
