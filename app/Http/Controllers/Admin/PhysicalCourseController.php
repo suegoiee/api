@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
 use App\Traits\ImageStorage;
 use App\Repositories\TagRepository;
+use App\Repositories\PlanRepository;
 use App\Repositories\ExpertRepository;
 use App\Repositories\PhysicalCourseRepository;
 
@@ -17,7 +18,7 @@ class PhysicalCourseController extends AdminController
 
     protected $PhysicalCourseRepository;
 
-    public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository)
+    public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository, PlanRepository $planRepository)
     {
         parent::__construct($request);
         $this->moduleName = 'physical_course';
@@ -25,6 +26,7 @@ class PhysicalCourseController extends AdminController
         $this->moduleRepository = $PhysicalCourseRepository;
         $this->tagRepository = $tagRepository;
         $this->expertRespository = $expertRespository;
+        $this->planRepository = $planRepository;
     }
 
     public function index()
@@ -68,6 +70,11 @@ class PhysicalCourseController extends AdminController
             $request_data['image'] = '';
         }
         $referrer = $this->PhysicalCourseRepository->create($request_data);
+        $plans = $request->input('plans',[]);
+        foreach($plans as $plan){
+            $tmp = $this->planRepository->create($plan);
+            $referrer->plan()->attach($tmp);
+        }
         $tags = $request->input('tags',[]);
         $referrer->tags()->attach($tags);
         $experts = $request->input('experts',[]);
@@ -96,6 +103,16 @@ class PhysicalCourseController extends AdminController
             $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status']);
         }
         $referrer = $this->PhysicalCourseRepository->update($id, $request_data);
+        $plans = $request->input('plans',[]);
+        foreach($plans as $plan){
+            if($plan["id"] == 'new'){
+                $tmp = $this->planRepository->create($plan);
+                $referrer->plan()->attach($tmp);
+            }
+            else{
+                $this->planRepository->update($plan["id"], $plan);
+            }
+        }
         $tags = $request->input('tags',[]);
         $referrer->tags()->sync($tags);
         $experts = $request->input('experts',[]);
@@ -106,7 +123,7 @@ class PhysicalCourseController extends AdminController
 
     public function edit($id)
     {
-        $product =  $this->PhysicalCourseRepository->getWith($id,['tags', 'experts']);
+        $product =  $this->PhysicalCourseRepository->getWith($id,['tags', 'experts', 'plan']);
         if($product['date']){
             $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
             $product['date'] = $dt->format('Y-m-d\TH:i:s');

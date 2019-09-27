@@ -43,4 +43,8 @@ final class PhysicalCourse extends UanalyzeModel
     {
         return $this->morphToMany(Expert::class, 'expertable');
     }
+
+    public function plan(){
+        return $this->morphToMany(Plan::class, 'planable');
+    }
 }

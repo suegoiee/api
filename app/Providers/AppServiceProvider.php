@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Plan;
 use App\OnlineCourse;
 use App\PhysicalCourse;
 use App\CategoryProduct;
@@ -26,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
             OnlineCourse::TABLE => OnlineCourse::class,
             PhysicalCourse::TABLE => PhysicalCourse::class,
             CategoryProduct::TABLE => CategoryProduct::class,
+            Plan::TABLE => Plan::class,
         ]);
     }
 
