@@ -35,10 +35,10 @@ class Laboratory extends UanalyzeModel
     }
     public function getMasterAttribute()
     {
-        $collection = $this->product()->with('faqs')->first();
+        $collection = $this->product()->with('affiliated_products')->first();
         if(!$collection){
             return null;
         }
-        return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort','date_range','inflated','faqs','faq']);
+        return $collection->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail','sort','date_range','inflated','faq']);
     }
 }

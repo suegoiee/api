@@ -76,14 +76,18 @@ class UserProductController extends Controller
                         if($laboratory->category == 3){
                             $affiliated_products = $product_data->affiliated_products;
                             foreach ($affiliated_products as $key => $affiliated_product) {
-                                $affiliated_old_product = $affiliated_product->user()->where('id',$user->id)->first();
+                                $affiliated_old_product = $affiliated_product->users()->where('id',$user->id)->first();
                                 $affiliated_old_deadline = $affiliated_old_product ? $affiliated_old_product->pivot->deadline : 0;
                                 $affiliated_installed = $affiliated_old_product ? $affiliated_old_product->pivot->installed : 0;
+
                                 $affiliated_deadline = $this->getExpiredDate($expiration, $affiliated_old_deadline);
+
                                 $affiliated_laboratory = $affiliated_product->laboratory;
+                                
                                 if($affiliated_laboratory){
                                     $user->master_laboratories()->syncWithoutDetaching($affiliated_laboratory->id);
                                 }
+
                                 $user_products[$affiliated_product->id] = ['deadline'=>$affiliated_deadline,'installed'=>$affiliated_installed];
                             }
                         }

@@ -106,13 +106,23 @@ class LaboratoryController extends Controller
     public function show(Request $request, $id)
     {
         $user = $request->user();
-        if(!($this->laboratoryRepository->isOwner($user->id,$id)) && !$user->master_laboratories()->find($id)){
-            return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
-        }
+        if(is_numeric($id)){
+            if(!($this->laboratoryRepository->isOwner($user->id,$id)) && !$user->master_laboratories()->find($id)){
+                return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
+            }
 
-        $laboratory = $user->master_laboratories()->with(['products','products.collections','products.faqs'])->find($id);
-        if(!$laboratory){
-            $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->find($id);
+            $laboratory = $user->master_laboratories()->with(['products','products.collections','products.faqs'])->find($id);
+            if(!$laboratory){
+                $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->find($id);
+            }
+        }else{
+            if(!$user->laboratories()->where('pathname', $id)->count() && !$user->master_laboratories()->where('pathname', $id)->count()){
+                return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
+            }
+            $laboratory = $user->master_laboratories()->with(['products','products.collections','products.faqs'])->where('pathname', $id)->first();
+            if(!$laboratory){
+                $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->where('pathname', $id)->first();
+            }
         }
         
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);

@@ -140,7 +140,8 @@ class ProductController extends Controller
             'tags',
             'collections'=>function($query){$query->orderBy('product_collections.sort');},
             'faqs',
-            'plans'=>function($query){$query->where('active',1);}
+            'plans'=>function($query){$query->where('active',1);},
+            'affiliated_products'
         ];
         $user = $request->user();
         if($user){
