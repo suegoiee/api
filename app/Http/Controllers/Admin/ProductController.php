@@ -233,6 +233,7 @@ class ProductController extends AdminController
         }
         foreach ($user_ids as $key => $user_id) {
             $result = $this->addProducts($request, $user_id, $products);
+            dd($result);
             if($result['status']=='success'){
                 $user = $this->userRepository->get($user_id);
                 $user->notify(new ProductReceive($user, $quantity , $product_ids, $notificationMessage));
