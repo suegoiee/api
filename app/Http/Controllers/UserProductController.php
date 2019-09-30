@@ -69,7 +69,6 @@ class UserProductController extends Controller
             $installed = $old_product ? $old_product->pivot->installed : 0;
             $user_products = [];
             if($product_data->category != 1){//not single
-                if($installed==0){
                     $laboratory = $product_data->laboratory;
                     if($laboratory){
                         $user->master_laboratories()->syncWithoutDetaching($laboratory->id);
@@ -94,7 +93,6 @@ class UserProductController extends Controller
                         $installed = 1;
                     }
                 }
-            }
             $user_products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
             $user->products()->syncWithoutDetaching($user_products);
             
