@@ -332,8 +332,8 @@ $(function(){
             case '4':case 4:$('#type').prop('disabled',false);break;
         }
     });
-
-    //$('#category').change();
+    /* trigger*/
+    $('#category').change();
 
     $('#type').change(function(event){
         var type = $(this).val();
