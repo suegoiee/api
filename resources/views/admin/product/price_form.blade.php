@@ -80,10 +80,10 @@
                                     {{trans($module_name.'.admin.expiration_12')}}
                                 </td>
                                 <td>
-                                <input class="form-control" type="text" name="plans[new_3][price]" value=""  placeholder="0為免費">
+                                    <input class="form-control" type="text" name="plans[new_3][price]" value=""  placeholder="0為免費">
                                 </td>
                                 <td>
-                                <input class="form-control" type="checkbox" name="plans[new_3][active]" value="1" >
+                                    <input class="form-control" type="checkbox" name="plans[new_3][active]" value="1" >
                                 </td>
                             </tr>
                         @endif
