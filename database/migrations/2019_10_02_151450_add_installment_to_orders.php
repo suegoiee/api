@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddActiveToPlans extends Migration
+class AddInstallmentToOrders extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddActiveToPlans extends Migration
      */
     public function up()
     {
-        Schema::table('plans', function (Blueprint $table) {
-            $table->integer('active')->default(0);
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('installment')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddActiveToPlans extends Migration
      */
     public function down()
     {
-        Schema::table('plans', function (Blueprint $table) {
-            $table->dropColumn('active');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('installment');
         });
     }
 }
