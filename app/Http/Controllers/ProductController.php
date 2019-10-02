@@ -269,8 +269,6 @@ class ProductController extends Controller
         }
         $product->affiliated_products()->sync($update_affiliated_products);
         
-        $this->productUpdated($product);
-
         return $this->successResponse($product?$product:[]);
     }
 
@@ -358,6 +356,8 @@ class ProductController extends Controller
                 $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];           
             }
             $laboratory->products()->sync($collections_ids);
+            return $laboratory;
         }
+        return false;
     }
 }
