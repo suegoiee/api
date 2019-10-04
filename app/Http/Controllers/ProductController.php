@@ -101,8 +101,10 @@ class ProductController extends Controller
         foreach ($plans as $key => $plan) {
             if($plan['id']==0){
                 $new_plan = $product->plans()->create(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'', 'freecourses'=>isset($plan['free_courses'])?$plan['free_courses']:0]);
-                foreach($plan['expert_affiliated_product_select'] as $key => $solution){
-                    $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$new_plan->id]);
+                if(array_key_exists('expert_affiliated_product_select', $plan)){
+                    foreach($plan['expert_affiliated_product_select'] as $key => $solution){
+                        $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$new_plan->id]);
+                    }
                 }
             }else{
                 $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])? $plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'' ]);
