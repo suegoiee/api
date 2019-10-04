@@ -153,91 +153,93 @@ $(function(){
         });
         $('.expert_affiliated_products').multiselect("refresh");
     });
-
-    $('#category').on('change', function() {
-        var $selectedOptions = $(this).find('option:selected');
-        if($selectedOptions.val() == 3){
-            $("#solutions").empty();
-            $("#new_solutions").empty();
-            $("#new_solution_btn").click();
-            $(".new_solution_btn_container").show();
-        }
-        else{
-            $("#solutions").empty();
-            $("#new_solutions").empty();
-            $("#new_solutions").append(""+
-            '<div  class="form-group row">'+
-                '<div class="col-sm-2">'+
-                '</div>'+
-                '<div class="col-sm-8 ">'+
-                    '<table class="table" id="price_table">'+
-                        '<thead>'+
-                            '<tr>'+
-                                '<th>使用期限(月)</th>'+
-                                '<th>價格(元)</th>'+
-                                '<th>啟用方案</th>'+
-                            '</tr>'+
-                        '</thead>'+
-                        '<tbody id="plan_list">'+
-                            '<tr>'+
-                                '<td>'+
-                                    '<input class="form-control" type="hidden" name="plans[new_0][id]" value="0">'+
-                                    '<input class="form-control" type="hidden" name="plans[new_0][expiration]" value="0">'+
-                                    '無期限'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="text" name="plans[new_0][price]" value=""  placeholder="0為免費">'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="checkbox" name="plans[new_0][active]" value="1" >'+
-                                '</td>'+
-                            '</tr>'+
-                            '<tr>'+
-                                '<td> '+
-                                    '<input class="form-control" type="hidden" name="plans[new_1][id]" value="0">'+
-                                    '<input class="form-control" type="hidden" name="plans[new_1][expiration]" value="1">'+
-                                    '一個月'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="text" name="plans[new_1][price]" value=""  placeholder="0為免費">'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="checkbox" name="plans[new_1][active]" value="1" >'+
-                                '</td>'+
-                            '</tr>'+
-                            '<tr>'+
-                                '<td>'+
-                                    '<input class="form-control" type="hidden" name="plans[new_2][id]" value="0">'+
-                                    '<input class="form-control" type="hidden" name="plans[new_2][expiration]" value="6">'+
-                                    '半年'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="text" name="plans[new_2][price]" value=""  placeholder="0為免費">'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="checkbox" name="plans[new_2][active]" value="1" >'+
-                                '</td>'+
-                            '</tr>'+
-                            '<tr>'+
-                                '<td>'+
-                                    '<input class="form-control" type="hidden" name="plans[new_3][id]" value="0">'+
-                                    '<input class="form-control" type="hidden" name="plans[new_3][expiration]" value="12">'+
-                                    '一年'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="text" name="plans[new_3][price]" value=""  placeholder="0為免費">'+
-                                '</td>'+
-                                '<td>'+
-                                '<input class="form-control" type="checkbox" name="plans[new_3][active]" value="1" >'+
-                                '</td>'+
-                            '</tr>'+
-                        '</tbody>'+
-                    '</table>'+
-                '</div>'+
-            '</div>');
-            $(".new_solution_btn_container").hide();
-        }
-    });
+    var pathname = window.location.pathname;
+    if (pathname.indexOf("create") >= 0){
+        $('#category').on('change', function() {
+            var $selectedOptions = $(this).find('option:selected');
+            if($selectedOptions.val() == 3){
+                $("#solutions").empty();
+                $("#new_solutions").empty();
+                $("#new_solution_btn").click();
+                $(".new_solution_btn_container").show();
+            }
+            else{
+                $("#solutions").empty();
+                $("#new_solutions").empty();
+                $("#new_solutions").append(""+
+                '<div  class="form-group row">'+
+                    '<div class="col-sm-2">'+
+                    '</div>'+
+                    '<div class="col-sm-8 ">'+
+                        '<table class="table" id="price_table">'+
+                            '<thead>'+
+                                '<tr>'+
+                                    '<th>使用期限(月)</th>'+
+                                    '<th>價格(元)</th>'+
+                                    '<th>啟用方案</th>'+
+                                '</tr>'+
+                            '</thead>'+
+                            '<tbody id="plan_list">'+
+                                '<tr>'+
+                                    '<td>'+
+                                        '<input class="form-control" type="hidden" name="plans[new_0][id]" value="0">'+
+                                        '<input class="form-control" type="hidden" name="plans[new_0][expiration]" value="0">'+
+                                        '無期限'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="text" name="plans[new_0][price]" value=""  placeholder="0為免費">'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="checkbox" name="plans[new_0][active]" value="1" >'+
+                                    '</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td> '+
+                                        '<input class="form-control" type="hidden" name="plans[new_1][id]" value="0">'+
+                                        '<input class="form-control" type="hidden" name="plans[new_1][expiration]" value="1">'+
+                                        '一個月'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="text" name="plans[new_1][price]" value=""  placeholder="0為免費">'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="checkbox" name="plans[new_1][active]" value="1" >'+
+                                    '</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>'+
+                                        '<input class="form-control" type="hidden" name="plans[new_2][id]" value="0">'+
+                                        '<input class="form-control" type="hidden" name="plans[new_2][expiration]" value="6">'+
+                                        '半年'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="text" name="plans[new_2][price]" value=""  placeholder="0為免費">'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="checkbox" name="plans[new_2][active]" value="1" >'+
+                                    '</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>'+
+                                        '<input class="form-control" type="hidden" name="plans[new_3][id]" value="0">'+
+                                        '<input class="form-control" type="hidden" name="plans[new_3][expiration]" value="12">'+
+                                        '一年'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="text" name="plans[new_3][price]" value=""  placeholder="0為免費">'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<input class="form-control" type="checkbox" name="plans[new_3][active]" value="1" >'+
+                                    '</td>'+
+                                '</tr>'+
+                            '</tbody>'+
+                        '</table>'+
+                    '</div>'+
+                '</div>');
+                $(".new_solution_btn_container").hide();
+            }
+        });
+    }
 
     var solution_index=1;
     $("#new_solution_btn").click(function(event){
