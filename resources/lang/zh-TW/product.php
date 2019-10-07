@@ -16,6 +16,7 @@ return [
         'price_tab'=>'購買方案',
         'avatar_tab'=>'產品圖片',
         'faq_tab'=>'FAQ',
+        'single_option_tab'=>'套件設定',
 
         'category'=>'類別',
         'category_1'=>'研究室套件',
@@ -73,6 +74,10 @@ return [
         'plan_intro'=>'方案簡介',
         'expert_affiliated_products'=>'方案附屬產品',
         'expert'=>'屬於達人',
+
+        'single_options' => '套件設定',
+        'single_type' => '套件類型',
+        'single_type_chart' => '圖表',
 	],
     'collection_cant_del' =>'無法個別刪除。',
     'cant_no_products' =>'需至少有一項產品。',

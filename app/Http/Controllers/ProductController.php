@@ -75,7 +75,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category','single_options', 'single_type']);
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
         $request_data['date_range'] = isset($request_data['date_range'])? $request_data['date_range']:'';
@@ -101,8 +101,10 @@ class ProductController extends Controller
         foreach ($plans as $key => $plan) {
             if($plan['id']==0){
                 $new_plan = $product->plans()->create(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])?$plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'', 'freecourses'=>isset($plan['free_courses'])?$plan['free_courses']:0]);
-                foreach($plan['expert_affiliated_product_select'] as $key => $solution){
-                    $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$new_plan->id]);
+                if(array_key_exists('expert_affiliated_product_select', $plan)){
+                    foreach($plan['expert_affiliated_product_select'] as $key => $solution){
+                        $product->solutions()->create(['solution_product_id'=>$solution, 'product_prices_id'=>$new_plan->id]);
+                    }
                 }
             }else{
                 $product->plans()->where('id', $plan['id'])->update(['price'=>isset($plan['price']) && $plan['price']!=''?$plan['price']:0,'expiration'=>$plan['expiration'], 'active'=>isset($plan['active'])? $plan['active']:0, 'introduction'=>isset($plan['plan_intro'])?$plan['plan_intro']:'' ]);
@@ -183,7 +185,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range', 'inflated', 'category']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range', 'inflated', 'category','single_options', 'single_type']);
         
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
@@ -268,7 +270,9 @@ class ProductController extends Controller
             $update_affiliated_products[$affiliated_product] = ['sort' => $key];
         }
         $product->affiliated_products()->sync($update_affiliated_products);
-        
+
+        $this->productUpdated($product);
+
         return $this->successResponse($product?$product:[]);
     }
 
@@ -356,6 +360,7 @@ class ProductController extends Controller
                 $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];           
             }
             $laboratory->products()->sync($collections_ids);
+
             return $laboratory;
         }
         return false;

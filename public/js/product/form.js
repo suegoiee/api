@@ -237,6 +237,11 @@ $(function(){
             '</div>');
             $(".new_solution_btn_container").hide();
         }
+        if($selectedOptions.val() == 1){
+            $("#single_option_tab").show();
+        }else{
+            $("#single_option_tab").hide();
+        }
     });
 
     var solution_index=1;
@@ -332,8 +337,8 @@ $(function(){
             case '4':case 4:$('#type').prop('disabled',false);break;
         }
     });
-
-    //$('#category').change();
+    
+    $('#category').change();
 
     $('#type').change(function(event){
         var type = $(this).val();

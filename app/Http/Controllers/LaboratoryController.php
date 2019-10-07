@@ -103,9 +103,10 @@ class LaboratoryController extends Controller
         return $this->successResponse($laboratory?$laboratory:[]);
     }
 
-    public function show(Request $request, $id)
+    public function show(Request $request, $id, $affiliates=false)
     {
         $user = $request->user();
+
         if(is_numeric($id)){
             if(!($this->laboratoryRepository->isOwner($user->id,$id)) && !$user->master_laboratories()->find($id)){
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
@@ -117,12 +118,21 @@ class LaboratoryController extends Controller
             }
         }else{
             if(!$user->laboratories()->where('pathname', $id)->count() && !$user->master_laboratories()->where('pathname', $id)->count()){
-                return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
+                    return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
             $laboratory = $user->master_laboratories()->with(['products','products.collections','products.faqs'])->where('pathname', $id)->first();
             if(!$laboratory){
                 $laboratory = $user->laboratories()->with(['products','products.collections','products.faqs'])->where('pathname', $id)->first();
             }
+        }
+        if($affiliates){
+            $affiliated_id = $affiliates;
+            if(is_numeric($affiliates)){
+                $affiliate_laboratory = $this->laboratoryRepository->getBy(["id"=>$affiliates]);
+                $affiliated_id = $affiliate_laboratory->master->id;
+            }
+            $affiliate_product = $laboratory->master->affiliated_products()->where('id', $affiliated_id)->orWhere('pathname', $affiliates)->first();
+            $laboratory = $affiliate_product->laboratory()->with(['products','products.collections','products.faqs'])->first();
         }
         
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
@@ -137,6 +147,7 @@ class LaboratoryController extends Controller
                 $laboratory->available = 1;
             }
         }
+
         foreach ($laboratory->products as $product) {
             $product_user = $product->users()->find($user->id);
             if(!$laboratory->customized){
