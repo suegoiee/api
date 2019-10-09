@@ -21,6 +21,8 @@
     <div class="col-sm-8">
         <select class="form-control" id="single_type" name="single_type" >
             <option value="chart" {{ $data && $data->single_type=='chart' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_chart')}}</option><option value="score" {{ $data && $data->single_type=='score' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_score')}}</option>
+            <option value="table" {{ $data && $data->single_type=='table' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_table')}}</option>
+            <option value="companyInfo" {{ $data && $data->single_type=='companyInfo' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_companyInfo')}}</option>
             <option value="news" {{ $data && $data->single_type=='news' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_news')}}</option>
         </select>
     </div>

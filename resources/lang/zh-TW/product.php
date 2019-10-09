@@ -80,6 +80,8 @@ return [
         'single_type_chart' => '圖表',
         'single_type_score' => '評分',
         'single_type_news' => '新聞',
+        'single_type_table' => '表格',
+        'single_type_companyInfo' => '公司資料',
 	],
     'collection_cant_del' =>'無法個別刪除。',
     'cant_no_products' =>'需至少有一項產品。',
