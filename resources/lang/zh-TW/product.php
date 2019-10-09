@@ -78,6 +78,8 @@ return [
         'single_options' => '套件設定',
         'single_type' => '套件類型',
         'single_type_chart' => '圖表',
+        'single_type_score' => '評分',
+        'single_type_news' => '新聞',
 	],
     'collection_cant_del' =>'無法個別刪除。',
     'cant_no_products' =>'需至少有一項產品。',

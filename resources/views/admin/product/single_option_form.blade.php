@@ -20,7 +20,8 @@
     <label class="form-control-label col-sm-2" for="type">{{trans($module_name.'.admin.single_type')}}</label>
     <div class="col-sm-8">
         <select class="form-control" id="single_type" name="single_type" >
-            <option value="chart" {{ $data && $data->single_type=='chart' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_chart')}}</option>
+            <option value="chart" {{ $data && $data->single_type=='chart' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_chart')}}</option><option value="score" {{ $data && $data->single_type=='score' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_score')}}</option>
+            <option value="news" {{ $data && $data->single_type=='news' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_news')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">
