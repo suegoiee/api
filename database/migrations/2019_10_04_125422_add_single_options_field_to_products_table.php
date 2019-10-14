@@ -14,7 +14,7 @@ class AddSingleOptionsFieldToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('single_type')->nullable()->default('');
+            $table->string('single_type')->nullable()->default('{}');
             $table->text('single_options')->nullable();
         });
     }
