@@ -99,6 +99,15 @@
         @foreach( $data->plans as $key => $plan )
             <div  class="form-group row">
                 <div class="col-sm-10 ">
+                    <div class="form-group row name_container">
+                        <label class="form-control-label col-sm-2" for="name{{$plan->id}}">{{trans($module_name.'.admin.name')}}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name{{$plan->id}}" name="plans[{{$plan->id}}][name]" placeholder="{{trans($module_name.'.admin.name')}}" value="{{$plan->name}}" min="0">
+                        </div>
+                        <div class="col-sm-2 text-danger msg">
+                                    
+                        </div>
+                    </div>
                     <div class="form-group row expert_affiliated_product_select_container">
                         <label class="form-control-label col-sm-2" for="expert_affiliated_products{{$plan->id}}">{{trans($module_name.'.admin.expert_affiliated_products')}}</label>
                         <div class="col-sm-8">

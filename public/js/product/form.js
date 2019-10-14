@@ -251,6 +251,14 @@ $(function(){
         });
         var solution_html='<div  class="form-group row">'+
                 '<div class="col-sm-10 ">'+
+                    '<div class="form-group row name_container">'+
+                        '<label class="form-control-label col-sm-2" for="name'+solution_index+'">方案名稱</label>'+
+                        '<div class="col-sm-8">'+
+                            '<input type="text" class="form-control" id="name'+solution_index+'" name="plans['+solution_index+'][name]" placeholder="方案名稱" value="" min="0">'+
+                        '</div>'+
+                        '<div class="col-sm-2 text-danger msg">'+           
+                        '</div>'+
+                    '</div>'+
                     '<div class="form-group row expert_affiliated_product_select_container">'+
                         '<label class="form-control-label col-sm-2" for="expert_affiliated_products'+solution_index+'">方案附屬產品</label>'+
                         '<div class="col-sm-8">'+
