@@ -488,8 +488,8 @@ class ServerTaskController extends AdminController
         set_time_limit(0);
         $http = new \GuzzleHttp\Client;
         $products = $productRepository->getsWith([],["type"=>'single']);
-        $isNoStock = false;
         foreach($products as $key=>$product){
+            $isNoStock = false;
             try{
                 $response = $http->request('get', 'https://cronjob.uanalyze.com.tw/fetch/'.$product->model.'/1101');
             }catch (\GuzzleHttp\Exception\ClientException $e){
