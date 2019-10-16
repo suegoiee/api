@@ -162,8 +162,7 @@ $(function(){
                 $("#new_solutions").empty();
                 $("#new_solution_btn").click();
                 $(".new_solution_btn_container").show();
-            }
-            else{
+            }else{
                 $("#solutions").empty();
                 $("#new_solutions").empty();
                 $("#new_solutions").append(""+
@@ -343,7 +342,7 @@ $(function(){
         }
     });
     /* trigger*/
-    $('#category').change();
+    //$('#category').change();
 
     $('#type').change(function(event){
         var type = $(this).val();

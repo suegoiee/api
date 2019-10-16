@@ -420,3 +420,4 @@ Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAddit
 Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
 Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\ServerTaskController@listProductPaymentUserByPlan');
 Route::get('server/updateSingleSetting', 'Admin\ServerTaskController@updateSingleSetting');
+Route::get('server/updateFreeLab', 'Admin\ServerTaskController@updateFreeLab');

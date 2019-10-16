@@ -525,4 +525,13 @@ class ServerTaskController extends AdminController
             }
         }
     }
+     public function updateFreeLab(ProductRepository $productRepository)
+    {
+        set_time_limit(0);
+        $products = $productRepository->getsWith([],["id.in"=>[83, 96, 108, 119, 120, 122, 134, 141, 142, 152, 155]]);
+        foreach($products as $key=>$product){
+            $product->update(['category'=>0]);
+            $product->laboratory->update(['category'=>0]);
+        }
+    }
 }
