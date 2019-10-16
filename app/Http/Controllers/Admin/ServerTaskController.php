@@ -488,11 +488,13 @@ class ServerTaskController extends AdminController
         set_time_limit(0);
         $http = new \GuzzleHttp\Client;
         $products = $productRepository->getsWith([],["type"=>'single']);
+        $isNoStock = false;
         foreach($products as $key=>$product){
             try{
                 $response = $http->request('get', 'https://cronjob.uanalyze.com.tw/fetch/'.$product->model.'/1101');
             }catch (\GuzzleHttp\Exception\ClientException $e){
                 try{
+                    $isNoStock = true;
                     $response = $http->request('get', 'https://cronjob.uanalyze.com.tw/fetch/'.$product->model);
                 }catch (\Exception $e){
                     continue;
@@ -516,7 +518,7 @@ class ServerTaskController extends AdminController
                     case 'account_table':case 'rankings_table':case 'sorting_table':$type = 'table';break;
                     default: $type = $dataType;break;
                 }
-                $product->update(['single_options'=>'{}', 'single_type'=>$type]);
+                $product->update(['single_options'=>$isNoStock ? '{"noStock":true}':'{}', 'single_type'=>$type]);
             }else{
                 echo $product->id.' '.$product->name.'<br/>'.PHP_EOL;
                 continue;
