@@ -122,6 +122,9 @@ class LaboratoryController extends Controller
             $affiliated_id = $affiliates;
             if(is_numeric($affiliates)){
                 $affiliate_laboratory = $this->laboratoryRepository->getBy(["id"=>$affiliates]);
+                if(!$affiliate_laboratory){
+                    return $this->failedResponse(['message'=>['laboratories invalid']]);
+                }
                 $affiliated_id = $affiliate_laboratory->master->id;
             }
             $affiliate_product = $laboratory->master->affiliated_products()->where('id', $affiliated_id)->orWhere('pathname', $affiliates)->first();
