@@ -72,6 +72,7 @@ class UserProductController extends Controller
                     $laboratory = $product_data->laboratory;
                     if($laboratory){
                         $user->master_laboratories()->syncWithoutDetaching($laboratory->id);
+                        /*
                         if($laboratory->category == 3){
                             $affiliated_products = $product_data->affiliated_products;
                             foreach ($affiliated_products as $key => $affiliated_product) {
@@ -89,7 +90,7 @@ class UserProductController extends Controller
 
                                 $user_products[$affiliated_product->id] = ['deadline'=>$affiliated_deadline,'installed'=>$affiliated_installed];
                             }
-                        }
+                        }*/
                         $installed = 1;
                     }
                 }
@@ -134,7 +135,7 @@ class UserProductController extends Controller
                 $laboratory = $product->laboratory;
                 if($laboratory){
                     $user->master_laboratories()->syncWithoutDetaching($laboratory->id);
-                    $installed = 1;
+                    $installed = 1;/*
                     if($laboratory->category == 3){
                         $user_products = [];
                         $affiliated_products = $product_data->affiliated_products;
@@ -146,7 +147,7 @@ class UserProductController extends Controller
                             }
                         }
                         $user->products()->updateExistingPivot($user_products);
-                    }
+                    }*/
                 }
             }
         }else{
@@ -175,6 +176,7 @@ class UserProductController extends Controller
             if($laboratory){
                 $user->master_laboratories()->detach($laboratory->id);
                 $user->products()->updateExistingPivot($id,['installed'=>0]);
+                /*
                 if($laboratory->category == 3){
                     $user_products = [];
                     $affiliated_products = $product_data->affiliated_products;
@@ -186,7 +188,7 @@ class UserProductController extends Controller
                         }
                     }
                     $user->products()->updateExistingPivot($user_products);
-                }
+                }*/
             }
         }
         return $this->successResponse(['message'=>[$product->name.' uninstalled'],'install'=>0]);
@@ -223,6 +225,7 @@ class UserProductController extends Controller
             $deadline = $this->getExpiredDateBack($expiration, $old_deadline);
             
             if($product_data->category!=1){
+                /*
                 if($product_data->category == 3){
                     $affiliated_products = $product_data->affiliated_products;
                     foreach ($affiliated_products as $key => $affiliated_product) {
@@ -231,7 +234,7 @@ class UserProductController extends Controller
                         $affiliated_deadline = $this->getExpiredDateBack($expiration, $affiliated_old_deadline);
                         $user_products[$affiliated_product->id] = ['deadline'=>$affiliated_deadline];
                     }
-                }
+                }*/
             }
             $user_product = [];
             $user_product[$product_data->id] = ['deadline'=>$deadline]; 

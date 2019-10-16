@@ -91,10 +91,13 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 
 	Route::delete('/user/laboratories/{laboratory}/products','LaboratoryController@removeProducts')->name('laboratories.product.destroy');
 	Route::put('/user/laboratories/{laboratory}/products/sort','LaboratoryController@productSorted')->name('laboratories.product.sort');
+
 	Route::put('/user/laboratories/sort', 'LaboratoryController@sorted');
+	Route::get('/user/laboratories/{laboratory}/affiliates/{affiliated}', 'LaboratoryController@show');
 	Route::resource('/user/laboratories', 'LaboratoryController', ['only' => [
 			'index','show', 'store', 'update'
 		]]);
+
 	Route::delete('/user/laboratories/{laboratory?}','LaboratoryController@destroy')->name('laboratories.destroy');
 
 	Route::get('/user/laboratories/product/{pathname}','LaboratoryController@mapping')->name('laboratories.product.mapping');
@@ -415,6 +418,5 @@ Route::get('server/fixUserProductByOrder','Admin\ServerTaskController@fixUserPro
 
 Route::get('server/fixAdditionUserProducts','Admin\ServerTaskController@fixAdditionUserProducts');
 Route::get('server/fixProdcutCategory','Admin\ServerTaskController@fixProdcutCategory');
-
 Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\ServerTaskController@listProductPaymentUserByPlan');
-
+Route::get('server/updateSingleSetting', 'Admin\ServerTaskController@updateSingleSetting');

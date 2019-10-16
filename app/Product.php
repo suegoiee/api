@@ -12,7 +12,7 @@ class Product extends UanalyzeModel
 
     
     protected $fillable = [
-        'name','model','column','info_short','info_more','type','price','expiration','status','faq','pathname','seo','date_range', 'inflated','category'
+        'name','model','column','info_short','info_more','type','price','expiration','status','faq','pathname','seo','date_range', 'inflated','category', 'single_type','single_options'
     ];
     protected $appends = [ 'avatar_small', 'avatar_detail'];
 
@@ -34,7 +34,7 @@ class Product extends UanalyzeModel
     	return $this->belongsToMany('App\Product','product_collections','collection_id','product_id')->select(['id','name','column','model','type','product_collections.sort'])->withTimestamps()->withPivot('sort');
     }
     public function affiliated_products(){
-        return $this->belongsToMany('App\Product','affiliated_product','affiliated_product_id','product_id')->select(['id','name','column','model','type','affiliated_product.sort'])->withTimestamps()->withPivot('sort');
+        return $this->belongsToMany('App\Product','affiliated_product','affiliated_product_id','product_id')->select(['id','name','column','model','type','affiliated_product.sort'])->orderBy('affiliated_product.sort','asc')->withTimestamps()->withPivot('sort');
     }
 
     public function tags()

@@ -75,6 +75,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category','single_options', 'single_type']);
         $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category']);
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
@@ -185,7 +186,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range', 'inflated', 'category']);
+        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range', 'inflated', 'category','single_options', 'single_type']);
         
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
@@ -270,7 +271,9 @@ class ProductController extends Controller
             $update_affiliated_products[$affiliated_product] = ['sort' => $key];
         }
         $product->affiliated_products()->sync($update_affiliated_products);
-        
+
+        $this->productUpdated($product);
+
         return $this->successResponse($product?$product:[]);
     }
 
@@ -358,6 +361,7 @@ class ProductController extends Controller
                 $collections_ids[$collection_product->id] = ['sort'=>$collection_sort];           
             }
             $laboratory->products()->sync($collections_ids);
+
             return $laboratory;
         }
         return false;
