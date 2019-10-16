@@ -14,9 +14,9 @@ final class OrderCourse extends UanalyzeModel
      */
     protected $table = self::TABLE;
 
-    public function user()
+    public function students()
     {
-        return $this->hasOneThrough('App/User', 'App/Order', 'user_id');
+        return $this->hasMany('App/Order', 'order_id');
     }
 
     /*public function user()

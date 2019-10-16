@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
 use App\Repositories\TagRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\PlanRepository;
+use App\Repositories\OrderRepository;
 use App\Repositories\ExpertRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\OrderCourseRepository;
 use App\Repositories\PhysicalCourseRepository;
 
@@ -19,7 +22,7 @@ class PhysicalCourseController extends AdminController
 
     protected $PhysicalCourseRepository;
 
-    public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository, PlanRepository $planRepository, OrderCourseRepository $OrderCourseRepository)
+    public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository, PlanRepository $planRepository, OrderCourseRepository $OrderCourseRepository, UserRepository $UserRepository, OrderRepository $OrderRepository, ProfileRepository $ProfileRepository)
     {
         parent::__construct($request);
         $this->moduleName = 'physical_course';
@@ -29,6 +32,9 @@ class PhysicalCourseController extends AdminController
         $this->expertRespository = $expertRespository;
         $this->planRepository = $planRepository;
         $this->OrderCourseRepository = $OrderCourseRepository;
+        $this->UserRepository = $UserRepository;
+        $this->OrderRepository = $OrderRepository;
+        $this->ProfileRepository = $ProfileRepository;
     }
 
     public function index()
@@ -125,8 +131,17 @@ class PhysicalCourseController extends AdminController
 
     public function edit($id)
     {
-        $product =  $this->PhysicalCourseRepository->getWith($id,['tags', 'experts', 'plan']);
-        $students = $this->OrderCourseRepository->getWith(['user']);
+        $product =  $this->PhysicalCourseRepository->getWith($id,['tags', 'experts', 'plan', 'orderCourse']);
+        $students = array();
+        foreach($product->orderCourse as $orderCourse){
+            $user = $this->UserRepository->getWith($this->OrderRepository->getWith($orderCourse->order_id)->user_id);
+            $user->quantity = $orderCourse->quantity;
+            $user->source = $orderCourse->source;
+            $user->remarks = $orderCourse->remarks;
+            $user->paid = $orderCourse->paid;
+            //dd($user, $orderCourse);
+            array_push($students, $user);
+        }
         if($product['date']){
             $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
             $product['date'] = $dt->format('Y-m-d\TH:i:s');
@@ -141,7 +156,7 @@ class PhysicalCourseController extends AdminController
             'tags'=>$this->tagRepository->gets(),
             'experts'=>$this->expertRespository->gets(),
             'data' => $product,
-            'students' => $students,
+            'students' => $students
         ];
         return view('admin.form', $data);
     }

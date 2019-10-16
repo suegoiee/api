@@ -4,6 +4,7 @@ namespace App;
 
 use App\Tag;
 use App\Expert;
+use App\OrderCourse;
 use App\UanalyzeModel;
 
 final class PhysicalCourse extends UanalyzeModel
@@ -46,5 +47,9 @@ final class PhysicalCourse extends UanalyzeModel
 
     public function plan(){
         return $this->morphToMany(Plan::class, 'planable');
+    }
+
+    public function orderCourse(){
+        return $this->HasMany(OrderCourse::class, 'course_id');
     }
 }

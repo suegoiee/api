@@ -33,5 +33,6 @@ return [
         'image_tab'=>'課程圖片',
         'electric_ticket_tab'=>'電子票券內容',
         'plan_tab'=>'課程方案',
+        'list_tab'=>'上課名單',
 	],
 ];
