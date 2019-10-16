@@ -6,7 +6,7 @@ use App\UanalyzeModel;
 class Product_price extends UanalyzeModel
 {
     protected $fillable = [
-        'price','expiration','active', 'introduction','freecourses', 'product_id'
+        'price','expiration','active', 'introduction','freecourses', 'product_id', 'name'
     ];
     protected $hidden = [
         'created_at','updated_at','active'

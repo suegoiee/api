@@ -5,6 +5,7 @@
     <li role="presentation" class="nav-item"><a class="nav-link" href="#suitable_tab" aria-controls="suitable" role="tab" data-toggle="tab">{{trans($module_name.'.admin.suitable_tab')}}</a></li>
     <li role="presentation" class="nav-item"><a class="nav-link" href="#electric_ticket_tab" aria-controls="electric_ticket" role="tab" data-toggle="tab">{{trans($module_name.'.admin.electric_ticket_tab')}}</a></li>
     <li role="presentation" class="nav-item"><a class="nav-link" href="#image_tab" aria-controls="image" role="tab" data-toggle="tab">{{trans($module_name.'.admin.image_tab')}}</a></li>
+    <li role="presentation" class="nav-item"><a class="nav-link" href="#list_tab" aria-controls="list" role="tab" data-toggle="tab">{{trans($module_name.'.admin.list_tab')}}</a></li>
 </ul>
 <div class="tab-content py-3">
     <div role="tabpanel" class="tab-pane fade show active" id="physical_course_tab">
@@ -24,5 +25,8 @@
     </div>
     <div role="tabpanel" class="tab-pane fade" id="image_tab"> 
         @include('admin.physical_course.image_form')
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="list_tab"> 
+        @include('admin.physical_course.list_form')
     </div>
 </div>

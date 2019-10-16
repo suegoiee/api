@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
 use App\Repositories\TagRepository;
 use App\Repositories\PlanRepository;
 use App\Repositories\ExpertRepository;
+use App\Repositories\OrderCourseRepository;
 use App\Repositories\PhysicalCourseRepository;
 
 class PhysicalCourseController extends AdminController
@@ -18,7 +19,7 @@ class PhysicalCourseController extends AdminController
 
     protected $PhysicalCourseRepository;
 
-    public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository, PlanRepository $planRepository)
+    public function __construct(Request $request, PhysicalCourseRepository $PhysicalCourseRepository, TagRepository $tagRepository, ExpertRepository $expertRespository, PlanRepository $planRepository, OrderCourseRepository $OrderCourseRepository)
     {
         parent::__construct($request);
         $this->moduleName = 'physical_course';
@@ -27,6 +28,7 @@ class PhysicalCourseController extends AdminController
         $this->tagRepository = $tagRepository;
         $this->expertRespository = $expertRespository;
         $this->planRepository = $planRepository;
+        $this->OrderCourseRepository = $OrderCourseRepository;
     }
 
     public function index()
@@ -40,7 +42,7 @@ class PhysicalCourseController extends AdminController
             'table_head' =>['id','name','date', 'location','quota'],
             'table_formatter' =>[''],
         ];
-        return view('admin.list',$data);
+        return view('admin.list', $data);
     }
 
     public function create()
@@ -124,6 +126,7 @@ class PhysicalCourseController extends AdminController
     public function edit($id)
     {
         $product =  $this->PhysicalCourseRepository->getWith($id,['tags', 'experts', 'plan']);
+        $students = $this->OrderCourseRepository->getWith(['user']);
         if($product['date']){
             $dt = Carbon::createFromFormat('Y-m-d H:i:s', $product['date']);
             $product['date'] = $dt->format('Y-m-d\TH:i:s');
@@ -138,8 +141,9 @@ class PhysicalCourseController extends AdminController
             'tags'=>$this->tagRepository->gets(),
             'experts'=>$this->expertRespository->gets(),
             'data' => $product,
+            'students' => $students,
         ];
-        return view('admin.form',$data);
+        return view('admin.form', $data);
     }
     
     protected function referrerCreateValidator(array $data)
