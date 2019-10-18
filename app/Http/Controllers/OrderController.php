@@ -319,6 +319,23 @@ class OrderController extends Controller
 
         return $this->successResponse($order?$order:[]);
     }
+    public function getpreOrder(Request $request, $product_id, $plan_id){
+        $order = $user->orders()->whereHas('products',function($query) use ($product_id){
+            $query->where('id', $product_id);
+        })->where('status', 1)->orderBy('created_at','DESC')->first();
+        if($order){
+            $order_product = $order->products()->find($product->id);
+            $order_quantity = $order_product->pivot->quantity;
+            $order_price = $order_product->pivot->unit_price;
+            $order_plan = $order_product->pivot->plan;
+        }
+        $product = $user->products()->with('plans')->find($product_id);
+        if(!$product || ($product && strtotime($product->pivot->deadline) >= time())){
+            $product = $this->productRepository->getBy(['id'=>$product_id,'status'=>1]);
+        }
+
+        return $this->successResponse(["product"=> $product, "price"=>$order_price, "plan"=>$order_plan]);
+    }
     public function renew(Request $request){
         $user = $request->user();
         $product_id = $request->input('product',0);
@@ -595,6 +612,15 @@ class OrderController extends Controller
         if(count($products)>0){
             foreach ($products as $key => $product_id) {
                 $product = $this->productRepository->get($product_id['id']);
+                $order = $user->orders()->whereHas('products',function($query) use ($product_id){
+                    $query->where('id', $product_id);
+                })->where('status', 1)->orderBy('created_at','DESC')->first();
+                if($order){
+                    $order_product = $order->products()->find($product->id);
+                    $order_quantity = $order_product->pivot->quantity;
+                    $order_price = $order_product->pivot->unit_price;
+                    $order_plan = $order_product->pivot->plan;
+                }
                 if(!$product){
                      return $this->failedResponse(['message'=>['The selected products is invalid.']]);
                 }
