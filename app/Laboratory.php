@@ -35,7 +35,7 @@ class Laboratory extends UanalyzeModel
     }
     public function getMasterAttribute()
     {
-        $collection = $this->product()->with(['affiliated_products','affiliated_products.laboratory'])->first();
+        $collection = $this->product()->with(['affiliated_products','affiliated_products.laboratory','experts'])->first();
         if(!$collection){
             return null;
         }

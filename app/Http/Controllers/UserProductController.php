@@ -55,6 +55,7 @@ class UserProductController extends Controller
         $result = [];
         foreach ($_products as $key => $product) {
             $quantity = isset($product['quantity'])? (int)$product['quantity'] : 1;
+            $plan = isset($product['plan'])? $product['plan'] : 0;
             $product_data = $this->productRepository->get($product["id"]);
 
             $old_product = $user->products()->where('id',$product["id"])->first();
@@ -62,7 +63,11 @@ class UserProductController extends Controller
             if($assigned){
                 $expiration = $quantity;
             }else{
-                $product_plan = $product_data->plans()->where('expiration', $quantity)->where('active',1)->first();
+                if($plan){
+                    $order_plan = $product_data->plans()->where('id', $plan)->where('active',1)->first();
+                }else{
+                    $order_plan = $product_data->plans()->where('expiration',$quantity)->where('active',1)->first();
+                }
                 $expiration = $product_plan->expiration;
             }
             $deadline = $this->getExpiredDate($expiration, $old_deadline);
@@ -94,10 +99,10 @@ class UserProductController extends Controller
                         $installed = 1;
                     }
                 }
-            $user_products[$product_data->id] = ['deadline'=>$deadline,'installed'=>$installed];
+            $user_products[$product_data->id] = ['deadline'=>$deadline, 'installed'=>$installed, 'plan'=>$plan];
             $user->products()->syncWithoutDetaching($user_products);
             
-            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed,'msg'=>$expiration]);
+            array_push($result,['id'=>$product_data->id, 'deadline'=>$deadline, 'installed'=>$installed,'msg'=>$expiration, 'plan'=>$plan]);
         }
 
         return $this->successResponse($result);
@@ -111,6 +116,7 @@ class UserProductController extends Controller
         }])->find($id);
         $product->installed = $product->pivot->installed;
         $product->deadline = $product->pivot->deadline ? $product->pivot->deadline:0;
+        $product->plan = $product->pivot->plan ? $product->pivot->plan:0;
         $product->sort = $product->pivot->sort;
 
         return $this->successResponse($product?$product->makeHidden(['model','column','info_short','info_more','expiration','status','faq','created_at', 'updated_at', 'deleted_at' , 'avatar_detail','pivot','price']):[]);
@@ -201,7 +207,7 @@ class UserProductController extends Controller
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        $request_data = $request->only(['deadline','installed','sort']);
+        $request_data = $request->only(['deadline','installed','sort','plan']);
         $data = array_filter($request_data, function($item){return $item!=null;});
         $request->user()->products()->updateExistingPivot($id, $data);
 
@@ -216,11 +222,18 @@ class UserProductController extends Controller
         $result = [];
         foreach ($_products as $key => $product) {
             $quantity = isset($product['quantity'])? (int)$product['quantity'] : 1;
+            $plan = isset($product['plan'])? $product['plan'] : 0;
+            $expiration = $quantity;
             $product_data = $this->productRepository->get($product["id"]);
+            if($plan){
+                $order_plan = $product_data->plans()->where('id', $plan)->where('active',1)->first();
+                if($order_plan){
+                    $expiration = $order_plan->expiration;
+                }
+            }
 
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            $expiration = $quantity;
             
             $deadline = $this->getExpiredDateBack($expiration, $old_deadline);
             

@@ -53,9 +53,10 @@ class OrderController extends Controller
                 if($quantity === false ){
                     return $this->failedResponse(['message'=>['The quantity is required']]);
                 }
+                $product_plan = $request->input('product_plan', false);
                 $temp_products = [];
                 foreach ($products as $key => $product_id) {
-                    array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key]]);
+                    array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key], 'plan'=>$product_plan ? $product_plan[$key]: '0']);
                     $product = $this->productRepository->get($product_id);
                     if(!$product){
                         return $this->failedResponse(['message'=>['The selected products is invalid.']]);
@@ -79,7 +80,6 @@ class OrderController extends Controller
         $request_data['invoice_type'] =  $request->input('invoice_type',0);
         $request_data['referrer_code'] = isset($request_data['referrer_code']) ? $request_data['referrer_code'] :  '';
         $product_ids = [];
-        $product_data = [];
         $product_free = [];
         $order_price = 0;
         foreach($products as $key => $value) {
@@ -88,23 +88,51 @@ class OrderController extends Controller
                 return $this->failedResponse(['message'=>['The selected products is invalid.']]);
             }
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-            $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
+            $plan = isset($value['plan']) ? $value['plan'] : 0;
+
+            $order = $user->orders()->whereHas('products',function($query) use ($value){
+                    $query->where('id', $value['id']);
+            })->where('status', 1)->orderBy('created_at','DESC')->first();
+            if($order){
+                $user_product = $user->products()->find($product['id']);
+                if(strtotime($user_product->pivot->deadline) >= time()){
+                    $order_product = $order->products()->find($product['id']);
+                    $quantity = $order_product->pivot->quantity;
+                    $unit_price = $order_product->pivot->unit_price;
+                    $plan = $order_product->pivot->plan;
+                    $products[$key]['unit_price'] = $unit_price;
+                    $products[$key]['quantity'] = $quantity;
+                    $products[$key]['plan'] = $plan;
+                    $products[$key]['is_renew'] = true;
+                }else{
+                    $products[$key]['is_renew'] = false;
+                }
+            }else{
+                $products[$key]['is_renew'] = false;
+            }
+
+            if($plan){
+                $order_plan = $product->plans()->where('id', $plan)->where('active',1)->first();
+            }else{
+                $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
+            }
+
+            $order_plan_price = $products[$key]['is_renew'] ? $unit_price : $order_plan->price;
             if(!$order_plan){
                 return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
-            $order_price += $order_plan->price;
-            if($order_plan->price==0){
-                array_push($product_free,['id'=>$product->id, 'quantity'=>$quantity]);
+
+            $order_price += $order_plan_price;
+            if($order_plan_price==0){
+                array_push($product_free,['id'=>$product->id, 'quantity'=>$quantity, 'plan'=>$plan ? $plan : '0']);
             }
-            $product_ids[$value['id']] = ['unit_price'=>$order_plan->price , 'quantity' => $quantity];
-            $product_collect = collect($product);
-            $product_collect->put('quantity', $quantity);
-            array_push($product_data, $product_collect);
+
+            $product_ids[$value['id']] = ['unit_price'=>$order_plan_price , 'quantity' => $quantity, 'plan'=>$plan ? $plan : '0'];
         }
         $promocodes = $request->input('promocodes',[]);
         $promocode_ids = [];
         $trail_result = $this->getOrderTrail($user, $products, $promocodes);
-        if(isset($trail_result['error'])){
+        if(!$trail_result){
             return $this->failedResponse(['message'=>['product plan is not exists']]);
         }
         foreach ($trail_result['promocodes'] as $key => $value) {
@@ -122,7 +150,7 @@ class OrderController extends Controller
         if($order_price == 0){
             $product_pass=[];
             foreach ($product_ids as $key => $product) {
-                array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity']]);
+                array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity'], 'plan'=>$product['plan']]);
             }
             $bonus_products = $this->checkEvents($product_pass);
             if(count($bonus_products)>0){
@@ -215,9 +243,9 @@ class OrderController extends Controller
             $condition_products = [];
             foreach ($order_products as $key => $product) {
                 if($product->pivot->unit_price>0){
-                    array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
+                    array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity, 'plan'=>$product->pivot->plan]);
                 }
-                array_push($condition_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
+                array_push($condition_products, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity, 'plan'=>$product->pivot->plan]);
             }
             $bonus_products = $this->checkEvents($condition_products);
             if(count($bonus_products)>0){
@@ -308,7 +336,7 @@ class OrderController extends Controller
             $product_data = [];
             foreach ($order_products as $key => $product) {
                 if($product->pivot->unit_price>0){
-                    array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity]);
+                    array_push($product_data, ['id'=>$product->id, 'quantity'=>$product->pivot->quantity, 'plan'=>$product->pivot->plan]);
                 }
             }
             if(count($product_data)>0){
@@ -319,109 +347,7 @@ class OrderController extends Controller
 
         return $this->successResponse($order?$order:[]);
     }
-    public function getpreOrder(Request $request, $product_id, $plan_id){
-        $order = $user->orders()->whereHas('products',function($query) use ($product_id){
-            $query->where('id', $product_id);
-        })->where('status', 1)->orderBy('created_at','DESC')->first();
-        if($order){
-            $order_product = $order->products()->find($product->id);
-            $order_quantity = $order_product->pivot->quantity;
-            $order_price = $order_product->pivot->unit_price;
-            $order_plan = $order_product->pivot->plan;
-        }
-        $product = $user->products()->with('plans')->find($product_id);
-        if(!$product || ($product && strtotime($product->pivot->deadline) >= time())){
-            $product = $this->productRepository->getBy(['id'=>$product_id,'status'=>1]);
-        }
-
-        return $this->successResponse(["product"=> $product, "price"=>$order_price, "plan"=>$order_plan]);
-    }
-    public function renew(Request $request){
-        $user = $request->user();
-        $product_id = $request->input('product',0);
-        $product = $user->products()->find($product_id);
-        if(!$product){
-            return $this->failedResponse(['message'=>['The product not yet purchased']]);
-        }
-        if(strtotime($product->pivot->deadline) < time()){
-            return $this->failedResponse(['message'=>['No unexpired product to renew']]);
-        }
-        $order = $user->orders()->whereHas('products',function($query) use ($product_id){
-            $query->where('id', $product_id);
-        })->where('status', 1)->orderBy('created_at','DESC')->first();
-        if(!$order){
-            return $this->failedResponse(['message'=>['No order to renew']]);
-        }
-        $request_data = $request->only(['memo', 'invoice_name', 'invoice_phone', 'invoice_address', 'company_id', 'invoice_title', 'paymentType', 'LoveCode', 'referrer_code']);
-        $request_data['paymentType'] = isset($request_data['paymentType']) ? $request_data['paymentType'] : ''; 
-        $request_data['use_invoice'] = '2'; //$request->input('use_invoice',2);
-        $request_data['invoice_type'] =  $request->input('invoice_type',0);
-        $product_ids = [];
-        $product_free = [];
-        $order_product = $order->products()->find($product->id);
-        $quantity = $order_product->pivot->quantity;
-        $product_price = $order_product->pivot->unit_price;
-        $order_price = $product_price;
-        if($product_price==0){
-            array_push($product_free,['id'=>$product->id, 'quantity'=>$quantity]);
-        }
-        $product_ids[$product->id] = ['unit_price'=>$product_price , 'quantity' => $quantity];
-        $product = collect($product);
-        $product->put('quantity', $quantity);
-        $product->put('unit_price', $product_price);
-
-        $promocodes = $request->input('promocodes',[]);
-        $promocode_ids = [];
-        $trail_result = $this->getOrderTrail($user, [$product], $promocodes, true);
-        if(isset($trail_result['error'])){
-            return $this->failedResponse(['message'=>['product plan is not exists']]);
-        }
-        foreach ($trail_result['promocodes'] as $key => $value) {
-            if(!isset($value['error'])){
-                $promocode = $this->promocodeRepository->getBy(['code'=>$key]);
-                if($promocode->type==1){
-                    $this->promocodeRepository->update($promocode->id, ['used_at'=> date('Y-m-d H:i:s')]);
-                }else{
-                    $promocode->used()->attach($user->id);
-                }
-                $promocode_ids[$promocode->id] = ['overflow_offer'=>(isset($value['overflow_offer']) ? $value['overflow_offer'] : 0)];
-            }
-        }
-        $order_price = $trail_result['total_price'];
-        if($order_price == 0){
-            $product_pass=[];
-            foreach ($product_ids as $key => $product) {
-                array_push($product_pass, ['id'=>$key, 'quantity'=>$product['quantity']]);
-            }
-            $bonus_products = $this->checkEvents($product_pass);
-            if(count($bonus_products)>0){
-                array_push($product_pass, ...$bonus_products);
-            }
-            $result = $this->addProducts($request, $user->id, $product_pass);
-        }else{
-            if(count($product_free)>0){
-                $result = $this->addProducts($request, $user->id, $product_free);
-            }
-
-        }
-        $request_data['price'] = $order_price;
-        $order = $user->orders()->create($request_data);
-        $order->products()->attach($product_ids);
-        $order->promocodes()->attach($promocode_ids);
-        
-        if($order_price>0){
-            $ecpay_form = $this->ecpay_form($order);
-            $order['form_html'] = $ecpay_form;
-        }
-
-        if($order_price==0){
-            $this->orderRepository->update($order->id, ['status'=>1]);
-        }
-        foreach ($order->products as $key => $product) {
-            $product->quantity = $product->pivot->quantity;
-        }
-        return $this->successResponse($order?$order->makeHidden('user'):[]);
-    }
+   
     protected function orderValidator(array $data)
     {
         return Validator::make($data, [
@@ -612,15 +538,6 @@ class OrderController extends Controller
         if(count($products)>0){
             foreach ($products as $key => $product_id) {
                 $product = $this->productRepository->get($product_id['id']);
-                $order = $user->orders()->whereHas('products',function($query) use ($product_id){
-                    $query->where('id', $product_id);
-                })->where('status', 1)->orderBy('created_at','DESC')->first();
-                if($order){
-                    $order_product = $order->products()->find($product->id);
-                    $order_quantity = $order_product->pivot->quantity;
-                    $order_price = $order_product->pivot->unit_price;
-                    $order_plan = $order_product->pivot->plan;
-                }
                 if(!$product){
                      return $this->failedResponse(['message'=>['The selected products is invalid.']]);
                 }
@@ -632,9 +549,10 @@ class OrderController extends Controller
                 if($quantity === false ){
                     return $this->failedResponse(['message'=>['The quantity is required']]);
                 }
+                $plan = $request->input('product_plan', false);
                 $temp_products = [];
                 foreach ($products as $key => $product_id) {
-                    array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key]]);
+                    array_push($temp_products,['id'=>$product_id, 'quantity'=>$quantity[$key], 'plan'=>$plan ? $plan[$key]:'0']);
                     $product = $this->productRepository->get($product_id);
                     if(!$product){
                         return $this->failedResponse(['message'=>['The selected products is invalid.']]);
@@ -645,6 +563,28 @@ class OrderController extends Controller
                 }
             }else{
                 return $this->failedResponse(['message'=>['The product is required']]);
+            }
+        }
+        foreach ($products as $key => $product) {
+            $order = $user->orders()->whereHas('products',function($query) use ($product){
+                    $query->where('id', $product['id']);
+            })->where('status', 1)->orderBy('created_at','DESC')->first();
+            if($order){
+                $user_product = $user->products()->find($product['id']);
+                if(strtotime($user_product->pivot->deadline) >= time()){
+                    $order_product = $order->products()->find($product['id']);
+                    $quantity = $order_product->pivot->quantity;
+                    $unit_price = $order_product->pivot->unit_price;
+                    $plan = $order_product->pivot->plan;
+                    $products[$key]['unit_price'] = $unit_price;
+                    $products[$key]['quantity'] = $quantity;
+                    $products[$key]['plan'] = $plan;
+                    $products[$key]['is_renew'] = true;
+                }else{
+                    $products[$key]['is_renew'] = false;
+                }
+            }else{
+                $products[$key]['is_renew'] = false;
             }
         }
         $promocode_codes = $request->input('promocodes',[]);
@@ -687,7 +627,7 @@ class OrderController extends Controller
         }
         return $check_order;
     }
-    function getOrderTrail($user, $products, $promocode_codes, $is_renew=false)
+    function getOrderTrail($user, $products, $promocode_codes)
     {
         $products_data = collect($products);
         $product_ids = $products_data->map(function($item, $key){return $item['id'];})->toArray();
@@ -695,7 +635,7 @@ class OrderController extends Controller
         $product_promocodes = [];
         $order_promocodes = [];
         $order_offer = 0;
-        $result = ['origin_price'=>0, 'total_price'=>0, 'promocodes'=>[]];
+        $result = ['origin_price'=>0, 'total_price'=>0, 'promocodes'=>[], 'product_plans'=>[]];
         foreach ($promocode_codes as $key => $promocode_code) {
             if(!$this->promocodeRepository->check($user->id, $promocode_code)){
                 $result['promocodes'][$promocode_code]=[ 'msg' => 'not exists','error'=>1];
@@ -735,19 +675,25 @@ class OrderController extends Controller
             }
         }
         foreach ($products as $key => $value) {
-            array_push($product_ids, $value['id']);
             $product = $this->productRepository->getWith($value['id'],['collections']);
             if($product){
                 $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
-                if($is_renew){
-                    $product_price = $value['unit_price'];
+                $plan = isset($value['plan']) ? $value['plan'] : 0;
+                if($plan){
+                    $product_plan = $product->plans()->where('id', $plan)->where('active',1)->first();
                 }else{
                     $product_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
-                    if(!$product_plan){
-                        return false;
-                    }
+                }
+                if(!$product_plan){
+                    return false;
+                }
+                if(isset($value['is_renew']) && $value['is_renew']){
+                    $product_price = $value['unit_price'];
+                    $product_plan->off_price = $value['unit_price'];
+                }else{
                     $product_price = $product_plan->price;
                 }
+                $result['product_plans'][$product->id] = $product_plan;
                 $result['total_price'] += $product_price;
                 $result['origin_price'] += $product_price;
                 $min_diff = PHP_INT_MAX;//$product_price;
