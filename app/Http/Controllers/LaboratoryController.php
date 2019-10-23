@@ -138,7 +138,7 @@ class LaboratoryController extends Controller
             $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
             if($collect_product){
                 $laboratory->deadline = $deadline ? $deadline : 0;
-                $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
+                $laboratory->available = $deadline == 0 || $laboratory->category == 0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
             }else{
                 $laboratory->available = 1;
             }

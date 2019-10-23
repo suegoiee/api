@@ -60,16 +60,9 @@ class UserProductController extends Controller
 
             $old_product = $user->products()->where('id',$product["id"])->first();
             $old_deadline = $old_product ? $old_product->pivot->deadline : 0;
-            if($assigned){
-                $expiration = $quantity;
-            }else{
-                if($plan){
-                    $order_plan = $product_data->plans()->where('id', $plan)->where('active',1)->first();
-                }else{
-                    $order_plan = $product_data->plans()->where('expiration',$quantity)->where('active',1)->first();
-                }
-                $expiration = $product_plan->expiration;
-            }
+            
+            $expiration = $quantity;
+
             $deadline = $this->getExpiredDate($expiration, $old_deadline);
             $installed = $old_product ? $old_product->pivot->installed : 0;
             $user_products = [];

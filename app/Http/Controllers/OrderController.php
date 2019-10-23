@@ -93,6 +93,7 @@ class OrderController extends Controller
             $order = $user->orders()->whereHas('products',function($query) use ($value){
                     $query->where('id', $value['id']);
             })->where('status', 1)->orderBy('created_at','DESC')->first();
+
             if($order){
                 $user_product = $user->products()->find($product['id']);
                 if(strtotime($user_product->pivot->deadline) >= time()){
@@ -101,7 +102,6 @@ class OrderController extends Controller
                     $unit_price = $order_product->pivot->unit_price;
                     $plan = $order_product->pivot->plan;
                     $products[$key]['unit_price'] = $unit_price;
-                    $products[$key]['quantity'] = $quantity;
                     $products[$key]['plan'] = $plan;
                     $products[$key]['is_renew'] = true;
                 }else{
@@ -117,10 +117,16 @@ class OrderController extends Controller
                 $order_plan = $product->plans()->where('expiration',$quantity)->where('active',1)->first();
             }
 
-            $order_plan_price = $products[$key]['is_renew'] ? $unit_price : $order_plan->price;
             if(!$order_plan){
                 return $this->failedResponse(['message'=>['product plan is not exists']]);
             }
+
+            $quantity = $products[$key]['is_renew'] ? $quantity : $order_plan->expiration;
+            
+            $products[$key]['quantity'] = $quantity;
+
+            $order_plan_price = $products[$key]['is_renew'] ? $unit_price : $order_plan->price;
+            
 
             $order_price += $order_plan_price;
             if($order_plan_price==0){
