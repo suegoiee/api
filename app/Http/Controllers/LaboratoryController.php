@@ -149,7 +149,8 @@ class LaboratoryController extends Controller
             if(!$laboratory->customized){
                 $product->installed = 1;
                 $product->deadline = $deadline ? $deadline : 0;
-                $product->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
+                $product->available = $deadline == 0 || $laboratory->category== 0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
+
             }else{
                 $product->installed = $product_user ? $product_user->pivot->installed : 0;
                 $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
