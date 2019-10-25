@@ -18,7 +18,7 @@ $(function(){
     CKEDITOR.config.removeButtons='About',
     CKEDITOR.config.extraPlugins = 'youtube';
     $('#collections').multiSelect({
-        keepOrder: true,
+        keepOrder: false,
         selectableHeader: "<div class='text-center'>可選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         afterInit: function(ms){
@@ -56,7 +56,7 @@ $(function(){
     });
 
     $('#affiliated_products').multiSelect({
-        keepOrder: true,
+        keepOrder: false,
         selectableHeader: "<div class='text-center'>可選附屬產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         selectionHeader: "<div class='text-center'>已選附屬產品</div><input type='text' class='form-control' autocomplete='off' placeholder='Search'>",
         afterInit: function(ms){
