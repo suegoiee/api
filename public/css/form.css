@@ -73,6 +73,9 @@ table .remove{
 table .remove:hover{
 	color: RED;
 }
+#form .ms-container{
+	width: 100%;
+}
 @media (max-width: 768px) {
 	.form-control-label{
 		text-align: left;
