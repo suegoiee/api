@@ -106,7 +106,7 @@ class LaboratoryController extends Controller
     public function show(Request $request, $id, $affiliates=false)
     {
         $user = $request->user();
-        $deadline = date('Y-m-d H:i:s');
+        $deadline = date('Y-m-d H:i:s', strtotime('today +1 day'));
         $available = 0;
         if(is_numeric($id)){
             $laboratory = $this->laboratoryRepository->getBy(["id"=>$id], ['products','products.collections']);
