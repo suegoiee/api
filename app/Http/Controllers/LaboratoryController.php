@@ -127,8 +127,9 @@ class LaboratoryController extends Controller
                 $laboratory->deadline = $deadline;
                 $laboratory->available = $available;
             }else{
-                $laboratory->available = 0;
-                $available = 0;
+                $available = $laboratory->category == 0 ? 1 : 0 ;
+                $laboratory->available = $available;
+                $available = $available;
             }
         }
 
