@@ -131,6 +131,9 @@ class LaboratoryController extends Controller
                 $laboratory->available = $available;
                 $available = $available;
             }
+        }else{
+            $laboratory->available = 1;
+            $available = 1;
         }
 
         if($affiliates){
