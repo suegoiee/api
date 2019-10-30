@@ -5,6 +5,8 @@
 @if($data && $data->plans->count()!=0)
     <div id="solutions">
     @foreach( $data->plans as $key => $plan )
+    <button data-toggle="collapse" data-target="#drop{{$plan->id}}" class="btn">{{$plan->name ? $plan->name : '方案'.$key}}</button>
+    <div id="drop{{$plan->id}}" class="collapse">
         <div  class="form-group row">
             <div class="col-sm-10 ">
                 <div class="form-group row name_container">
@@ -77,6 +79,7 @@
                 <button class="btn btn-danger remove_btn" type="button" value="{{$plan->id}}"><span class="oi oi-trash"></span></button>
             </div>
         </div>
+    </div>
     @endforeach  
     </div>
 @endif
