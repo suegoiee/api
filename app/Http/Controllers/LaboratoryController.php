@@ -106,7 +106,8 @@ class LaboratoryController extends Controller
     public function show(Request $request, $id, $affiliates=false)
     {
         $user = $request->user();
-
+        $deadline = date('Y-m-d H:i:s', strtotime('today +1 day'));
+        $available = 0;
         if(is_numeric($id)){
             $laboratory = $this->laboratoryRepository->getBy(["id"=>$id], ['products','products.collections']);
             if( ($laboratory && $laboratory->category != 0) && !$user->master_laboratories()->where("id", $id)->count() && !$user->laboratories()->where("id", $id)->count()){
@@ -118,6 +119,23 @@ class LaboratoryController extends Controller
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
         }
+        if(!$laboratory->customized){
+            $collect_product = $user->products()->find($laboratory->product_id);
+            if($collect_product){
+                $deadline = $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
+                $available = $deadline == 0 || $laboratory->category == 0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
+                $laboratory->deadline = $deadline;
+                $laboratory->available = $available;
+            }else{
+                $available = $laboratory->category == 0 ? 1 : 0 ;
+                $laboratory->available = $available;
+                $available = $available;
+            }
+        }else{
+            $laboratory->available = 1;
+            $available = 1;
+        }
+
         if($affiliates){
             $affiliated_id = $affiliates;
             if(is_numeric($affiliates)){
@@ -129,28 +147,23 @@ class LaboratoryController extends Controller
             }
             $affiliate_product = $laboratory->master->affiliated_products()->where('id', $affiliated_id)->orWhere('pathname', $affiliates)->first();
             $laboratory = $affiliate_product->laboratory()->with(['products','products.collections','products.faqs'])->first();
+
+            if(!$laboratory->customized){
+                $laboratory->deadline = $deadline;
+                $laboratory->available = $available;
+            }
         }
         
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
 
-        if(!$laboratory->customized){
-            $collect_product = $user->products()->find($laboratory->product_id);
-            $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
-            if($collect_product){
-                $laboratory->deadline = $deadline ? $deadline : 0;
-                $laboratory->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
-            }else{
-                $laboratory->available = 1;
-            }
-        }
-
         foreach ($laboratory->products as $product) {
-            $product_user = $product->users()->find($user->id);
-            if(!$laboratory->customized){
+            if(!$laboratory->customized || $affiliates){
                 $product->installed = 1;
-                $product->deadline = $deadline ? $deadline : 0;
-                $product->available = $deadline==0 ? 1 : ((time() <= strtotime($deadline)) ? 1 : 0);
+                $product->deadline = $deadline;
+                $product->available = $available;
             }else{
+                $product_user = $product->users()->find($user->id);
+                
                 $product->installed = $product_user ? $product_user->pivot->installed : 0;
                 $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
                 $product->available = $product->deadline == 0 ? 1 :((time() <= strtotime($product->deadline)) ? 1 : 0);

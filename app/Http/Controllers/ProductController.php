@@ -163,7 +163,6 @@ class ProductController extends Controller
             $product->owned = 0;
         }
         $product->makeHidden(['status', 'created_at', 'updated_at', 'deleted_at','price','expiration','users']);
-        $product->plans->makeHidden('id');
         return $this->successResponse($product);
     }
 

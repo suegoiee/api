@@ -85,7 +85,7 @@ $(function(){
         afterSelect: function(value){
             this.qs1.cache();
             this.qs2.cache();
-            //this.$element.find('[value='+value+']').insertAfter($('#affiliated_products :last-child'));
+            this.$element.find('[value='+value+']').insertAfter($('#affiliated_products :last-child'));
         },
         afterDeselect: function(){
             this.qs1.cache();

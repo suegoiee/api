@@ -25,7 +25,7 @@ class Repository
 				$query = $query->where($key,$value);
 			}
 		}
-		return $query->orderBy('created_at','DESC')->first();
+		return $query->orderBy('created_at','DESC')->orderBy('updated_at','DESC')->first();
 	}
 	public function gets($select=false){
 		if($select){

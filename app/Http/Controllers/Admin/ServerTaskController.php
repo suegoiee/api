@@ -509,14 +509,23 @@ class ServerTaskController extends AdminController
                                 $responseData['type'] : $responseData['data']['type'];
                 $type = 'chart';
                 switch($dataType){
-                    case 'table_chart':$type = 'comboChart';break;
-                    case 'CompanyInfo':$type = 'companyInfo';break;
-                    case 'KLine':case 'kline':$type = 'kLine';break;
-                    case 'link_list':$type = 'news';break;
-                    case 'rankings':$type = 'selection';break;
-                    case 'account_table':case 'rankings_table':case 'sorting_table':$type = 'table';break;
-                    case 'account_table':case 'rankings_table':case 'sorting_table':$type = 'table';break;
-                    default: $type = $dataType;break;
+                    case 'table_chart':         $type = 'comboChart';break;
+                    case 'score':
+                        case 'rating':          $type = 'score';break;
+                    case 'CompanyInfo':         $type = 'companyInfo';break;
+                    case 'KLine':
+                        case 'kline':           $type = 'kLine';break;
+                    case 'link_list':           $type = 'news';break;
+                    case 'rankings':            $type = 'selection';break;
+                    case 'account_table':
+                        case 'rankings_table':
+                        case 'sorting_table':   $type = 'table';break;
+                    case 'chart':
+                        case 'line':            $type = 'chart';break;
+                    default:                    $type = $dataType;break;
+                }
+                if($product->model == 'CompanyInfo'){
+                    $type = 'companyInfo';
                 }
                 $product->update(['single_options'=>$isNoStock ? '{"noStock":true}':'{}', 'single_type'=>$type]);
             }else{
