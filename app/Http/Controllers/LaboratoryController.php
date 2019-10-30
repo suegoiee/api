@@ -129,7 +129,6 @@ class LaboratoryController extends Controller
             }else{
                 $available = $laboratory->category == 0 ? 1 : 0 ;
                 $laboratory->available = $available;
-                $available = $available;
             }
         }else{
             $laboratory->available = 1;

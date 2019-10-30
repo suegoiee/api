@@ -489,12 +489,12 @@ class ServerTaskController extends AdminController
         $http = new \GuzzleHttp\Client;
         $products = $productRepository->getsWith([],["type"=>'single']);
         foreach($products as $key=>$product){
-            $isNoStock = false;
+            $single_options = [];
             try{
                 $response = $http->request('get', 'https://cronjob.uanalyze.com.tw/fetch/'.$product->model.'/1101');
             }catch (\GuzzleHttp\Exception\ClientException $e){
                 try{
-                    $isNoStock = true;
+                    $single_options['noStock'] = true;
                     $response = $http->request('get', 'https://cronjob.uanalyze.com.tw/fetch/'.$product->model);
                 }catch (\Exception $e){
                     continue;
@@ -502,32 +502,64 @@ class ServerTaskController extends AdminController
             }catch (\Exception $e){
                 continue;
             }
+                        echo $product->id.' '.$product->name.'<br/>'.PHP_EOL;
             
             $responseData = json_decode((string) $response->getBody(), true);
             if($responseData['status']=='OK' && ( isset($responseData['type']) || ( isset($responseData['data']) && isset($responseData['data']['type'])))){
                 $dataType = array_key_exists("type", $responseData) ? 
                                 $responseData['type'] : $responseData['data']['type'];
-                $type = 'chart';
+                echo $dataType.'<br/>'.PHP_EOL;
                 switch($dataType){
-                    case 'table_chart':         $type = 'comboChart';break;
+                    case 'table_chart':         $type = 'comboChart';
+                    break;
                     case 'score':
-                        case 'rating':          $type = 'score';break;
-                    case 'CompanyInfo':         $type = 'companyInfo';break;
+                    case 'rating':          $type = 'score';
+                    break;
+                    case 'CompanyInfo':         $type = 'companyInfo';
+                    break;
                     case 'KLine':
-                        case 'kline':           $type = 'kLine';break;
-                    case 'link_list':           $type = 'news';break;
-                    case 'rankings':            $type = 'selection';break;
+                    case 'kline':           $type = 'kLine';
+                    break;
+                    case 'link_list':           $type = 'news';
+                    break;
+                    case 'rankings':            $type = 'selection';
+                    break;
                     case 'account_table':
-                        case 'rankings_table':
-                        case 'sorting_table':   $type = 'table';break;
+                    case 'rankings_table':
+                    case 'sorting_table':   $type = 'table';
+                    break;
                     case 'chart':
-                        case 'line':            $type = 'chart';break;
+                    case 'line':
+                        $set_default_range_mode = false;
+                        $chart_data = [];
+                        if(array_key_exists('data',$responseData['data'])){
+                            foreach ($responseData['data']['data'] as $model => $data) {
+                                echo $model.'<br/>'.PHP_EOL;
+                                if(is_array($data) && array_key_exists('Style', $data)){
+                                    echo $data['Style'].'<br/>'.PHP_EOL;
+                                    if($data['Style'] == 'area'){
+                                        $set_default_range_mode = true;
+                                    }
+                                    $single_options['chart_type'] = $data['Style'];
+                                    $chart_data[$model] = $data['Style'];
+                                }
+                            }
+                        }
+                        $type = 'chart';
+                        if($set_default_range_mode){
+                            $single_options['default_range_mode'] = 'all';
+                        }
+                        if(count($chart_data)){
+                            $single_options['data'] = $chart_data;
+                        }
+                    break;
                     default:                    $type = $dataType;break;
                 }
                 if($product->model == 'CompanyInfo'){
                     $type = 'companyInfo';
                 }
-                $product->update(['single_options'=>$isNoStock ? '{"noStock":true}':'{}', 'single_type'=>$type]);
+
+                $product->update(['single_options'=>json_encode($single_options), 'single_type'=>$type]);
             }else{
                 echo $product->id.' '.$product->name.'<br/>'.PHP_EOL;
                 continue;
