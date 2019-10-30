@@ -32,6 +32,7 @@ final class OnlineCourse extends UanalyzeModel
         'host',
         'interested',
         'suitable',
+        'allow_freecourse',
     ];
 
     public function tags()

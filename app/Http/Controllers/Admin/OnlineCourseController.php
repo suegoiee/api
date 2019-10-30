@@ -59,7 +59,7 @@ class OnlineCourseController extends AdminController
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
+        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status', 'allow_freecourse']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'online_course');
             $request_data['image'] = $path;
@@ -85,7 +85,7 @@ class OnlineCourseController extends AdminController
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status']);
+        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'image', 'seo', 'electric_ticket', 'status', 'allow_freecourse']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'online_course');
             $request_data['image'] = $path;
@@ -94,7 +94,7 @@ class OnlineCourseController extends AdminController
             $request_data['image'] = '';
         }
         else{
-            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status']);
+            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status', 'allow_freecourse']);
         }
         $referrer = $this->OnlineCourseRepository->update($id, $request_data);
         $tags = $request->input('tags',[]);
@@ -143,6 +143,7 @@ class OnlineCourseController extends AdminController
             'tags' => 'array',
             'experts' => 'array',
             'image',
+            'allow_freecourse'
         ]);        
     }
 
@@ -163,6 +164,7 @@ class OnlineCourseController extends AdminController
             'experts' => 'array',
             'image',
             'delete_image',
+            'allow_freecourse'
         ]);        
     }
 }

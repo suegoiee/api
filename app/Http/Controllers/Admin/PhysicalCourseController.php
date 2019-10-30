@@ -69,7 +69,7 @@ class PhysicalCourseController extends AdminController
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        $request_data = $request->only(['name', 'date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket']);
+        $request_data = $request->only(['name', 'date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'allow_freecourse']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'physical_course');
             $request_data['image'] = $path;
@@ -99,7 +99,7 @@ class PhysicalCourseController extends AdminController
         if($validator->fails()){
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
-        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'status']);
+        $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'location', 'image', 'seo', 'electric_ticket', 'status', 'allow_freecourse']);
         if($request->file('image')){
             $path = $this->storeImage($request->file('image'), 'online_course');
             $request_data['image'] = $path;
@@ -108,7 +108,7 @@ class PhysicalCourseController extends AdminController
             $request_data['image'] = '';
         }
         else{
-            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status']);
+            $request_data = $request->only(['name','date', 'end_date', 'quota', 'introduction', 'host', 'suitable', 'seo', 'electric_ticket', 'status', 'allow_freecourse']);
         }
         $referrer = $this->PhysicalCourseRepository->update($id, $request_data);
         $plans = $request->input('plans',[]);
@@ -177,6 +177,7 @@ class PhysicalCourseController extends AdminController
             'tags' => 'array',
             'experts' => 'array',
             'location',
+            'allow_freecourse',
         ]);        
     }
 
@@ -196,6 +197,7 @@ class PhysicalCourseController extends AdminController
             'tags' => 'array',
             'experts' => 'array',
             'location',
+            'allow_freecourse',
         ]);        
     }
 }

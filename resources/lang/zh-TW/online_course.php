@@ -20,6 +20,7 @@ return [
         'tags'=>'標籤',
         'suitable'=>'適合對象',
         'seo'=>'搜尋用文字',
+        'allow_freecourse'=>'啟用上課卷',
         'electric_ticket'=>'電子票券',
         'status_0'=>'下架',
         'status_1'=>'上架',
