@@ -344,11 +344,11 @@ $(function(){
         $('#affiliated_product_select').hide();
         $('#belongs_to_expert').hide();
         switch(category){
-            case '0':case 0:$('#type').prop('disabled',false);break;
-            case '1':case 1:$('#type').val('single').prop('disabled',true).change();break;
-            case '2':case 2:$('#type').val('collection').prop('disabled',true).change();break;
-            case '3':case 3:$('#type').val('collection').prop('disabled',true).change();$('#affiliated_product_select').show();$('#belongs_to_expert').show();break;
-            case '4':case 4:$('#type').prop('disabled',false);break;
+            case '0':case 0:$('#type').prop('disabled',false);$('#single_option_tab').addClass('hide');break;
+            case '1':case 1:$('#type').val('single').prop('disabled',true).change();$('#single_option_tab').removeClass('hide');break;
+            case '2':case 2:$('#type').val('collection').prop('disabled',true).change();$('#single_option_tab').addClass('hide');break;
+            case '3':case 3:$('#type').val('collection').prop('disabled',true).change();$('#single_option_tab').addClass('hide');$('#affiliated_product_select').show();$('#belongs_to_expert').show();break;
+            case '4':case 4:$('#type').prop('disabled',false);$('#single_option_tab').addClass('hide');break;
         }
     });
     /* trigger*/
