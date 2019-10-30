@@ -33,6 +33,7 @@ final class PhysicalCourse extends UanalyzeModel
         'image',
         'suitable',
         'host',
+        'allow_freecourse',
     ];
 
     public function tags()

@@ -76,7 +76,6 @@ class ProductController extends Controller
             }
         }
         $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category','single_options', 'single_type']);
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category']);
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
         $request_data['date_range'] = isset($request_data['date_range'])? $request_data['date_range']:'';

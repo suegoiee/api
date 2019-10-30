@@ -100,3 +100,12 @@
                 
     </div>
 </div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="allow_freecourse">{{trans($module_name.'.admin.allow_freecourse')}}</label>
+    <div class="col-sm-8">
+        <input type="checkbox" class="form-control" id="allow_freecourse" name="allow_freecourse" value="1" {{ $data->allow_freecourse == 1 ? 'checked' : '' }}>
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>

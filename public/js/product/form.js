@@ -285,14 +285,24 @@ $(function(){
                         '</div>'+
                     '</div>'+
                     '<div class="form-group row">'+
-                        '<label class="form-control-label col-sm-2" for="year_price'+solution_index+'">價格(一年)</label>'+
+                        '<label class="form-control-label col-sm-2" for="year_price'+solution_index+'">價格</label>'+
                         '<div class="col-sm-8">'+
                             '<input class="form-control" type="hidden" name="plans[new_'+solution_index+'][id]" value=0>'+
-                            '<input class="form-control" type="hidden" name="plans[new_'+solution_index+'][expiration]" value="12">'+
-                            '<input class="form-control" type="hidden" name="plans[new_'+solution_index+'][active]" value="1" >'+
-                            '<input type="text" class="form-control" id="year_price'+solution_index+'" name="plans[new_'+solution_index+'][price]" placeholder="價格(一年)" value="">'+
+                            '<input type="text" class="form-control" id="year_price'+solution_index+'" name="plans[new_'+solution_index+'][price]" placeholder="價格" value="">'+
                         '</div>'+
                         '<div class="col-sm-2 text-danger msg">'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="form-group row">'+
+                        '<label class="form-control-label col-sm-2" for="year_price'+solution_index+'">期數(月)</label>'+
+                        '<div class="col-sm-8">'+
+                            '<input class="form-control" type="number" name="plans[new_'+solution_index+'][expiration]" value="12">'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="form-group row">'+
+                        '<label class="form-control-label col-sm-2" for="active'+solution_index+'">啟用</label>'+
+                        '<div class="col-sm-8">'+
+                            '<input class="form-control" id="active'+solution_index+'" type="checkbox" name="plans[new_'+solution_index+'][active]" value="1">'+
                         '</div>'+
                     '</div>'+
                 '</div>'+
