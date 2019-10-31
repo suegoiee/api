@@ -42,7 +42,7 @@ class VerifiedUserController extends Controller
             event(new UserVerified($request->input('email')));
         }
        
-        return redirect(env('APP_FRONT_URL'));
+        return redirect(env('APP_FRONT_URL').'login-page');
     }
     public function confirmByForum(Request $request)
     {

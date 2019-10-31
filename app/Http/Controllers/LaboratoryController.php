@@ -119,7 +119,8 @@ class LaboratoryController extends Controller
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
         }
-        if(!$laboratory->customized){
+
+        if($laboratory->customized == 0){
             $collect_product = $user->products()->find($laboratory->product_id);
             if($collect_product){
                 $deadline = $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
@@ -128,9 +129,11 @@ class LaboratoryController extends Controller
                 $laboratory->available = $available;
             }else{
                 $available = $laboratory->category == 0 ? 1 : 0 ;
+                $laboratory->deadline = $deadline;
                 $laboratory->available = $available;
             }
         }else{
+            $laboratory->deadline = $deadline;
             $laboratory->available = 1;
             $available = 1;
         }
@@ -147,7 +150,7 @@ class LaboratoryController extends Controller
             $affiliate_product = $laboratory->master->affiliated_products()->where('id', $affiliated_id)->orWhere('pathname', $affiliates)->first();
             $laboratory = $affiliate_product->laboratory()->with(['products','products.collections','products.faqs'])->first();
 
-            if(!$laboratory->customized){
+            if($laboratory->customized==0){
                 $laboratory->deadline = $deadline;
                 $laboratory->available = $available;
             }
@@ -156,7 +159,7 @@ class LaboratoryController extends Controller
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
 
         foreach ($laboratory->products as $product) {
-            if(!$laboratory->customized || $affiliates){
+            if($laboratory->customized == 0 || $affiliates){
                 $product->installed = 1;
                 $product->deadline = $deadline;
                 $product->available = $available;
