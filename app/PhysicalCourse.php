@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Tag;
+use App\User;
 use App\Expert;
 use App\OrderCourse;
 use App\UanalyzeModel;
@@ -51,6 +52,6 @@ final class PhysicalCourse extends UanalyzeModel
     }
 
     public function orderCourse(){
-        return $this->HasMany(OrderCourse::class, 'course_id');
+        return $this->HasMany(OrderCourse::class, 'course_id')->where('order_course.course_type', '=', 'physical')->where('order_course.paid', '=', '1');
     }
 }
