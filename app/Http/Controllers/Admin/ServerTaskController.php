@@ -575,7 +575,7 @@ class ServerTaskController extends AdminController
             $product->laboratory->update(['category'=>0]);
         }
     }
-    public function fixUserLabSamePathname(ProductRepository $productRepositorym LaboratoryRepository $laboratoryRepository)
+    public function fixUserLabSamePathname(ProductRepository $productRepositorym, LaboratoryRepository $laboratoryRepository)
     {
         set_time_limit(0);
         $product = $productRepository->get(233);
