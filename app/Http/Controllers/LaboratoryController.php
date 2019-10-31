@@ -114,7 +114,7 @@ class LaboratoryController extends Controller
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
         }else{
-            $laboratory = $this->laboratoryRepository->getBy(["pathname"=>$id], ['products','products.collections']);
+            $laboratory = $this->laboratoryRepository->whereBy(["pathname"=>$id])->toWith(['products','products.collections'])->orderBy(['status'=>'DESC'])->toGet();
             if(($laboratory && $laboratory->category != 0) && !$user->laboratories()->where('pathname', $id)->count() && !$user->master_laboratories()->where('pathname', $id)->count()){
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
