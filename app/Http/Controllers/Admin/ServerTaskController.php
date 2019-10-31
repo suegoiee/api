@@ -574,5 +574,23 @@ class ServerTaskController extends AdminController
             $product->update(['category'=>0]);
             $product->laboratory->update(['category'=>0]);
         }
+    },
+    public function fixUserLabSamePathname(ProductRepository $productRepositorym LaboratoryRepository $laboratoryRepository)
+    {
+        set_time_limit(0);
+        $product = $productRepository->get(233);
+        foreach($product->users as $key2 => $user){
+            if(strtotime($user->pivot->deadline) >= time()){
+                $user->master_laboratories()->syncWithoutDetaching($product->laboratory->id);
+            }
+        }
+        $product = $productRepository->get(188);
+        $laboratory = $product->laboratory;
+        foreach($laboratory->users as $key2 => $user){
+            $product = $user->products()->find($laboratory->product_id);
+            if($product && strtotime($product->pivot->deadline) < time()){
+                $user->master_laboratories()->detach($laboratory->id);
+            }
+        }
     }
 }

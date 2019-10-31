@@ -25,7 +25,9 @@ class Laboratory extends UanalyzeModel
     {
         return $this->avatars()->orderBy('created_at','DESC')->first();
     }
-
+    public function users(){
+         return $this->belongsToMany('App\User')->withPivot('sort')->withTimestamps();
+    }
 	public function products(){
         $user_id = $this->user_id;
 		return $this->belongsToMany('App\Product')->with(['users'])->orderBy('pivot_sort', 'ASC')->withPivot('sort')->withTimestamps();
