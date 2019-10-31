@@ -421,3 +421,4 @@ Route::get('server/listProductPaymentUserByPlan/{product_id}/{plan}', 'Admin\Ser
 Route::get('server/updateSingleSetting', 'Admin\ServerTaskController@updateSingleSetting');
 Route::get('server/updateFreeLab', 'Admin\ServerTaskController@updateFreeLab');
 Route::get('server/fixUserLabSamePathname', 'Admin\ServerTaskController@fixUserLabSamePathname');
+Route::get('server/fixSameProduct', 'Admin\ServerTaskController@fixSameProduct');

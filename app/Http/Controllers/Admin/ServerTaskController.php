@@ -593,4 +593,14 @@ class ServerTaskController extends AdminController
             }
         }
     }
+    public function fixSameProduct(ProductRepository $productRepository, LaboratoryRepository $laboratoryRepository)
+    {
+        set_time_limit(0);
+        $product = $productRepository->get(188);
+        foreach($product->users as $key2 => $user){
+            if(strtotime($user->pivot->deadline) >= time()){
+                echo $user->pivot->deadline.' '.$user->id.' '.$user->email.'<br/>';
+            }
+        }
+    }
 }
