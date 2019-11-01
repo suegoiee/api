@@ -158,7 +158,7 @@ class ProductController extends Controller
         }
         $product_user = $user ? $product->users('id', $user)->first() : false;
         if($product_user){
-            $product->owned = $product_user->pivot->deadline==null || time() <= strtotime($product_user->pivot->deadline) ? 1 : 0;
+            $product->owned = ($product_user->pivot->deadline==null || time() <= strtotime($product_user->pivot->deadline)) ? 1 : 0;
         }else{
             $product->owned = 0;
         }
