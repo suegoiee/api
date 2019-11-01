@@ -56,8 +56,12 @@ class ForgotPasswordController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'email' => 'required|email', 
-            //'redirect'=>'required|url'
+            'email' => [
+                'required',
+                'email',
+                Rule::exists('users')->where(function ($query) {
+                    $query->where('is_socialite', 0);
+                })
             ]);
     }
 
