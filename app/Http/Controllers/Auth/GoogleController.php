@@ -74,6 +74,7 @@ class GoogleController extends Controller
         event(new UserRegistered($user, $adminToken, $request->input('password'), false));
         $token = $this->passwordGrantToken($request, $mobile);
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
+        $token['is_socialite'] = $user->is_socialite;
         //$token['user'] = $user;
         //$token['profile'] = $this->createProfile($request, $user);
         return $this->successResponse($token);
@@ -82,6 +83,7 @@ class GoogleController extends Controller
     {
         $token = $this->passwordGrantToken($request, $mobile);
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
+        $token['is_socialite'] = $user->is_socialite;
         //$token['user'] = $user;
         $this->updateProfile($request,$user);
         //$token['profile'] = $this->updateProfile($request,$user);

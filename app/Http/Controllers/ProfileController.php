@@ -37,6 +37,8 @@ class ProfileController extends Controller
         $profile = $user->profile;
         $profile->email =  $user->email;
         $profile->subscription = $user->subscription;
+        $profile->is_socialite = $user->is_socialite;
+        
         return $this->successResponse($profile?$profile:[]);
     }
 
@@ -61,6 +63,7 @@ class ProfileController extends Controller
         $user->profile()->update($data);
         $profile = $user->profile;
         $profile->email =  $user->email;
+        $profile->is_socialite = $user->is_socialite;
         return $this->successResponse($profile?$profile:[]);
     }
 

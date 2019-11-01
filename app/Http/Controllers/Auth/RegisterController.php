@@ -96,6 +96,7 @@ class RegisterController extends Controller
         $token = $this->passwordGrantToken($request, $mobile);
         //$token['user'] = $user;
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
+        $token['is_socialite'] = $user->is_socialite;
         //$token['profile'] = $this->createProfile($request,$user);
         return $this->successResponse($token);
     }
