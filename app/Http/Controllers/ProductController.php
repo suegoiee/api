@@ -41,7 +41,7 @@ class ProductController extends Controller
 
         $products = $this->productRepository->getsWithByStatus($with,$where);
         foreach ($products as $key => $product) {
-            $product_user = $user ? $product->users->where('id', $user->id)->first() : false;
+            $product_user = $user ? $product->users()->where('id', $user->id)->first() : false;
             if($product_user){
                 $product->owned = ($product_user->pivot->deadline==null || time() <= strtotime($product_user->pivot->deadline)) ? 1 : 0;
             }else{
@@ -156,7 +156,7 @@ class ProductController extends Controller
                 return $this->failedResponse(['message'=>[trans('product.product_is_not_exists')]]);
             }
         }
-        $product_user = $user ? $product->users('id', $user->id)->first() : false;
+        $product_user = $user ? $product->users()->where('id', $user->id)->first() : false;
         if($product_user){
             $product->owned = ($product_user->pivot->deadline==null || time() <= strtotime($product_user->pivot->deadline)) ? 1 : 0;
         }else{
