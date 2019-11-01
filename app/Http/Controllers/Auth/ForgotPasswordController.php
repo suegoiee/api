@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
 
 class ForgotPasswordController extends Controller
 {
@@ -61,7 +62,7 @@ class ForgotPasswordController extends Controller
                 'email',
                 Rule::exists('users')->where(function ($query) {
                     $query->where('is_socialite', 0);
-                })
+                })]
             ]);
     }
 
