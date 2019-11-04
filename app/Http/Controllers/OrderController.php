@@ -33,7 +33,11 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $orders = $user->orders()->with(['products'])->orderBy('created_at','DESC')->get()->makeHidden(['deleted_at']);
+        $orders = $user->orders()->with(['products'])->where(function($query){
+            $query->where('price','<>', 0)->whereHas('products',function($query){
+                $query->where('price',"<>",0);
+            });
+        })->orderBy('created_at','DESC')->get()->makeHidden(['deleted_at']);
         return $this->successResponse($orders);
     }
 
