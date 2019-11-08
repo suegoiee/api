@@ -138,7 +138,7 @@ class LaboratoryController extends Controller
             $available = 1;
         }
 
-        if($affiliates){
+        if($affiliates && $id != $affiliates){
             $affiliated_id = $affiliates;
             if(is_numeric($affiliates)){
                 $affiliate_laboratory = $this->laboratoryRepository->getBy(["id"=>$affiliates]);
