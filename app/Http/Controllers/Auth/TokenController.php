@@ -54,7 +54,7 @@ class TokenController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.invalid_credential')]]);
         }
         $response['verified']= $user && $user->mail_verified_at ? 1 : 0;
-        $response['is_socialite'] = $user && $user->is_socialite ? $user->mail_verified_at: 0;
+        $response['is_socialite'] = $user ? $user->is_socialite : 0;
         return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)
