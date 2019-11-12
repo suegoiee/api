@@ -63,13 +63,13 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="form-control-label col-sm-2" for="expiration{{$plan->id}}">{{trans($module_name.'.admin.year_price')}}</label>
+                    <label class="form-control-label col-sm-2" for="expiration{{$plan->id}}">{{trans($module_name.'.admin.expiration')}}</label>
                     <div class="col-sm-8">
                         <input class="form-control" id="expiration{{$plan->id}}" type="number" name="plans[{{$plan->id}}][expiration]" value="{{$plan->expiration}}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="form-control-label col-sm-2">{{trans($module_name.'.admin.year_price')}}</label>
+                    <label class="form-control-label col-sm-2">{{trans($module_name.'.admin.active')}}</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="checkbox" name="plans[{{$plan->id}}][active]" value="1" {{$plan->active == 1 ? 'checked' : ''}}>
                     </div>

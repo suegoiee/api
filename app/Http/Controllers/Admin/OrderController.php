@@ -78,11 +78,11 @@ class OrderController extends AdminController
         }
 
         if($request->has('sort')){
-            $order_column = $request->input('sort');
+            $order_column = $request->input('sort', false);
             $order = $request->input('order');
             if($order_column == 'products'){
                 $orderBy['products.name'] = $order;
-            }else{
+            }else if($order_column){
                 $orderBy[$order_column] = $order;
             }
         }else{

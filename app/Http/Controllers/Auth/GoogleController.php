@@ -39,7 +39,7 @@ class GoogleController extends Controller
                 $user->touch();
                 return $this->logined($request, $user, $mobile);
             }else{
-                return $this->validateErrorResponse([trans('auth.facebook_error')]);
+                return $this->validateErrorResponse([trans('auth.google_error')]);
             }
         }else{
             $n_user = User::whereIn('is_socialite',[0,1])->where('email',$request->input('email'))->first();

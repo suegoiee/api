@@ -72,9 +72,11 @@ class EventController extends AdminController
         $where['status'] = $status;
 
         if($request->has('sort')){
-            $order_column = $request->input('sort');
+            $order_column = $request->input('sort', false);
             $order = $request->input('order');
-            $orderBy[$order_column] = $order;
+            if($order_column){
+                $orderBy[$order_column] = $order;
+            }   
         }else{
             $order_column = $request->input('sort');
             $order = $request->input('order');

@@ -43,9 +43,11 @@ class UserController extends AdminController
         $search = ""; 
 
         if($request->has('sort')){
-            $order_column = $request->input('sort');
+            $order_column = $request->input('sort', false);
             $order = $request->input('order');
-            $orderBy[$order_column] = $order;
+            if($order_column){
+                $orderBy[$order_column] = $order;
+            }
         }
 
         $offset = $request->input('offset',0);
