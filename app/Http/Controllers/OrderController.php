@@ -94,9 +94,9 @@ class OrderController extends Controller
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
             $plan = isset($value['plan']) ? $value['plan'] : 0;
 
-            $order = $user->orders()->whereHas('products',function($query) use ($value){
+            $order = false;/*$user->orders()->whereHas('products',function($query) use ($value){
                     $query->where('id', $value['id']);
-            })->where('status', 1)->orderBy('created_at','DESC')->first();
+            })->where('status', 1)->orderBy('created_at','DESC')->first();*/
 
             if($order){
                 $user_product = $user->products()->find($product['id']);
@@ -574,9 +574,9 @@ class OrderController extends Controller
             }else{
                 return $this->failedResponse(['message'=>['The product is required']]);
             }
-        }
+        }/*
         foreach ($products as $key => $product) {
-            $order = $user->orders()->whereHas('products',function($query) use ($product){
+            $order = false$user->orders()->whereHas('products',function($query) use ($product){
                     $query->where('id', $product['id']);
             })->where('status', 1)->orderBy('created_at','DESC')->first();
             if($order){
@@ -596,7 +596,7 @@ class OrderController extends Controller
             }else{
                 $products[$key]['is_renew'] = false;
             }
-        }
+        }*/
         $promocode_codes = $request->input('promocodes',[]);
         $check_order = $this->delOrderByUsePromocode($user, $promocode_codes);
         $result = $this->getOrderTrail($user, $products, $promocode_codes);
