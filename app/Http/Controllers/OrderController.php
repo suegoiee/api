@@ -574,11 +574,11 @@ class OrderController extends Controller
             }else{
                 return $this->failedResponse(['message'=>['The product is required']]);
             }
-        }/*
+        }
         foreach ($products as $key => $product) {
-            $order = false$user->orders()->whereHas('products',function($query) use ($product){
+            $order = false;/* $user->orders()->whereHas('products',function($query) use ($product){
                     $query->where('id', $product['id']);
-            })->where('status', 1)->orderBy('created_at','DESC')->first();
+            })->where('status', 1)->orderBy('created_at','DESC')->first();*/
             if($order){
                 $user_product = $user->products()->find($product['id']);
                 if(strtotime($user_product->pivot->deadline) >= time()){
@@ -594,9 +594,14 @@ class OrderController extends Controller
                     $products[$key]['is_renew'] = false;
                 }
             }else{
+                $product_data = $this->productRepository->getWith($product['id']);
+                if($product_data){
+                    $product_plan = $product_data->plans()->where('id', $product['plan'])->where('active',1)->first();
+                    $products[$key]['quantity'] = $product_plan->expiration;
+                }
                 $products[$key]['is_renew'] = false;
             }
-        }*/
+        }
         $promocode_codes = $request->input('promocodes',[]);
         $check_order = $this->delOrderByUsePromocode($user, $promocode_codes);
         $result = $this->getOrderTrail($user, $products, $promocode_codes);
