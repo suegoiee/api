@@ -86,7 +86,7 @@
         <div class="col-sm-8">
              <select class="form-control selectpicker" id="product_ids" name="product_ids[]" data-placeholder="{{trans('form.do_select')}}"  multiple="multiple" data-live-search="true" data-size="5" data-none-selected-text="{{trans('form.do_select')}}" data-width="100%" data-actions-box="ture">
                 @foreach($products as $product)
-                    <option value="{{$product->id}}" {{($data && in_array($user->id, $data->product_ids)) ? 'selected':''}} >{{$product->name}} ({{ trans('product.admin.status_'.$product->status)}}) </option>
+                    <option value="{{$product->id}}" {{($data && in_array($product->id, $data->product_ids)) ? 'selected':''}} >{{$product->name}} ({{ trans('product.admin.status_'.$product->status)}}) </option>
                 @endforeach
             </select>
         </div>
