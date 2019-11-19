@@ -495,7 +495,7 @@ class OrderController extends Controller
                 unset($extendData['CustomerIdentifier']);
             }
             $extendData['TaxType'] = '1';
-            $extendData['Print'] = '0';
+            $extendData['Print'] = $order->invoice_type == '2' ? '1':'0';
             $extendData['InvoiceItems'] = $invoiceItems;
             $extendData['RelateNumber'] = $order->RelateNumber;
             $extendData['InvType'] = '07';
