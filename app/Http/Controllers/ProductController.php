@@ -188,12 +188,12 @@ class ProductController extends Controller
         
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
-        $request_data['model'] = $request_data['model'] ? $request_data['model']:'';
-        $request_data['column'] = $request_data['column'] ? $request_data['column']:'';
-        $request_data['info_more'] = $request_data['info_more'] ? $request_data['info_more']:'';
-        $request_data['pathname'] = $request_data['pathname'] ? $request_data['pathname']:'';
-        $request_data['seo'] = $request_data['seo'] ? $request_data['seo']:'';
-        $request_data['date_range'] = $request_data['date_range'] ? $request_data['date_range'] : '';
+        $request_data['model'] = isset($request_data['model']) ? $request_data['model']:'';
+        $request_data['column'] = isset($request_data['column']) ? $request_data['column']:'';
+        $request_data['info_more'] = isset($request_data['info_more']) ? $request_data['info_more']:'';
+        $request_data['pathname'] = isset($request_data['pathname']) ? $request_data['pathname']:'';
+        $request_data['seo'] = isset($request_data['seo']) ? $request_data['seo']:'';
+        $request_data['date_range'] = isset($request_data['date_range']) ? $request_data['date_range'] : '';
         $data = array_filter($request_data, function($item){return $item!==null;});
         
         $product = $this->productRepository->update($id,$data);

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Hash;
 use Storage;
 use App\User;
-use Facebook;
+use Shouwda\Facebook\Facebook;
 use App\Traits\OauthToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Validator;
 class FacebookController extends Controller
 {
 	use OauthToken;
+    protected $facebook;
     public function __construct()
     {
+        $this->facebook = new Facebook();
     }
     public function email_exist(Request $request)
     {
@@ -33,6 +35,7 @@ class FacebookController extends Controller
     }   
     public function login(Request $request)
     {
+        $fb_user = $this->facebook->getUser($request->input('access_token'));
         $log = ['time'=>date('Y-m-d H:i:s'), 'email'=>$request->input('email',''), 'password'=>$request->input('password',''), 'encoding_password'=>bcrypt($request->input('password','')), 'nickname'=>$request->input('nickname','')];
         Storage::append('login.log', json_encode($log));
     	return $this->loginHandler($request);

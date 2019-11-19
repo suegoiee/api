@@ -69,7 +69,6 @@ class NotificationMessageController extends AdminController
             'users' => $this->userRepository->getsWith(['profile']),
             'products' => $this->productRepository->getsWith([],[],['type'=>'collection','status'=>'desc']),
             'data' => $notificationMessage,
-            'send_actions'=>true
         ];
 
         return view('admin.form',$data);
