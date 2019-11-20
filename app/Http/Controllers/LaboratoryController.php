@@ -157,7 +157,7 @@ class LaboratoryController extends Controller
         }
         
         $laboratory->products->makeHidden(['status', 'users', 'info_short', 'info_more', 'price', 'expiration', 'created_at', 'updated_at', 'deleted_at', 'avatar_small', 'avatar_detail']);
-
+        $laboratory->singles = collect();
         foreach ($laboratory->products as $product) {
             if($laboratory->customized == 0 || $affiliates){
                 $product->installed = 1;
@@ -174,9 +174,10 @@ class LaboratoryController extends Controller
             foreach ( $product->collections as $collection){
                 $collection->makeHidden(['avatar_small','avatar_detail']);
             }
+            $laboratory->singles->push(collect($product)->except(['category','collections','date_range','faq','inflated','pathname','type','seo']));
          }
-         $laboratory->products=$laboratory->products->sortBy('sort');
-        
+        $laboratory->products = $laboratory->products->sortBy('sort');
+        $laboratory->singles = $laboratory->singles->sortBy('sort');
         return $this->successResponse($laboratory?$laboratory->makeHidden(['product_id']):[]);
     }
 
@@ -198,6 +199,8 @@ class LaboratoryController extends Controller
             $deadline = $collect_product && $collect_product->pivot->deadline ? $collect_product->pivot->deadline : 0;
             $laboratory->available = ($deadline != 0 && time() <= strtotime($deadline)) ? 1 : 0;
         }
+
+        $laboratory->singles = collect();
         foreach ($laboratory->products as $product) {
             $product_user = $product->users()->find($user->id);
             if(!$laboratory->customized){
@@ -213,8 +216,10 @@ class LaboratoryController extends Controller
             foreach ( $product->collections as $collection){
                 $collection->makeHidden(['avatar_small','avatar_detail']);
             }
+            $laboratory->singles->push(collect($product)->except(['category','collections','date_range','faq','inflated','pathname','type','seo']));
          }
-         $laboratory->products=$laboratory->products->sortBy('sort');
+        $laboratory->products = $laboratory->products->sortBy('sort');
+        $laboratory->singles =  $laboratory->singles->sortBy('sort');
         return $this->successResponse($laboratory?$laboratory->makeHidden(['product_id']):[]);
     }
 

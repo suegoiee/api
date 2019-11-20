@@ -18,7 +18,8 @@ class ModifySocailitesTable extends Migration
         Schema::create('socialites', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('social_id');
+            $table->string('provider_id');
+            $table->string('provider');
             $table->string('email');
             $table->string('name');
             $table->text('access_token')->nullable();

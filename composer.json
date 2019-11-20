@@ -9,6 +9,7 @@
         "barryvdh/laravel-cors": "^0.11.4",
         "doctrine/dbal": "^2.9",
         "facebook/graph-sdk": "^5.7",
+        "google/apiclient": "^2.0",
         "laravel/framework": "5.6.*",
         "laravel/passport": "^6.0",
         "laravel/socialite": "^3.2.0",
@@ -34,6 +35,7 @@
             "Shouwda\\Capital\\": "packages/Shouwda/capital/src/",
             "Shouwda\\EcpayInvoice\\": "packages/Shouwda/ecpayInvoice/src/",
             "Shouwda\\Facebook\\": "packages/Shouwda/facebook/src/",
+            "Shouwda\\Google\\": "packages/Shouwda/google/src/",
             "Uanalyze\\Mitake\\": "packages/uanalyze/mitake/src/"
         }
     },

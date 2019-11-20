@@ -27,5 +27,6 @@ return [
     'invalid_credential'=>'The user credentials were incorrect.',
     'email_exists'=>'The email already exists',
     'refresh_token_invalid'=>'The refresh token is invalid.',
-    'facebook_error'=>'Facebook logging error.'
+    'facebook_error'=>'Facebook logging error',
+    'google_error'=>'Google logging error'
 ];
