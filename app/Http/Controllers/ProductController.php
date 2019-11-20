@@ -75,7 +75,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category','single_options', 'single_type']);
+        $request_data = $request->only(['name','alias','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range','inflated', 'category','single_options', 'single_type']);
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
         $request_data['date_range'] = isset($request_data['date_range'])? $request_data['date_range']:'';
@@ -184,7 +184,7 @@ class ProductController extends Controller
                 return $this->validateErrorResponse([trans('product.The pathname_is_exists')]);
             }
         }
-        $request_data = $request->only(['name','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range', 'inflated', 'category','single_options', 'single_type']);
+        $request_data = $request->only(['name','alias','model','column','info_short','info_more','type','status','faq', 'pathname','seo','date_range', 'inflated', 'category','single_options', 'single_type']);
         
         $request_data['inflated'] = isset($request_data['inflated']) && $request_data['inflated']!=''? $request_data['inflated']:0;
         $request_data['category'] = isset($request_data['category'])? $request_data['category']:null;
@@ -338,6 +338,7 @@ class ProductController extends Controller
                 $laboratory->update([
                     'category'=>$product->category,
                     'title'=>$product->name, 
+                    'alias'=>$product->alias,
                     'pathname'=> $product->pathname,
                     'sort'=> 0,
                     'customized'=>0
@@ -346,7 +347,8 @@ class ProductController extends Controller
                 $laboratory = $product->laboratory()->create([
                     'user_id'=> 0,
                     'category'=> $product->category,
-                    'title'=> $product->name,
+                    'title'=> $product->name, 
+                    'alias'=>$product->alias,
                     'pathname'=> $product->pathname,
                     'sort'=> 0,
                     'customized'=> 0
