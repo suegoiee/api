@@ -179,8 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         //App\Providers\PasswordResetServiceProvider::class,
 
-        Barryvdh\Cors\ServiceProvider::class,
-
         //Shouwda\Allpay\AllpayServiceProvider::class,
         //Shouwda\Ecpay\EcpayServiceProvider::class,
         //Shouwda\EcpayInvoice\EcpayInvoiceServiceProvider::class,

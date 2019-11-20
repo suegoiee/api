@@ -31,6 +31,10 @@ class User  extends Authenticatable
     ];
     protected $appends = [ 'avatar' ];
 
+    public function socialite(){
+        return $this->hasOne('App\Socialite');
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));

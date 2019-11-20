@@ -37,6 +37,7 @@ return [
         'unit'=>'元',
     	'id'=>'編號',
     	'name'=>'名稱',
+        'alias'=>'別名',
         'pathname'=>'路徑',
     	'type'=>'類型',
     	'type_single'=>'單一',

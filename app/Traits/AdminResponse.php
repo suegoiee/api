@@ -4,7 +4,8 @@ trait AdminResponse
 {
     protected function adminResponse($request, $response_data){
         if($response_data['status']=='error'){
-    		return redirect()->back()->with('errors',$response_data['error']['message']);
+            $request->session()->put('errors', $response_data['error']['message'][0]);
+            return back();//view('admin.form_error');
         }
         return $request->input('action')=="save_exit" ? $this->saveExitResponse($response_data): $this->saveResponse($response_data);
     }

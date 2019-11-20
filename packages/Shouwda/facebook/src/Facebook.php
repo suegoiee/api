@@ -12,8 +12,8 @@ class Facebook
     public function __construct()
     {
         $this->fb = new FacebookSDK([
-            'app_id' => config('facebook.FacebookAppId'),
-            'app_secret' => config('facebook.FacebookAppSecret'),
+            'app_id' => config('facebook.FacebookClientId'),
+            'app_secret' => config('facebook.FacebookClientSecret'),
             'default_graph_version' => config('facebook.FacebookGraphVersion'),
         ]);
     }
@@ -38,7 +38,7 @@ class Facebook
     public function getUser($accessToken)
     {
         try {
-            $response = $this->fb->get('/me?fields=id,name,first_name,last_name,locale,gender,timezone,verified,email,link', $accessToken);
+            $response = $this->fb->get('/me?fields=id,name,first_name,last_name,email', $accessToken);
         } catch(Facebook\Exceptions\FacebookResponseException $e) {
             return 'Graph returned an error: ' . $e->getMessage();
         } catch(Facebook\Exceptions\FacebookSDKException $e) {
