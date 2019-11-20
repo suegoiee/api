@@ -7,6 +7,15 @@
                 
     </div>
 </div>
+<div class="form-group row">
+    <label class="form-control-label col-sm-2" for="alias">{{trans($module_name.'.admin.alias')}} <span class="text-danger"></span></label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="alias" name="alias" placeholder="{{trans($module_name.'.admin.alias')}}" value="{{@$data->alias}}">
+    </div>
+    <div class="col-sm-2 text-danger msg">
+                
+    </div>
+</div>
 
 <div class="form-group row">
     <label class="form-control-label col-sm-2" for="category">{{trans($module_name.'.admin.category')}}</label>

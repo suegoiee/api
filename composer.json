@@ -6,18 +6,21 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "barryvdh/laravel-cors": "^0.9.3",
-        "doctrine/dbal": "^2.5",
-        "facebook/graph-sdk": "^5.6",
-        "laravel/framework": "5.4.*",
-        "laravel/passport": "^3.0",
+        "barryvdh/laravel-cors": "^0.11.4",
+        "doctrine/dbal": "^2.9",
+        "facebook/graph-sdk": "^5.7",
+        "google/apiclient": "^2.0",
+        "laravel/framework": "5.6.*",
+        "laravel/passport": "^6.0",
+        "laravel/socialite": "^3.2.0",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "2.1.30"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7"
+        "phpunit/phpunit": "~7.0",
+        "filp/whoops":"~2.0"
     },
     "autoload": {
         "classmap": [
@@ -32,6 +35,7 @@
             "Shouwda\\Capital\\": "packages/Shouwda/capital/src/",
             "Shouwda\\EcpayInvoice\\": "packages/Shouwda/ecpayInvoice/src/",
             "Shouwda\\Facebook\\": "packages/Shouwda/facebook/src/",
+            "Shouwda\\Google\\": "packages/Shouwda/google/src/",
             "Uanalyze\\Mitake\\": "packages/uanalyze/mitake/src/"
         }
     },
@@ -48,12 +52,14 @@
             "php artisan key:generate"
         ],
         "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall"
         ],
         "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
         ]
     },
     "config": {

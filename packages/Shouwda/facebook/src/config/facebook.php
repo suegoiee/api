@@ -1,6 +1,6 @@
 <?php
 return [
-    'FacebookAppId' => '',
+    'FacebookClientId' => '',
     'FacebookAppSecret'    => '',
-    'FacebookGraphVersion' => 'v2.10',
+    'FacebookClientSecret' => 'v5.0',
 ];
