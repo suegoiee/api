@@ -105,6 +105,7 @@ class GoogleController extends Controller
         $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken, $request->input('password'), false));
         $client = $mobile ? getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
             'expires_in'=>$user_token->token->expires_at,
