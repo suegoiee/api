@@ -121,7 +121,7 @@ class FacebookController extends Controller
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
             'is_socialite'=>$user->is_socialite,
-            'set_password'=> $user->version==2 ? $user->set_password : 0
+            'set_password'=> $user->set_password
         ];
         return $this->successResponse($token);
     }
@@ -136,7 +136,7 @@ class FacebookController extends Controller
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
             'is_socialite'=>$user->is_socialite,
-            'set_password'=> $user->version==2 ? $user->set_password : 0
+            'set_password'=> $user->set_password
         ];
         $this->updateProfile($request,$user);
         return $this->successResponse($token);
