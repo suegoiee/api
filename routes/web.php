@@ -29,6 +29,8 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+Route::post('/password/set', 'Auth\SetPasswordController@set');
+
 Route::post('/allpay/feedback','AllpayController@feedback');
 Route::post('/ecpay/feedback','EcpayController@feedback');
 

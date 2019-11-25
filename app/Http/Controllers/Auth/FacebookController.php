@@ -80,11 +80,7 @@ class FacebookController extends Controller
             $user->touch();
             return $this->logined($request, $user, $mobile);
         }else{
-            $n_user = User::whereIn('is_socialite',[0,2])->where('email',$socialite_data['email'])->first();
-            if($n_user ){
-                return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
-            }
-            $user = User::whereIn('is_socialite',[1])->where('email',$socialite_data['email'])->first();
+            $user = User::where('email',$socialite_data['email'])->first();
             if(!$user){
                 $user = $this->create($request->all());
                 $user->socialite()->create($socialite_data);

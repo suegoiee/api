@@ -54,7 +54,7 @@ class OrderController extends AdminController
             'table_data' => $orders,
             'table_head' =>['id','user.profile.nickname','user.email','price','products','use_invoice','status','created_at'],
             'table_sortable' =>['id','price','status','created_at'],
-            'table_formatter' =>[ 'user.profile.nickname', 'user.email','use_invoice','status', 'products'],
+            'table_formatter' =>[ 'user.profile.nickname', 'user.email','use_invoice','status', 'products']
         ];
         return view('admin.list',$data);
     }
