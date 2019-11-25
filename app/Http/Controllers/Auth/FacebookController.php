@@ -112,7 +112,7 @@ class FacebookController extends Controller
         $this->createProfile($request, $user);
         $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken, $request->input('password'), false));
-        $client = $mobile ? getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $client = $mobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
@@ -127,7 +127,7 @@ class FacebookController extends Controller
     }
     protected function logined(Request $request, $user, $mobile)
     {
-        $client = $mobile ? getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $client = $mobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
