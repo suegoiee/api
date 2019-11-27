@@ -23,7 +23,7 @@ class AnnouncementController extends Controller
     }
     public function show(Request $request, $id)
     {
-        $announcement = $this->announcementRepository->getWith($id, ['status'=>1]);
+        $announcement = $this->announcementRepository->getWith($id,[],['status'=>1]);
         
         return $this->successResponse($announcement);
     }

@@ -156,6 +156,9 @@ Route::middleware(['web'])->group(function(){
 	]]);
 	Route::post('/events/products', 'EventController@productEvents');
 	Route::post('user/records','UserRecordController@store');
+
+	Route::get('/announcements','AnnouncementController@index');
+	Route::get('/announcements/{announcement}','AnnouncementController@show');
 });
 
 Route::middleware(['client'])->group(function(){
