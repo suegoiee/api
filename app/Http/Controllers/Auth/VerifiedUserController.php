@@ -97,6 +97,10 @@ class VerifiedUserController extends Controller
     public function isVerified(Request $request)
     {
         $user = $request->user();
-        return $this->successResponse(['verified'=>$user && $user->mail_verified_at ? 1 : 0]);
+        return $this->successResponse([
+            'verified'=>$user && $user->mail_verified_at ? 1 : 0, 
+            'is_socialite'=>$user->is_socialite,
+            'set_password'=>$user->is_socialite != 0 && $user->version == 1 ? 0 : $user->set_password
+        ]);
     }
 }

@@ -9,6 +9,10 @@ trait AdminResponse
         }
         return $request->input('action')=="save_exit" ? $this->saveExitResponse($response_data): $this->saveResponse($response_data);
     }
+    protected function adminFailedResponse($request, $message){
+        $request->session()->put('errors', $message);
+        return back();
+    }
     protected function saveExitResponse($response_data)
     {
     	return redirect(url('/admin/'.str_plural($this->moduleName)));

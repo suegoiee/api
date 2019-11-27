@@ -67,11 +67,8 @@ class GoogleController extends Controller
             $user->touch();
             return $this->logined($request, $user, $mobile);
         }else{
-            $n_user = User::whereIn('is_socialite',[0,1])->where('email',$socialite_data['email'])->first();
-            if($n_user ){
-                return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
-            }
-            $user = User::whereIn('is_socialite',[2])->where('email',$socialite_data['email'])->first();
+            
+            $user = User::where('email',$socialite_data['email'])->first();
             if(!$user){
                 $user = $this->create($request->all());
                 $user->socialite()->create($socialite_data);
@@ -104,7 +101,7 @@ class GoogleController extends Controller
         $this->createProfile($request, $user);
         $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken, $request->input('password'), false));
-        $client = $mobile ? getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $client = $mobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
@@ -113,13 +110,13 @@ class GoogleController extends Controller
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
             'is_socialite'=>$user->is_socialite,
-            'set_password'=> $user->version==2 ? $user->set_password : 0
+            'set_password'=> $user->set_password
         ];
         return $this->successResponse($token);
     }
     protected function logined(Request $request,$user, $mobile)
     {
-        $client = $mobile ? getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $client = $mobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
@@ -128,7 +125,7 @@ class GoogleController extends Controller
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
             'is_socialite'=>$user->is_socialite,
-            'set_password'=> $user->version==2 ? $user->set_password : 0
+            'set_password'=> $user->version == 1 ? 0 : $user->set_password
         ];
         $this->updateProfile($request,$user);
         return $this->successResponse($token);

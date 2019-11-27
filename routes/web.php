@@ -29,6 +29,8 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+Route::post('/password/set', 'Auth\SetPasswordController@set');
+
 Route::post('/allpay/feedback','AllpayController@feedback');
 Route::post('/ecpay/feedback','EcpayController@feedback');
 
@@ -385,6 +387,10 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
+
+	Route::get('/announcements/{announcement}/delete','Admin\AnnouncementController@destroy');
+	Route::delete('/announcements','Admin\AnnouncementController@destroy');
+	Route::resource('/announcements', 'Admin\AnnouncementController');
 });
 
 //Server task

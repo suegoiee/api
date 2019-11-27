@@ -28,5 +28,7 @@ return [
     'email_exists'=>'The email already exists',
     'refresh_token_invalid'=>'The refresh token is invalid.',
     'facebook_error'=>'Facebook logging error',
-    'google_error'=>'Google logging error'
+    'google_error'=>'Google logging error',
+    'can_not_set_password'=>'Can not set password',
+    'password_set_success'=>'Set password success'
 ];
