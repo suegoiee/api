@@ -128,7 +128,6 @@ class FacebookController extends Controller
     protected function logined(Request $request, $user, $mobile)
     {
         $client = $mobile ? $this->getMobilePersonalAccessClient() : $this->getPersonalAccessClient();
-        $client = $this->getMobilePersonalAccessClient();
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
