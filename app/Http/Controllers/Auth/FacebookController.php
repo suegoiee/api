@@ -86,6 +86,9 @@ class FacebookController extends Controller
                 $user->socialite()->create($socialite_data);
                 return $this->registered($request, $user, $mobile);
             }
+            if(!$user->mail_verified_at){
+                $user->update(['mail_verified_at'=>date('Y-m-d H:i:s')]);
+            }
             $user->socialite()->create($socialite_data);
             return $this->logined($request, $user, $mobile);
         }
