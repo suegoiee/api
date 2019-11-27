@@ -64,6 +64,9 @@ class GoogleController extends Controller
                 'name'=>$socialite_data['name'],
                 'access_token'=>$socialite_data['access_token']
             ]);
+            if(!$user->mail_verified_at){
+                User::where('id',$user->id)->update(['mail_verified_at'=>date('Y-m-d H:i:s'),'confirmed'=>1]);
+            }
             $user->touch();
             return $this->logined($request, $user, $mobile);
         }else{
