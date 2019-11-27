@@ -54,7 +54,8 @@ class SetPasswordController extends Controller
         }
         $user->forceFill([
             'password' => bcrypt($password),
-            'set_password'=>1
+            'set_password'=>1,
+            'version'=>2
         ])->save();
     }
 

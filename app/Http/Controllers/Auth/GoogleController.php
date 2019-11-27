@@ -125,7 +125,7 @@ class GoogleController extends Controller
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
             'is_socialite'=>$user->is_socialite,
-            'set_password'=> $user->set_password
+            'set_password'=> $user->version == 1 ? 0 : $user->set_password
         ];
         $this->updateProfile($request,$user);
         return $this->successResponse($token);

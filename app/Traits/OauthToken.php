@@ -74,9 +74,12 @@ trait OauthToken
         $client = DB::table('oauth_clients')->where('personal_access_client',1)->first();
         return $client;
     }
-
     private function getMobilePasswordGrantClient(){
-        $client = Client::where('name','uanalyze_api_mobile')->where('password_client',1)->first();
+        $client = DB::table('oauth_clients')->where('name','uanalyze_api_mobile')->where('password_client',1)->first();
+        return $client;
+    }
+    private function getMobilePersonalAccessClient(){
+        $client = DB::table('oauth_clients')->where('name','uanalyze_api_socialite_mobile')->where('personal_access_client',1)->first();
         return $client;
     }
 }

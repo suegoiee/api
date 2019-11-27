@@ -127,7 +127,8 @@ class FacebookController extends Controller
     }
     protected function logined(Request $request, $user, $mobile)
     {
-        $client = $mobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $client = $mobile ? $this->getMobilePersonalAccessClient() : $this->getPersonalAccessClient();
+        $client = $this->getMobilePersonalAccessClient();
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
@@ -136,7 +137,7 @@ class FacebookController extends Controller
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
             'is_socialite'=>$user->is_socialite,
-            'set_password'=> $user->set_password
+            'set_password'=> $user->version == 1 ? 0 : $user->set_password
         ];
         $this->updateProfile($request,$user);
         return $this->successResponse($token);

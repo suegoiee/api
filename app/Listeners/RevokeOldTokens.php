@@ -31,6 +31,7 @@ class RevokeOldTokens
     public function handle(AccessTokenCreated $event)
     {
         $mobile_client = $this->getMobilePasswordGrantClient();
+        $mobile_personal_client = $this->getMobilePersonalAccessClient();
         $password_client = $this->getPasswordGrantClient();
         $personal_client = $this->getPersonalAccessClient();
         $clientIds = [$event->clientId];

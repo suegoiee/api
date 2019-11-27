@@ -387,6 +387,10 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
+
+	Route::get('/announcements/{announcement}/delete','Admin\AnnouncementController@destroy');
+	Route::delete('/announcements','Admin\AnnouncementController@destroy');
+	Route::resource('/announcements', 'Admin\AnnouncementController');
 });
 
 //Server task
