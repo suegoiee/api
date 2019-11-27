@@ -13,7 +13,7 @@ class AnnouncementController extends AdminController
     public function __construct(Request $request, AnnouncementRepository $announcementRepository, TagRepository $tagRepository)
     {
         parent::__construct($request);
-        $this->moduleName = 'article';
+        $this->moduleName = 'announcement';
         $this->moduleRepository = $announcementRepository;
         $this->tagRepository = $tagRepository;
     }
@@ -35,7 +35,7 @@ class AnnouncementController extends AdminController
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
-            'actions'=>[],
+            'actions'=>['new'],
             'tabs'=>['status'=>[1,0]],
             'query_string' => $query_string,
             'query_data' => $query_data,
@@ -43,15 +43,16 @@ class AnnouncementController extends AdminController
             'table_data' => $announcements,
             'table_head' =>['title','type','created_at'],
             'table_sortable' =>['title','type','created_at'],
-            'table_formatter' =>[ ]
+            'table_formatter' =>[]
         ];
         return view('admin.list',$data);
+    }
 
     public function data(Request $request)
     {
         $where=[];
         $orderBy=[];
-        $with = ['tag'];
+        $with = [];
         $announcements_by = $this->moduleRepository;
         $search_fields = ['title', 'content'];
         $search_relation_fields = [];
@@ -98,6 +99,9 @@ class AnnouncementController extends AdminController
         ];
         return view('admin.form',$data);
     }
+    public function  show(){
+
+    }
 
     public function edit($id)
     {
@@ -106,7 +110,7 @@ class AnnouncementController extends AdminController
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
             'tags'=>$this->tagRepository->gets(),
-            'data' => $this->moduleRepository->getWith($id,['tags']),
+            'data' => $this->moduleRepository->getWith($id),
         ];
         return view('admin.form',$data);
     }
@@ -118,9 +122,9 @@ class AnnouncementController extends AdminController
         }
 
         $request_data = $request->only(['title','content','type','status']);
-        $announcement = $this->announcementRepository->create($request_data);
+        $announcement = $this->moduleRepository->create($request_data);
         
-        return $this->adminResponse($request, ['data'=>$announcement]);
+        return $this->adminResponse($request, ['status'=>'success','data'=>$announcement]);
     }
 
     public function update(Request $request, $id)
@@ -131,9 +135,9 @@ class AnnouncementController extends AdminController
         }
 
         $request_data = $request->only(['title','content','type','status']);
-        $announcement = $this->announcementRepository->update($id, $request_data);
+        $announcement = $this->moduleRepository->update($id, $request_data);
         
-        return $this->adminResponse($request, ['data'=>$announcement]);
+        return $this->adminResponse($request, ['status'=>'success','data'=>$announcement]);
     }
     protected function announcementValidator(array $data)
     {

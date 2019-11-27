@@ -372,6 +372,11 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/forumCategories/{id}/delete','Admin\ForumCategoeyController@destroy');
 	Route::delete('/forumCategories','Admin\ForumCategoeyController@destroy');
 	Route::resource('/forumCategories', 'Admin\ForumCategoeyController');
+
+	Route::get('/announcements/data','Admin\AnnouncementController@data');
+	Route::get('/announcements/{announcement}/delete','Admin\AnnouncementController@destroy');
+	Route::delete('/announcements','Admin\AnnouncementController@destroy');
+	Route::resource('/announcements', 'Admin\AnnouncementController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');
@@ -387,10 +392,6 @@ Route::group(['middleware' => ['analyst','auth:analyst'],'prefix' => 'analyst'],
 	Route::get('/grants', 'Analyst\GrantController@index')->name('analyst.grant.index');
 	Route::get('/grants/{grant}', 'Analyst\GrantController@show')->name('analyst.grant.show');
 	Route::get('/promocodes', 'Analyst\PromocodeController@index')->name('analyst.promocode.index');
-
-	Route::get('/announcements/{announcement}/delete','Admin\AnnouncementController@destroy');
-	Route::delete('/announcements','Admin\AnnouncementController@destroy');
-	Route::resource('/announcements', 'Admin\AnnouncementController');
 });
 
 //Server task
