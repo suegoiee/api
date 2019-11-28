@@ -69,10 +69,10 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        //$request->session()->flush();
+        $request->session()->flush();
         $this->guard()->logout();
 
-        //$request->session()->regenerate();
+        $request->session()->regenerate();
 
         return redirect($this->redirectTo);
     }

@@ -67,12 +67,24 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        //$request->session()->flush();
+        $request->session()->flush();
         $this->guard()->logout();
 
-        //$request->session()->regenerate();
+        $request->session()->regenerate();
 
         return redirect($this->redirectTo);
+    }
+
+    public function settings()
+    {
+        return view('admin.auth.settings');
+    }
+
+    public function updatePassword(Request $request){
+        if(Hash::check($request->old_password, Auth::user()->getAuthPassword())){
+            Auth::user()->update(['password' => bcrypt($request->new_password)]);
+        }
+        return redirect()->route('admin.updatePassword');
     }
 
     protected function guard()

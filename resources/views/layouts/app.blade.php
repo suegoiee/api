@@ -51,9 +51,24 @@
                            <span class="oi oi-person"></span> {{Auth::guard('admin')->user()->name }}<span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        	<a class="dropdown-item" href="{{route('admin.settings')}}">
+                                <span class="glyphicon glyphicon-off"></span> {{trans('auth.settings')}}
+                            </a>
                         	<a class="dropdown-item" href="#" onclick="event.preventDefault();
                                                          document.getElementById('logout-form').submit();">
                                 <span class="glyphicon glyphicon-off"></span> {{trans('auth.logout')}}
+                            </a>
+                            <a class="dropdown-item">
+                                @php
+                                    if (!empty($_SERVER["HTTP_CLIENT_IP"])){
+                                        $ip = $_SERVER["HTTP_CLIENT_IP"];
+                                    }elseif(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])){
+                                        $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+                                    }else{
+                                        $ip = $_SERVER["REMOTE_ADDR"];
+                                    }
+                                @endphp
+                                <span class="glyphicon glyphicon-off"></span> {{$ip}}
                             </a>
                             <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}

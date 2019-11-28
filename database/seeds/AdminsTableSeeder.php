@@ -10,10 +10,48 @@ class AdminsTableSeeder extends Seeder
     	DB::table('admins')->truncate();
     	if(DB::table('admins')->count()==0){
 	        DB::table('admins')->insert([
-                   'name' => 'uanalyze',
-                   'password' => Hash::make('57f0a7008635d0a0fe7a6c9335185020'),
-                   'auth' => 0
-               ]);
+                [
+                   'name' => 'shouwda@uanalyze.com.tw',
+                   'password' => Hash::make('123456'),
+                   'auth' => 3
+                ],
+                [   'name' => 'kfp87198@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'seantu@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'teresa@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'hankshih@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'joechen@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'cyc2016@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'joshhuang@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 1
+                ],
+                [   'name' => 'bubuyen@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ],
+                [   'name' => 'azrae24@uanalyze.com.tw',
+                    'password' => Hash::make('123456'),
+                    'auth' => 3
+                ]
+            ]);
      	}
     }
 }

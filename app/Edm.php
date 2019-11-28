@@ -7,6 +7,14 @@ use App\UanalyzeModel;
 class Edm extends UanalyzeModel
 {
 
+    const TABLE = 'edms';
+    public $timestamps = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $table = self::TABLE;
+
 	protected $fillable=['name', 'sort', 'status'];
 	
 	public function images()

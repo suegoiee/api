@@ -248,14 +248,27 @@ Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
 	Route::post('/login', 'Admin\Auth\LoginController@login');
 	Route::get('/', 'HomeController@index')->name('admin.home');
 });
-Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' => 'admin'],function(){
+/*Route::group(['middleware' => ['ip','admin','verifyAdmin'],'prefix' => 'admin'],function(){
+	Route::get('/', 'HomeController@index')->name('admin.home');
+});*/
+Route::group(['middleware' => ['ip','admin','auth:admin','adminToken','verifyAdmin'],'prefix' => 'admin'],function(){
 	Route::post('/logout', 'Admin\Auth\LoginController@logout');
+	Route::post('/settings', 'Admin\Auth\LoginController@updatePassword')->name('admin.updatePassword');
+	Route::get('/settings', 'Admin\Auth\LoginController@settings')->name('admin.settings');
+	
+	Route::post('/edms/export','Admin\EdmController@export');
+	Route::get('/edms/{edm}/delete','Admin\EdmController@destroy');
+	Route::delete('/edms','Admin\EdmController@destroy');
+	Route::resource('/edms', 'Admin\EdmController');
+	
+	Route::get('/roles/{role_ids}/delete','Admin\RoleController@destroy');
+	Route::resource('/roles', 'Admin\RoleController');
 
+	Route::resource('/products', 'Admin\ProductController', ['only' => [
+    	'show', 'index'
+	]]);
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
 	Route::delete('/products','Admin\ProductController@destroy');
-	Route::resource('/products', 'Admin\ProductController', ['except' => [
-    	'show'
-	]]);
 
 	Route::post('/products/export','Admin\ProductController@export');
 	Route::get('/products/{product}','Admin\ProductController@show')->name('products.show')->where('product','[0-9]+');
@@ -263,6 +276,7 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::post('/products/assigned','Admin\ProductController@assigned');
 	Route::get('/products/sorted','Admin\ProductController@sortedView');
 	Route::post('/products/sorted','Admin\ProductController@sorted');
+	
 	Route::post('/ckeditor/images','CkeditorImageController@store')->name('ckeditor.image.store');
 	
 	Route::post('/tags/export','Admin\TagController@export');
@@ -294,7 +308,9 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::get('/messages/{message}/delete','Admin\MessageController@destroy');
 	Route::delete('/messages','Admin\MessageController@destroy');
 	Route::resource('/messages', 'Admin\MessageController');
-
+	Route::resource('messages', 'Admin\MessageController', ['names' => [
+		'index' => 'messages'
+	]]);
 	Route::post('/articles/export','Admin\ArticleController@export');
 	Route::get('/articles/{article}/delete','Admin\ArticleController@destroy');
 	Route::delete('/articles','Admin\ArticleController@destroy');
@@ -315,10 +331,6 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken'],'prefix' 
 	Route::delete('/notificationMessages','Admin\NotificationMessageController@destroy');
 	Route::resource('/notificationMessages', 'Admin\NotificationMessageController');
 
-	Route::post('/edms/export','Admin\EdmController@export');
-	Route::get('/edms/{edm}/delete','Admin\EdmController@destroy');
-	Route::delete('/edms','Admin\EdmController@destroy');
-	Route::resource('/edms', 'Admin\EdmController');
 
 	Route::get('/analysts/{analyst}/delete','Admin\AnalystController@destroy');
 	Route::delete('/analysts','Admin\AnalystController@destroy');

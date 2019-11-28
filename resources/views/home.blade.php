@@ -14,7 +14,7 @@
             </select>
         </div>
         <div class="col-sm pt-2">
-            <input type="text" class="form-control" placeholder="/api/user" id="url">
+            <input type="text" class="form-control" placeholder="/api/user" id="url" value="">
         </div>
         <div class="col-sm-1 text-center pt-2">
             <button class="btn btn-info" id="submit_btn">submit</button>

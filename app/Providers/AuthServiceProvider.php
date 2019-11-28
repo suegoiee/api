@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Admin;
 use Carbon\Carbon;
+use App\Policies\AdminPolicy;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -16,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+        Admin::class => AdminPolicy::class,
     ];
 
     /**
@@ -46,6 +49,8 @@ class AuthServiceProvider extends ServiceProvider
             'edm'=>'create update delete',
             'user'=>'update',
             'event'=>'create update delete',
-			]);
+            ]);
+            
+        Gate::define('permission', 'App\Policies\AdminPolicy@permission');
     }
 }

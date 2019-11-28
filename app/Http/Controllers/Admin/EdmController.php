@@ -1,11 +1,15 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use Auth;
+use App\Models\Edm;
 use App\Traits\ImageStorage;
+use App\Policies\EdmPolicy;
 use App\Repositories\EdmRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Gate;
 
 class EdmController extends AdminController
 {	
@@ -20,7 +24,7 @@ class EdmController extends AdminController
     }
 
     public function index(Request $request)
-    {
+    {   
         $edm = $this->moduleRepository->getsWith([],[],['status'=>'DESC','sort'=>'ASC','updated_at'=>'DESC']);
         $data = [
             'actionName'=>__FUNCTION__,

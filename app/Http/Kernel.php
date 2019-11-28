@@ -82,5 +82,6 @@ class Kernel extends HttpKernel
         'ip'=>\App\Http\Middleware\RestrictIPMiddleware::class,
         'adminToken'=>\App\Http\Middleware\AdminToken::class,
         'verifyUser'=>\App\Http\Middleware\VerifyEmailMiddleware::class,
+        'verifyAdmin'=>\App\Http\Middleware\VerifyAdmin::class,
     ];
 }
