@@ -122,7 +122,7 @@ class FacebookController extends Controller
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
-            'expires_in'=>$user_token->token->expires_at,
+            'expires_in'=>$user_token->token->expires_at->toDateTimeString(),
             'access_token'=>$user_token->accessToken,
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
@@ -137,7 +137,7 @@ class FacebookController extends Controller
         $user_token = $user->createToken($client->name);
         $token = [
             'token_type'=>'Bearer',
-            'expires_in'=>$user_token->token->expires_at,
+            'expires_in'=>$user_token->token->expires_at->toDateTimeString(),
             'access_token'=>$user_token->accessToken,
             'refresh_token'=>'',
             'verified'=>$user->mail_verified_at ? 1 : 0,
