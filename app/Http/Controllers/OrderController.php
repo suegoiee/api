@@ -33,7 +33,11 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $orders = $user->orders()->with(['products'])->orderBy('created_at','DESC')->get()->makeHidden(['deleted_at']);
+        $orders = $user->orders()->with(['products'])->where(function($query){
+            $query->where('price','<>', 0)->whereHas('products',function($query){
+                $query->where('price',"<>",0);
+            });
+        })->orderBy('created_at','DESC')->get()->makeHidden(['deleted_at']);
         return $this->successResponse($orders);
     }
 
@@ -90,9 +94,9 @@ class OrderController extends Controller
             $quantity = isset($value['quantity']) ? $value['quantity'] : 1;
             $plan = isset($value['plan']) ? $value['plan'] : 0;
 
-            $order = $user->orders()->whereHas('products',function($query) use ($value){
+            $order = false;/*$user->orders()->whereHas('products',function($query) use ($value){
                     $query->where('id', $value['id']);
-            })->where('status', 1)->orderBy('created_at','DESC')->first();
+            })->where('status', 1)->orderBy('created_at','DESC')->first();*/
 
             if($order){
                 $user_product = $user->products()->find($product['id']);
@@ -491,7 +495,7 @@ class OrderController extends Controller
                 unset($extendData['CustomerIdentifier']);
             }
             $extendData['TaxType'] = '1';
-            $extendData['Print'] = '0';
+            $extendData['Print'] = $order->invoice_type == '2' ? '1':'0';
             $extendData['InvoiceItems'] = $invoiceItems;
             $extendData['RelateNumber'] = $order->RelateNumber;
             $extendData['InvType'] = '07';
@@ -572,9 +576,9 @@ class OrderController extends Controller
             }
         }
         foreach ($products as $key => $product) {
-            $order = $user->orders()->whereHas('products',function($query) use ($product){
+            $order = false;/* $user->orders()->whereHas('products',function($query) use ($product){
                     $query->where('id', $product['id']);
-            })->where('status', 1)->orderBy('created_at','DESC')->first();
+            })->where('status', 1)->orderBy('created_at','DESC')->first();*/
             if($order){
                 $user_product = $user->products()->find($product['id']);
                 if(strtotime($user_product->pivot->deadline) >= time()){
@@ -590,6 +594,11 @@ class OrderController extends Controller
                     $products[$key]['is_renew'] = false;
                 }
             }else{
+                $product_data = $this->productRepository->getWith($product['id']);
+                if($product_data){
+                    $product_plan = $product_data->plans()->where('id', $product['plan'])->where('active',1)->first();
+                    $products[$key]['quantity'] = $product_plan->expiration;
+                }
                 $products[$key]['is_renew'] = false;
             }
         }

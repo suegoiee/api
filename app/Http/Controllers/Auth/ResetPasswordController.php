@@ -44,9 +44,6 @@ class ResetPasswordController extends Controller
     	if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
-        if($user->is_socialite != 0){
-            return $this->validateErrorResponse([trans('auth.can_not_reset_password')]);
-        }
         if(Hash::check($request->input('old_password'), $user->getAuthPassword())){
     		$this->resetPassword($user, $request->input('password'));
         	$request->merge(['email' => $user->email]);
@@ -88,9 +85,6 @@ class ResetPasswordController extends Controller
 
     protected function resetPassword($user, $password)
     {
-        if($user->is_socialite != 0){
-            return false;
-        }
         $user->forceFill([
             'password' => bcrypt($password),
             'remember_token' => Str::random(60),

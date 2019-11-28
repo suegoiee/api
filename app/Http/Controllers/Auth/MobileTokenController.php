@@ -54,6 +54,8 @@ class MobileTokenController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.invalid_credential')]]);
         }
         $response['verified']= $user && $user->mail_verified_at ? 1 : 0;
+        $response['is_socialite'] = $user ? $user->is_socialite : 0;
+        $response['set_password'] = $user ? $user->set_password : 0;
         return $this->successResponse($response);
     }
     public function refreshAccessToken(Request $request)
@@ -68,8 +70,10 @@ class MobileTokenController extends Controller
         if(isset($response['error'])){
             return $this->failedResponse(['message'=>[trans('auth.refresh_token_invalid')]]);
         }
-        $isVerified = $this->isVerified($verified_request, $response['access_token']);
-        $response['verified']= $isVerified;
+        $isVerifiedUser = $this->isVerifiedUser($verified_request, $response['access_token']);
+        $response['verified']= $isVerifiedUser['verified'];
+        $response['is_socialite'] = $isVerifiedUser['is_socialite'];
+        $response['set_password'] = $isVerifiedUser['set_password'];
         return $this->successResponse($response);
     }
     public function isLogin(Request $request)

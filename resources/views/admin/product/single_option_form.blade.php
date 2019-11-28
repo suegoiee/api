@@ -27,6 +27,7 @@
             <option value="comboChart" {{ $data && $data->single_type=='comboChart' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_comboChart')}}</option>
             <option value="companyInfo" {{ $data && $data->single_type=='companyInfo' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_companyInfo')}}</option>
             <option value="news" {{ $data && $data->single_type=='news' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_news')}}</option>
+            <option value="calculator" {{ $data && $data->single_type=='calculator' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_calculator')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">

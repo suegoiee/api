@@ -1,0 +1,19 @@
+{
+    "name": "shouwda/google",
+    "description": "The google for Laravel 5 Framework.",
+    "keywords": ["google", "laravel"],
+    "authors": [
+        {
+            "name": "shouwda",
+            "email": "shouwda@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {  
+        "classmap": [
+        ],
+        "psr-4": {
+            "Shouwda\\Google\\": "src/"
+        }
+    }
+}

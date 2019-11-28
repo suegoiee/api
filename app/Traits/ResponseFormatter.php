@@ -99,6 +99,9 @@ trait ResponseFormatter
                 case 'The user is not exists':                              return 'E400149';
                 case 'The product is required':                             return 'E400150';
                 case 'Email is not verified':                               return 'E400151';
+                case 'The email already exists':                            return 'E400152';
+                case 'Facebook logging error':                              return 'E400153';
+                case 'Google logging error':                                return 'E400154';
             }
         }
     }

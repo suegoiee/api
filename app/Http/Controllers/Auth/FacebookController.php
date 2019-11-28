@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Hash;
 use Storage;
 use App\User;
-use Facebook;
+use App\Socialite;
+use Shouwda\Facebook\Facebook;
 use App\Traits\OauthToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,8 +16,10 @@ use Illuminate\Support\Facades\Validator;
 class FacebookController extends Controller
 {
 	use OauthToken;
+    protected $facebook;
     public function __construct()
     {
+        $this->facebook = new Facebook();
     }
     public function email_exist(Request $request)
     {
@@ -41,40 +44,58 @@ class FacebookController extends Controller
     {
         return $this->loginHandler($request, true);
     }
-    protected function loginHandler($request, $mobile=false){
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            return $this->validateErrorResponse($validator->errors()->all());
-        }
-        $user = User::where('is_socialite',1)->where('email',$request->input('email'))->first();
-        if( $user ){
-            if(Hash::check($request->input('password'), $user->getAuthPassword())){
-                $user->touch();
-                return $this->logined($request, $user, $mobile);
-            }else{
-                return $this->validateErrorResponse([trans('auth.facebook_error')]);
-            }
-        }else{
-            $n_user = User::whereIn('is_socialite',[0,2])->where('email',$request->input('email'))->first();
-            if($n_user ){
-                return $this->failedResponse(['message'=>[trans('auth.email_exists')]]);
-            }
-            $user = $this->create($request->all());
-            return $this->registered($request, $user, $mobile);
-        }
-    }
-    public function register(Request $request)
+    protected function loginHandler($request, $mobile=false)
     {
+        $access_token = $request->input('access_token');
+        $fb_user = $this->facebook->getUser($access_token);
+        if(!$fb_user){
+            return $this->validateErrorResponse([trans('auth.facebook_error')]);
+        }
+        $socialite = Socialite::where('provider', 'facebook')->where('provider_id', $fb_user['id'])->first();
+
+        $socialite_data = [
+            'provider'=>'facebook',
+            'provider_id'=>$fb_user['id'],
+            'name'=>$fb_user['name'],
+            'email'=>$fb_user['email'],
+            'access_token'=>$access_token,
+        ];
+
+        $request->request->add(['email'=>$socialite_data['email'],
+            'provider_id'=>$socialite_data['provider_id'],
+            'nickname'=>$socialite_data['name']]);
+
         $validator = $this->validator($request->all());
         if ($validator->fails()) {
             return $this->validateErrorResponse($validator->errors()->all());
         }
 
-        event(new Registered($user = $this->create($request->all())));
-        
-        return $this->registered($request,$user);
+        if($socialite){
+            $user = $socialite->user;
+            $socialite->update([
+                'email'=>$socialite_data['email'],
+                'name'=>$socialite_data['name'],
+                'access_token'=>$socialite_data['access_token']
+            ]);
+            if(!$user->mail_verified_at){
+                User::where('id',$user->id)->update(['mail_verified_at'=>date('Y-m-d H:i:s'),'confirmed'=>1]);
+            }
+            $user->touch();
+            return $this->logined($request, $user, $mobile);
+        }else{
+            $user = User::where('email',$socialite_data['email'])->first();
+            if(!$user){
+                $user = $this->create($request->all());
+                $user->socialite()->create($socialite_data);
+                return $this->registered($request, $user, $mobile);
+            }
+            if(!$user->mail_verified_at){
+                User::where('id',$user->id)->update(['mail_verified_at'=>date('Y-m-d H:i:s'),'confirmed'=>1]);
+            }
+            $user->socialite()->create($socialite_data);
+            return $this->logined($request, $user, $mobile);
+        }
     }
-
     protected function create(array $data)
     {
         return User::create([
@@ -83,11 +104,12 @@ class FacebookController extends Controller
             'username'=>$data['email'],
             'confirmed'=>1,
             'bio'=>'',
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['provider_id']),
             'is_socialite' => 1,
             'confirmation_code'=>'',
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
             'mail_verified_at'=>date('Y-m-d H:i:s'),
+            'set_password' => 0,
         ]);
     }
 
@@ -96,21 +118,33 @@ class FacebookController extends Controller
         $this->createProfile($request, $user);
         $adminToken = $this->clientCredentialsGrantToken($request);
         event(new UserRegistered($user, $adminToken, $request->input('password'), false));
-        $token = $this->passwordGrantToken($request, $mobile);
-        $token['verified'] = $user->mail_verified_at ? 1 : 0;
-        $token['is_socialite'] = $user->is_socialite;
-        //$token['user'] = $user;
-        //$token['profile'] = $this->createProfile($request, $user);
+        $client = $mobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
+        $user_token = $user->createToken($client->name);
+        $token = [
+            'token_type'=>'Bearer',
+            'expires_in'=>$user_token->token->expires_at,
+            'access_token'=>$user_token->accessToken,
+            'refresh_token'=>'',
+            'verified'=>$user->mail_verified_at ? 1 : 0,
+            'is_socialite'=>$user->is_socialite,
+            'set_password'=> $user->set_password
+        ];
         return $this->successResponse($token);
     }
     protected function logined(Request $request, $user, $mobile)
     {
-        $token = $this->passwordGrantToken($request, $mobile);
-        $token['verified'] = $user->mail_verified_at ? 1 : 0;
-        $token['is_socialite'] = $user->is_socialite;
-        //$token['user'] = $user;
+        $client = $mobile ? $this->getMobilePersonalAccessClient() : $this->getPersonalAccessClient();
+        $user_token = $user->createToken($client->name);
+        $token = [
+            'token_type'=>'Bearer',
+            'expires_in'=>$user_token->token->expires_at,
+            'access_token'=>$user_token->accessToken,
+            'refresh_token'=>'',
+            'verified'=>$user->mail_verified_at ? 1 : 0,
+            'is_socialite'=>$user->is_socialite,
+            'set_password'=> $user->is_socialite !=0 && $user->version == 1 ? 0 : $user->set_password
+        ];
         $this->updateProfile($request,$user);
-        //$token['profile'] = $this->updateProfile($request,$user);
         return $this->successResponse($token);
     }
 
@@ -128,11 +162,7 @@ class FacebookController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-            'nickname' => 'required|max:255',
-            'name' => 'max:255',
-            'sex'=>'in:F,M',
+            'access_token' => 'required|string',
         ]);
     }
 }

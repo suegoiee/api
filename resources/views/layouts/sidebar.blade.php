@@ -13,6 +13,12 @@
         </li>-->
         @can('permission', url('/admin/edms'))
         <li>
+            <a href="{{url('/admin/announcements')}}">
+                <span class="oi oi-volume-high"></span>
+                <span class="text">{{trans('announcement.admin.menu_title')}}</span>
+            </a>
+        </li>
+        <li>
             <a href="{{url('/admin/edms')}}">
                 <span class="oi oi-flag"></span>
                 <span class="text">{{trans('edm.admin.menu_title')}}</span>

@@ -29,6 +29,8 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+Route::post('/password/set', 'Auth\SetPasswordController@set');
+
 Route::post('/allpay/feedback','AllpayController@feedback');
 Route::post('/ecpay/feedback','EcpayController@feedback');
 
@@ -154,6 +156,9 @@ Route::middleware(['web'])->group(function(){
 	]]);
 	Route::post('/events/products', 'EventController@productEvents');
 	Route::post('user/records','UserRecordController@store');
+
+	Route::get('/announcements','AnnouncementController@index');
+	Route::get('/announcements/{announcement}','AnnouncementController@show');
 });
 
 Route::middleware(['client'])->group(function(){
@@ -382,6 +387,11 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken','verifyAdm
 	Route::get('/forumCategories/{id}/delete','Admin\ForumCategoeyController@destroy');
 	Route::delete('/forumCategories','Admin\ForumCategoeyController@destroy');
 	Route::resource('/forumCategories', 'Admin\ForumCategoeyController');
+
+	Route::get('/announcements/data','Admin\AnnouncementController@data');
+	Route::get('/announcements/{announcement}/delete','Admin\AnnouncementController@destroy');
+	Route::delete('/announcements','Admin\AnnouncementController@destroy');
+	Route::resource('/announcements', 'Admin\AnnouncementController');
 });
 Route::group(['middleware' => ['analyst'],'prefix' => 'analyst'],function(){
 	Route::get('/login', 'Analyst\Auth\LoginController@loginForm')->name('analyst.login');

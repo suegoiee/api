@@ -9,19 +9,6 @@ use Illuminate\Http\Request;
 trait OauthToken
 {
     protected function clientCredentialsGrantToken( $request){
-        /*$client = PersonalAccessClient::first()->client;
-        $request->request->add([
-            'grant_type' => 'client_credentials',
-            'client_id' => $client->id,
-            'client_secret' => $client->secret,
-            'scope' => 'user-product product order tag message company article promocode notificationMessage edm user event',
-        ]);
-        $tokenRequest = $request->create(
-            url('/oauth/token'),
-            'post'
-        );
-        $instance = Route::dispatch($tokenRequest);
-        */
         $http = new \GuzzleHttp\Client;
         $client = PersonalAccessClient::first()->client;
         $response = $http->post(url('oauth/token'), [
@@ -34,27 +21,9 @@ trait OauthToken
         ]);
 
         return json_decode((string) $response->getBody(), true);
-        //return json_decode($instance->getContent(), true);
     }
 
     protected function passwordGrantToken($request, $isMobile=false){
-        /*
-        $http = new \GuzzleHttp\Client;
-        $client = PersonalAccessClient::first()->client;
-        $oauth_client = $this->getPasswordGrantClient();
-        $response = $http->post(url('oauth/token'), [
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => $oauth_client->id,
-                'client_secret' => $oauth_client->secret,
-                'username' => $request->input('email'),
-                'password' =>  $request->input('password'),
-                'scope' =>  '',//$request->input('scope'),
-            ],
-        ]);
-
-        return json_decode((string) $response->getBody(), true);
-        */
         $client = PersonalAccessClient::first()->client;
         $oauth_client = $isMobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $request->request->add([
@@ -77,22 +46,6 @@ trait OauthToken
     }
 
     protected function refreshGrantToken($request, $isMobile=false){
-        /*
-        $http = new \GuzzleHttp\Client;
-        $client = PersonalAccessClient::first()->client;
-        $oauth_client = $this->getPasswordGrantClient();
-        $response = $http->post(url('oauth/token'), [
-            'form_params' => [
-                'grant_type' => 'refresh_token',
-                'client_id' =>  $oauth_client->id,
-                'client_secret' => $oauth_client->secret,
-                'refresh_token' => $request->input('refresh_token'),
-                'scope' =>  '',//$request->input('scope'),
-            ],
-        ]);
-
-        return json_decode((string) $response->getBody(), true);
-        */
         $client = PersonalAccessClient::first()->client;
         $oauth_client = $isMobile ? $this->getMobilePasswordGrantClient() : $this->getPasswordGrantClient();
         $request->request->add([
@@ -114,12 +67,19 @@ trait OauthToken
     }
     
     private function getPasswordGrantClient(){
-        $client = DB::table('oauth_clients')->where('password_client',1)->first();
+        $client = DB::table('oauth_clients')->where('name','uanalyze_api')->where('password_client',1)->first();
         return $client;
     }
-
+    private function getPersonalAccessClient(){
+        $client = DB::table('oauth_clients')->where('name','uanalyze_api')->where('personal_access_client',1)->first();
+        return $client;
+    }
     private function getMobilePasswordGrantClient(){
-        $client = Client::where('name','uanalyze_api_mobile')->where('password_client',1)->first();
+        $client = DB::table('oauth_clients')->where('name','uanalyze_api_mobile')->where('password_client',1)->first();
+        return $client;
+    }
+    private function getMobilePersonalAccessClient(){
+        $client = DB::table('oauth_clients')->where('name','uanalyze_api_socialite_mobile')->where('personal_access_client',1)->first();
         return $client;
     }
 }

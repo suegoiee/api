@@ -202,8 +202,10 @@ $(function(){
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) { 
         e.preventDefault();
+
         return false;
       }
+        updateAmount();
     });
     $('#year_month').on('change',function(e) {
         $('#detail_page span').html($(this).val());

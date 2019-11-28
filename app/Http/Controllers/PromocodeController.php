@@ -60,7 +60,7 @@ class PromocodeController extends Controller
             $request_data['user_id']=0;
             $request_data['send']=0;
         }
-        $request_data['used_at'] = $request_data['used_at'] ? date('Y-m-d H:i:s') : null;
+        $request_data['used_at'] = isset($request_data['used_at']) ? date('Y-m-d H:i:s') : null;
         $promocode = $this->promocodeRepository->create($request_data);
         if($request_data['specific']==1){
             $products = $request->input('products',[]);
@@ -127,7 +127,7 @@ class PromocodeController extends Controller
             $request_data['send']=0;
         }
         $old_promocode = $this->promocodeRepository->get($id);
-        $request_data['used_at'] = !$old_promocode->used_at && $request_data['used_at'] ? date('Y-m-d H:i:s') : null;
+        $request_data['used_at'] = !$old_promocode->used_at && isset($request_data['used_at']) ? date('Y-m-d H:i:s') : null;
 
         $promocode = $this->promocodeRepository->update($id,$request_data);
         
