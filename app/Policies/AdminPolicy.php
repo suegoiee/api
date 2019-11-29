@@ -23,17 +23,15 @@ class AdminPolicy
         //
     }
 
-    public function permission(Admin $admin, $url)
+    public function permission(Admin $admin, $controller, $method)
     {
         $role = $admin->role;
         $permissions = $role->permissions;
-        $route = app('router')->getRoutes()->match(app('request')->create($url));
-        $actionName = class_basename($route->getActionname());
         foreach ($permissions as $permission)
         {
             $_namespaces_chunks = explode('\\', $permission->controller);
-            $controller = end($_namespaces_chunks);
-            if ($actionName == $controller . '@' . $permission->method)
+            $route_controller = end($_namespaces_chunks);
+            if ($controller == $route_controller && $method == $permission->method)
             {
                 // authorized request
                 return true;

@@ -1,7 +1,12 @@
 function actionFormatter(value,row,index){
 	var actions='<div class="actions">';
-	actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/edit"><span class="oi oi-pencil edit-btn"></span></a>';
-	actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/delete"><span class="oi oi-trash delete-btn"></span></a>';
+	console.log($("#editPermission"));
+	if($("#editPermission")){
+		actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/edit"><span class="oi oi-pencil edit-btn"></span></a>';
+	}
+	if($("#deletePermission")){
+		actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/delete"><span class="oi oi-trash delete-btn"></span></a>';
+	}
 	actions+='</div>';
 	return actions;
 }

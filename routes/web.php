@@ -270,8 +270,8 @@ Route::group(['middleware' => ['ip','admin','auth:admin','adminToken','verifyAdm
 	Route::get('/roles/{role_ids}/delete','Admin\RoleController@destroy');
 	Route::resource('/roles', 'Admin\RoleController');
 
-	Route::resource('/products', 'Admin\ProductController', ['only' => [
-    	'show', 'index'
+	Route::resource('/products', 'Admin\ProductController', ['except' => [
+    	'show'
 	]]);
 	Route::get('/products/{product}/delete','Admin\ProductController@destroy');
 	Route::delete('/products','Admin\ProductController@destroy');

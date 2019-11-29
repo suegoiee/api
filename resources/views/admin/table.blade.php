@@ -29,5 +29,11 @@
         </tr>
     </thead>
     <tbody>
+        @can('permission', [ucfirst($module_name).'Controller', 'edit'])
+            <input type="hidden" id="editPermission" value="1">
+        @endcan
+        @can('permission', [ucfirst($module_name).'Controller', 'delete'])
+            <input type="hidden" id="deletePermission" value="1">
+        @endcan
     </tbody>
 </table>

@@ -11,13 +11,15 @@
                 <li><a href="#">Home 3</a></li>
             </ul>
         </li>-->
-        @can('permission', url('/admin/edms'))
+        @can('permission', ['AnnouncementController', 'index'])
         <li>
             <a href="{{url('/admin/announcements')}}">
                 <span class="oi oi-volume-high"></span>
                 <span class="text">{{trans('announcement.admin.menu_title')}}</span>
             </a>
         </li>
+        @endcan
+        @can('permission', ['EdmController', 'index'])
         <li>
             <a href="{{url('/admin/edms')}}">
                 <span class="oi oi-flag"></span>
@@ -25,7 +27,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/products'))
+        @can('permission', ['ProductController', 'index'])
         <li>
             <a href="{{url('/admin/products')}}">
                 <span class="oi oi-box"></span>
@@ -33,7 +35,7 @@
             </a>
         </li> 
         @endcan
-        @can('permission', url('/admin/orders'))
+        @can('permission', ['OrderController', 'index'])
         <li>
             <a href="{{url('/admin/orders')}}">
                 <span class="oi oi-clipboard"></span>
@@ -41,7 +43,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/users'))
+        @can('permission', ['UserController', 'index'])
         <li>
             <a href="{{url('/admin/users')}}">
                 <span class="oi oi-people"></span>
@@ -49,7 +51,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/tags'))
+        @can('permission', ['TagController', 'index'])
         <li>
             <a href="{{url('/admin/tags')}}">
                 <span class="oi oi-tag"></span>
@@ -57,7 +59,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/companies'))
+        @can('permission', ['CompanyController', 'index'])
         <li>
             <a href="{{url('/admin/companies')}}">
                 <span class="oi oi-briefcase"></span>
@@ -65,7 +67,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/messages'))
+        @can('permission', ['MessageController', 'index'])
         <li>
             <a href="{{url('/admin/messages')}}">
                 <span class="oi oi-envelope-closed"></span>
@@ -73,7 +75,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/articles'))
+        @can('permission', ['ArticleController', 'index'])
         <li>
             <a href="{{url('/admin/articles')}}">
                 <span class="oi oi-script"></span>
@@ -81,7 +83,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/roles'))
+        @can('permission', ['PromocodeController', 'index'])
         <li>
             <a href="{{url('/admin/promocodes')}}">
                 <span class="oi oi-bookmark"></span>
@@ -89,7 +91,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/notificationMessages'))
+        @can('permission', ['NotificationMessageController', 'index'])
         <li>
             <a href="{{url('/admin/notificationMessages')}}">
                 <span class="oi oi-bullhorn"></span>
@@ -97,7 +99,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/analysts'))
+        @can('permission', ['AanalystController', 'index'])
         <li>
             <a href="{{url('/admin/analysts')}}">
                 <span class="oi oi-audio-spectrum"></span>
@@ -105,7 +107,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/referrers'))
+        @can('permission', ['ReferrerController', 'index'])
         <li>
             <a href="{{url('/admin/referrers')}}">
                 <span class="oi oi-badge"></span>
@@ -113,7 +115,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/events'))
+        @can('permission', ['EventController', 'index'])
         <li>
             <a href="{{url('/admin/events')}}">
                 <span class="oi oi-bullhorn"></span>
@@ -121,7 +123,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/online_courses'))
+        @can('permission', ['OnlineCourseController', 'index'])
         <li>
             <a href="{{url('/admin/online_courses')}}">
                 <span class="oi oi-monitor"></span>
@@ -129,7 +131,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/physical_courses'))
+        @can('permission', ['PhysicalCourseController', 'index'])
         <li>
             <a href="{{url('/admin/physical_courses')}}">
                 <span class="oi oi-book"></span>
@@ -137,7 +139,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/experts'))
+        @can('permission', ['ExpertController', 'index'])
         <li>
             <a href="{{url('/admin/experts')}}">
                 <span class="oi oi-thumb-up"></span>
@@ -145,7 +147,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/forumCategories'))
+        @can('permission', ['ForumCategoeyController', 'index'])
         <li>
             <a href="{{url('/admin/forumCategories')}}">
                 <span class="oi oi-list-rich"></span>
@@ -153,7 +155,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', url('/admin/roles'))
+        @can('permission', ['RoleController', 'index'])
         <li>
             <a href="{{url('/admin/roles')}}">
                 <span class="oi oi-key"></span>
