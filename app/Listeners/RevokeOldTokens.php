@@ -35,7 +35,7 @@ class RevokeOldTokens
         $password_client = $this->getPasswordGrantClient();
         $personal_client = $this->getPersonalAccessClient();
         $clientIds = [$event->clientId];
-        if($personal_client->id == $event->clientId || $password_client->id == $event->clientId){
+        if(($personal_client && $personal_client->id == $event->clientId) || ($password_client && $password_client->id == $event->clientId)){
             $clientIds=[$personal_client->id, $password_client->id];
         }
         DB::table('oauth_access_tokens')

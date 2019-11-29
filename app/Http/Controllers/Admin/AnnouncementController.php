@@ -64,6 +64,8 @@ class AnnouncementController extends AdminController
             $order = $request->input('order');
             if($order_column){
                 $orderBy[$order_column] = $order;
+            }else{
+                $orderBy['created_at'] = 'DESC';
             }
         }else{
             $order_column = $request->input('sort');
