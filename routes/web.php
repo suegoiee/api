@@ -257,6 +257,7 @@ Route::group(['middleware' => ['ip','admin'],'prefix' => 'admin'],function(){
 	Route::get('/', 'HomeController@index')->name('admin.home');
 });*/
 Route::group(['middleware' => ['ip','admin','auth:admin','adminToken','verifyAdmin'],'prefix' => 'admin'],function(){
+	Route::get('/apiexplorer', 'Admin\ApiExplorerController@index')->name('admin.apiexplorer');
 	Route::post('/logout', 'Admin\Auth\LoginController@logout');
 	Route::post('/settings', 'Admin\Auth\LoginController@updatePassword')->name('admin.updatePassword');
 	Route::get('/settings', 'Admin\Auth\LoginController@settings')->name('admin.settings');

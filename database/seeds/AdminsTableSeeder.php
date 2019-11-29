@@ -7,9 +7,7 @@ class AdminsTableSeeder extends Seeder
 {
     public function run()
     {
-    	DB::table('admins')->truncate();
-    	if(DB::table('admins')->count()==0){
-	        DB::table('admins')->insert([
+        $admins = [
                 [
                    'name' => 'shouwda@uanalyze.com.tw',
                    'password' => Hash::make('123456'),
@@ -51,7 +49,15 @@ class AdminsTableSeeder extends Seeder
                     'password' => Hash::make('123456'),
                     'auth' => 3
                 ]
-            ]);
-     	}
+            ];
+        $insert_admin = [];
+        foreach ($admins as $key => $admin) {
+            if(!DB::table('admins')->where('name',$admin['name'])->count()){
+                array_push($insert_admin, $admin);
+            }   
+        }
+        if(count($insert_admin)){
+            DB::table('admins')->insert($insert_admin);
+        }
     }
 }
