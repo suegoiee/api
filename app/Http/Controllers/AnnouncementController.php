@@ -18,7 +18,7 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $announcements = $this->announcementRepository->getsWith([],['status'=>1]);
-        
+        $announcements->makeHidden(['status','updated_at']);
         return $this->successResponse($announcements);
     }
     public function show(Request $request, $id)
