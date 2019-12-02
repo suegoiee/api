@@ -27,13 +27,17 @@
         {{ csrf_field() }}
         @if(isset($send_actions))
             <div class="actions form-group text-center" >
-                <button type="submit" name="action" value="save_exit" class="btn btn-info" id="send_btn">{{trans('form.send')}}</button>
+                @can('permission', [ucfirst($module_name).'Controller', 'update'])
+                    <button type="submit" name="action" value="save_exit" class="btn btn-info" id="send_btn">{{trans('form.send')}}</button>
+                @endcan
                 <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
             </div>
         @else
             <div class="actions form-group text-center" >
-                <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
-                <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
+                @can('permission', [ucfirst($module_name).'Controller', 'update'])
+                    <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
+                    <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
+                @endcan
                 <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
             </div>
         @endif
@@ -41,28 +45,28 @@
 @endsection
 
 @section('javascript')
-<script src="{{asset('thirdparty/moment/moment.js')}}"></script>
-<script src="{{asset('thirdparty/moment/locales/zh-tw.js')}}"></script>
-<script src="{{asset('thirdparty/bootstrap-multiselect/js/bootstrap-multiselect.js')}}"></script>
-<script src="{{asset('thirdparty/chosen/chosen.jquery.js')}}"></script>
-<script src="{{asset('thirdparty/jquery.quicksearch/jquery.quicksearch.js')}}"></script>
-<script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
-<script src="{{asset('thirdparty/bootstrap-select/js/bootstrap-select.min.js')}}"></script>
-<script src="{{asset('thirdparty/bootstrap4-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
-<script>
-$(function(){
-   $('#form').on('keyup keypress','input[type=text]',function(e) {
-      var keyCode = e.keyCode || e.which;
-      if (keyCode === 13) { 
-        e.preventDefault();
-        return false;
-      }
-    });
-});
-</script>
-@if($module_name=='edm' || $module_name=='product')
-<script src="{{asset('thirdparty/jquery-ui-sortable/jquery-ui.min.js')}}"></script>
-@endif
-<script src="{{asset('js/'.$module_name.'/form.js')}}"></script>
-<script src="{{asset('thirdparty/ckeditor/ckeditor.js')}}"></script>
+    <script src="{{asset('thirdparty/moment/moment.js')}}"></script>
+    <script src="{{asset('thirdparty/moment/locales/zh-tw.js')}}"></script>
+    <script src="{{asset('thirdparty/bootstrap-multiselect/js/bootstrap-multiselect.js')}}"></script>
+    <script src="{{asset('thirdparty/chosen/chosen.jquery.js')}}"></script>
+    <script src="{{asset('thirdparty/jquery.quicksearch/jquery.quicksearch.js')}}"></script>
+    <script src="{{asset('thirdparty/multi-select/js/jquery.multi-select.js')}}"></script>
+    <script src="{{asset('thirdparty/bootstrap-select/js/bootstrap-select.min.js')}}"></script>
+    <script src="{{asset('thirdparty/bootstrap4-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
+    <script>
+        $(function(){
+            $('#form').on('keyup keypress','input[type=text]',function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) { 
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+    @if($module_name=='edm' || $module_name=='product')
+        <script src="{{asset('thirdparty/jquery-ui-sortable/jquery-ui.min.js')}}"></script>
+    @endif
+    <script src="{{asset('js/'.$module_name.'/form.js')}}"></script>
+    <script src="{{asset('thirdparty/ckeditor/ckeditor.js')}}"></script>
 @endsection

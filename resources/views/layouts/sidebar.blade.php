@@ -11,6 +11,14 @@
                 <li><a href="#">Home 3</a></li>
             </ul>
         </li>-->
+        @can('permission', ['MessageController', 'index'])
+        <li>
+            <a href="{{url('/admin/messages')}}">
+                <span class="oi oi-envelope-closed"></span>
+                <span class="text">{{trans('message.admin.menu_title')}}</span>
+            </a>
+        </li>
+        @endcan
         @can('permission', ['AnnouncementController', 'index'])
         <li>
             <a href="{{url('/admin/announcements')}}">
@@ -64,14 +72,6 @@
             <a href="{{url('/admin/companies')}}">
                 <span class="oi oi-briefcase"></span>
                 <span class="text">{{trans('company.admin.menu_title')}}</span>
-            </a>
-        </li>
-        @endcan
-        @can('permission', ['MessageController', 'index'])
-        <li>
-            <a href="{{url('/admin/messages')}}">
-                <span class="oi oi-envelope-closed"></span>
-                <span class="text">{{trans('message.admin.menu_title')}}</span>
             </a>
         </li>
         @endcan
