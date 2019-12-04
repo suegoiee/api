@@ -21,9 +21,11 @@ class Handler extends ExceptionHandler
         \Illuminate\Auth\AuthenticationException::class,
         \Illuminate\Auth\Access\AuthorizationException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        \Illuminate\Auth\AuthenticationException:class,
     ];
 
     /**
@@ -38,32 +40,34 @@ class Handler extends ExceptionHandler
     {
         //parent::report($exception);
          // this is from the parent method
-        try {
-            $logger = $this->container->make(\Psr\Log\LoggerInterface::class);
-        } catch (Exception $ex) {
-            throw $exception; // throw the original exception
-        }
-        // this is the new custom handling of guzzle exceptions
-        if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
-            // get the full text of the exception (including stack trace),
-            // and replace the original message (possibly truncated),
-            // with the full text of the entire response body.
-            if($exception->getResponse()){
-                $message = str_replace(
-                    rtrim($exception->getMessage()),
-                    (string) $exception->getResponse()->getBody(),
-                    (string) $exception
-                );
-            }else{
-                $message = rtrim($exception->getMessage());
+        if ($this->shouldReport($exception)) {]
+            try {
+                $logger = $this->container->make(\Psr\Log\LoggerInterface::class);
+            } catch (Exception $ex) {
+                throw $exception; // throw the original exception
+            }
+            // this is the new custom handling of guzzle exceptions
+            if ($exception instanceof \GuzzleHttp\Exception\RequestException) {
+                // get the full text of the exception (including stack trace),
+                // and replace the original message (possibly truncated),
+                // with the full text of the entire response body.
+                if($exception->getResponse()){
+                    $message = str_replace(
+                        rtrim($exception->getMessage()),
+                        (string) $exception->getResponse()->getBody(),
+                        (string) $exception
+                    );
+                }else{
+                    $message = rtrim($exception->getMessage());
+                }
+
+                // log your new custom guzzle error message
+                return $logger->error($exception);
             }
 
-            // log your new custom guzzle error message
-            return $logger->error($exception);
+            // make sure to still log non-guzzle exceptions
+            $logger->error($exception);
         }
-
-        // make sure to still log non-guzzle exceptions
-        $logger->error($exception);
     }
 
     /**
