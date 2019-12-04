@@ -97,6 +97,7 @@ class RegisterController extends Controller
         //$token['user'] = $user;
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['is_socialite'] = $user->is_socialite;
+        $response['set_password'] = $user ? $user->set_password : 0;
         //$token['profile'] = $this->createProfile($request,$user);
         return $this->successResponse($token);
     }
