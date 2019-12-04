@@ -27,7 +27,7 @@ class StockController extends Controller
 
     public function lists()
     {
-        $stocks = $this->stockRepository->gets(['stock_code'])->map(function($item, $key){
+        $stocks = $this->stockRepository->getsWith([],['stock_industries.<>'=>7])->map(function($item, $key){
             return $item->stock_code;
             });
         return $this->successResponse($stocks?$stocks:[]);
