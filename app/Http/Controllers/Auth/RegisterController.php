@@ -70,6 +70,7 @@ class RegisterController extends Controller
             'confirmation_code'=>'',
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
+            'set_password'=>1
         ]);
     }
     protected function createByForum(array $data)
