@@ -20,6 +20,7 @@ class OrderController extends AdminController
 
     public function index(Request $request)
     {
+        dd($request);
         $query_string=[];
         $query_data = [];
         if($request->has('free')){
