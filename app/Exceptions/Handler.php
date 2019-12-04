@@ -40,7 +40,6 @@ class Handler extends ExceptionHandler
     {
         //parent::report($exception);
          // this is from the parent method
-        if ($this->shouldReport($exception)) {
             try {
                 $logger = $this->container->make(\Psr\Log\LoggerInterface::class);
             } catch (Exception $ex) {
@@ -67,7 +66,6 @@ class Handler extends ExceptionHandler
 
             // make sure to still log non-guzzle exceptions
             $logger->error($exception);
-        }
     }
 
     /**
