@@ -88,8 +88,8 @@ class OrderController extends AdminController
         }else{
             $order_column = $request->input('sort');
             $order = $request->input('order');
-            $orderBy['created_at'] = 'DESC';
         }
+        $orderBy['created_at'] = 'DESC';
 
         $offset = $request->input('offset',0);
         $limit = $request->input('limit',100);
