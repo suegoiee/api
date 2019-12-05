@@ -99,7 +99,7 @@
             </a>
         </li>
         @endcan
-        @can('permission', ['AanalystController', 'index'])
+        @can('permission', ['AnalystController', 'index'])
         <li>
             <a href="{{url('/admin/analysts')}}">
                 <span class="oi oi-audio-spectrum"></span>
