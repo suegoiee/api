@@ -70,6 +70,7 @@ class RegisterController extends Controller
             'confirmation_code'=>'',
             'password' => bcrypt($data['password']),
             'phone' => isset($data['phone']) ? $data['phone']:NULL,
+            'set_password'=>1
         ]);
     }
     protected function createByForum(array $data)
@@ -97,6 +98,7 @@ class RegisterController extends Controller
         //$token['user'] = $user;
         $token['verified'] = $user->mail_verified_at ? 1 : 0;
         $token['is_socialite'] = $user->is_socialite;
+        //dd($user);
         $token['set_password'] = $user ? $user->set_password : 0;
         //$token['profile'] = $this->createProfile($request,$user);
         return $this->successResponse($token);
