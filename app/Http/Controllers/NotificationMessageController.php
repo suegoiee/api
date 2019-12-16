@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Mail\Announcement;
 use App\Mail\RelatedProduct;
 use Illuminate\Support\Facades\Mail;
-
+use Swift_SmtpTransport;
+use Swift_Mailer;
 class NotificationMessageController extends Controller
 {	
     protected $notificationMessageRepository;
@@ -94,30 +95,20 @@ class NotificationMessageController extends Controller
                 }
             }
             if($request_data['send_email']==1){
-                $bcc = array_values($send_users);
-                $n = 0;
-                $div  =  250;
-                while($n < count($bcc)){
-                    Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
-                    $n+=$div;
-                }
+                $this->sencondMailer($notificationType, $notificationMessage, $send_users);
             }
             foreach ($send_users as $key => $user) {
                 $user->notify(new $classType($user, $notificationMessage));
             }
         }else if($notificationType == 'MassiveAnnouncement'){
-            $bcc = [];
+            $send_users = [];
             foreach ($users as $key => $user) {
                 if($user->subscription==1){
-                    array_push($bcc, $user->email);
+                    array_push($send_users, $user->email);
                 }
             }
-            $n = 0;
-            $div  =  250;
-            while($n < count($bcc)){
-                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new Announcement($notificationMessage));
-                $n+=$div;
-            }
+
+            $this->sencondMailer($notificationType, $notificationMessage, $send_users);
         }else{
             foreach ($users as $key => $user) { 
                 $user->notify(new $classType($user, $notificationMessage));
@@ -196,30 +187,19 @@ class NotificationMessageController extends Controller
                 }
             }
             if($request_data['send_email']==1){
-                $bcc = array_values($send_users);
-                $n = 0;
-                $div  =  250;
-                while($n < count($bcc)){
-                    Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new RelatedProduct($notificationMessage));
-                    $n+=$div;
-                }
+                $this->sencondMailer($notificationType, $notificationMessage, $send_users);
             }
             foreach ($send_users as $key => $user) {
                 $user->notify(new $classType($user, $notificationMessage));
             }
         }else if($notificationType=='MassiveAnnouncement'){
-            $bcc = [];
+            $send_users = [];
             foreach ($users as $key => $user) {
                 if($user->subscription==1){
-                    array_push($bcc, $user->email);
+                    array_push($send_users, $user->email);
                 }
             }
-            $n = 0;
-            $div  =  250;
-            while($n < count($bcc)){
-                Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new Announcement($notificationMessage));
-                $n+=$div;
-            }
+            $this->sencondMailer($notificationType, $notificationMessage, $send_users);
         }else{
             foreach ($users as $key => $user) { 
                 $user->notify(new $classType($user, $notificationMessage));
@@ -240,5 +220,31 @@ class NotificationMessageController extends Controller
             'title'=>'required',
             'content'=>'required'
         ]);        
+    }
+    public function sencondMailer($notificationType, $notificationMessage, $send_users){
+        $backup = Mail::getSwiftMailer();
+
+        $transport = new Swift_SmtpTransport(env('MAIL2_HOST'), env('MAIL2_PORT'), env('MAIL2_ENCRYPTION'));
+        $transport->setUsername(env('MAIL2_USERNAME'));
+        $transport->setPassword(env('MAIL2_PASSWORD'));
+
+        $gmail = new Swift_Mailer($transport);
+
+        Mail::setSwiftMailer($gmail);
+
+        $bcc = array_values($send_users);
+        $n = 0;
+        $div  =  250;
+        if($notificationType == 'RelatedProduct'){
+            $mailerType = 'App\\Mail\\RelatedProduct';
+        }else if($notificationType == 'MassiveAnnouncement'){
+            $mailerType = 'App\\Mail\\Announcement';
+        }
+        while($n < count($bcc)){
+            Mail::to(env('APP_EMAIL','service@uanalyze.com.tw'))->bcc(array_slice($bcc, $n, $div))->queue(new $mailerType($notificationMessage));
+            $n+=$div;
+        }
+
+        Mail::setSwiftMailer($backup);
     }
 }
