@@ -25,8 +25,13 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        
-        $master_laboratories = $user->master_laboratories()->get()->makeHidden(['product_id','faqs']);
+        $category = $request->input('category',false);
+        if($category){
+            $master_laboratories = $user->master_laboratories()->where('category',$category)->get()->makeHidden(['product_id','faqs']);
+        }else{
+            $master_laboratories = $user->master_laboratories()->where('category','<>','5')->get()->makeHidden(['product_id','faqs']);
+        }
+
         foreach ($master_laboratories as $key => $laboratory) {
             $collect_product = $user->products()->find($laboratory->product_id);
             if($collect_product){
@@ -40,7 +45,14 @@ class LaboratoryController extends Controller
             $merge_laboratories->push($laboratory);
         }
 
-        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
+        if($category){
+            $where_laboratories = $user->laboratories()->where('category',$category);
+        }else{
+            $where_laboratories = $user->laboratories()->where('category','<>','5');
+        }
+
+        $laboratories = $where_laboratories->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
+
         foreach ($laboratories as $key => $laboratory) {
             if(!$laboratory->customized){
                 $collect_product = $user->products()->find($laboratory->product_id);
@@ -119,7 +131,9 @@ class LaboratoryController extends Controller
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
         }
-
+        if(!$laboratory){
+            return $this->failedResponse(['message'=>['laboratories invalid']]);
+        }
         if($laboratory->customized == 0){
             $collect_product = $user->products()->find($laboratory->product_id);
             if($collect_product){

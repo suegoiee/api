@@ -102,6 +102,7 @@ trait ResponseFormatter
                 case 'The email already exists':                            return 'E400152';
                 case 'Facebook logging error':                              return 'E400153';
                 case 'Google logging error':                                return 'E400154';
+                case 'The stock is exists':                                 return 'E400156';
             }
         }
     }

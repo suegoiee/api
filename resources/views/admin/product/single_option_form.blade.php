@@ -28,6 +28,7 @@
             <option value="companyInfo" {{ $data && $data->single_type=='companyInfo' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_companyInfo')}}</option>
             <option value="news" {{ $data && $data->single_type=='news' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_news')}}</option>
             <option value="calculator" {{ $data && $data->single_type=='calculator' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_calculator')}}</option>
+            <option value="portfolio" {{ $data && $data->single_type=='portfolio' ? 'selected':'' }} >{{trans($module_name.'.admin.single_type_portfolio')}}</option>
         </select>
     </div>
     <div class="col-sm-2 text-danger msg">

@@ -84,4 +84,8 @@ class User  extends Authenticatable
     {
         return $this->hasMany('App\Permission');
     }
+    public function portfolios()
+    {
+        return $this->hasMany('App\Portfolio');
+    }
 }
