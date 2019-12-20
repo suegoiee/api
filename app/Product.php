@@ -36,6 +36,9 @@ class Product extends UanalyzeModel
     public function affiliated_products(){
         return $this->belongsToMany('App\Product','affiliated_product','affiliated_product_id','product_id')->select(['id','name','column','model','type','affiliated_product.sort'])->orderBy('affiliated_product.sort','asc')->withTimestamps()->withPivot('sort');
     }
+    public function master_products(){
+        return $this->belongsToMany('App\Product','affiliated_product','product_id','affiliated_product_id')->withPivot('sort');
+    }
 
     public function tags()
     {

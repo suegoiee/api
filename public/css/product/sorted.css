@@ -22,3 +22,7 @@
     line-height: 1.25;
 	border: 1px dashed #555;
 }
+
+.ms-selection .ms-list .ui-state-highlight{
+	height: 26px;
+}
