@@ -98,6 +98,14 @@ class LaboratoryController extends Controller
         $laboratory = $user->laboratories()->create($request_data);
 
         $products = $request->input('products',[]);
+
+        if($category==5){
+            $portfolio_single = $this->productRepository->getBy(['pathname'=>'portfolio']);
+            if($portfolio_single){
+                $products=[$portfolio_single->id];
+            }
+        }
+
         $products_data = [];
         foreach ($products as $key => $value) {
             $products_data[$value]=['sort'=>$key];
@@ -182,11 +190,17 @@ class LaboratoryController extends Controller
                 $product->deadline = $deadline;
                 $product->available = $available;
             }else{
-                $product_user = $product->users()->find($user->id);
-                
-                $product->installed = $product_user ? $product_user->pivot->installed : 0;
-                $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
-                $product->available = $product->deadline == 0 ? 1 :((time() <= strtotime($product->deadline)) ? 1 : 0);
+                if($laboratory->category==5){
+                    $product->installed == 1;
+                    $product->deadline = 0;
+                    $product->available = 1;
+                }else{
+                    $product_user = $product->users()->find($user->id);
+                    
+                    $product->installed = $product_user ? $product_user->pivot->installed : 0;
+                    $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
+                    $product->available = $product->deadline == 0 ? 1 :((time() <= strtotime($product->deadline)) ? 1 : 0);
+                }
             }
             $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){

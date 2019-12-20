@@ -92,6 +92,26 @@ $(function(){
             this.qs2.cache();
         }
     });
+    $( "#ms-affiliated_products .ms-selection .ms-list" ).sortable({
+      placeholder: "ui-state-highlight",
+      update: function( event, ui ) {
+        var selected_item = $('#ms-affiliated_products .ms-selection .ms-list .ms-elem-selection.ms-selected').map(function(i,d){return $(d).data('msValue')}).toArray()
+        console.log(selected_item);
+        var ordered_item = $('#affiliated_products option').map(function(i, d){
+            return {index: selected_item.indexOf(d.value),value: d};
+        }).sort(function(a,b){
+            if(a.index == -1){
+                return -1;
+            }else{
+                return a.index - b.index;
+            }
+        }).map(function(i, d){
+            return d.value;
+        }).toArray();
+        $('#affiliated_products').empty();
+        $('#affiliated_products').append(ordered_item);
+      }
+    });
     multisolutions('expert_affiliated_products', 1);
     /*var $selectedOptions = $('#affiliated_products').find('option:selected');
     $("#expert_affiliated_products0").empty();
