@@ -89,7 +89,11 @@ class LaboratoryController extends Controller
         }
 
         $request_data = $request->only(['title','alias','layout','sort']);
-        $request_data['customized']=1;
+        $category = $request->input('category');
+        if($category==5){
+            $request_data['category'] = 5;
+        }
+        $request_data['customized'] = 1;
         $request_data['sort'] = isset($request_data['sort']) ? $request_data['sort'] : 0;
         $laboratory = $user->laboratories()->create($request_data);
 
@@ -255,7 +259,10 @@ class LaboratoryController extends Controller
         }
 
         $request_data = $request->only(['title','alias','layout', 'sort']);
-
+        $category = $request->input('category');
+        if($category==5){
+            $request_data['category'] = 5;
+        }
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $user->laboratories()->where('id',$id)->update($data);
