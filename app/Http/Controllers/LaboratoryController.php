@@ -110,13 +110,14 @@ class LaboratoryController extends Controller
         foreach ($products as $key => $value) {
             $products_data[$value]=['sort'=>$key];
         }
+
         $laboratory->products()->syncWithoutDetaching($products_data);
         $products_install = [];
 
         $products = is_array($products) ? $products:[$products];
         foreach ($products as $key => $product) {
             $product_data = $user->products()->find($product);
-            if($key==0 && $product_data->type=='collection'){
+            if($key==0 && $product_data && $product_data->type=='collection'){
                 if($product_data->avatar_small){
                     $this->create_avatar($laboratory, $product_data->avatar_small);
                 }
