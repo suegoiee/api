@@ -45,8 +45,11 @@ class LaboratoryController extends Controller
             $merge_laboratories->push($laboratory);
         }
 
-        $where_laboratories = $user->laboratories()->where('category',$category);
-        
+        if($category){
+            $where_laboratories = $user->laboratories()->where('category',$category);
+        }else{
+            $where_laboratories = $user->laboratories();
+        }
 
         $laboratories = $where_laboratories->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
 
