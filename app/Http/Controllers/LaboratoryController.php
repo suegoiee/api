@@ -25,8 +25,13 @@ class LaboratoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        
-        $master_laboratories = $user->master_laboratories()->get()->makeHidden(['product_id','faqs']);
+        $category = $request->input('category',false);
+        if($category){
+            $master_laboratories = $user->master_laboratories()->where('category',$category)->get()->makeHidden(['product_id','faqs']);
+        }else{
+            $master_laboratories = $user->master_laboratories()->where('category','<>','5')->get()->makeHidden(['product_id','faqs']);
+        }
+
         foreach ($master_laboratories as $key => $laboratory) {
             $collect_product = $user->products()->find($laboratory->product_id);
             if($collect_product){
@@ -40,7 +45,14 @@ class LaboratoryController extends Controller
             $merge_laboratories->push($laboratory);
         }
 
-        $laboratories = $user->laboratories()->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
+        if($category){
+            $where_laboratories = $user->laboratories()->where('category',$category);
+        }else{
+            $where_laboratories = $user->laboratories();
+        }
+
+        $laboratories = $where_laboratories->orderBy('sort')->get()->makeHidden(['product_id','faqs']);
+
         foreach ($laboratories as $key => $laboratory) {
             if(!$laboratory->customized){
                 $collect_product = $user->products()->find($laboratory->product_id);
@@ -77,22 +89,35 @@ class LaboratoryController extends Controller
         }
 
         $request_data = $request->only(['title','alias','layout','sort']);
-        $request_data['customized']=1;
+        $category = $request->input('category');
+        if($category==5){
+            $request_data['category'] = 5;
+        }
+        $request_data['customized'] = 1;
         $request_data['sort'] = isset($request_data['sort']) ? $request_data['sort'] : 0;
         $laboratory = $user->laboratories()->create($request_data);
 
         $products = $request->input('products',[]);
+
+        if($category==5){
+            $portfolio_single = $this->productRepository->getBy(['pathname'=>'portfolio']);
+            if($portfolio_single){
+                $products=[$portfolio_single->id];
+            }
+        }
+
         $products_data = [];
         foreach ($products as $key => $value) {
             $products_data[$value]=['sort'=>$key];
         }
+
         $laboratory->products()->syncWithoutDetaching($products_data);
         $products_install = [];
 
         $products = is_array($products) ? $products:[$products];
         foreach ($products as $key => $product) {
             $product_data = $user->products()->find($product);
-            if($key==0 && $product_data->type=='collection'){
+            if($key==0 && $product_data && $product_data->type=='collection'){
                 if($product_data->avatar_small){
                     $this->create_avatar($laboratory, $product_data->avatar_small);
                 }
@@ -119,7 +144,9 @@ class LaboratoryController extends Controller
                 return $this->failedResponse(['message'=>[trans('auth.permission_denied')]]);
             }
         }
-
+        if(!$laboratory){
+            return $this->failedResponse(['message'=>['laboratories invalid']]);
+        }
         if($laboratory->customized == 0){
             $collect_product = $user->products()->find($laboratory->product_id);
             if($collect_product){
@@ -164,11 +191,17 @@ class LaboratoryController extends Controller
                 $product->deadline = $deadline;
                 $product->available = $available;
             }else{
-                $product_user = $product->users()->find($user->id);
-                
-                $product->installed = $product_user ? $product_user->pivot->installed : 0;
-                $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
-                $product->available = $product->deadline == 0 ? 1 :((time() <= strtotime($product->deadline)) ? 1 : 0);
+                if($laboratory->category==5){
+                    $product->installed == 1;
+                    $product->deadline = 0;
+                    $product->available = 1;
+                }else{
+                    $product_user = $product->users()->find($user->id);
+                    
+                    $product->installed = $product_user ? $product_user->pivot->installed : 0;
+                    $product->deadline = $product_user ? $product_user->pivot->deadline : 0;
+                    $product->available = $product->deadline == 0 ? 1 :((time() <= strtotime($product->deadline)) ? 1 : 0);
+                }
             }
             $product->sort = $product->pivot->sort;
             foreach ( $product->collections as $collection){
@@ -241,7 +274,10 @@ class LaboratoryController extends Controller
         }
 
         $request_data = $request->only(['title','alias','layout', 'sort']);
-
+        $category = $request->input('category');
+        if($category==5){
+            $request_data['category'] = 5;
+        }
         $data = array_filter($request_data, function($item){return $item!=null;});
 
         $user->laboratories()->where('id',$id)->update($data);

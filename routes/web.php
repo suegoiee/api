@@ -116,6 +116,11 @@ Route::middleware(['auth:api','verifyUser'])->group(function(){
 	Route::get('/user/notifications/unread','NotificationController@unRead')->name('notifications.unRead');
 	Route::put('/user/notifications/{notification}','NotificationController@markRead')->name('notifications.update');
 
+	Route::get('/user/portfolios', 'PortfolioController@index')->name('portfolios.index');
+	Route::post('/user/portfolios', 'PortfolioController@store')->name('portfolios.store');
+	Route::put('/user/portfolios/{id}', 'PortfolioController@update')->name('portfolios.update');
+	Route::delete('/user/portfolios/{id}', 'PortfolioController@destroy')->name('portfolios.destroy');
+	//Route::put('/user/portfolios/{id}/transactions', 'PortfolioController@transactionUpdate')->name('portfolios.transactions.update');
 });
 
 Route::middleware(['web'])->group(function(){

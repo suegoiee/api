@@ -371,8 +371,7 @@ $(function(){
             case '4':case 4:$('#type').prop('disabled',false);$('#single_option_tab').addClass('hide');break;
         }
     });
-    /* trigger*/
-    //$('#category').change();
+    $('#category').change();
 
     $('#type').change(function(event){
         var type = $(this).val();

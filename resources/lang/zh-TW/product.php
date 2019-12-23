@@ -87,6 +87,7 @@ return [
         'single_type_selection' => '股票清單',
         'single_type_comboChart' => '組合圖表',
         'single_type_calculator' => '計算機',
+        'single_type_portfolio'=>'投資組合'
 	],
     'collection_cant_del' =>'無法個別刪除。',
     'cant_no_products' =>'需至少有一項產品。',
