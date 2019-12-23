@@ -80,6 +80,14 @@ class ProductController extends AdminController
     public function edit($id)
     {
         $product =  $this->moduleRepository->getWith($id,['tags','collections','affiliated_products', 'solutions', 'plans']);
+        $affiliated_products = $this->moduleRepository->getsWith(['master_products'],['category.in'=>['0','4']],['created_at'=>'DESC']);
+        $sorted_affiliated_products = $affiliated_products->sortBy(function ($affiliated_product, $key) use ($product){
+            $affiliated_product_data = $affiliated_product->master_products->where('id',$product->id)->first();
+            if($affiliated_product_data){
+                return $affiliated_product_data->pivot->sort;
+            }
+            return -1;
+        });
         $data = [
             'actionName'=>__FUNCTION__,
             'module_name'=> $this->moduleName,
@@ -87,7 +95,7 @@ class ProductController extends AdminController
             'experts'=>$this->expertRepository->gets(),
             'collections'=>$this->moduleRepository->getsWith([],['type'=>'collection']),
             'singles'=>$this->moduleRepository->getsWith([],['type'=>'single'])->whereNotIn('id', array_merge( [$id], $product ? $product->collections->map(function($item, $key){return $item->id;})->toArray(): [])),
-            'affiliated_products'=>$this->moduleRepository->getsWith([],['category.in'=>['0','4']],['created_at'=>'DESC']),
+            'affiliated_products'=>$sorted_affiliated_products,
             'data' => $product,
         ];
         return view('admin.form',$data);

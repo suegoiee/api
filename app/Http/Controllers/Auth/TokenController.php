@@ -73,6 +73,9 @@ class TokenController extends Controller
         }
         
         $isVerifiedUser = $this->isVerifiedUser($verified_request, $response['access_token']);
+        if(!$isVerifiedUser){
+            return $this->validateErrorResponse([trans('auth.refresh_token_invalid')]);
+        }
         $response['verified']= $isVerifiedUser['verified'];
         $response['is_socialite'] = $isVerifiedUser['is_socialite'];
         $response['set_password'] = $isVerifiedUser['set_password'];
@@ -114,7 +117,7 @@ class TokenController extends Controller
 
         $response_data = json_decode((string) $instance->getBody(), true);
         if(isset($response_data['error'])){
-            return '0';
+            return false;
         }
         return $response_data['data'];
     }

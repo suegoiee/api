@@ -71,6 +71,9 @@ class MobileTokenController extends Controller
             return $this->failedResponse(['message'=>[trans('auth.refresh_token_invalid')]]);
         }
         $isVerifiedUser = $this->isVerifiedUser($verified_request, $response['access_token']);
+        if(!$isVerifiedUser){
+            return $this->validateErrorResponse([trans('auth.refresh_token_invalid')]);
+        }
         $response['verified']= $isVerifiedUser['verified'];
         $response['is_socialite'] = $isVerifiedUser['is_socialite'];
         $response['set_password'] = $isVerifiedUser['set_password'];
@@ -99,7 +102,7 @@ class MobileTokenController extends Controller
             'refresh_token' => 'required',
         ]);
     }
-    protected function isVerified($request, $access_token){
+    protected function isVerifiedUser($request, $access_token){
         $http = new \GuzzleHttp\Client;
         $instance = $http->get(url('auth/verified/check'), [
             'headers'=>[
@@ -110,8 +113,8 @@ class MobileTokenController extends Controller
 
         $response_data = json_decode((string) $instance->getBody(), true);
         if(isset($response_data['error'])){
-            return '0';
+            return false;
         }
-        return $response_data['data']['verified'];
+        return $response_data['data'];
     }
 }
