@@ -176,8 +176,12 @@
             </table>
         </div>
         <div class="actions form-group text-center" >
-            <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
-            <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
+            @can('permission', [ucfirst($module_name).'Controller', 'grantUpdate'])
+                <button type="submit" name="action" value="save" class="btn btn-info">{{trans('form.save')}}</button>
+            @endcan
+            @can('permission', [ucfirst($module_name).'Controller', 'grantUpdate'])
+                <button type="submit" name="action" value="save_exit" class="btn btn-info">{{trans('form.save_exit')}}</button>
+            @endcan
             <a href="{{url('/admin/'.str_plural($module_name))}}" class="btn btn-warning cancel">{{trans('form.cancel')}}</a>
         </div>
     </form>

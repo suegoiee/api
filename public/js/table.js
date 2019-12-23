@@ -1,7 +1,7 @@
 function actionFormatter(value,row,index){
 	var actions='<div class="actions">';
-	console.log($("#editPermission").length != 0);
-	if($("#editPermission")){
+	console.log($("#editPermission").length);
+	if($("#editPermission").length != 0){
 		console.log('edit');
 		actions+='<a href="'+url('/admin/'+module_name)+'/'+row.id+'/edit"><span class="oi oi-pencil edit-btn"></span></a>';
 	}

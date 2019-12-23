@@ -37,3 +37,12 @@
         @can('permission', [ucfirst($module_name).'Controller', 'delete'])
             <input type="hidden" id="deletePermission" value="1">
         @endcan
+        @can('permission', [ucfirst($module_name).'Controller', 'grantList'])
+            <input type="hidden" id="grantPermission" value="1">
+        @endcan
+        @can('permission', [ucfirst($module_name).'Controller', 'grantEdit'])
+            <input type="hidden" id="grantEditPermission" value="1">
+        @endcan
+        @can('permission', [ucfirst($module_name).'Controller', 'grantDestroy'])
+            <input type="hidden" id="grantDestroyPermission" value="1">
+        @endcan
